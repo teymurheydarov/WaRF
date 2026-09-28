@@ -1,0 +1,115 @@
+name: WaRF Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+    inputs:
+      domain:
+        description: "Review domain (AUTO detects per file)"
+        required: false
+        default: AUTO
+        type: choice
+        options: [AUTO, SECURITY, LOGIC, PERFORMANCE]
+      commit:
+        description: "Commit to review (default: HEAD)"
+        required: false
+        default: HEAD
+
+jobs:
+  warf-review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history needed so git show <sha> works correctly
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pyproject.toml
+
+      # The core has no dependencies; the anthropic extra is the provider this
+      # workflow uses (ANTHROPIC_API_KEY below).
+      - name: Install WaRF
+        run: pip install ".[anthropic]"
+
+      - name: Check API key present
+        run: |
+          if [ -z "${{ secrets.ANTHROPIC_API_KEY }}" ]; then
+            echo "::error::ANTHROPIC_API_KEY secret is not set. Add it under Settings → Secrets → Actions."
+            exit 1
+          fi
+
+      - name: Run WaRF review
+        id: review
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          DOMAIN="${{ inputs.domain || 'AUTO' }}"
+          # For PR events use the actual PR head SHA so git show sees only that commit's diff.
+          # workflow_dispatch uses the user-supplied commit (default HEAD).
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            COMMIT="${{ github.event.pull_request.head.sha }}"
+          else
+            COMMIT="${{ inputs.commit || 'HEAD' }}"
+          fi
+          python warf/cli.py review-commit "$COMMIT" \
+            --domain "$DOMAIN" \
+            --verbose \
+            --repo . \
+            2>&1 | tee warf_output.txt
+          echo "warf_exit=${PIPESTATUS[0]}" >> $GITHUB_ENV
+
+      - name: Post review as PR comment
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const raw = fs.readFileSync('warf_output.txt', 'utf8').trim();
+
+            // Extract last decision line — matches "-> APPROVE [HIGH]" or "-> REJECT [MEDIUM]"
+            const decisions = [...raw.matchAll(/->\s*(APPROVE|REJECT)\s*\[(\w+)\]/g)];
+            const last = decisions[decisions.length - 1];
+            const badge = last
+              ? (last[1] === 'APPROVE'
+                  ? `✅ **APPROVE** \`[${last[2]}]\``
+                  : `❌ **REJECT** \`[${last[2]}]\``)
+              : '⚪ *no decision*';
+
+            const body = [
+              '## WaRF Review',
+              '',
+              badge,
+              '',
+              '<details><summary>Full output</summary>',
+              '',
+              '```',
+              raw,
+              '```',
+              '',
+              '</details>',
+            ].join('\n');
+
+            await github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body,
+            });
+
+      - name: Upload output artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: warf-review-output
+          path: warf_output.txt
+          retention-days: 14

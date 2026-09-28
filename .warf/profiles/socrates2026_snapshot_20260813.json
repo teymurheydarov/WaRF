@@ -1,0 +1,102 @@
+[
+  {
+    "name": "SKEPTIC",
+    "persona": "You are a defensive code reviewer who assumes there is likely a defect. Look hard for bugs, missing guards, edge cases, and unsafe assumptions. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 10.0,
+        "beta": 12.0
+      },
+      "SECURITY": {
+        "alpha": 21.0,
+        "beta": 14.0
+      },
+      "PERFORMANCE": {
+        "alpha": 4.0,
+        "beta": 2.0
+      }
+    },
+    "last_updated": "2026-08-03T12:23:53.680574+00:00",
+    "persona_hash": "8a76f6692c3f"
+  },
+  {
+    "name": "ADVOCATE",
+    "persona": "You are a code reviewer who defends the author's intent. Assume the code is correct unless you find a clear, demonstrable defect. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 18.0,
+        "beta": 8.0
+      },
+      "SECURITY": {
+        "alpha": 23.0,
+        "beta": 15.0
+      },
+      "PERFORMANCE": {
+        "alpha": 5.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-08-03T12:23:53.680574+00:00",
+    "persona_hash": "32e59155d0a3"
+  },
+  {
+    "name": "AUDITOR",
+    "persona": "You are an impartial compliance officer performing a neutral technical audit. Apply standards and best practices without bias toward approval or rejection. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 24.0,
+        "beta": 7.0
+      },
+      "SECURITY": {
+        "alpha": 23.0,
+        "beta": 15.0
+      },
+      "PERFORMANCE": {
+        "alpha": 5.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-08-03T12:23:53.680574+00:00",
+    "persona_hash": "318509b9ab1f"
+  },
+  {
+    "name": "TEST-FOCUSED",
+    "persona": "You are a code reviewer focused on testability and test coverage. Assume the test suite is incomplete. Identify untested code paths, missing edge-case tests, and logic that is difficult to verify automatically. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 7.0,
+        "beta": 15.0
+      },
+      "SECURITY": {
+        "alpha": 12.0,
+        "beta": 11.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-08-03T04:56:39.567652+00:00",
+    "persona_hash": "52651fb5cc9c"
+  },
+  {
+    "name": "BOUNDARY",
+    "persona": "You are a code reviewer who probes boundary conditions. For every function and input, consider what happens with None, empty collections, zero, negative values, maximum values, and off-by-one inputs. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 10.0,
+        "beta": 7.0
+      },
+      "SECURITY": {
+        "alpha": 8.0,
+        "beta": 9.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-08-03T04:54:02.162985+00:00",
+    "persona_hash": "f602df0fa885"
+  }
+]

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WaRF — Weight Trajectories</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  padding: 28px 32px 40px;
+}
+h1 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #c8d8f4;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.domain-grid {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.domain-card {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 16px 18px 14px;
+  flex: 1 1 320px;
+  min-width: 280px;
+}
+.domain-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #7ea8d4;
+  margin-bottom: 10px;
+}
+canvas { display: block; width: 100%; }
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin-top: 10px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.73rem;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 2px 6px 2px 4px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  transition: background 0.1s, border-color 0.1s;
+}
+.legend-item:hover { background: #1e293b; }
+.legend-item.front {
+  color: #e2e8f0;
+  font-weight: 700;
+  background: #1e293b;
+  border-color: #334155;
+}
+.legend-swatch {
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.legend-hint {
+  font-size: 0.68rem;
+  color: #475569;
+  margin-top: 6px;
+}
+#tooltip {
+  position: fixed;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 7px 11px;
+  font-size: 0.76rem;
+  pointer-events: none;
+  display: none;
+  z-index: 999;
+  color: #e2e8f0;
+  line-height: 1.6;
+  max-width: 220px;
+}
+</style>
+</head>
+<body>
+<h1>WaRF — Agent Reliability Learning Curves</h1>
+<div class="subtitle">
+  Each point = one oracle update (ground-truth label applied).<br>
+  Dashed line: ω = 0.5, the weight of an agent nobody has tested yet. Above it the agent has been right more often than wrong.<br>
+  Below it the vote still counts in its own direction &#x2014; only with less weight (Δλ = ω × LLR; ω never flips the sign).
+</div>
+<div class="domain-grid" id="grid"></div>
+<div id="tooltip"></div>
+
+<script>
+const DATA   = {"LOGIC": {"AUDITOR": {"init": 0.5714, "points": [{"idx": 1, "omega": 0.625, "correct": true}, {"idx": 2, "omega": 0.6667, "correct": true}, {"idx": 3, "omega": 0.7, "correct": true}, {"idx": 4, "omega": 0.7273, "correct": true}, {"idx": 5, "omega": 0.6875, "correct": true}, {"idx": 6, "omega": 0.7059, "correct": true}, {"idx": 7, "omega": 0.7222, "correct": true}, {"idx": 8, "omega": 0.7368, "correct": true}, {"idx": 9, "omega": 0.75, "correct": true}, {"idx": 10, "omega": 0.7143, "correct": false}, {"idx": 11, "omega": 0.7273, "correct": true}, {"idx": 12, "omega": 0.7391, "correct": true}, {"idx": 13, "omega": 0.7083, "correct": false}, {"idx": 14, "omega": 0.72, "correct": true}, {"idx": 15, "omega": 0.7308, "correct": true}, {"idx": 16, "omega": 0.7407, "correct": true}, {"idx": 17, "omega": 0.75, "correct": true}, {"idx": 18, "omega": 0.7586, "correct": true}, {"idx": 19, "omega": 0.7667, "correct": true}, {"idx": 20, "omega": 0.7742, "correct": true}]}, "ADVOCATE": {"init": 0.5714, "points": [{"idx": 1, "omega": 0.625, "correct": true}, {"idx": 2, "omega": 0.5556, "correct": false}, {"idx": 3, "omega": 0.6, "correct": true}, {"idx": 4, "omega": 0.6364, "correct": true}, {"idx": 5, "omega": 0.6, "correct": true}, {"idx": 6, "omega": 0.625, "correct": true}, {"idx": 7, "omega": 0.6471, "correct": true}, {"idx": 8, "omega": 0.6111, "correct": false}, {"idx": 9, "omega": 0.6316, "correct": true}, {"idx": 10, "omega": 0.65, "correct": true}, {"idx": 11, "omega": 0.6667, "correct": true}, {"idx": 12, "omega": 0.6818, "correct": true}, {"idx": 13, "omega": 0.6957, "correct": true}, {"idx": 14, "omega": 0.7083, "correct": true}, {"idx": 15, "omega": 0.72, "correct": true}, {"idx": 16, "omega": 0.6923, "correct": false}]}, "SKEPTIC": {"init": 0.7143, "points": [{"idx": 1, "omega": 0.625, "correct": false}, {"idx": 2, "omega": 0.5556, "correct": false}, {"idx": 3, "omega": 0.5, "correct": false}, {"idx": 4, "omega": 0.4545, "correct": false}, {"idx": 5, "omega": 0.4667, "correct": false}, {"idx": 6, "omega": 0.4375, "correct": false}, {"idx": 7, "omega": 0.4118, "correct": false}, {"idx": 8, "omega": 0.3889, "correct": false}, {"idx": 9, "omega": 0.3684, "correct": false}, {"idx": 10, "omega": 0.4, "correct": true}, {"idx": 11, "omega": 0.4286, "correct": true}, {"idx": 12, "omega": 0.4545, "correct": true}]}, "BOUNDARY": {"init": 0.5, "points": [{"idx": 1, "omega": 0.8333, "correct": true}, {"idx": 2, "omega": 0.8571, "correct": true}, {"idx": 3, "omega": 0.75, "correct": false}, {"idx": 4, "omega": 0.6667, "correct": false}, {"idx": 5, "omega": 0.7, "correct": true}, {"idx": 6, "omega": 0.6364, "correct": false}, {"idx": 7, "omega": 0.6667, "correct": true}, {"idx": 8, "omega": 0.6154, "correct": false}, {"idx": 9, "omega": 0.5714, "correct": false}, {"idx": 10, "omega": 0.6, "correct": true}, {"idx": 11, "omega": 0.625, "correct": true}, {"idx": 12, "omega": 0.5882, "correct": false}]}, "TEST-FOCUSED": {"init": 0.5, "points": [{"idx": 1, "omega": 0.8333, "correct": true}, {"idx": 2, "omega": 0.8571, "correct": true}, {"idx": 3, "omega": 0.75, "correct": false}, {"idx": 4, "omega": 0.6667, "correct": false}, {"idx": 5, "omega": 0.6, "correct": false}, {"idx": 6, "omega": 0.5455, "correct": false}, {"idx": 7, "omega": 0.5, "correct": false}, {"idx": 8, "omega": 0.4615, "correct": false}, {"idx": 9, "omega": 0.4286, "correct": false}, {"idx": 10, "omega": 0.4, "correct": false}, {"idx": 11, "omega": 0.375, "correct": false}, {"idx": 12, "omega": 0.3529, "correct": false}, {"idx": 13, "omega": 0.3333, "correct": false}, {"idx": 14, "omega": 0.3158, "correct": false}, {"idx": 15, "omega": 0.3, "correct": false}, {"idx": 16, "omega": 0.2857, "correct": false}, {"idx": 17, "omega": 0.3182, "correct": true}]}}, "SECURITY": {"AUDITOR": {"init": 0.6667, "points": [{"idx": 1, "omega": 0.75, "correct": true}, {"idx": 2, "omega": 0.8, "correct": true}, {"idx": 3, "omega": 0.8333, "correct": true}, {"idx": 4, "omega": 0.7143, "correct": false}, {"idx": 5, "omega": 0.625, "correct": false}, {"idx": 6, "omega": 0.5556, "correct": false}, {"idx": 7, "omega": 0.5, "correct": false}, {"idx": 8, "omega": 0.5455, "correct": true}, {"idx": 9, "omega": 0.5833, "correct": true}, {"idx": 10, "omega": 0.6154, "correct": true}, {"idx": 11, "omega": 0.6667, "correct": true}, {"idx": 12, "omega": 0.6875, "correct": true}, {"idx": 13, "omega": 0.7059, "correct": true}, {"idx": 14, "omega": 0.7222, "correct": true}, {"idx": 15, "omega": 0.7368, "correct": true}, {"idx": 16, "omega": 0.75, "correct": true}, {"idx": 17, "omega": 0.7619, "correct": true}, {"idx": 18, "omega": 0.7826, "correct": true}, {"idx": 19, "omega": 0.7917, "correct": true}, {"idx": 20, "omega": 0.8, "correct": true}, {"idx": 21, "omega": 0.7692, "correct": false}, {"idx": 22, "omega": 0.7778, "correct": true}, {"idx": 23, "omega": 0.7857, "correct": true}, {"idx": 24, "omega": 0.7931, "correct": true}, {"idx": 25, "omega": 0.7667, "correct": false}, {"idx": 26, "omega": 0.7419, "correct": false}, {"idx": 27, "omega": 0.7188, "correct": false}, {"idx": 28, "omega": 0.697, "correct": false}, {"idx": 29, "omega": 0.6765, "correct": false}, {"idx": 30, "omega": 0.6571, "correct": false}, {"idx": 31, "omega": 0.6389, "correct": false}, {"idx": 32, "omega": 0.6216, "correct": false}, {"idx": 33, "omega": 0.6053, "correct": false}]}, "ADVOCATE": {"init": 0.6667, "points": [{"idx": 1, "omega": 0.75, "correct": true}, {"idx": 2, "omega": 0.8, "correct": true}, {"idx": 3, "omega": 0.8333, "correct": true}, {"idx": 4, "omega": 0.7143, "correct": false}, {"idx": 5, "omega": 0.625, "correct": false}, {"idx": 6, "omega": 0.5556, "correct": false}, {"idx": 7, "omega": 0.5, "correct": false}, {"idx": 8, "omega": 0.4545, "correct": false}, {"idx": 9, "omega": 0.5, "correct": true}, {"idx": 10, "omega": 0.5385, "correct": true}, {"idx": 11, "omega": 0.6, "correct": true}, {"idx": 12, "omega": 0.625, "correct": true}, {"idx": 13, "omega": 0.6471, "correct": true}, {"idx": 14, "omega": 0.6667, "correct": true}, {"idx": 15, "omega": 0.6842, "correct": true}, {"idx": 16, "omega": 0.7, "correct": true}, {"idx": 17, "omega": 0.7143, "correct": true}, {"idx": 18, "omega": 0.7391, "correct": true}, {"idx": 19, "omega": 0.75, "correct": true}, {"idx": 20, "omega": 0.76, "correct": true}, {"idx": 21, "omega": 0.7692, "correct": true}, {"idx": 22, "omega": 0.7778, "correct": true}, {"idx": 23, "omega": 0.7857, "correct": true}, {"idx": 24, "omega": 0.7931, "correct": true}, {"idx": 25, "omega": 0.7667, "correct": false}, {"idx": 26, "omega": 0.7419, "correct": false}, {"idx": 27, "omega": 0.7188, "correct": false}, {"idx": 28, "omega": 0.697, "correct": false}, {"idx": 29, "omega": 0.6765, "correct": false}, {"idx": 30, "omega": 0.6571, "correct": false}, {"idx": 31, "omega": 0.6389, "correct": false}, {"idx": 32, "omega": 0.6216, "correct": false}, {"idx": 33, "omega": 0.6053, "correct": false}]}, "SKEPTIC": {"init": 0.6667, "points": [{"idx": 1, "omega": 0.75, "correct": true}, {"idx": 2, "omega": 0.6, "correct": false}, {"idx": 3, "omega": 0.5, "correct": false}, {"idx": 4, "omega": 0.5714, "correct": true}, {"idx": 5, "omega": 0.625, "correct": true}, {"idx": 6, "omega": 0.6667, "correct": true}, {"idx": 7, "omega": 0.7, "correct": true}, {"idx": 8, "omega": 0.7273, "correct": true}, {"idx": 9, "omega": 0.6667, "correct": false}, {"idx": 10, "omega": 0.6154, "correct": false}, {"idx": 11, "omega": 0.6667, "correct": true}, {"idx": 12, "omega": 0.6875, "correct": true}, {"idx": 13, "omega": 0.7059, "correct": true}, {"idx": 14, "omega": 0.6667, "correct": false}, {"idx": 15, "omega": 0.6316, "correct": false}, {"idx": 16, "omega": 0.6, "correct": false}, {"idx": 17, "omega": 0.619, "correct": true}, {"idx": 18, "omega": 0.6522, "correct": true}, {"idx": 19, "omega": 0.6667, "correct": true}, {"idx": 20, "omega": 0.68, "correct": true}, {"idx": 21, "omega": 0.6538, "correct": false}, {"idx": 22, "omega": 0.6296, "correct": false}, {"idx": 23, "omega": 0.6071, "correct": false}, {"idx": 24, "omega": 0.6207, "correct": true}, {"idx": 25, "omega": 0.6333, "correct": true}, {"idx": 26, "omega": 0.6452, "correct": true}, {"idx": 27, "omega": 0.625, "correct": false}, {"idx": 28, "omega": 0.6364, "correct": true}, {"idx": 29, "omega": 0.6176, "correct": false}, {"idx": 30, "omega": 0.6, "correct": false}]}, "BOUNDARY": {"init": 0.5, "points": [{"idx": 1, "omega": 0.6667, "correct": true}, {"idx": 2, "omega": 0.75, "correct": true}, {"idx": 3, "omega": 0.6, "correct": false}, {"idx": 4, "omega": 0.5, "correct": false}, {"idx": 5, "omega": 0.5714, "correct": true}, {"idx": 6, "omega": 0.5, "correct": false}, {"idx": 7, "omega": 0.4444, "correct": false}, {"idx": 8, "omega": 0.5, "correct": true}, {"idx": 9, "omega": 0.4545, "correct": false}, {"idx": 10, "omega": 0.5, "correct": true}, {"idx": 11, "omega": 0.5385, "correct": true}, {"idx": 12, "omega": 0.5, "correct": false}, {"idx": 13, "omega": 0.5333, "correct": true}, {"idx": 14, "omega": 0.5, "correct": false}, {"idx": 15, "omega": 0.4706, "correct": false}]}, "TEST-FOCUSED": {"init": 0.5, "points": [{"idx": 1, "omega": 0.3333, "correct": false}, {"idx": 2, "omega": 0.25, "correct": false}, {"idx": 3, "omega": 0.2, "correct": false}, {"idx": 4, "omega": 0.1667, "correct": false}, {"idx": 5, "omega": 0.1429, "correct": false}, {"idx": 6, "omega": 0.125, "correct": false}, {"idx": 7, "omega": 0.1111, "correct": false}, {"idx": 8, "omega": 0.1, "correct": false}, {"idx": 9, "omega": 0.0909, "correct": false}, {"idx": 10, "omega": 0.1667, "correct": true}, {"idx": 11, "omega": 0.2308, "correct": true}, {"idx": 12, "omega": 0.2143, "correct": false}, {"idx": 13, "omega": 0.2667, "correct": true}, {"idx": 14, "omega": 0.3125, "correct": true}, {"idx": 15, "omega": 0.3529, "correct": true}, {"idx": 16, "omega": 0.3889, "correct": true}, {"idx": 17, "omega": 0.4211, "correct": true}, {"idx": 18, "omega": 0.45, "correct": true}, {"idx": 19, "omega": 0.4762, "correct": true}, {"idx": 20, "omega": 0.5, "correct": true}, {"idx": 21, "omega": 0.5217, "correct": true}]}}, "PERFORMANCE": {"AUDITOR": {"init": 0.6667, "points": [{"idx": 1, "omega": 0.75, "correct": true}, {"idx": 2, "omega": 0.8, "correct": true}, {"idx": 3, "omega": 0.8333, "correct": true}]}, "ADVOCATE": {"init": 0.6667, "points": [{"idx": 1, "omega": 0.75, "correct": true}, {"idx": 2, "omega": 0.8, "correct": true}, {"idx": 3, "omega": 0.8333, "correct": true}]}, "SKEPTIC": {"init": 0.6667, "points": [{"idx": 1, "omega": 0.5, "correct": false}, {"idx": 2, "omega": 0.6, "correct": true}, {"idx": 3, "omega": 0.6667, "correct": true}]}}};
+const COLORS = {"AUDITOR": "#4E79A7", "ADVOCATE": "#59A14F", "SKEPTIC": "#E15759", "BOUNDARY": "#F28E2B", "TEST-FOCUSED": "#B07AA1"};
+const AGENTS = ["AUDITOR", "ADVOCATE", "SKEPTIC", "BOUNDARY", "TEST-FOCUSED"];
+
+const PAD  = { l: 46, r: 96, t: 14, b: 32 };
+const CH   = 230;  // canvas height px
+
+function drawChart(canvas, domainData, frontAgent = null) {
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 340;
+  canvas.width  = W * dpr;
+  canvas.height = CH * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  const pw = W   - PAD.l - PAD.r;
+  const ph = CH  - PAD.t - PAD.b;
+
+  // Compute x range
+  let maxIdx = 1;
+  for (const a of Object.keys(domainData)) {
+    const pts = domainData[a].points;
+    if (pts.length > 0) maxIdx = Math.max(maxIdx, pts[pts.length - 1].idx);
+  }
+
+  const xScale = i => PAD.l + (i / maxIdx) * pw;
+  const yScale = w => PAD.t + (1.0 - w) * ph;
+
+  // Background
+  ctx.fillStyle = "#1e293b";
+  ctx.fillRect(0, 0, W, CH);
+
+  // Horizontal grid + y-axis labels
+  [0, 0.25, 0.5, 0.75, 1.0].forEach(y => {
+    const py = yScale(y);
+    ctx.strokeStyle = y === 0.5 ? "#334155" : "#1e3a5f";
+    ctx.lineWidth   = y === 0.5 ? 1 : 0.8;
+    ctx.beginPath(); ctx.moveTo(PAD.l, py); ctx.lineTo(PAD.l + pw, py); ctx.stroke();
+    ctx.fillStyle   = "#475569";
+    ctx.font        = "10px monospace";
+    ctx.textAlign   = "right";
+    ctx.fillText(y.toFixed(2), PAD.l - 6, py + 3.5);
+  });
+
+  // ω = 0.5: the untested-agent prior (dashed red). Not an inversion threshold —
+  // engine.sprt_update adds ω × LLR, so a low ω shrinks a vote, never flips it.
+  const y05 = yScale(0.5);
+  ctx.strokeStyle = "#ef4444";
+  ctx.lineWidth   = 1.2;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(PAD.l, y05); ctx.lineTo(PAD.l + pw, y05); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Axes
+  ctx.strokeStyle = "#334155";
+  ctx.lineWidth   = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.l, PAD.t);
+  ctx.lineTo(PAD.l, PAD.t + ph);
+  ctx.lineTo(PAD.l + pw, PAD.t + ph);
+  ctx.stroke();
+
+  // X-axis ticks
+  const step = maxIdx <= 8 ? 1 : maxIdx <= 20 ? 2 : 5;
+  for (let i = 0; i <= maxIdx; i += step) {
+    const px = xScale(i);
+    ctx.fillStyle   = "#475569";
+    ctx.font        = "10px monospace";
+    ctx.textAlign   = "center";
+    ctx.fillText(i, px, PAD.t + ph + 16);
+  }
+  ctx.fillStyle   = "#475569";
+  ctx.font        = "10px sans-serif";
+  ctx.textAlign   = "center";
+  ctx.fillText("oracle updates →", PAD.l + pw / 2, CH - 2);
+
+  // Collect hit targets for tooltip
+  const hits = [];
+
+  // Sort agents by final omega descending for label placement
+  // Draw order is z-order on a canvas: last drawn wins where lines overlap.
+  // Two agents with an identical run of correct/wrong calls sit on the exact
+  // same pixels — bringing one "to front" is the only way to see it then.
+  let agentList = AGENTS.filter(a => a in domainData);
+  if (frontAgent && agentList.includes(frontAgent)) {
+    agentList = [...agentList.filter(a => a !== frontAgent), frontAgent];
+  }
+
+  agentList.forEach(agent => {
+    const series = domainData[agent];
+    const color  = COLORS[agent] || "#94a3b8";
+    const isFront = agent === frontAgent;
+    // Build full point list: [init point] + oracle updates
+    const allPts = [{ idx: 0, omega: series.init, correct: null }, ...series.points];
+
+    // Draw line. The front agent also gets a dark halo stroked underneath, so
+    // it reads as "brought forward" even on a stretch where no line hides it.
+    const tracePath = () => {
+      ctx.beginPath();
+      allPts.forEach((p, i) => {
+        const px = xScale(p.idx), py = yScale(p.omega);
+        if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+      });
+    };
+    if (isFront) {
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth   = 6;
+      ctx.lineJoin    = "round";
+      tracePath();
+      ctx.stroke();
+    }
+    ctx.strokeStyle = color;
+    ctx.lineWidth   = isFront ? 3.5 : 2.5;
+    ctx.lineJoin    = "round";
+    tracePath();
+    ctx.stroke();
+
+    // Draw dots
+    allPts.forEach(p => {
+      const px = xScale(p.idx), py = yScale(p.omega);
+      const r  = p.correct === false ? 5 : 4;
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      if (p.correct === null) {
+        // hollow: initial weight marker
+        ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+        ctx.fillStyle   = "#1e293b";
+        ctx.fill(); ctx.stroke();
+      } else if (p.correct) {
+        ctx.fillStyle = color;
+        ctx.fill();
+      } else {
+        // wrong prediction: hollow with red ring
+        ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 2;
+        ctx.fillStyle   = "#1e293b";
+        ctx.fill(); ctx.stroke();
+      }
+      hits.push({ px, py, agent, omega: p.omega, correct: p.correct, idx: p.idx });
+    });
+
+    // Direct label at end of line — a dark halo behind the front agent's
+    // label too, so it wins legibility even where another label sits right
+    // on top of it (that overlap is what made AUDITOR disappear in the
+    // first place: identical end points, later-drawn label wins outright).
+    const last  = allPts[allPts.length - 1];
+    const label = agent === "TEST-FOCUSED" ? "T-FOCUSED" : agent;
+    const lx    = PAD.l + pw + 6, ly = yScale(last.omega) + 3.5;
+    ctx.font      = isFront ? "bold 11.5px sans-serif" : "bold 10.5px sans-serif";
+    ctx.textAlign = "left";
+    if (isFront) {
+      ctx.strokeStyle = "#0f172a";
+      ctx.lineWidth   = 3;
+      ctx.lineJoin    = "round";
+      ctx.strokeText(label, lx, ly);
+    }
+    ctx.fillStyle = color;
+    ctx.fillText(label, lx, ly);
+  });
+
+  return hits;
+}
+
+const grid    = document.getElementById("grid");
+const tooltip = document.getElementById("tooltip");
+
+Object.entries(DATA).forEach(([domain, domainData]) => {
+  const card = document.createElement("div");
+  card.className = "domain-card";
+
+  const title = document.createElement("div");
+  title.className = "domain-title";
+  title.textContent = domain;
+  card.appendChild(title);
+
+  const canvas = document.createElement("canvas");
+  canvas.height = CH;
+  card.appendChild(canvas);
+
+  // Legend — click an agent to bring its line and label to the front. Two
+  // agents with the same correct/wrong history at every point sit on
+  // identical pixels (that's how AUDITOR went missing under ADVOCATE in
+  // PERFORMANCE); the later-drawn one always wins, so this is the only way
+  // to see the hidden one. Click the same agent again to go back to normal.
+  const legend    = document.createElement("div");
+  legend.className = "legend";
+  const domainAgents = AGENTS.filter(a => a in domainData);
+  const legendItems  = {};
+  domainAgents.forEach(agent => {
+    const item = document.createElement("div");
+    item.className = "legend-item";
+    item.innerHTML  = `<div class="legend-swatch" style="background:${COLORS[agent] || '#aaa'}"></div>${agent}`;
+    item.title      = "Click to bring this agent's line to the front";
+    legend.appendChild(item);
+    legendItems[agent] = item;
+  });
+  card.appendChild(legend);
+
+  if (domainAgents.length > 1) {
+    const hint = document.createElement("div");
+    hint.className   = "legend-hint";
+    hint.textContent = "Lines can overlap exactly — click a name above to bring it to the front.";
+    card.appendChild(hint);
+  }
+
+  grid.appendChild(card);
+
+  requestAnimationFrame(() => {
+    let hits = [];
+    let front = null;
+
+    function redraw() {
+      hits = drawChart(canvas, domainData, front);
+      domainAgents.forEach(a => legendItems[a].classList.toggle("front", a === front));
+    }
+    redraw();
+
+    domainAgents.forEach(agent => {
+      legendItems[agent].addEventListener("click", () => {
+        front = (front === agent) ? null : agent;
+        redraw();
+      });
+    });
+
+    canvas.addEventListener("mousemove", e => {
+      const rect = canvas.getBoundingClientRect();
+      const mx   = (e.clientX - rect.left) * (canvas.offsetWidth  / rect.width);
+      const my   = (e.clientY - rect.top)  * (canvas.offsetHeight / rect.height);
+      let best = null, bestD = 22;
+      hits.forEach(h => {
+        const d = Math.hypot(h.px - mx, h.py - my);
+        if (d < bestD) { bestD = d; best = h; }
+      });
+      if (best) {
+        const status = best.correct === null ? "initial weight"
+                     : best.correct ? "✓ correct" : "✗ wrong";
+        tooltip.style.display = "block";
+        tooltip.style.left    = (e.clientX + 14) + "px";
+        tooltip.style.top     = (e.clientY - 36) + "px";
+        tooltip.innerHTML     =
+          `<b style="color:${COLORS[best.agent]}">${best.agent}</b><br>` +
+          `ω = ${best.omega.toFixed(4)}&ensp;·&ensp;update #${best.idx}<br>` +
+          `${status}`;
+      } else {
+        tooltip.style.display = "none";
+      }
+    });
+    canvas.addEventListener("mouseleave", () => { tooltip.style.display = "none"; });
+  });
+});
+</script>
+</body>
+</html>

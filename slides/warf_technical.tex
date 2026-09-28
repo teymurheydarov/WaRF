@@ -1,0 +1,539 @@
+% WaRF Technical Reference
+% Companion document to warf_talk.tex
+% Build: pdflatex warf_technical.tex
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black}
+
+\title{\textbf{WaRF: Weighted $n$-Agent Reliability Framework}\\[0.4em]
+\large Technical Reference}
+\author{Teymur Heydarov}
+\date{August 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip\hrule
+\bigskip
+
+% =============================================================================
+\section{Overview}
+
+WaRF is a multi-agent code review framework that combines Bayesian weight
+calibration with sequential hypothesis testing to produce a single
+APPROVE/REJECT decision with a calibrated confidence level.
+
+A pool of $n$ specialised LLM agents votes independently on the submitted
+code. Each vote updates a cumulative evidence score $\Lambda$ via the
+Sequential Probability Ratio Test (SPRT). The framework stops as soon as
+$\Lambda$ crosses a decision boundary, or after all $n$ agents have voted.
+Agent reliability weights $\omega \in [0,1]$ are per-agent and per-domain;
+they are learned online from oracle-labelled reviews via a Bayesian update
+rule.
+
+% =============================================================================
+\section{Agent Pool}
+
+\subsection{Personas}
+
+The default pool contains five LLM agents with fixed system prompts:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Agent & Evaluation focus & Domain strengths \\
+\midrule
+AUDITOR      & Compliance audit, neutral         & Security, Logic \\
+BOUNDARY     & Edge cases, missing guards        & Logic \\
+ADVOCATE     & Author intent, false-positive resistance & General \\
+SKEPTIC      & Adversarial reasoning, threat surface & Security \\
+TEST-FOCUSED & Coverage, missing tests           & Logic \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Each agent receives: (1) a system prompt defining its persona, (2) the
+code under review, and (3) an instruction to respond with exactly one word
+(APPROVE or REJECT) on the first line, followed by free-text reasoning.
+Agent responses are parsed for the vote; reasoning is logged and shown in
+the dashboard but is not consumed by the stopping rule.
+
+An optional sixth voter, \textbf{Bandit} (a deterministic SAST analyser),
+is available in the SECURITY domain via the \texttt{--sast} flag.
+It is assigned a fixed weight $\omega = 0.75$ and does not participate in
+the Bayesian calibration cycle.
+
+\subsection{Domain Classification}
+
+Agents are indexed to three review domains:
+
+\begin{description}[leftmargin=2.5cm,style=sameline]
+  \item[\textsc{Security}] Authentication, injection, cryptography, input validation, serialisation.
+  \item[\textsc{Logic}]    Correctness, edge cases, type safety, control flow, missing guards.
+  \item[\textsc{Performance}] Algorithmic complexity, blocking calls, memory allocation, N+1 patterns.
+\end{description}
+
+The domain is specified by the caller via \texttt{--domain}.
+Agent weights are domain-specific: an agent's LOGIC weight is entirely
+independent of its SECURITY weight, capturing that BOUNDARY is more
+reliable on logic defects than on security ones, and SKEPTIC is the
+reverse.
+
+% =============================================================================
+\section{Sequential Probability Ratio Test}
+
+\subsection{Cumulative Evidence Score}
+
+After each agent vote, WaRF updates the log-likelihood ratio:
+
+\begin{equation}
+  \Lambda_k = \Lambda_{k-1} + s_k \cdot \omega_k \cdot \ell
+  \label{eq:lambda}
+\end{equation}
+
+\noindent where:
+\begin{itemize}
+  \item $k$ is the vote index (agents are sampled in a fixed order)
+  \item $s_k \in \{+1,-1\}$ is the vote sign (APPROVE $=+1$, REJECT $=-1$)
+  \item $\omega_k$ is the calibrated weight of agent $k$ in the active domain
+  \item $\ell \approx 1.253$ is the base log-likelihood ratio constant
+  \item $\Lambda_0 = 0$
+\end{itemize}
+
+The LLR increment is asymmetric in the implementation. With $P_1 = 0.80$
+and $P_0 = 0.30$ encoding prior beliefs about agent reliability:
+
+\[
+  \ell_{\text{APPROVE}} = \ln\!\frac{P_1}{P_0}
+    = \ln\!\frac{0.80}{0.30} \approx +0.981
+  \qquad
+  \ell_{\text{REJECT}} = \ln\!\frac{1-P_1}{1-P_0}
+    = \ln\!\frac{0.20}{0.70} \approx -1.253
+\]
+
+Because $|\ell_{\text{REJECT}}| > |\ell_{\text{APPROVE}}|$, unanimous REJECT
+evidence accumulates faster than unanimous APPROVE evidence. In the remainder
+of this document, $\ell \approx 1.253$ denotes the REJECT magnitude and is
+used to reason about boundary reachability in the REJECT direction; the
+APPROVE direction requires a larger pool or higher $\omega$ to compensate.
+
+\subsection{Decision Boundaries}
+
+WaRF uses asymmetric SPRT boundaries derived from target error rates:
+
+\begin{align}
+  A &= \ln\!\left(\frac{1-\beta}{\alpha}\right)
+     = \ln\!\left(\frac{0.90}{0.05}\right) \approx +2.890
+  & \text{(APPROVE boundary)} \label{eq:A} \\
+  B &= \ln\!\left(\frac{\beta}{1-\alpha}\right)
+     = \ln\!\left(\frac{0.10}{0.95}\right) \approx -2.251
+  & \text{(REJECT boundary)}  \label{eq:B}
+\end{align}
+
+\noindent with $\alpha = 0.05$ (false-alarm rate) and $\beta = 0.10$
+(miss rate). The asymmetry $|A| > |B|$ is deliberate: requiring stronger
+evidence for APPROVE than for REJECT. A false rejection triggers human review,
+which is recoverable. A false approval on a defective change is not.
+
+\subsection{Stopping Rule}
+
+After vote $k$:
+\begin{itemize}
+  \item If $\Lambda_k \geq A$: \textbf{stop}, decision $=$ APPROVE
+  \item If $\Lambda_k \leq B$: \textbf{stop}, decision $=$ REJECT
+  \item Otherwise: invite the next agent (or proceed to synthesis)
+\end{itemize}
+
+If the pool is exhausted without crossing a boundary, WaRF uses a synthesis
+threshold $\theta = 0.2$:
+
+\begin{equation}
+  \text{decision} = \begin{cases}
+    \textsc{Approve}      & \text{if } \Lambda_n > \theta \\
+    \textsc{Reject}       & \text{if } \Lambda_n < -\theta \\
+    \textsc{Inconclusive} & \text{if } |\Lambda_n| \leq \theta
+  \end{cases}
+\end{equation}
+
+\subsection{Maximum Reachable Evidence and Pool Size}
+
+With a pool of $n$ agents voting unanimously in one direction:
+
+\begin{equation}
+  |\Lambda|_{\max} = \ell \cdot \sum_{k=1}^{n} \omega_k
+  \label{eq:max_lambda}
+\end{equation}
+
+SPRT early stopping is only possible if $|\Lambda|_{\max}$ exceeds the
+relevant boundary. Table~\ref{tab:reachability} shows reachability for
+representative configurations.
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrll}
+\toprule
+Configuration & $n$ & $\sum\omega_i$ & $|\Lambda|_{\max}^{\text{rej}}$ & REJECT? & APPROVE? \\
+\midrule
+Uniform $\omega=0.5$           & 2 & 1.000 & 1.253 & No  & No \\
+Top-2 current ($\omega{\approx}0.605$)  & 2 & 1.211 & 1.517 & No  & No \\
+Top-3 current                   & 3 & 1.811 & 2.268 & \textbf{Yes} & No \\
+Top-4 current                   & 4 & 2.332 & 2.922 & Yes & \textbf{Yes} \\
+Full 5-agent pool               & 5 & 2.803 & 3.511 & Yes & Yes \\
+\bottomrule
+\end{tabular}
+\caption{SPRT boundary reachability at current calibrated weights
+($|\lambda_B|=2.251$, $\lambda_A=2.890$). $|\Lambda|_{\max}^{\text{rej}}$ uses
+$\ell_{\text{REJECT}}=1.253$; the APPROVE direction (using $\ell_{\text{APPROVE}}=0.981$)
+requires $n\geq 4$ at current weights.}
+\label{tab:reachability}
+\end{table}
+
+At current calibrated weights, $n=3$ is the minimum pool that can reach the
+REJECT boundary; $n=4$ for the APPROVE boundary. With $n=2$, the framework
+always exhausts the pool and synthesizes, capped at \textsc{Medium} confidence.
+These thresholds are weight-dependent: as agents accumulate more oracle labels
+and $\hat\omega$ rises toward 1, smaller pools become sufficient.
+
+% =============================================================================
+\section{Bayesian Weight Calibration}
+
+\subsection{Model}
+
+Each agent $a$ maintains a per-domain Beta distribution over its reliability:
+
+\begin{equation}
+  \omega_a^{(d)} \sim \text{Beta}\!\left(\alpha_a^{(d)},\, \beta_a^{(d)}\right)
+\end{equation}
+
+The prior is $\alpha_0 = \beta_0 = 1$, the uniform distribution, corresponding
+to $\omega = 0.5$ with maximum uncertainty (two pseudo-observations).
+
+\subsection{Update Rule}
+
+After an oracle-labelled review in domain $d$, for each agent $a$ that voted:
+\begin{itemize}
+  \item Vote matched oracle verdict: $\alpha_a^{(d)} \mathrel{+}= 1$
+  \item Vote did not match oracle verdict: $\beta_a^{(d)} \mathrel{+}= 1$
+\end{itemize}
+
+The point estimate used in Equation~\ref{eq:lambda} is the posterior mean:
+
+\begin{equation}
+  \hat{\omega}_a^{(d)} = \frac{\alpha_a^{(d)}}{\alpha_a^{(d)} + \beta_a^{(d)}}
+\end{equation}
+
+Agents that are skipped by SPRT early stopping do not receive an update —
+only agents that actually voted are evaluated against the oracle.
+
+\medskip\noindent\textbf{Interpretation.} $\hat\omega$ is an estimate of
+\emph{agent-domain fit}, not of the agent's absolute quality. An agent that
+performs well on LOGIC code but poorly on SECURITY code will accumulate high
+$\hat\omega^{\textsc{logic}}$ and low $\hat\omega^{\textsc{security}}$; neither
+value characterises the agent in isolation. Changes in $\hat\omega$ over time
+signal that the current corpus is shifting in ways that suit or penalise the
+agent's evaluation heuristics — not that the agent itself has changed.
+
+\subsection{Confidence Intervals}
+
+A 95\% credible interval for $\omega$ is computed via the Normal
+approximation to the Beta posterior:
+
+\begin{equation}
+  \hat{\omega} \;\pm\; 1.96\,\sqrt{\frac{\hat{\omega}(1-\hat{\omega})}
+                                         {\alpha + \beta}}
+\end{equation}
+
+Wide intervals indicate few oracle-labelled reviews in the domain; the
+weight is not yet reliable and should be interpreted with caution.
+
+\subsection{Oracle Labelling}
+
+The oracle is human judgment: after a review session, a developer marks the
+ground-truth verdict. WaRF compares each agent's vote to the oracle and
+updates weights accordingly. The system credits the correct \emph{outcome},
+not the quality of reasoning: a correct vote for a spurious reason receives
+the same reward as a correct vote for the right reason.
+
+This is a deliberate black-box abstraction. Evaluating reasoning quality
+would require a developer to read and judge every explanation — which is
+exactly the work WaRF is meant to reduce.
+
+% =============================================================================
+\section{Confidence Classification}
+
+WaRF assigns one of three confidence labels to each decision:
+
+\begin{center}
+\begin{tabular}{llll}
+\toprule
+Label & Condition & Empirical accuracy & Sessions \\
+\midrule
+\textsc{High}   & SPRT boundary crossed ($|\Lambda| \geq |\lambda_B|$ or $\geq \lambda_A$) & 75\%  & 12 \\
+\textsc{Medium} & Pool exhausted, $|\Lambda_n| > \theta$                                    & 63\%  & 35 \\
+\textsc{Low}    & Synthesis, $|\Lambda_n| \leq 2\theta$                                     & 27\%  & 15 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\smallskip
+Accuracy rises monotonically from LOW (27\%) to HIGH (75\%) across 62
+oracle-labelled sessions, confirming that the SPRT boundary marks a
+meaningful evidence threshold. The LOW anti-correlation (worse than random)
+indicates that when the pool exhausts without accumulating much signal, the
+synthesis decision is actively unreliable; such cases should always route to
+human review.
+
+The practical utility of the HIGH label is in \emph{selective automation}:
+a downstream policy can auto-approve HIGH-confidence APPROVE decisions, block
+on HIGH-confidence REJECT, and escalate MEDIUM or LOW to a human reviewer.
+This stratification is only possible because the SPRT boundary produces a
+qualitatively distinct evidence tier, not merely a higher vote count.
+
+% =============================================================================
+\section{Debate Round}
+
+When a Round-1 decision has LOW or MEDIUM confidence, WaRF can optionally
+invoke a debate round. Each agent receives all other agents' Round-1 votes
+and reasoning and is asked whether it maintains or revises its position.
+
+\subsection{Prompt Design}
+
+The debate prompt is not neutral. Two framings produce systematically
+different outcomes on the same code:
+
+\begin{center}
+\begin{tabular}{p{5.5cm}p{2.5cm}p{4.5cm}}
+\toprule
+Prompt & Typical outcome & Mechanism \\
+\midrule
+\textit{``Do you revise your position?''} (no anchor)
+  & Conformity
+  & Minority reads majority as evidence and capitulates \\[0.5em]
+\textit{``Your Round-1 vote was X. Maintain or revise? Explain what others got wrong if you maintain.''}
+  & Rational persuasion
+  & Minority has a path to defend its position \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The anchoring prompt is the current default in WaRF. The conformity nudge
+was an early design that was found to amplify the wrong majority — including
+with HIGH confidence after SPRT fired on the conforming votes.
+
+\subsection{When Debate Helps and When It Does Not}
+
+Debate propagates correct reasoning that agents can evaluate and find
+convincing. It does not cure false beliefs held by an agent whose training
+does not include the relevant ground truth.
+
+\begin{center}
+\begin{tabular}{p{3.5cm}p{2.0cm}p{5.5cm}}
+\toprule
+Case & Outcome & Reason \\
+\midrule
+\texttt{sessions\_pre\_auth\_strip.py}
+  & \textcolor{green!60!black}{Corrected}
+  & Correct minority (SKEPTIC) had a verifiable argument about \texttt{rebuild\_auth} stripping; majority evaluated and updated \\[0.5em]
+\texttt{hooks.py}
+  & No change
+  & Incorrect agent (SKEPTIC) held a false belief about \texttt{collections.abc.Callable}; correct explanation did not penetrate \\[0.5em]
+\texttt{\_internal\_utils.py}
+  & \textcolor{red}{Worsened}
+  & Plausible wrong argument (``no None guard'') captured the correct minority; SPRT fired on the wrong unanimous verdict \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Key principle: persuasion $\neq$ correctness.} Debate propagates
+the most \emph{persuasive} argument, not the correct one. A structurally
+sound generic heuristic (``no None guard'') can capture the correct minority
+even when it is inapplicable in context. When this happens, the result is a
+unanimous wrong verdict with HIGH confidence — the worst failure mode, because
+the SPRT boundary provides false assurance. The oracle is the only in-system
+corrective; debate has no mechanism to distinguish a persuasive argument from
+a true one.
+
+% =============================================================================
+\section{Empirical Results}
+
+Results are drawn from 246 sessions across PSF/requests library code and
+manually constructed validation files (M-00 through M-13).
+
+\subsection{Calibration}
+
+On 62 oracle-labelled sessions (reliability diagram):
+
+\begin{center}
+\begin{tabular}{lccc}
+\toprule
+Confidence & Sessions & Correct & Accuracy \\
+\midrule
+\textsc{High}   & 12 &  9 & 75.0\% \\
+\textsc{Medium} & 35 & 22 & 62.9\% \\
+\textsc{Low}    & 15 &  4 & 26.7\% \\
+\midrule
+Overall         & 62 & 35 & 56.5\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The 48-percentage-point spread from LOW (27\%) to HIGH (75\%) validates
+that the SPRT boundary marks a meaningful evidence threshold. Overall
+accuracy of 56.5\% reflects a corpus balanced between straightforward and
+hard cases; the confidence-stratified numbers are the informative signal.
+Compared to the previous corpus snapshot, the MEDIUM band has grown (22
+to 35 sessions) while LOW has shrunk (28 to 15), consistent with agents
+accumulating enough calibration history to escape the inconclusive range
+on more reviews.
+
+\subsection{Token Efficiency}
+
+SPRT early stopping fires on approximately 44\% of sessions (109 of 246).
+On those sessions the average token usage drops substantially compared to a
+full-pool run:
+
+\begin{center}
+\begin{tabular}{lrll}
+\toprule
+Configuration & Tokens & Confidence & Notes \\
+\midrule
+5-agent, pool exhausted        & $\sim$16\,100 & \textsc{Medium} (max) & All 5 agents called \\
+5-agent, SPRT at $k=3$         & $\sim$3\,200  & \textsc{High}         & 2 agents skipped \\
+2-agent, any outcome           & $\sim$4\,000  & \textsc{Medium} (max) & Boundaries unreachable \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Token cost is more strongly driven by file size than pool size; a 5-agent
+run on a small file is cheaper than a 2-agent run on a large one. The early
+stopping rate of 44\% has grown with corpus size: as agents accumulate
+oracle labels and $\hat\omega$ converges away from the uninformative prior,
+evidence accumulates faster per agent, making boundary crossings more frequent.
+
+\subsection{2-Agent Pool Comparison}
+
+The top-2 agents by current calibrated $\hat\omega$ (ADVOCATE and AUDITOR,
+both $\approx 0.605$) are structurally capped at \textsc{Medium} confidence
+(Section~3.4, Table~1): their combined $|\Lambda|_{\max} \approx 1.52$, well
+below the REJECT boundary at 2.251. This cap holds for any choice of two
+agents at current weight distributions.
+
+The critical practical consequence is \emph{selective automation}. A downstream
+CI policy can only stratify decisions if confidence levels are qualitatively
+distinct: HIGH to auto-approve or auto-block; MEDIUM and LOW to escalate.
+With a 2-agent pool, every decision returns MEDIUM regardless of how
+unambiguous the evidence is. The routing signal disappears. The 5-agent pool
+produces HIGH on 44\% of reviews — those are the sessions that can be handled
+without human intervention.
+
+Counter-argument to \cite{single2026}: their finding concerns mathematical
+reasoning tasks, where the defect is derived from premises. Code review is
+different: the defect is present or absent in the artefact, and the ensemble's
+value is not deliberation but accumulating the evidence mass required to cross
+the SPRT boundary with HIGH confidence. The 2-agent pool achieves comparable
+accuracy on average but never produces the HIGH-confidence tier that makes
+selective automation possible.
+
+% =============================================================================
+\section{Known Limitations}
+
+\begin{description}
+\item[Type 1 — Persona bias.]
+  Agents with affirmative personas (ADVOCATE, AUDITOR) evaluate whether the
+  code does what its author intended — not whether what the author intended is
+  sufficient. They correctly assess that the logic is coherent and then stop.
+  They do not ask what happens when an integer overflows, or when a pointer is
+  null, because those scenarios lie outside the framing their persona uses to
+  read code. BOUNDARY and TEST-FOCUSED partially correct this by design, but
+  any pool dominated by affirmative personas inherits the bias structurally.
+  More agents of the same persona type amplify rather than correct it.
+
+\item[Type 2 — Shared knowledge gap.]
+  When all agents share the same training-level blind spot, WaRF produces
+  a unanimous wrong verdict with HIGH confidence. CVE-2024-47081 is the
+  canonical example: all five agents approved the vulnerable \texttt{urlparse}
+  hostname parsing line. Adding more agents with the same training coverage
+  amplifies the wrong signal. Bandit (SAST) partially mitigates this for
+  patterns in its ruleset.
+
+\item[Type 3 — False-consensus capitulation.]
+  In debate, a correct minority can be captured by a plausible wrong majority
+  argument (see \texttt{\_internal\_utils.py} case). Once SPRT fires on the
+  conforming votes, there is no in-session recovery; the oracle update is the
+  only corrective mechanism.
+
+\item[Boundary reachability.]
+  At current calibrated weights, $n \geq 3$ is required to reach the REJECT
+  boundary and $n \geq 4$ for the APPROVE boundary (Section~3.4, Table~1).
+  With $n=2$, the framework always exhausts the pool and synthesizes at
+  MEDIUM. As agents accumulate more oracle labels and $\hat\omega$ rises,
+  smaller pools may become sufficient; conversely, a domain with few labelled
+  sessions keeps $\hat\omega$ near the prior (0.5), making boundaries harder
+  to reach. Adding more agents increases cost proportionally whenever the
+  boundary is not crossed before pool exhaustion.
+
+\item[Oracle dependency.]
+  Bayesian calibration requires oracle-labelled reviews. Without labelling,
+  all weights remain at their prior ($\hat\omega = 0.5$) and the SPRT
+  reduces to an unweighted vote counter. The quality of calibration is bounded
+  by the labelling rate.
+\end{description}
+
+% =============================================================================
+\section{Related Work}
+
+\textbf{ConSol}~\cite{consol2025} applies SPRT to a single language model at
+varied sampling temperature to determine when the model has converged on a
+consistent answer. WaRF's extension: heterogeneous agent personas with
+domain-specific learned weights. Temperature variance gives noise around one
+perspective; different personas give genuinely different evaluation heuristics
+(compliance audit vs.\ adversarial probing). The domain-specific $\omega$
+weights are only meaningful because the agents are actually different.
+
+\textbf{Asymptotically Optimal Sequential Testing}~\cite{optimal2026} derives
+optimal stopping policies for LLM ensembles under a combined cost-plus-wait
+objective. The optimal policy uses at most two LLMs. The objective differs
+from WaRF's: WaRF optimises calibrated accuracy at minimum agent calls without
+a cost term, and does not assume homogeneous agents.
+
+\textbf{Wisdom and Delusion of LLM Ensembles}~\cite{wisdom2025} demonstrates
+that ensembles do not always outperform the single best agent, particularly
+when agents share training data and therefore share blind spots. This is
+consistent with WaRF's Type 2 failure mode and validates the distinction
+between \emph{persona diversity} (which WaRF provides) and
+\emph{knowledge diversity} (which requires external tools or data augmentation).
+
+\textbf{Single-Agent Outperforms Multi-Agent Under Equal Token Budget}~\cite{single2026}
+finds that on mathematical reasoning tasks, adding agents under a fixed budget
+degrades performance. Code review differs: the defect is not derived from
+premises but observed in the artefact, and the ensemble's value lies in
+accumulating sufficient evidence mass to cross the SPRT boundary — not in
+deliberation.
+
+\begin{thebibliography}{9}
+\bibitem{consol2025}
+  ConSol: Sequential Consistency for LLM Outputs via SPRT.
+  arXiv:2503.17587, 2025.
+\bibitem{optimal2026}
+  Asymptotically Optimal Sequential Testing for LLM Ensembles.
+  arXiv:2604.01086, 2026.
+\bibitem{wisdom2025}
+  The Wisdom and Delusion of LLM Ensembles.
+  arXiv:2510.21513, 2025.
+\bibitem{single2026}
+  Single-Agent Outperforms Multi-Agent Under Equal Token Budget.
+  arXiv:2604.02460, 2026.
+\end{thebibliography}
+
+\end{document}

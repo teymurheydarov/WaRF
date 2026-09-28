@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WaRF — Tokens vs Agents Consulted</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: "Segoe UI", system-ui, sans-serif;
+  padding: 28px 32px 48px;
+}
+h1 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #c8d8f4;
+  margin-bottom: 6px;
+}
+.subtitle {
+  font-size: 0.82rem;
+  color: #64748b;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+.charts {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.chart-card {
+  background: #1e293b;
+  border-radius: 10px;
+  padding: 16px 18px 14px;
+  flex: 1 1 380px;
+}
+.chart-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #7ea8d4;
+  margin-bottom: 10px;
+}
+canvas { display: block; width: 100%; }
+
+.legend {
+  display: flex;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  font-size: 0.74rem;
+  color: #94a3b8;
+}
+.legend-item { display: flex; align-items: center; gap: 5px; }
+.legend-dot  { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+
+.stats-row {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+.stat-chip {
+  background: #1e293b;
+  border-radius: 8px;
+  padding: 10px 16px;
+  min-width: 130px;
+}
+.stat-label  { font-size: 0.7rem; color: #64748b; letter-spacing: 0.08em; text-transform: uppercase; }
+.stat-value  { font-size: 1.5rem; font-weight: 700; color: #c8d8f4; line-height: 1.3; }
+.stat-sub    { font-size: 0.72rem; color: #475569; margin-top: 1px; }
+
+#tooltip {
+  position: fixed;
+  background: #0f172a;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  padding: 7px 11px;
+  font-size: 0.76rem;
+  pointer-events: none;
+  display: none;
+  z-index: 999;
+  line-height: 1.6;
+  max-width: 230px;
+  color: #e2e8f0;
+}
+</style>
+</head>
+<body>
+<h1>WaRF — SPRT Efficiency: Tokens vs Agents Consulted</h1>
+<div class="subtitle">
+  SPRT fires early when agents agree — fewer opinions needed, fewer tokens spent.
+</div>
+
+<div id="stats-row" class="stats-row"></div>
+
+<div class="charts" style="margin-top:20px">
+
+  <!-- Chart 1: how many opinions were needed? -->
+  <div class="chart-card">
+    <div class="chart-title">How many opinions were needed?</div>
+    <div id="proportion-chart"></div>
+  </div>
+
+  <!-- Chart 2: SPRT early-stop vs full run -->
+  <div class="chart-card">
+    <div class="chart-title">SPRT early stop vs full run</div>
+    <canvas id="bar" height="280"></canvas>
+  </div>
+
+</div>
+<div id="tooltip"></div>
+
+<script>
+const ROWS    = [{"agents": 3, "tokens": 2098, "tokens_in": 1091, "tokens_out": 1007, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "file_utils.py"}, {"agents": 3, "tokens": 12139, "tokens_in": 10892, "tokens_out": 1247, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "auth.py"}, {"agents": 3, "tokens": 11990, "tokens_in": 10892, "tokens_out": 1098, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "auth.py"}, {"agents": 3, "tokens": 23673, "tokens_in": 22391, "tokens_out": 1282, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "adapters.py"}, {"agents": 3, "tokens": 23614, "tokens_in": 22391, "tokens_out": 1223, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "adapters.py"}, {"agents": 3, "tokens": 23572, "tokens_in": 22391, "tokens_out": 1181, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "PERFORMANCE", "artifact": "adapters.py"}, {"agents": 3, "tokens": 23619, "tokens_in": 22391, "tokens_out": 1228, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "PERFORMANCE", "artifact": "adapters.py"}, {"agents": 3, "tokens": 33826, "tokens_in": 32438, "tokens_out": 1388, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "utils.py"}, {"agents": 3, "tokens": 31050, "tokens_in": 29717, "tokens_out": 1333, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "utils_cve_2024_47081.py"}, {"agents": 3, "tokens": 31022, "tokens_in": 29717, "tokens_out": 1305, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "utils_cve_2024_47081.py"}, {"agents": 3, "tokens": 31028, "tokens_in": 29717, "tokens_out": 1311, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "utils_cve_2024_47081.py"}, {"agents": 3, "tokens": 23515, "tokens_in": 22187, "tokens_out": 1328, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "sessions_pre_auth_strip.py"}, {"agents": 3, "tokens": 23359, "tokens_in": 22187, "tokens_out": 1172, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "sessions_pre_auth_strip.py"}, {"agents": 3, "tokens": 19869, "tokens_in": 18533, "tokens_out": 1336, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "cookies.py"}, {"agents": 3, "tokens": 19759, "tokens_in": 18533, "tokens_out": 1226, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "cookies.py"}, {"agents": 3, "tokens": 19947, "tokens_in": 18533, "tokens_out": 1414, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "cookies.py"}, {"agents": 3, "tokens": 7648, "tokens_in": 6584, "tokens_out": 1064, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "api.py"}, {"agents": 3, "tokens": 7688, "tokens_in": 6584, "tokens_out": 1104, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "api.py"}, {"agents": 3, "tokens": 2349, "tokens_in": 1304, "tokens_out": 1045, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "LOGIC", "artifact": "hooks.py"}, {"agents": 3, "tokens": 2496, "tokens_in": 1304, "tokens_out": 1192, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "LOGIC", "artifact": "hooks.py"}, {"agents": 3, "tokens": 4684, "tokens_in": 3635, "tokens_out": 1049, "confidence": "LOW", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "exceptions.py"}, {"agents": 3, "tokens": 4807, "tokens_in": 3635, "tokens_out": 1172, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "exceptions.py"}, {"agents": 3, "tokens": 5243, "tokens_in": 4076, "tokens_out": 1167, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "structures.py"}, {"agents": 3, "tokens": 5220, "tokens_in": 4076, "tokens_out": 1144, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "structures.py"}, {"agents": 3, "tokens": 28693, "tokens_in": 27341, "tokens_out": 1352, "confidence": "LOW", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "sessions.py"}, {"agents": 3, "tokens": 28703, "tokens_in": 27341, "tokens_out": 1362, "confidence": "LOW", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "sessions.py"}, {"agents": 3, "tokens": 34955, "tokens_in": 33662, "tokens_out": 1293, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "models.py"}, {"agents": 3, "tokens": 34883, "tokens_in": 33662, "tokens_out": 1221, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "models.py"}, {"agents": 3, "tokens": 2352, "tokens_in": 1304, "tokens_out": 1048, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "hooks.py"}, {"agents": 3, "tokens": 2204, "tokens_in": 1304, "tokens_out": 900, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "hooks.py"}, {"agents": 3, "tokens": 23388, "tokens_in": 22187, "tokens_out": 1201, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "sessions_pre_auth_strip.py"}, {"agents": 5, "tokens": 3372, "tokens_in": 1951, "tokens_out": 1421, "confidence": "LOW", "decision": "REJECT", "sprt_fired": false, "domain": "LOGIC", "artifact": "test_calculator.py"}, {"agents": 5, "tokens": 2541, "tokens_in": 1346, "tokens_out": 1195, "confidence": "LOW", "decision": "REJECT", "sprt_fired": false, "domain": "LOGIC", "artifact": "calculator.cpp"}, {"agents": 3, "tokens": 2218, "tokens_in": 1341, "tokens_out": 877, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "array_utils.cpp"}, {"agents": 3, "tokens": 2120, "tokens_in": 1304, "tokens_out": 816, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "db_query.py"}, {"agents": 3, "tokens": 2571, "tokens_in": 1448, "tokens_out": 1123, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "PERFORMANCE", "artifact": "counter.py"}, {"agents": 3, "tokens": 2538, "tokens_in": 1448, "tokens_out": 1090, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "PERFORMANCE", "artifact": "counter.py"}, {"agents": 3, "tokens": 2476, "tokens_in": 1277, "tokens_out": 1199, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "runner.py"}, {"agents": 3, "tokens": 2401, "tokens_in": 1272, "tokens_out": 1129, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "string_ops.c"}, {"agents": 3, "tokens": 2116, "tokens_in": 1055, "tokens_out": 1061, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "file_server.py"}, {"agents": 3, "tokens": 2540, "tokens_in": 1485, "tokens_out": 1055, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "node_list.cpp"}, {"agents": 5, "tokens": 2433, "tokens_in": 1046, "tokens_out": 1387, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "certs.py"}, {"agents": 5, "tokens": 6177, "tokens_in": 4246, "tokens_out": 1931, "confidence": "LOW", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "compat.py"}, {"agents": 5, "tokens": 8100, "tokens_in": 6296, "tokens_out": 1804, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "help.py"}, {"agents": 5, "tokens": 5007, "tokens_in": 3136, "tokens_out": 1871, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "LOGIC", "artifact": "_internal_utils.py"}, {"agents": 5, "tokens": 9569, "tokens_in": 7491, "tokens_out": 2078, "confidence": "LOW", "decision": "REJECT", "sprt_fired": false, "domain": "LOGIC", "artifact": "status_codes.py"}, {"agents": 5, "tokens": 11757, "tokens_in": 9836, "tokens_out": 1921, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "_types.py"}, {"agents": 5, "tokens": 8223, "tokens_in": 6296, "tokens_out": 1927, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "help.py"}, {"agents": 5, "tokens": 4979, "tokens_in": 3136, "tokens_out": 1843, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "_internal_utils.py"}, {"agents": 5, "tokens": 4939, "tokens_in": 3136, "tokens_out": 1803, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "_internal_utils.py"}, {"agents": 2, "tokens": 14702, "tokens_in": 13642, "tokens_out": 1060, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "cookies.py"}, {"agents": 2, "tokens": 2843, "tokens_in": 2156, "tokens_out": 687, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "LOGIC", "artifact": "hooks.py"}, {"agents": 2, "tokens": 15527, "tokens_in": 14790, "tokens_out": 737, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "sessions_pre_auth_strip.py"}, {"agents": 2, "tokens": 20520, "tokens_in": 19810, "tokens_out": 710, "confidence": "MEDIUM", "decision": "APPROVE", "sprt_fired": false, "domain": "SECURITY", "artifact": "utils_cve_2024_47081.py"}, {"agents": 3, "tokens": 2776, "tokens_in": 1694, "tokens_out": 1082, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "demo_target.py"}, {"agents": 3, "tokens": 2654, "tokens_in": 1694, "tokens_out": 960, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "demo_target.py"}, {"agents": 2, "tokens": 1827, "tokens_in": 1128, "tokens_out": 699, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "demo_target.py"}, {"agents": 5, "tokens": 59030, "tokens_in": 56556, "tokens_out": 2474, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "cli.py"}, {"agents": 5, "tokens": 25782, "tokens_in": 23541, "tokens_out": 2241, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "orchestrator.py"}, {"agents": 5, "tokens": 58765, "tokens_in": 56556, "tokens_out": 2209, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "cli.py"}, {"agents": 5, "tokens": 25684, "tokens_in": 23541, "tokens_out": 2143, "confidence": "MEDIUM", "decision": "REJECT", "sprt_fired": false, "domain": "SECURITY", "artifact": "orchestrator.py"}, {"agents": 4, "tokens": 29286, "tokens_in": 27292, "tokens_out": 1994, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "cookies.py"}, {"agents": 4, "tokens": 6056, "tokens_in": 4320, "tokens_out": 1736, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "hooks.py"}, {"agents": 4, "tokens": 41469, "tokens_in": 39036, "tokens_out": 2433, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "sessions.py"}, {"agents": 4, "tokens": 48959, "tokens_in": 45832, "tokens_out": 3127, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "SECURITY", "artifact": "utils.py"}, {"agents": 3, "tokens": 1326, "tokens_in": 590, "tokens_out": 736, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "build_runner.py"}, {"agents": 3, "tokens": 1380, "tokens_in": 590, "tokens_out": 790, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "build_runner.py"}, {"agents": 3, "tokens": 1310, "tokens_in": 590, "tokens_out": 720, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "build_runner.py"}, {"agents": 3, "tokens": 1424, "tokens_in": 590, "tokens_out": 834, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "build_runner.py"}, {"agents": 3, "tokens": 1374, "tokens_in": 590, "tokens_out": 784, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "build_runner.py"}, {"agents": 3, "tokens": 1370, "tokens_in": 590, "tokens_out": 780, "confidence": "HIGH", "decision": "REJECT", "sprt_fired": true, "domain": "LOGIC", "artifact": "build_runner.py"}];
+const SUMMARY = [{"label": "SPRT early stop", "fired": true, "mean": 7238, "min": 1310, "max": 48959, "count": 25}, {"label": "All agents ran", "fired": false, "mean": 17795, "min": 1827, "max": 59030, "count": 46}];
+
+// ── Stat chips ────────────────────────────────────────────────────────────────
+(function buildStats() {
+  const total     = ROWS.length;
+  const earlyStop = ROWS.filter(r => r.sprt_fired).length;
+  const pctEarly  = Math.round(earlyStop / total * 100);
+  const avgAll    = Math.round(ROWS.reduce((s, r) => s + r.tokens, 0) / total);
+  const earlyRows = ROWS.filter(r => r.sprt_fired);
+  const avgEarly  = earlyRows.length ? Math.round(earlyRows.reduce((s,r)=>s+r.tokens,0)/earlyRows.length) : 0;
+  const fullRows  = ROWS.filter(r => !r.sprt_fired);
+  const avgFull   = fullRows.length  ? Math.round(fullRows.reduce((s,r)=>s+r.tokens,0)/fullRows.length)   : 0;
+  const avgAgents = (ROWS.reduce((s, r) => s + r.agents, 0) / total).toFixed(2);
+  const maxAgents = Math.max(...ROWS.map(r => r.agents));
+
+  const row = document.getElementById("stats-row");
+  const chips = [
+    { label: "Reviews",           value: total,              sub: "total sessions" },
+    { label: "SPRT early stop",   value: `${pctEarly}%`,    sub: `${earlyStop} of ${total} sessions` },
+    { label: "Avg agents consulted", value: `${avgAgents} / ${maxAgents}`, sub: "avg reviewers consulted" },
+    { label: "Avg tokens (all)",  value: avgAll.toLocaleString(), sub: "input + output" },
+    { label: "Avg (early stop)",  value: avgEarly.toLocaleString(), sub: "vs " + avgFull.toLocaleString() + " (full run)" },
+  ];
+  chips.forEach(c => {
+    const el = document.createElement("div");
+    el.className = "stat-chip";
+    el.innerHTML = `<div class="stat-label">${c.label}</div><div class="stat-value">${c.value}</div><div class="stat-sub">${c.sub}</div>`;
+    row.appendChild(el);
+  });
+})();
+
+const PAD = { l: 56, r: 20, t: 14, b: 38 };
+const tooltip = document.getElementById("tooltip");
+
+// ── Proportion chart: stopped early vs full run ───────────────────────────────
+(function drawProportion() {
+  const total     = ROWS.length;
+  const earlyN    = ROWS.filter(r => r.sprt_fired).length;
+  const fullN     = total - earlyN;
+  const earlyPct  = Math.round(earlyN / total * 100);
+  const fullPct   = 100 - earlyPct;
+
+  const container = document.getElementById("proportion-chart");
+  container.style.padding = "24px 8px 8px";
+
+  const rows = [
+    { label: "Stopped early",  n: earlyN, pct: earlyPct, color: "#16a34a", sub: "SPRT fired — agents agreed" },
+    { label: "Full review",    n: fullN,  pct: fullPct,  color: "#4E79A7", sub: "all agents consulted" },
+  ];
+
+  rows.forEach(row => {
+    const wrap = document.createElement("div");
+    wrap.style.cssText = "margin-bottom:28px";
+
+    // Label row
+    const labelRow = document.createElement("div");
+    labelRow.style.cssText = "display:flex;justify-content:space-between;align-items:baseline;margin-bottom:7px";
+    labelRow.innerHTML =
+      `<span style="font-size:0.88rem;font-weight:600;color:#c8d8f4">${row.label}</span>` +
+      `<span style="font-size:1.45rem;font-weight:700;color:${row.color}">${row.pct}%` +
+      `<span style="font-size:0.72rem;font-weight:400;color:#64748b;margin-left:6px">n=${row.n}</span></span>`;
+
+    // Bar track
+    const track = document.createElement("div");
+    track.style.cssText = "background:#0f172a;border-radius:4px;height:28px;overflow:hidden";
+    const fill = document.createElement("div");
+    fill.style.cssText = `width:0%;height:100%;border-radius:4px;background:${row.color};transition:width 0.8s ease`;
+    track.appendChild(fill);
+
+    // Sub-label
+    const sub = document.createElement("div");
+    sub.style.cssText = "font-size:0.72rem;color:#475569;margin-top:5px";
+    sub.textContent = row.sub;
+
+    wrap.appendChild(labelRow);
+    wrap.appendChild(track);
+    wrap.appendChild(sub);
+    container.appendChild(wrap);
+
+    // Animate bar after paint
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      fill.style.width = `${row.pct}%`;
+    }));
+  });
+})();
+
+// ── Bar chart: mean tokens per agent count ────────────────────────────────────
+(function drawBar() {
+  const canvas = document.getElementById("bar");
+  const dpr = window.devicePixelRatio || 1;
+  const W   = canvas.offsetWidth || 380;
+  const H   = 280;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  const ctx = canvas.getContext("2d");
+  ctx.scale(dpr, dpr);
+
+  const pw = W - PAD.l - PAD.r;
+  const ph = H - PAD.t - PAD.b;
+
+  const maxMean = Math.max(...SUMMARY.map(s => s.mean)) * 1.15;
+  const n       = SUMMARY.length;
+  const barW    = Math.min(60, (pw / n) * 0.6);
+  const gap     = pw / n;
+
+  const xCenter = i => PAD.l + gap * i + gap / 2;
+  const yS = v => PAD.t + (1 - v / maxMean) * ph;
+
+  // Background
+  ctx.fillStyle = "#1e293b";
+  ctx.fillRect(0, 0, W, H);
+
+  // Y grid
+  ctx.strokeStyle = "#1e3a5f"; ctx.lineWidth = 0.8;
+  [0, 0.25, 0.5, 0.75, 1].forEach(f => {
+    const v = f * maxMean;
+    const py = yS(v);
+    ctx.beginPath(); ctx.moveTo(PAD.l, py); ctx.lineTo(PAD.l + pw, py); ctx.stroke();
+    ctx.fillStyle  = "#475569"; ctx.font = "10px monospace"; ctx.textAlign = "right";
+    ctx.fillText((v / 1000).toFixed(1) + "k", PAD.l - 5, py + 3.5);
+  });
+
+  // Axes
+  ctx.strokeStyle = "#334155"; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(PAD.l, PAD.t); ctx.lineTo(PAD.l, PAD.t + ph); ctx.lineTo(PAD.l + pw, PAD.t + ph);
+  ctx.stroke();
+
+  // Bar colors: green for early stop, blue for full run
+  const BAR_COLORS = { true: ["#16a34a", "#052e16"], false: ["#4E79A7", "#2a4a6e"] };
+
+  // Bars
+  const hits = [];
+  SUMMARY.forEach((s, i) => {
+    const cx   = xCenter(i);
+    const yTop = yS(s.mean);
+    const yBot = yS(0);
+    const hh   = yBot - yTop;
+    const [c0, c1] = BAR_COLORS[s.fired];
+
+    const grad = ctx.createLinearGradient(0, yTop, 0, yBot);
+    grad.addColorStop(0, c0);
+    grad.addColorStop(1, c1);
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.roundRect(cx - barW / 2, yTop, barW, hh, [4, 4, 0, 0]);
+    ctx.fill();
+
+    // Min/max range line
+    const yMin = yS(s.min), yMax = yS(s.max);
+    ctx.strokeStyle = "#7ea8d4"; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(cx, yMin); ctx.lineTo(cx, yMax); ctx.stroke();
+    ctx.strokeStyle = "#7ea8d4"; ctx.lineWidth = 1;
+    [yMin, yMax].forEach(py => {
+      ctx.beginPath(); ctx.moveTo(cx - 4, py); ctx.lineTo(cx + 4, py); ctx.stroke();
+    });
+
+    // Value label
+    ctx.fillStyle  = "#c8d8f4"; ctx.font = "bold 11px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText((s.mean / 1000).toFixed(1) + "k", cx, yTop - 5);
+
+    // X labels
+    ctx.fillStyle = "#94a3b8"; ctx.font = "10px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText(s.label, cx, PAD.t + ph + 14);
+    ctx.fillStyle = "#475569"; ctx.font = "9px sans-serif";
+    ctx.fillText(`n=${s.count}`, cx, PAD.t + ph + 26);
+
+    hits.push({ cx, yTop, yBot, barW, ...s });
+  });
+
+  // Y label
+  ctx.save();
+  ctx.translate(12, PAD.t + ph / 2);
+  ctx.rotate(-Math.PI / 2);
+  ctx.fillStyle  = "#475569"; ctx.font = "10px sans-serif"; ctx.textAlign = "center";
+  ctx.fillText("mean total tokens", 0, 0);
+  ctx.restore();
+
+  canvas.addEventListener("mousemove", e => {
+    const rect = canvas.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    let best = null;
+    hits.forEach(h => {
+      if (mx >= h.cx - h.barW / 2 - 4 && mx <= h.cx + h.barW / 2 + 4 && my >= h.yTop - 4 && my <= h.yBot + 4)
+        best = h;
+    });
+    if (best) {
+      tooltip.style.display = "block";
+      tooltip.style.left    = (e.clientX + 14) + "px";
+      tooltip.style.top     = (e.clientY - 40) + "px";
+      tooltip.innerHTML =
+        `<b>${best.label}</b>&ensp;(${best.count} sessions)<br>` +
+        `Mean: ${best.mean.toLocaleString()} tokens<br>` +
+        `Range: ${best.min.toLocaleString()} – ${best.max.toLocaleString()}`;
+    } else {
+      tooltip.style.display = "none";
+    }
+  });
+  canvas.addEventListener("mouseleave", () => { tooltip.style.display = "none"; });
+})();
+</script>
+</body>
+</html>

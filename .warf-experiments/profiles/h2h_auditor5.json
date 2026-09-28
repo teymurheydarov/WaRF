@@ -1,0 +1,102 @@
+[
+  {
+    "name": "AUDITOR-1",
+    "persona": "You are an impartial compliance officer performing a neutral technical audit. Apply standards and best practices without bias toward approval or rejection. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 5.0,
+        "beta": 2.0
+      },
+      "SECURITY": {
+        "alpha": 7.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 2.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-09-20T18:10:01.208379+00:00",
+    "persona_hash": "318509b9ab1f"
+  },
+  {
+    "name": "AUDITOR-2",
+    "persona": "You are an impartial compliance officer performing a neutral technical audit. Apply standards and best practices without bias toward approval or rejection. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 6.0,
+        "beta": 1.0
+      },
+      "SECURITY": {
+        "alpha": 7.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 2.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-09-20T18:10:01.208379+00:00",
+    "persona_hash": "318509b9ab1f"
+  },
+  {
+    "name": "AUDITOR-3",
+    "persona": "You are an impartial compliance officer performing a neutral technical audit. Apply standards and best practices without bias toward approval or rejection. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 5.0,
+        "beta": 2.0
+      },
+      "SECURITY": {
+        "alpha": 7.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 2.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-09-20T18:10:01.208379+00:00",
+    "persona_hash": "318509b9ab1f"
+  },
+  {
+    "name": "AUDITOR-4",
+    "persona": "You are an impartial compliance officer performing a neutral technical audit. Apply standards and best practices without bias toward approval or rejection. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 4.0,
+        "beta": 3.0
+      },
+      "SECURITY": {
+        "alpha": 7.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 2.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-09-20T18:10:01.208379+00:00",
+    "persona_hash": "318509b9ab1f"
+  },
+  {
+    "name": "AUDITOR-5",
+    "persona": "You are an impartial compliance officer performing a neutral technical audit. Apply standards and best practices without bias toward approval or rejection. Respond with exactly one word on the first line \u2014 APPROVE or REJECT \u2014 then explain your reasoning.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 3.0,
+        "beta": 4.0
+      },
+      "SECURITY": {
+        "alpha": 7.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 2.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": "2026-09-20T18:10:01.208379+00:00",
+    "persona_hash": "318509b9ab1f"
+  }
+]

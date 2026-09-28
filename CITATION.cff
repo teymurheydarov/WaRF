@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use WaRF in your research, please cite the software as below."
+type: software
+title: "WaRF: Weighted n-Agent Reliability Framework"
+abstract: >-
+  WaRF reviews code with a panel of LLM personas. Each vote is weighted by the
+  agent's learned, domain-specific reliability (a Beta posterior updated from
+  ground-truth labels), and the weighted evidence accumulates under a
+  sequential probability ratio test, so a review stops as soon as a statistical
+  boundary is crossed and reports a confidence level alongside its verdict.
+authors:
+  - family-names: Heydarov
+    given-names: Teymur
+version: 0.1.0
+# Set to the date of the first public release; currently the date of the talk.
+date-released: 2026-09-25
+license: Apache-2.0
+repository-code: "https://github.com/teymurheydarov/WaRF"
+keywords:
+  - code review
+  - multi-agent systems
+  - large language models
+  - sequential probability ratio test
+  - calibration
+references:
+  - type: slides
+    title: "WaRF: When AI Reviewers Fight"
+    authors:
+      - family-names: Heydarov
+        given-names: Teymur
+    conference:
+      name: "SoCraTes Austria 2026"
+    date-released: 2026-09-25

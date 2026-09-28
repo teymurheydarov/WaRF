@@ -1,0 +1,164 @@
+{
+  "corpus_version": "1.0",
+  "source_project": "ICGASA",
+  "description": "WaRF validation corpus — controlled mutations with pre-certified ground truth. Each session has a known x* established before any agent is queried. Used to verify synthesis function correctness, Bayesian weight convergence direction, and SPRT stopping behaviour.",
+  "sprt_params": {
+    "p1": 0.80,
+    "p0": 0.30,
+    "alpha_error": 0.05,
+    "beta_error": 0.10,
+    "A_boundary": 2.890,
+    "B_boundary": -2.251
+  },
+  "sessions": [
+    {
+      "id": "M-00",
+      "label": "Clean baseline — no mutation",
+      "domain": "LOGIC",
+      "theta": 0.0,
+      "artifact": "M-00_baseline/calculator.cpp",
+      "artifact_type": "SNIPPET",
+      "language": "cpp",
+      "review_prompt": "Review the following C++ code for logical correctness, edge-case handling, and type safety. Vote APPROVE (+1) if the code is correct and complete. Vote REJECT (-1) if you identify a defect. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": 1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "rationale": "Original unmodified code. Division-by-zero guard is present. Casts are correct. All tests pass. Expected verdict: APPROVE."
+      }
+    },
+    {
+      "id": "M-01",
+      "label": "Removed division-by-zero guard",
+      "domain": "LOGIC",
+      "theta": 0.0,
+      "artifact": "M-01_no_div_guard/calculator.cpp",
+      "artifact_type": "SNIPPET",
+      "language": "cpp",
+      "review_prompt": "Review the following C++ code for logical correctness, edge-case handling, and type safety. Vote APPROVE (+1) if the code is correct and complete. Vote REJECT (-1) if you identify a defect. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": -1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "secondary_oracle": {
+          "oracle_type": "TEST_SUITE",
+          "oracle_tier": 3,
+          "oracle_confidence_weight": 0.3,
+          "note": "ctest divide-by-zero test case would crash or produce UB"
+        },
+        "rationale": "The if (b == 0) guard and std::invalid_argument throw have been removed. Calling divide(x, 0) produces undefined behaviour (integer division by zero). Expected verdict: REJECT."
+      }
+    },
+    {
+      "id": "M-02",
+      "label": "SFINAE syntax error — missing _t on enable_if",
+      "domain": "LOGIC",
+      "theta": 0.0,
+      "artifact": "M-02_type_error/main.cpp",
+      "artifact_type": "SNIPPET",
+      "language": "cpp",
+      "review_prompt": "Review the following C++ code for logical correctness, edge-case handling, and type safety. Pay particular attention to template and type-trait usage. Vote APPROVE (+1) if the code is correct and complete. Vote REJECT (-1) if you identify a defect. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": -1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "secondary_oracle": {
+          "oracle_type": "COMPILER",
+          "oracle_tier": 4,
+          "oracle_confidence_weight": 0.1,
+          "note": "CMake build fails: lambda return type resolves to the enable_if struct, not void"
+        },
+        "rationale": "std::enable_if<condition, void> returns the struct itself, not the nested type. The correct form is std::enable_if_t<condition, void> or std::enable_if<condition, void>::type. Without this, the lambda has an invalid return type and the code fails to compile. Expected verdict: REJECT."
+      }
+    },
+    {
+      "id": "M-03",
+      "label": "Missing edge-case test coverage",
+      "domain": "LOGIC",
+      "theta": 0.0,
+      "artifact": "M-03_missing_tests/test_calculator.py",
+      "artifact_type": "SNIPPET",
+      "language": "python",
+      "review_prompt": "Review the following Python test suite for adequacy of coverage. Consider whether edge cases, negative inputs, and boundary conditions are tested. Vote APPROVE (+1) if the coverage is sufficient. Vote REJECT (-1) if significant gaps exist. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": -1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "rationale": "Negative-operand cases removed from test_add and test_subtract. No test for multiply with negative inputs or zero. No test for subtract producing a negative result. These gaps mean integer sign-handling bugs in the implementation would not be caught by CI. Expected verdict: REJECT. Note: automated tools (pylint, mypy, pytest) will all pass — only a human reviewer can identify coverage gaps."
+      }
+    },
+    {
+      "id": "M-04",
+      "label": "Path traversal via unsanitized user input",
+      "domain": "SECURITY",
+      "theta": 0.2,
+      "artifact": "M-04_path_traversal/file_utils.py",
+      "artifact_type": "SNIPPET",
+      "language": "python",
+      "review_prompt": "Review the following Python code for security vulnerabilities, with particular attention to input handling and file system access. Vote APPROVE (+1) if the code is secure. Vote REJECT (-1) if you identify a security defect. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": -1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "secondary_oracle": {
+          "oracle_type": "SAST",
+          "oracle_tier": 2,
+          "oracle_confidence_weight": 0.7,
+          "note": "Semgrep rule python.lang.security.audit.path-traversal.path-traversal-open would flag this"
+        },
+        "rationale": "filename is user-controlled and passed directly to os.path.join without sanitization. A value like ../../etc/passwd allows reading arbitrary files outside base_dir. Fix: use os.path.basename(filename) before joining, then verify the resolved path starts with os.path.realpath(base_dir). Expected verdict: REJECT."
+      }
+    },
+    {
+      "id": "M-05",
+      "label": "O(n) loop division instead of O(1)",
+      "domain": "PERFORMANCE",
+      "theta": -0.1,
+      "artifact": "M-05_slow_divide/calculator.cpp",
+      "artifact_type": "SNIPPET",
+      "language": "cpp",
+      "review_prompt": "Review the following C++ code for performance correctness and algorithmic efficiency. Vote APPROVE (+1) if the implementation is acceptably efficient. Vote REJECT (-1) if you identify a significant performance defect. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": -1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "secondary_oracle": {
+          "oracle_type": "BENCHMARK",
+          "oracle_tier": 2,
+          "oracle_confidence_weight": 0.7,
+          "note": "divide(INT_MAX, 1) would loop ~2 billion times; measurable regression vs O(1) baseline"
+        },
+        "rationale": "Division implemented via repeated subtraction loop. Time complexity is O(|a/b|) instead of O(1). divide(INT_MAX, 1) iterates ~2.1 billion times. The loop also loses fractional precision — it only returns an integer quotient cast to double, discarding the remainder. Two independent defects: algorithmic complexity and precision loss. Expected verdict: REJECT."
+      }
+    },
+    {
+      "id": "M-06",
+      "label": "Silent integer overflow in multiply",
+      "domain": "LOGIC",
+      "theta": 0.0,
+      "artifact": "M-06_overflow/calculator.cpp",
+      "artifact_type": "SNIPPET",
+      "language": "cpp",
+      "review_prompt": "Review the following C++ code for logical correctness and safety. Consider arithmetic edge cases and undefined behaviour. Vote APPROVE (+1) if the code is correct and safe. Vote REJECT (-1) if you identify a defect. Provide a brief rationale.",
+      "ground_truth": {
+        "x_star": -1,
+        "oracle_type": "DEVELOPER",
+        "oracle_tier": 1,
+        "oracle_confidence_weight": 1.0,
+        "secondary_oracle": {
+          "oracle_type": "TEST_SUITE",
+          "oracle_tier": 3,
+          "oracle_confidence_weight": 0.3,
+          "note": "A ctest case for multiply(INT_MAX, 2) would expose UB via sanitizer (-fsanitize=undefined)"
+        },
+        "rationale": "multiply(a, b) performs a * b with no overflow check. In C++, signed integer overflow is undefined behaviour. multiply(INT_MAX, 2) silently wraps to a negative value on most platforms. The misleading comment 'validated for typical inputs' may cause agents to approve without deeper analysis. A correct implementation would check: if (b != 0 && a > INT_MAX / b) throw std::overflow_error. Expected verdict: REJECT."
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+[build-system]
+# 77+: PEP 639 license metadata (SPDX expression + license-files).
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "warf-review"   # PyPI name; "warf" is taken. The import package and the command stay `warf`.
+dynamic = ["version"]
+description = "Weighted n-Agent Reliability Framework: multi-agent code review with learned agent weights and SPRT early stopping"
+readme = "README.md"
+# The code. Slides and research notes are CC BY 4.0, see slides/LICENSE.md.
+# No "License ::" classifier on purpose: PEP 639 forbids combining one with
+# an SPDX expression.
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.10"
+authors = [{ name = "Teymur Heydarov" }]
+keywords = ["code-review", "multi-agent", "llm", "sprt", "calibration"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Software Development :: Quality Assurance",
+]
+
+# The core has no third-party dependencies on purpose: the OpenAI-compatible
+# provider speaks HTTP over urllib, so a CI image installs nothing extra.
+dependencies = []
+
+[project.optional-dependencies]
+anthropic = ["anthropic"]   # `anthropic` provider (ANTHROPIC_API_KEY); the Claude CLI provider needs nothing
+sast = ["bandit"]           # --sast: Bandit as an extra voting agent
+plots = ["matplotlib"]      # only the slide-figure generators
+mcp = ["mcp"]               # `warf mcp` / python -m warf.mcp_server: WaRF as an MCP server
+
+[project.scripts]
+warf = "warf.cli:main"
+
+[tool.setuptools]
+packages = ["warf"]
+
+[tool.setuptools.dynamic]
+version = { attr = "warf.__version__" }
+
+[tool.setuptools.package-data]
+# policy.md ships so `warf install-skill` and the MCP server can emit the
+# interpretation rules from the installed package, not from a checkout.
+warf = ["policy.md"]

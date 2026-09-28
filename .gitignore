@@ -1,0 +1,42 @@
+# Claude Code internals
+.claude/
+
+# WaRF state lives in .warf/ (see warf/paths.py), not in the package.
+# Tracked on purpose: the session log (the research data the talk's charts are
+# generated from), the corpus profile and the talk snapshot. The log is not
+# listed here: in a fresh clone an ignore rule would silently keep it out of
+# the first commit.
+.warf/profiles/*
+!.warf/profiles/*snapshot*.json
+!.warf/profiles/corpus_v1.json
+.warf/debug.log
+# A personal preference of this working copy (open the pages in the browser), not project state.
+.warf/settings.json
+
+# Experiment runs (tools/run_persona_experiment.py) live apart from the talk
+# corpus, so that a refresh of .warf/ always shows the corpus. The sessions and
+# profiles there are research data and are meant to be tracked; generated
+# dashboards and logs are not.
+.warf-experiments/*.html
+.warf-experiments/debug.log
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Packaging (pip install -e . / builds)
+*.egg-info/
+build/
+dist/
+
+# Environment / secrets
+.env
+
+# LaTeX build output (compile from slides/)
+slides/*.aux
+slides/*.log
+slides/*.nav
+slides/*.out
+slides/*.snm
+slides/*.toc

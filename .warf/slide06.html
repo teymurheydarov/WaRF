@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>WaRF — SPRT Trace</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-size: 15px;
+  padding: 2rem 2.5rem 4rem;
+  max-width: 680px;
+  margin: 0 auto;
+}
+h1 { font-size: 1.25rem; font-weight: 700; color: #e2e8f0; margin-bottom: .25rem; }
+.meta { font-size: .78rem; color: #475569; margin-bottom: 1.5rem; }
+.meta b { color: #94a3b8; }
+.flow-label {
+  font-size: .75rem; color: #475569; text-align: center;
+  margin-bottom: .5rem; letter-spacing: .03em;
+}
+.chart-wrap { margin-bottom: 1.5rem; }
+table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
+th {
+  font-size: .65rem; letter-spacing: .07em; text-transform: uppercase;
+  color: #475569; padding: 5px 8px; text-align: left;
+  border-bottom: 1px solid #1e3a5f;
+}
+td { padding: 7px 8px; border-bottom: 1px solid #1e293b; vertical-align: middle; }
+.skipped-row td { opacity: .5; }
+.mono { font-family: 'Consolas', monospace; font-size: .82rem; }
+.muted { color: #475569; }
+.pos { color: #22c55e; }
+.neg { color: #ef4444; }
+.badge {
+  display: inline-block; padding: 1px 8px; border-radius: 999px;
+  font-size: .68rem; font-weight: 700;
+}
+.badge.approve { background: #052e16; color: #22c55e; }
+.badge.reject  { background: #7f1d1d; color: #ef4444; }
+.skipped-label { font-style: italic; color: #475569; font-size: .82rem; }
+.cross-marker  { color: #ef4444; font-size: .75rem; font-style: italic; margin-left: .4rem; }
+.crossing-row  { background: #1c0a0a; border-left: 3px solid #ef4444; }
+.decision-row {
+  margin-top: .75rem; padding: .6rem 1rem; border-radius: 6px;
+  background: #1e293b; border-left: 3px solid;
+  font-size: .82rem; display: flex; gap: 1.5rem; align-items: center;
+}
+.decision-row.reject  { border-color: #ef4444; }
+.decision-row.approve { border-color: #22c55e; }
+.decision-row .high   { color: #22c55e; font-weight: 700; }
+.decision-row .medium { color: #f59e0b; font-weight: 700; }
+.decision-row .low    { color: #ef4444; font-weight: 700; }
+.footer {
+  margin-top: 1.25rem; font-size: .72rem; color: #334155; line-height: 1.6;
+}
+</style>
+</head>
+<body>
+<h1>SPRT Trace — LOGIC domain</h1>
+<div class="meta">
+  <b>..\test-subjects\build_runner.py</b> &nbsp;·&nbsp; 2026-09-26 10:14 UTC
+</div>
+
+<div class="flow-label">Λ = 0 &nbsp;→&nbsp; evidence accumulates &nbsp;→&nbsp; boundary crossed &nbsp;→&nbsp; <span style="color:#ef4444;font-weight:700">STOP</span></div>
+<div class="chart-wrap"><svg viewBox="0 0 560 220" xmlns="http://www.w3.org/2000/svg"
+     style="width:100%;max-width:560px;display:block;margin:0 auto">
+  <rect width="560" height="220" fill="#0f172a" rx="6"/>
+  <line x1="68" y1="28.5" x2="540" y2="28.5" stroke="#22c55e" stroke-width="1" stroke-dasharray="4 3" opacity="0.7"/>
+<text x="64" y="32.5" text-anchor="end" font-size="9" fill="#22c55e" font-family="monospace">A=+2.89</text>
+<line x1="68" y1="107.5" x2="540" y2="107.5" stroke="#475569" stroke-width="1" stroke-dasharray="4 3" opacity="0.7"/>
+<text x="64" y="111.5" text-anchor="end" font-size="9" fill="#475569" font-family="monospace">0</text>
+<line x1="68" y1="169.0" x2="540" y2="169.0" stroke="#ef4444" stroke-width="1" stroke-dasharray="4 3" opacity="0.7"/>
+<text x="64" y="173.0" text-anchor="end" font-size="9" fill="#ef4444" font-family="monospace">B=-2.25</text>
+
+  <line x1="540.0" y1="169.0" x2="540.0" y2="177.1" stroke="#ef4444" stroke-width="1" stroke-dasharray="3 2" opacity="0.6"/>
+
+  <polyline points="68.0,107.5 225.3,133.7 382.7,157.2 540.0,177.1" fill="none" stroke="#60a5fa" stroke-width="2"
+            stroke-linejoin="round" stroke-linecap="round"/>
+  <circle cx="540.0" cy="177.1" r="7" fill="#ef4444" stroke="#0f172a" stroke-width="2"/>
+<circle cx="540.0" cy="177.1" r="3" fill="#fff"/>
+
+  <text x="540.0" y="166.1" text-anchor="middle" font-size="8.5" font-weight="700" fill="#ef4444" font-family="monospace">STOP</text>
+
+  <text x="68.0" y="214" text-anchor="middle" font-size="8.5" fill="#475569" font-family="monospace">start</text>
+<text x="225.3" y="214" text-anchor="middle" font-size="8.5" fill="#4E79A7" font-family="monospace">AUD</text>
+<text x="382.7" y="214" text-anchor="middle" font-size="8.5" fill="#59A14F" font-family="monospace">ADV</text>
+<text x="540.0" y="214" text-anchor="middle" font-size="8.5" fill="#F28E2B" font-family="monospace">BOU</text>
+
+</svg></div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Agent</th><th>Vote</th><th>ω</th><th>Δλ</th><th>Running λ</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="color:#4E79A7;font-weight:700">AUDITOR</td>
+      <td><span class="badge reject">REJECT</span></td>
+      <td class="mono muted">0.7659</td>
+      <td class="mono neg">-0.959</td>
+      <td class="mono neg">-0.959</td>
+    </tr>
+<tr>
+      <td style="color:#59A14F;font-weight:700">ADVOCATE</td>
+      <td><span class="badge reject">REJECT</span></td>
+      <td class="mono muted">0.6854</td>
+      <td class="mono neg">-0.859</td>
+      <td class="mono neg">-1.818</td>
+    </tr>
+<tr class="crossing-row">
+      <td style="color:#F28E2B;font-weight:700">BOUNDARY</td>
+      <td><span class="badge reject">REJECT</span></td>
+      <td class="mono muted">0.5834</td>
+      <td class="mono neg">-0.731</td>
+      <td class="mono neg">-2.549 <span class="cross-marker">← boundary crossed · WaRF stops</span></td>
+    </tr>
+<tr class="skipped-row">
+      <td style="color:#E15759;opacity:.55;font-weight:700">SKEPTIC</td>
+      <td><span class="skipped-label">skipped</span></td>
+      <td class="mono muted">—</td>
+      <td class="mono muted">—</td>
+      <td class="mono muted">—</td>
+    </tr>
+<tr class="skipped-row">
+      <td style="color:#B07AA1;opacity:.55;font-weight:700">TEST-FOCUSED</td>
+      <td><span class="skipped-label">skipped</span></td>
+      <td class="mono muted">—</td>
+      <td class="mono muted">—</td>
+      <td class="mono muted">—</td>
+    </tr>
+
+  </tbody>
+</table>
+
+<div class="decision-row reject">
+  <span>Decision: <strong>REJECT</strong></span>
+  <span>Confidence: <strong class="high">HIGH</strong></span>
+  <span class="muted" style="font-size:.72rem">Accumulated evidence crossed the decision boundary. Fewer agent calls are a consequence — not the goal.</span>
+</div>
+
+<div class="footer">
+  Δλ = ω × LLR &nbsp;·&nbsp;
+  REJECT: log((1−P₁)/(1−P₀)) ≈ -1.253 &nbsp;·&nbsp;
+  APPROVE: log(P₁/P₀) ≈ +0.981 &nbsp;(P₁=0.8, P₀=0.3) &nbsp;·&nbsp;
+  Boundaries: B = -2.251, A = +2.890 (α=0.05, β=0.1)
+</div>
+</body>
+</html>
