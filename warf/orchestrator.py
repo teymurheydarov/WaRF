@@ -29,6 +29,14 @@ from .providers import (
 # (AgentProfile.provider / .model); see providers.py for the resolution order.
 VOTE_MODEL = "claude-haiku-4-5-20251001"
 
+# How a text model is told to answer; _call_agent appends it to every message.
+# A decision model (a provider of kind "decision": Jev, Laya) answers a typed
+# question instead and never sees it.
+REPLY_FORMAT = (
+    "First line of your response must be exactly one word: APPROVE or REJECT.\n"
+    "Subsequent lines: your reasoning."
+)
+
 
 def _omega_bar(omega: float, width: int = 10) -> str:
     filled = round(omega * width)
@@ -122,17 +130,19 @@ def _call_agent(
         user_message = (
             f"Domain: {domain}\n\n"
             f"{ctx_section}"
-            f"{input_label}:\n```\n{code}\n```\n\n"
-            "First line of your response must be exactly one word: APPROVE or REJECT.\n"
-            "Subsequent lines: your reasoning."
+            f"{input_label}:\n```\n{code}\n```"
         )
-    if _DEBUG_LOG is not None:
-        with _DEBUG_LOG_LOCK, _DEBUG_LOG.open("a", encoding="utf-8") as f:
-            f.write(f"\n{'='*60}\n[INPUT len={len(user_message)}]\n{user_message}\n")
-
     provider_name = provider or detect_default_provider()
     model_name    = resolve_model(provider_name, model)
     backend       = get_provider(provider_name)
+
+    # A text model is told how to answer. A decision model is asked a typed
+    # question by its provider, so the instruction would only pad the state.
+    if getattr(backend, "kind", "text") != "decision":
+        user_message = f"{user_message}\n\n{REPLY_FORMAT}"
+    if _DEBUG_LOG is not None:
+        with _DEBUG_LOG_LOCK, _DEBUG_LOG.open("a", encoding="utf-8") as f:
+            f.write(f"\n{'='*60}\n[INPUT len={len(user_message)}]\n{user_message}\n")
 
     try:
         completion = backend.complete(
@@ -222,9 +232,7 @@ def _build_debate_prompt(
         "revise your vote and explain what convinced you.\n"
         "- If their reasoning contains misconceptions or factual errors, "
         "maintain your position and explain specifically what they got wrong.\n"
-        "- Do NOT change your vote simply because others disagree with you.\n\n"
-        "First line of your response must be exactly one word: APPROVE or REJECT.\n"
-        "Subsequent lines: your reasoning."
+        "- Do NOT change your vote simply because others disagree with you."
     )
 
 
