@@ -135,6 +135,78 @@ def omega_ci(alpha: float, beta: float, level: float = 0.95) -> tuple[float, flo
     return max(0.0, omega - z * se), min(1.0, omega + z * se)
 
 
+# ── Log-odds aggregation (docs/spec/logodds-aggregation.md) ─────────────────
+# Each vote carries evidence in natural log-likelihood-ratio units (positive =
+# APPROVE). Seats of one model are averaged, models are summed: five personas on
+# one model are about one reviewer, not five.
+
+LOGODDS_MARGIN = math.log(2)   # posterior odds of 2:1 around τ; below it, LOW
+
+
+def logodds_tau(domain: str) -> float:
+    """The domain threshold θ (mean-vote scale [-1, 1]) mapped to log-odds."""
+    q = (1.0 + THETA[domain]) / 2.0
+    return math.log(q / (1.0 - q))
+
+
+def vote_evidence(vote: int, omega: float) -> float:
+    """What one vote is worth in `vote` mode: ω × LLR."""
+    return omega * (LLR_APPROVE if vote == 1 else LLR_REJECT)
+
+
+def capped_evidence(r: float, omega: float) -> float:
+    """An uncalibrated agent's log-odds r, never worth more than its vote-mode step."""
+    return max(omega * LLR_REJECT, min(omega * LLR_APPROVE, r))
+
+
+def pool_evidence(items: list[tuple[str, float]]) -> tuple[float, dict[str, float]]:
+    """(group, evidence) pairs -> (Λ, mean evidence per group). Λ sums the group means."""
+    by_group: dict[str, list[float]] = {}
+    for group, e in items:
+        by_group.setdefault(group, []).append(e)
+    means = {g: sum(es) / len(es) for g, es in by_group.items()}
+    return sum(means.values()), means
+
+
+def sprt_boundary(lambda_: float) -> Decision | None:
+    """The SPRT verdict for a running statistic, or None between the boundaries."""
+    if lambda_ >= A:
+        return Decision.APPROVE
+    if lambda_ <= B:
+        return Decision.REJECT
+    return None
+
+
+def models_disagree(group_means: dict[str, float]) -> bool:
+    """Two models point in opposite directions by at least ln 2 each."""
+    return (any(m >= LOGODDS_MARGIN for m in group_means.values())
+            and any(m <= -LOGODDS_MARGIN for m in group_means.values()))
+
+
+def logodds_boundary(lambda_: float, group_means: dict[str, float]) -> Decision | None:
+    """An SPRT stop on pooled evidence — never while models disagree (they go to a human)."""
+    return None if models_disagree(group_means) else sprt_boundary(lambda_)
+
+
+def logodds_decision(
+    lambda_: float,
+    group_means: dict[str, float],
+    domain: str,
+) -> tuple[Decision, Confidence, float]:
+    """
+    Verdict when the pool is exhausted without crossing a boundary.
+
+    LOW when the margin to τ is under ln 2, or when two models point in opposite
+    directions by at least ln 2 each — model disagreement goes to a human.
+    Returns (decision, confidence, normalised_score) with the score on [-1, 1].
+    """
+    tau = logodds_tau(domain)
+    decision = Decision.APPROVE if lambda_ >= tau else Decision.REJECT
+    low = abs(lambda_ - tau) < LOGODDS_MARGIN or models_disagree(group_means)
+    normalised = 2.0 / (1.0 + math.exp(-(lambda_ - tau))) - 1.0
+    return decision, Confidence.LOW if low else Confidence.MEDIUM, normalised
+
+
 LAMBDA_DECAY = 0.95  # decay factor per week (spec §2.3.4)
 
 

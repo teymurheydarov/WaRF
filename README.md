@@ -150,6 +150,8 @@ care who answers the prompt. The panel can even mix providers per agent.
 | `anthropic` | `ANTHROPIC_API_KEY`, `pip install ".[anthropic]"` | real token counts |
 | `openai_compat` | `WARF_BASE_URL`, optionally `WARF_API_KEY` | OpenAI, Groq, DeepSeek, Together, Mistral, vLLM, LM Studio … |
 | `ollama` | a local Ollama | alias for `openai_compat` at `localhost:11434` |
+| `jev` | `TYPESAFE_API_KEY` | TypeSafe's Jev, a *decision model*: a vote with a probability, no reasoning; early access |
+| `laya` | a local `laya-serve` | alias for `jev`'s protocol at `127.0.0.1:8000`; ConvAI's open Laya checkpoints |
 
 ```bash
 warf init --provider ollama --model qwen2.5-coder:7b   # a whole panel on a local model
@@ -165,6 +167,35 @@ Per agent, in a profile file:
 Because ω is learned per agent per domain, a mixed panel discovers on its own
 which persona-on-which-model is worth trusting where. `WARF_PROVIDER`,
 `WARF_MODEL` and `WARF_TIMEOUT` set process-wide defaults.
+
+**Decision models.** Jev (TypeSafe) and Laya (ConvAI, open weights) write no
+text. Given a state and a typed question they return the chosen option and a
+probability for every option, in one forward pass — which is the shape of a
+vote. WaRF asks such an agent one question: APPROVE or REJECT, with the agent's
+persona as the question and the code as the state. The answer enters the panel
+like any other vote — weighted by the agent's learned ω, scored by `warf label`,
+retired with its persona text — and carries the probability readout where a
+text agent would give its reasoning:
+
+```
+  [JEV] -> REJECT  (0.4s)  Δλ=-0.627  L=-0.627
+      p(APPROVE)=0.12  p(REJECT)=0.88  confidence=0.76  [jev-1.13.0: decision model, no reasoning]
+```
+
+Add one to a panel in the profile file. The right persona is a question, not a
+character:
+
+```json
+{ "name": "JEV", "provider": "jev", "persona": "Should this change be merged as it is? A defect you can point to is a REJECT." }
+```
+
+Two limits. Jev reads 32k tokens per question by default; a longer file is
+refused with a message, not truncated. Laya reads the first 512 (`laya`) or
+1,024 (`multilingual`, the default here) tokens of the state and ignores the
+rest, and by ConvAI's own numbers sits near chance until fine-tuned on the task
+— the labelled sessions in `.warf/` are the material for that. Neither has
+been calibrated here: a decision agent starts at ω = 0.5 like everyone else.
+`TYPESAFE_BASE_URL` and `LAYA_BASE_URL` move either endpoint.
 
 ---
 

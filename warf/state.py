@@ -115,6 +115,10 @@ class AgentProfile:
     # Weights earned by earlier versions of this agent's persona, keyed by their
     # hash. A reverted persona gets its history back; nothing is silently lost.
     retired: dict[str, dict] = field(default_factory=dict)
+    # What this seat is shown, when it differs from the others (e.g. "whole-commit").
+    # In log-odds mode, seats of one model with different evidence count as separate
+    # sources; seats of one model shown the same input still count once (ADR 0002).
+    evidence: str | None = None
 
 
 _DEFAULT_AGENTS = [
@@ -184,6 +188,8 @@ def _to_dict(p: AgentProfile) -> dict:
         out["persona_hash"] = p.persona_hash
     if p.retired:
         out["retired"] = p.retired
+    if p.evidence:
+        out["evidence"] = p.evidence
     return out
 
 
@@ -201,6 +207,7 @@ def _from_dict(d: dict) -> AgentProfile:
         model=d.get("model"),
         persona_hash=d.get("persona_hash"),
         retired=dict(d.get("retired") or {}),
+        evidence=d.get("evidence"),
     )
 
 

@@ -16,10 +16,16 @@ from pathlib import Path
 from .engine import (
     SPRTState, sprt_update, synthesis, bayesian_update, apply_decay,
     Decision, Confidence, THETA, A, B,
+    pool_evidence, logodds_boundary, logodds_decision, logodds_tau, vote_evidence,
 )
+from .calibration import Calibrator, p_reject_from_text
 from .state import AgentProfile, DomainWeight, ORACLE_TIERS, load_profiles, save_profiles
 from .sast import bandit_vote, SAST_AGENT_NAME, SAST_OMEGA
-from .paths import debug_log_path
+from .paths import debug_log_path, sessions_path
+
+# How votes are combined: "vote" (SPECIFICATION §2, the default) or "logodds"
+# (docs/spec/logodds-aggregation.md).
+AGGREGATE_MODES = ("vote", "logodds")
 from .providers import (
     ProviderError, get_provider, resolve_model, detect_default_provider,
     DEFAULT_TIMEOUT,
@@ -72,6 +78,29 @@ class VoteRecord:
     # been retired — otherwise `warf label` on an old session would train the
     # new agent on the old agent's behaviour.
     persona_hash: str = ""
+    # Log-odds mode only: the decision model's p(REJECT), the evidence this vote
+    # added, and how that evidence was obtained (spec §3: platt, capped, rates,
+    # omega, fixed).
+    p_reject: float | None = None
+    evidence: float | None = None
+    calibration: str = ""
+    # The seat's evidence source (AgentProfile.evidence), "" when it sees the common input.
+    evidence_source: str = ""
+
+
+def _group_key(provider: str, model: str, source: str | None) -> str:
+    """Seats of one model shown the same input form one group (ADR 0001); a seat shown other
+    evidence is its own source (ADR 0002)."""
+    return f"{provider}/{model}" + (f"#{source}" if source else "")
+
+
+def _evidence_group(v: VoteRecord) -> str:
+    """The pooling group of a vote; a vote without a provider (SAST) is its own."""
+    return _group_key(v.provider, v.model, v.evidence_source) if v.provider else v.agent_name
+
+
+def _pooled(votes: list[VoteRecord]) -> tuple[float, dict[str, float]]:
+    return pool_evidence([(_evidence_group(v), v.evidence) for v in votes])
 
 
 @dataclass
@@ -86,6 +115,7 @@ class ReviewResult:
     debate_votes: list[VoteRecord] = field(default_factory=list)
     debate_sprt_lambda: float = 0.0
     debate_normalised_score: float | None = None
+    aggregate: str = "vote"
 
 
 _DEBUG_LOG: Path | None = None  # set by run_review when debug=True
@@ -350,6 +380,9 @@ def run_review(
     agents: list[str] | None = None,
     max_agents: int | None = None,
     no_early_stop: bool = False,
+    aggregate: str = "vote",
+    log_path: Path | None = None,
+    seat_inputs: dict[str, str] | None = None,
 ) -> ReviewResult:
     """
     Run a full WaRF review session.
@@ -361,7 +394,22 @@ def run_review(
     unchanged — it is still the boundary that fired — but every agent votes, which
     is required when measuring per-agent discrimination rather than running a
     review for its own sake.
+
+    aggregate="logodds" pools calibrated per-vote evidence instead of counting
+    votes (docs/spec/logodds-aggregation.md); calibration is read from the
+    labelled sessions in log_path (default: the data directory's session log).
+
+    seat_inputs gives the input for seats shown other evidence (AgentProfile.evidence),
+    keyed by that source; such a seat reviews seat_inputs[source] instead of `code`. A
+    tagged seat without an input is refused: reviewing the common input, it would be
+    counted as a separate source for evidence it never saw (ADR 0002).
     """
+    if aggregate not in AGGREGATE_MODES:
+        raise ValueError(f"aggregate must be one of {', '.join(AGGREGATE_MODES)}, got {aggregate!r}")
+    if aggregate == "logodds" and debate:
+        raise ValueError("the debate round is not defined for aggregate='logodds'")
+    calibrator = Calibrator(log_path or sessions_path()) if aggregate == "logodds" else None
+
     global _DEBUG_LOG
     if debug:
         _DEBUG_LOG = debug_log_path()
@@ -385,6 +433,39 @@ def run_review(
         if max_agents < 1:
             raise RuntimeError(f"--max-agents must be a positive integer, got {max_agents}")
         profiles = profiles[:max_agents]
+
+    # Seats shown other evidence review their own input; refuse rather than show them `code`.
+    for p in profiles:
+        if p.evidence and p.evidence not in (seat_inputs or {}):
+            raise ValueError(f"seat {p.name} is shown {p.evidence!r} evidence, but run_review got no "
+                             f"input for it: pass seat_inputs={{{p.evidence!r}: ...}} (Python API; the "
+                             f"CLI and MCP server cannot pass seat inputs yet)")
+        if p.evidence and debate:
+            raise ValueError(f"the debate round shows every seat the same input; seat {p.name} is "
+                             f"shown {p.evidence!r} evidence")
+
+    # Log-odds mode tests the boundary on whole models only: a model's evidence is
+    # the mean over its seats, which later seats can pull back. Seats of one model
+    # are asked together (models in order of their heaviest seat), and `unasked`
+    # counts the seats each model still has to answer.
+    unasked: dict[str, int] = {}
+    if calibrator is not None:
+        group_of = {}
+        for p in profiles:
+            prov = p.provider or detect_default_provider()
+            group_of[p.name] = _group_key(prov, resolve_model(prov, p.model), p.evidence)
+        first_seat = {}
+        for i, p in enumerate(profiles):
+            first_seat.setdefault(group_of[p.name], i)
+        profiles.sort(key=lambda p: first_seat[group_of[p.name]])
+        for p in profiles:
+            unasked[group_of[p.name]] = unasked.get(group_of[p.name], 0) + 1
+
+    def _logodds_step(votes_so_far: list[VoteRecord]) -> tuple[SPRTState, Decision | None]:
+        """Pooled Λ after a vote, and a boundary only when every model seen has answered fully."""
+        lam, means = _pooled(votes_so_far)
+        complete = all(unasked.get(g, 0) == 0 for g in means)
+        return SPRTState(lambda_=lam, k=len(votes_so_far)), logodds_boundary(lam, means) if complete else None
 
     # --- Sequential agent calls (heaviest omega first for SPRT efficiency) -
     sprt_state = SPRTState()
@@ -413,7 +494,11 @@ def run_review(
             agent_timings.append({"name": SAST_AGENT_NAME, "elapsed": 0.0, "timed_out": False})
 
             lambda_before = sprt_state.lambda_
-            sprt_state, boundary = sprt_update(sprt_state, sast_v, SAST_OMEGA)
+            if calibrator is not None:
+                sast_record.evidence, sast_record.calibration = vote_evidence(sast_v, SAST_OMEGA), "fixed"
+                sprt_state, boundary = _logodds_step(votes)
+            else:
+                sprt_state, boundary = sprt_update(sprt_state, sast_v, SAST_OMEGA)
             delta = sprt_state.lambda_ - lambda_before
 
             if verbose:
@@ -445,6 +530,8 @@ def run_review(
         if early_decision is not None and not no_early_stop:
             break
         omega = _effective_omega(profile, domain)
+        if calibrator is not None:
+            unasked[group_of[profile.name]] -= 1   # asked now, whether it answers or times out
 
         if verbose:
             print(f"  [{profile.name}] omega={omega:.3f}  querying...")
@@ -454,7 +541,8 @@ def run_review(
         t0 = time.time()
         try:
             vote, reasoning, tok_in, tok_out, prov_used, model_used = _call_agent(
-                profile.persona, code, domain, input_label=input_label, context=context,
+                profile.persona, seat_inputs[profile.evidence] if profile.evidence else code, domain,
+                input_label=input_label, context=context,
                 provider=profile.provider, model=profile.model,
             )
         except subprocess.TimeoutExpired:
@@ -468,9 +556,27 @@ def run_review(
         elapsed = time.time() - t0
         agent_timings.append({"name": profile.name, "elapsed": elapsed, "timed_out": False})
         label = "APPROVE" if vote == 1 else "REJECT"
+        record = VoteRecord(
+            agent_name=profile.name,
+            vote=vote,
+            omega=omega,
+            reasoning=reasoning,
+            tokens_in=tok_in,
+            tokens_out=tok_out,
+            provider=prov_used,
+            model=model_used,
+            persona_hash=profile.persona_hash or "",
+            evidence_source=profile.evidence or "",
+        )
 
         lambda_before = sprt_state.lambda_
-        sprt_state, boundary = sprt_update(sprt_state, vote, omega)
+        if calibrator is not None:
+            record.p_reject = p_reject_from_text(reasoning)
+            record.evidence, record.calibration = calibrator.evidence(
+                profile, vote, record.p_reject, omega, prov_used, model_used)
+            sprt_state, boundary = _logodds_step(votes + [record])
+        else:
+            sprt_state, boundary = sprt_update(sprt_state, vote, omega)
         delta = sprt_state.lambda_ - lambda_before
 
         if demo:
@@ -491,17 +597,7 @@ def run_review(
                     print(f"      {line}")
                 print(f"  {'─' * 40}")
 
-        votes.append(VoteRecord(
-            agent_name=profile.name,
-            vote=vote,
-            omega=omega,
-            reasoning=reasoning,
-            tokens_in=tok_in,
-            tokens_out=tok_out,
-            provider=prov_used,
-            model=model_used,
-            persona_hash=profile.persona_hash or "",
-        ))
+        votes.append(record)
 
         if boundary is not None:
             if no_early_stop:
@@ -570,6 +666,25 @@ def run_review(
             domain=domain,
             votes=votes,
             sprt_lambda=sprt_state.lambda_,
+            aggregate=aggregate,
+        )
+
+    if calibrator is not None:
+        # Pool exhausted — the pooled evidence against the domain threshold τ
+        lam, group_means = _pooled(votes)
+        decision, confidence, norm = logodds_decision(lam, group_means, domain)
+        if verbose:
+            print(f"  Pool exhausted  L={lam:.3f}  tau={logodds_tau(domain):.3f}  "
+                  f"models={', '.join(f'{g} {m:+.2f}' for g, m in group_means.items())}")
+            print(f"  -> {decision.value} [{confidence.value}]")
+        return ReviewResult(
+            decision=decision,
+            confidence=confidence,
+            domain=domain,
+            votes=votes,
+            sprt_lambda=lam,
+            normalised_score=norm,
+            aggregate=aggregate,
         )
 
     # Pool exhausted — fall back to synthesis

@@ -36,7 +36,7 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="repla
 import re
 import time
 
-from .orchestrator import run_review, apply_oracle, ReviewResult
+from .orchestrator import run_review, apply_oracle, ReviewResult, AGGREGATE_MODES
 from .state import (
     ORACLE_TIERS, default_profiles, load_profiles, save_profiles, reconcile_profiles,
     profile_path,
@@ -99,6 +99,13 @@ JSON_SCHEMA_VERSION = 1
 _CONF_RANK = {"LOW": 1, "MEDIUM": 2, "HIGH": 3}
 FAIL_ON_CHOICES = ("HIGH", "MEDIUM", "LOW")
 FAIL_ON_DEFAULT = "LOW"   # preserves historical behaviour: any REJECT exits 1
+
+# Shared by `review` and `review-commit` (docs/spec/logodds-aggregation.md).
+_AGGREGATE_ARG = dict(
+    choices=AGGREGATE_MODES, default="vote",
+    help="How votes are combined: 'vote' (default, the weighted SPRT vote) or 'logodds' "
+         "(calibrated per-vote evidence, seats of one model counted once; no --debate).",
+)
 
 
 def _should_fail(decision: str, confidence: str, fail_on: str) -> bool:
@@ -236,6 +243,7 @@ def _run_single_file(
     agents: list[str] | None = None,
     max_agents: int | None = None,
     no_early_stop: bool = False,
+    aggregate: str = "vote",
 ) -> tuple[ReviewResult, str]:
     """Read and review one file. Returns (result, domain_used)."""
     if profiles_path is None:
@@ -248,7 +256,7 @@ def _run_single_file(
     else:
         domain_used = domain_arg
     sast_path = file_path if sast else None
-    result = run_review(code, domain_used, profiles_path, verbose=verbose, debate=debate, demo=demo, reason=reason, context=context, sast_path=sast_path, agents=agents, max_agents=max_agents, no_early_stop=no_early_stop)
+    result = run_review(code, domain_used, profiles_path, verbose=verbose, debate=debate, demo=demo, reason=reason, context=context, sast_path=sast_path, agents=agents, max_agents=max_agents, no_early_stop=no_early_stop, aggregate=aggregate)
     return result, domain_used
 
 
@@ -283,7 +291,7 @@ def _review_file_inner(args: argparse.Namespace, file_path: Path) -> dict:
     print(f"\n=== WaRF Review: {file_path.name}  [{domain_arg}]  profile={args.profile} ===\n")
     if context:
         print(f"  [context] warf_context.md loaded ({len(context)} chars)\n")
-    result, domain_used = _run_single_file(file_path, domain_arg, args.debate, verbose=verbose, demo=demo_mode, reason=getattr(args, "reason", False), context=context, profiles_path=profiles_path, sast=getattr(args, "sast", False), agents=getattr(args, "agents", None), max_agents=getattr(args, "max_agents", None), no_early_stop=getattr(args, "no_early_stop", False))
+    result, domain_used = _run_single_file(file_path, domain_arg, args.debate, verbose=verbose, demo=demo_mode, reason=getattr(args, "reason", False), context=context, profiles_path=profiles_path, sast=getattr(args, "sast", False), agents=getattr(args, "agents", None), max_agents=getattr(args, "max_agents", None), no_early_stop=getattr(args, "no_early_stop", False), aggregate=getattr(args, "aggregate", "vote"))
 
     print(f"\n{'-' * 42}")
     print(f"  DECISION  : {result.decision.value}")
@@ -415,6 +423,7 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
             try:
                 result, domain_used = _run_single_file(
                     file_path, domain_arg, args.debate, verbose=verbose_each, context=context, profiles_path=profiles_path, sast=getattr(args, "sast", False), agents=getattr(args, "agents", None), max_agents=getattr(args, "max_agents", None),
+                    aggregate=getattr(args, "aggregate", "vote"),
                 )
                 consecutive_errors = 0
             except Exception as exc:
@@ -655,6 +664,7 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
                     context=context,
                     agents=getattr(args, "agents", None),
                     max_agents=getattr(args, "max_agents", None),
+                    aggregate=getattr(args, "aggregate", "vote"),
                 )
                 consecutive_errors = 0
             except Exception as exc:
@@ -1119,6 +1129,7 @@ def main() -> None:
              "unchanged; use this when measuring per-agent behaviour, since early "
              "stopping under-samples low-weight agents.",
     )
+    p_review.add_argument("--aggregate", **_AGGREGATE_ARG)
     p_review.add_argument(
         "--json",
         action="store_true",
@@ -1152,6 +1163,7 @@ def main() -> None:
         "--debate", action="store_true", default=False,
         help="Enable debate Round 2",
     )
+    p_commit.add_argument("--aggregate", **_AGGREGATE_ARG)
     p_commit.add_argument(
         "--debug", action="store_true", default=False,
         help="Write agent inputs and subprocess output to warf/debug.log",
@@ -1366,6 +1378,9 @@ def main() -> None:
 
     if args.command == "label" and not (args.session_id or args.artifact):
         p_label.error("give a session id or --artifact to select the session")
+    if getattr(args, "aggregate", "vote") == "logodds" and getattr(args, "debate", False):
+        (p_review if args.command == "review" else p_commit).error(
+            "--debate is not defined for --aggregate logodds")
 
     try:
         _dispatch(args, parser)

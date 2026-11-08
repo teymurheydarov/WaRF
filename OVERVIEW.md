@@ -70,7 +70,7 @@ All of this is preliminary: one labelled corpus, small samples. Full figures and
 ## Current Status
 
 - CLI: `warf review <path>` for a file or a directory, and `warf review-commit <hash> --repo <path>` for a commit (git; SVN revisions are handled too); `warf label` records the human verdict.
-- Several model backends (Claude CLI, Anthropic API, OpenAI-compatible endpoints, Ollama), a `/warf` skill for Claude Code, and an MCP server.
+- Several model backends (Claude CLI, Anthropic API, OpenAI-compatible endpoints, Ollama, and the Jev and Laya decision models, which vote with a probability and no reasoning), a `/warf` skill for Claude Code, and an MCP server.
 - Dashboards regenerated after every review from the session log: session list (numbered, searchable), confidence calibration, weight trajectories, token cost.
 - Corpus: 251 logged sessions, 62 with a developer label, from `psf/requests`, `urllib3`, G+Smo and a synthetic validation suite.
 

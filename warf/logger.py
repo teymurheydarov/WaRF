@@ -6,7 +6,7 @@ import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
-from .engine import THETA, Decision, Confidence
+from .engine import THETA, Decision, Confidence, logodds_tau
 from .orchestrator import ReviewResult, VoteRecord
 from .state import ORACLE_TIERS
 from .paths import sessions_path
@@ -81,6 +81,19 @@ def session_dict(
         "total_tokens_in":  sum(v.tokens_in  for v in result.votes),
         "total_tokens_out": sum(v.tokens_out for v in result.votes),
     }
+
+    for rec, v in zip(entry["votes"], result.votes):
+        if v.evidence_source:          # ADR 0002; votes of seats on the common input keep their shape
+            rec["evidence_source"] = v.evidence_source
+
+    if result.aggregate != "vote":
+        # docs/spec/logodds-aggregation.md §6; vote-mode records keep their shape
+        entry["aggregate"] = result.aggregate
+        entry["tau"] = round(logodds_tau(result.domain), 4)   # the decision threshold; theta is vote mode's
+        for rec, v in zip(entry["votes"], result.votes):
+            rec["p_reject"]    = v.p_reject
+            rec["evidence"]    = round(v.evidence, 4) if v.evidence is not None else None
+            rec["calibration"] = v.calibration
 
     if result.debate_votes:
         r1_vote_map = {v.agent_name: v.vote for v in result.votes}
