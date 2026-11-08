@@ -1,0 +1,10 @@
+{
+  "kinds": [
+    "build",
+    "defect",
+    "test"
+  ],
+  "max_fix_files": 20,
+  "min_lines": 1,
+  "window_days": 180
+}

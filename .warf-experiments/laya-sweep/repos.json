@@ -1,0 +1,365 @@
+[
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\CLionProjects\\gsm\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\CLionProjects\\gsm",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\CLionProjects\\gsm",
+      "C:\\Users\\Teymur Heydarov\\CLionProjects\\gsm\\.git"
+    ],
+    "name": "~/CLionProjects/gsm",
+    "bare": false,
+    "shallow": false,
+    "commits": 0
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\filedata\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\filedata",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\filedata",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\filedata\\.git"
+    ],
+    "name": "~/source/repos/gismo6/filedata",
+    "bare": false,
+    "shallow": false,
+    "commits": 0
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\out\\install\\x64-Release\\share\\gismodata\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\out\\install\\x64-Release\\share\\gismodata",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\out\\install\\x64-Release\\share\\gismodata",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\out\\install\\x64-Release\\share\\gismodata\\.git"
+    ],
+    "name": "~/source/repos/gismo6/out/install/x64-Release/share/gismodata",
+    "bare": false,
+    "shallow": false,
+    "commits": 0
+  },
+  {
+    "git_dir": "C:\\workdir\\2026\\udemyCourseGithubCopilot\\nextjs\\linkshortenerpoject\\.git",
+    "worktree": "C:\\workdir\\2026\\udemyCourseGithubCopilot\\nextjs\\linkshortenerpoject",
+    "seen_at": [
+      "C:\\workdir\\2026\\udemyCourseGithubCopilot\\nextjs\\linkshortenerpoject",
+      "C:\\workdir\\2026\\udemyCourseGithubCopilot\\nextjs\\linkshortenerpoject\\.git"
+    ],
+    "name": "C:/workdir/2026/udemyCourseGithubCopilot/nextjs/linkshortenerpoject",
+    "bare": false,
+    "shallow": false,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\casadiGoddard\\.git",
+    "worktree": "C:\\workdir\\casadiGoddard",
+    "seen_at": [
+      "C:\\workdir\\casadiGoddard",
+      "C:\\workdir\\casadiGoddard\\.git"
+    ],
+    "name": "C:/workdir/casadiGoddard",
+    "bare": false,
+    "shallow": false,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs\\gismo\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs\\gismo",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs\\gismo",
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs/gismo",
+    "bare": false,
+    "shallow": true,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsUnitTest\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsUnitTest",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsUnitTest",
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsUnitTest\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs/gismo/optional/gsUnitTest",
+    "bare": false,
+    "shallow": true,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs_unref\\casadi-src\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs_unref\\casadi-src",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs_unref\\casadi-src",
+      "C:\\workdir\\claudeVersuch\\gs_unref\\casadi-src\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs_unref/casadi-src",
+    "bare": false,
+    "shallow": true,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs_unref\\gismo",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs_unref\\gismo",
+      "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs_unref/gismo",
+    "bare": false,
+    "shallow": true,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\optional\\gsMPBES\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\optional\\gsMPBES",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\optional\\gsMPBES",
+      "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\optional\\gsMPBES\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs_unref/gismo/optional/gsMPBES",
+    "bare": false,
+    "shallow": true,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\TDDkata\\.git",
+    "worktree": "C:\\workdir\\TDDkata",
+    "seen_at": [
+      "C:\\workdir\\TDDkata",
+      "C:\\workdir\\TDDkata\\.git"
+    ],
+    "name": "C:/workdir/TDDkata",
+    "bare": false,
+    "shallow": false,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\.codex\\.tmp\\plugins\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\.codex\\.tmp\\plugins",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\.codex\\.tmp\\plugins",
+      "C:\\Users\\Teymur Heydarov\\.codex\\.tmp\\plugins\\.git"
+    ],
+    "name": "~/.codex/.tmp/plugins",
+    "bare": false,
+    "shallow": true,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\AppData\\Local\\Temp\\claude\\bash-edit-diff\\13744225064955265873-7555859774831634031-fd0525ef7a2e3c8f",
+    "worktree": null,
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\AppData\\Local\\Temp\\claude\\bash-edit-diff\\13744225064955265873-7555859774831634031-fd0525ef7a2e3c8f"
+    ],
+    "name": "~/AppData/Local/Temp/claude/bash-edit-diff/13744225064955265873-7555859774831634031-fd0525ef7a2e3c8f",
+    "bare": false,
+    "shallow": false,
+    "commits": 1
+  },
+  {
+    "git_dir": "C:\\workdir\\2024\\gitTest\\SeveralFilesExample\\.git",
+    "worktree": "C:\\workdir\\2024\\gitTest\\SeveralFilesExample",
+    "seen_at": [
+      "C:\\workdir\\2024\\gitTest\\SeveralFilesExample",
+      "C:\\workdir\\2024\\gitTest\\SeveralFilesExample\\.git"
+    ],
+    "name": "C:/workdir/2024/gitTest/SeveralFilesExample",
+    "bare": false,
+    "shallow": false,
+    "commits": 2
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsMPBES\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsMPBES",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsMPBES",
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsMPBES\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs/gismo/optional/gsMPBES",
+    "bare": false,
+    "shallow": false,
+    "commits": 2
+  },
+  {
+    "git_dir": "C:\\workdir\\warf\\WaRF\\.git",
+    "worktree": "C:\\workdir\\warf\\WaRF",
+    "seen_at": [
+      "C:\\workdir\\warf\\WaRF",
+      "C:\\workdir\\warf\\WaRF\\.git"
+    ],
+    "name": "C:/workdir/warf/WaRF",
+    "bare": false,
+    "shallow": false,
+    "commits": 2
+  },
+  {
+    "git_dir": "C:\\workdir\\2024\\gitTest\\Test1\\.git",
+    "worktree": "C:\\workdir\\2024\\gitTest\\Test1",
+    "seen_at": [
+      "C:\\workdir\\2024\\gitTest\\Test1",
+      "C:\\workdir\\2024\\gitTest\\Test1\\.git"
+    ],
+    "name": "C:/workdir/2024/gitTest/Test1",
+    "bare": false,
+    "shallow": false,
+    "commits": 3
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gsMPBESUnrefinement\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gsMPBESUnrefinement",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gsMPBESUnrefinement",
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsMPBESUnrefinement",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gsMPBESUnrefinement\\.git",
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\gsMPBESUnrefinement\\.git"
+    ],
+    "name": "~/source/repos/gsMPBESUnrefinement",
+    "bare": false,
+    "shallow": false,
+    "commits": 3
+  },
+  {
+    "git_dir": "C:\\workdir\\2024\\codecrafters\\codecrafters-git-cpp\\.git",
+    "worktree": "C:\\workdir\\2024\\codecrafters\\codecrafters-git-cpp",
+    "seen_at": [
+      "C:\\workdir\\2024\\codecrafters\\codecrafters-git-cpp",
+      "C:\\workdir\\2024\\codecrafters\\codecrafters-git-cpp\\.git"
+    ],
+    "name": "C:/workdir/2024/codecrafters/codecrafters-git-cpp",
+    "bare": false,
+    "shallow": false,
+    "commits": 6
+  },
+  {
+    "git_dir": "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\myDraftCasADI\\.git",
+    "worktree": "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\myDraftCasADI",
+    "seen_at": [
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\myDraftCasADI",
+      "C:\\workdir\\claudeVersuch\\gs\\gismo\\optional\\myDraftCasADI\\.git"
+    ],
+    "name": "C:/workdir/claudeVersuch/gs/gismo/optional/myDraftCasADI",
+    "bare": false,
+    "shallow": false,
+    "commits": 10
+  },
+  {
+    "git_dir": "C:\\workdir\\G_rep\\.git",
+    "worktree": "C:\\workdir\\G_rep",
+    "seen_at": [
+      "C:\\workdir\\G_rep",
+      "C:\\workdir\\G_rep\\.git"
+    ],
+    "name": "C:/workdir/G_rep",
+    "bare": false,
+    "shallow": false,
+    "commits": 11
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\myDraftCasADI\\myDraftCasADI\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\myDraftCasADI\\myDraftCasADI",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\myDraftCasADI\\myDraftCasADI",
+      "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\optional\\myDraftCasADI",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\myDraftCasADI\\myDraftCasADI\\.git",
+      "C:\\workdir\\claudeVersuch\\gs_unref\\gismo\\optional\\myDraftCasADI\\.git"
+    ],
+    "name": "~/source/repos/myDraftCasADI/myDraftCasADI",
+    "bare": false,
+    "shallow": false,
+    "commits": 13
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\AppData\\Local\\Temp\\claude\\c--workdir-TDDkata\\81e80427-256c-43ee-ae05-528f13a96391\\scratchpad\\b\\_deps\\googletest-src\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\AppData\\Local\\Temp\\claude\\c--workdir-TDDkata\\81e80427-256c-43ee-ae05-528f13a96391\\scratchpad\\b\\_deps\\googletest-src",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\AppData\\Local\\Temp\\claude\\c--workdir-TDDkata\\81e80427-256c-43ee-ae05-528f13a96391\\scratchpad\\b\\_deps\\googletest-src",
+      "C:\\Users\\Teymur Heydarov\\AppData\\Local\\Temp\\claude\\c--workdir-TDDkata\\81e80427-256c-43ee-ae05-528f13a96391\\scratchpad\\b\\_deps\\googletest-src\\.git"
+    ],
+    "name": "~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src",
+    "bare": false,
+    "shallow": true,
+    "commits": 27
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\THBSelf\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\THBSelf",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\THBSelf",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\THBSelf\\.git"
+    ],
+    "name": "~/source/repos/THBSelf",
+    "bare": false,
+    "shallow": false,
+    "commits": 5339
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo\\.git"
+    ],
+    "name": "~/source/repos/gismo",
+    "bare": false,
+    "shallow": false,
+    "commits": 6644
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo1\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo1",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo1",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo1\\.git"
+    ],
+    "name": "~/source/repos/gismo1",
+    "bare": false,
+    "shallow": false,
+    "commits": 6645
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo2\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo2",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo2",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo2\\.git"
+    ],
+    "name": "~/source/repos/gismo2",
+    "bare": false,
+    "shallow": false,
+    "commits": 6645
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo3\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo3",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo3",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo3\\.git"
+    ],
+    "name": "~/source/repos/gismo3",
+    "bare": false,
+    "shallow": false,
+    "commits": 6647
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo4\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo4",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo4",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo4\\.git"
+    ],
+    "name": "~/source/repos/gismo4",
+    "bare": false,
+    "shallow": false,
+    "commits": 7189
+  },
+  {
+    "git_dir": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\.git",
+    "worktree": "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6",
+    "seen_at": [
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6",
+      "C:\\Users\\Teymur Heydarov\\source\\repos\\gismo6\\.git"
+    ],
+    "name": "~/source/repos/gismo6",
+    "bare": false,
+    "shallow": false,
+    "commits": 9788
+  }
+]

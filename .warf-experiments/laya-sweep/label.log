@@ -1,0 +1,23 @@
+  reading the history of every repository ...
+  locating the blamed lines of 3567 REJECTs in 2202 patches ...
+
+  fixes: 1807 counted, 186 left out: warning fix, 129 left out: docs fix, 6 left out: more than 20 files, 2 left out: not a fix, 2 left out: fix was reverted
+  reverts: 40 revert commits, 15 reverted commits
+
+  36715 samples:
+     18726  APPROVE  no fix found
+      7798  none     less than 180 days of later history
+      6176  none     shallow boundary
+      3567  REJECT   fixed later
+       273  none     revert
+       175  none     reverted
+
+  phase   REJECT  APPROVE    none
+  A         3283    13961    4695
+  B          284     4765    3551
+  C            0        0    6176
+
+  days from a REJECT to its first fix: quartiles 1 / 22 / 250, 90 % 934; 71 % within the 180-day window
+  REJECTs with the blamed line found in the patch: 3565/3567
+
+  -> C:\workdir\warf\WaRF\.warf-experiments\laya-sweep\labels.jsonl

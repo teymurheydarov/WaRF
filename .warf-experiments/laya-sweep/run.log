@@ -1,0 +1,1060 @@
+
+  profile laya_sweep (model provider default): 'Should this change be merged as it is? A defect you can point to is a REJECT.'
+  plan 7484 commits; done 0 commits, 0 files; left 7484 commits, ~36715 reviews, ~22.9 h
+
+  [13:04:13] 150 reviews (0 errors) this run, 2.02 s each, ~36565 left, ETA 20.5 h  | ~/source/repos/myDraftCasADI/myDraftCasADI
+  [13:09:15] 256 reviews (0 errors) this run, 2.36 s each, ~36459 left, ETA 23.9 h  | ~/source/repos/THBSelf
+  [13:14:17] 376 reviews (0 errors) this run, 2.41 s each, ~36339 left, ETA 24.3 h  | ~/source/repos/gismo4
+Exception in thread sweep-producer:
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\warf\WaRF\tools\run_laya_sweep.py", line 398, in produce
+    enriched = enrich_patch(cwd, sha, path, patch)
+  File "C:\workdir\warf\WaRF\warf\context_extractor.py", line 167, in enrich_patch
+    functions = _heuristic_functions(source, set(changed_lines))
+  File "C:\workdir\warf\WaRF\warf\context_extractor.py", line 117, in _heuristic_functions
+    if any(pat.match(src_lines[i]) for pat in _FUNC_STARTS):
+       ^^^
+  File "C:\workdir\warf\WaRF\warf\context_extractor.py", line 117, in <genexpr>
+    if any(pat.match(src_lines[i]) for pat in _FUNC_STARTS):
+                     ~~~~~~~~~^^^
+IndexError: list index out of range
+  [13:17:21] 443 reviews (0 errors) this run, 2.46 s each, ~36272 left, ETA 24.8 h  | 
+
+  sessions -> C:\workdir\warf\WaRF\.warf-experiments\laya-sweep\sessions.jsonl
+
+  profile laya_sweep (model provider default): 'Should this change be merged as it is? A defect you can point to is a REJECT.'
+  plan 7484 commits; done 136 commits, 443 files; left 7348 commits, ~36272 reviews, ~22.7 h
+
+  [13:25:12] 69 reviews (0 errors) this run, 4.41 s each, ~36203 left, ETA 44.4 h  | ~/source/repos/gismo6
+  [13:30:14] 122 reviews (0 errors) this run, 4.97 s each, ~36150 left, ETA 49.9 h  | ~/source/repos/gismo6
+  [13:35:14] 237 reviews (0 errors) this run, 3.82 s each, ~36035 left, ETA 38.3 h  | ~/source/repos/gismo6
+  [13:40:15] 371 reviews (0 errors) this run, 3.26 s each, ~35901 left, ETA 32.5 h  | ~/source/repos/gismo6
+  [13:45:16] 536 reviews (0 errors) this run, 2.81 s each, ~35736 left, ETA 27.9 h  | ~/source/repos/gismo6
+  [13:50:16] 675 reviews (0 errors) this run, 2.68 s each, ~35597 left, ETA 26.5 h  | ~/source/repos/gismo6
+  [13:55:18] 800 reviews (0 errors) this run, 2.64 s each, ~35472 left, ETA 26.0 h  | ~/source/repos/gismo6
+  STOP file found: stopping
+  [13:55:25] 803 reviews (0 errors) this run, 2.64 s each, ~35469 left, ETA 26.0 h  | 
+
+  sessions -> C:\workdir\warf\WaRF\.warf-experiments\laya-sweep\sessions.jsonl
+
+  profile laya_sweep (model provider default): 'Should this change be merged as it is? A defect you can point to is a REJECT.'
+  plan 7484 commits; done 333 commits, 1246 files; left 7151 commits, ~35469 reviews, ~22.2 h
+
+  [14:00:53] 137 reviews (0 errors) this run, 2.2 s each, ~35332 left, ETA 21.6 h  | ~/source/repos/gismo6
+  [14:05:55] 297 reviews (0 errors) this run, 2.03 s each, ~35172 left, ETA 19.8 h  | ~/source/repos/gismo6
+  [14:10:56] 431 reviews (0 errors) this run, 2.1 s each, ~35038 left, ETA 20.4 h  | ~/source/repos/gismo6
+  [14:15:58] 566 reviews (0 errors) this run, 2.13 s each, ~34903 left, ETA 20.7 h  | ~/source/repos/gismo6
+  [14:20:59] 704 reviews (0 errors) this run, 2.14 s each, ~34765 left, ETA 20.7 h  | ~/source/repos/gismo6
+  [14:25:59] 835 reviews (0 errors) this run, 2.16 s each, ~34634 left, ETA 20.8 h  | ~/source/repos/gismo6
+  [14:31:01] 966 reviews (0 errors) this run, 2.18 s each, ~34503 left, ETA 20.9 h  | ~/source/repos/gismo6
+  [14:36:03] 1094 reviews (0 errors) this run, 2.2 s each, ~34375 left, ETA 21.0 h  | ~/source/repos/gismo6
+  [14:41:03] 1228 reviews (0 errors) this run, 2.21 s each, ~34241 left, ETA 21.0 h  | ~/source/repos/gismo6
+  [14:46:05] 1373 reviews (0 errors) this run, 2.19 s each, ~34096 left, ETA 20.8 h  | ~/source/repos/gismo6
+  [14:51:06] 1515 reviews (0 errors) this run, 2.19 s each, ~33954 left, ETA 20.6 h  | ~/source/repos/gismo6
+  [14:56:08] 1649 reviews (0 errors) this run, 2.19 s each, ~33820 left, ETA 20.6 h  | ~/source/repos/gismo6
+  [15:01:10] 1784 reviews (0 errors) this run, 2.2 s each, ~33685 left, ETA 20.6 h  | ~/source/repos/gismo6
+  [15:06:12] 1921 reviews (0 errors) this run, 2.2 s each, ~33548 left, ETA 20.5 h  | ~/source/repos/gismo6
+  [15:11:14] 2056 reviews (0 errors) this run, 2.2 s each, ~33413 left, ETA 20.4 h  | ~/source/repos/gismo6
+  [15:16:15] 2189 reviews (0 errors) this run, 2.2 s each, ~33280 left, ETA 20.4 h  | ~/source/repos/gismo6
+  [15:21:16] 2321 reviews (0 errors) this run, 2.21 s each, ~33148 left, ETA 20.3 h  | ~/source/repos/gismo6
+  [15:26:17] 2454 reviews (0 errors) this run, 2.21 s each, ~33015 left, ETA 20.3 h  | ~/source/repos/gismo6
+  [15:31:18] 2591 reviews (0 errors) this run, 2.21 s each, ~32878 left, ETA 20.2 h  | ~/source/repos/gismo6
+  [15:36:19] 2727 reviews (0 errors) this run, 2.21 s each, ~32742 left, ETA 20.1 h  | ~/source/repos/gismo6
+  [15:41:21] 2862 reviews (0 errors) this run, 2.21 s each, ~32607 left, ETA 20.0 h  | ~/source/repos/gismo6
+  [15:46:21] 2994 reviews (0 errors) this run, 2.21 s each, ~32475 left, ETA 20.0 h  | ~/source/repos/gismo6
+  [15:51:23] 3135 reviews (0 errors) this run, 2.21 s each, ~32334 left, ETA 19.9 h  | ~/source/repos/gismo6
+  [15:56:24] 3276 reviews (0 errors) this run, 2.21 s each, ~32193 left, ETA 19.7 h  | ~/source/repos/gismo6
+Exception in thread Thread-8343 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 156654: invalid continuation byte
+  [16:01:25] 3412 reviews (0 errors) this run, 2.21 s each, ~32057 left, ETA 19.7 h  | ~/source/repos/gismo6
+  [16:06:26] 3553 reviews (0 errors) this run, 2.2 s each, ~31916 left, ETA 19.5 h  | ~/source/repos/gismo6
+Exception in thread Thread-8829 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 152022: invalid continuation byte
+Exception in thread Thread-8859 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 151194: invalid continuation byte
+Exception in thread Thread-8941 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 148123: invalid continuation byte
+  [16:11:26] 3684 reviews (0 errors) this run, 2.21 s each, ~31785 left, ETA 19.5 h  | ~/source/repos/gismo6
+Exception in thread Thread-9231 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 145795: invalid continuation byte
+Exception in thread Thread-9257 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 145793: invalid continuation byte
+Exception in thread Thread-9277 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 145795: invalid continuation byte
+  [16:16:27] 3818 reviews (0 errors) this run, 2.21 s each, ~31651 left, ETA 19.4 h  | ~/source/repos/gismo6
+  [16:21:27] 3953 reviews (0 errors) this run, 2.21 s each, ~31516 left, ETA 19.3 h  | ~/source/repos/gismo6
+Exception in thread Thread-10049 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 154469: invalid continuation byte
+  [16:26:29] 4089 reviews (0 errors) this run, 2.21 s each, ~31380 left, ETA 19.3 h  | ~/source/repos/gismo6
+Exception in thread Thread-10167 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 150203: invalid continuation byte
+Exception in thread Thread-10225 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 103458: invalid continuation byte
+Exception in thread Thread-10231 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 147446: invalid continuation byte
+Exception in thread Thread-10307 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 103513: invalid continuation byte
+Exception in thread Thread-10309 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 103513: invalid continuation byte
+Exception in thread Thread-10343 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 142584: invalid continuation byte
+  [16:31:29] 4225 reviews (0 errors) this run, 2.21 s each, ~31244 left, ETA 19.2 h  | ~/source/repos/gismo6
+  [16:36:31] 4358 reviews (0 errors) this run, 2.21 s each, ~31111 left, ETA 19.1 h  | ~/source/repos/gismo6
+  [16:41:32] 4491 reviews (0 errors) this run, 2.21 s each, ~30978 left, ETA 19.0 h  | ~/source/repos/gismo6
+  [16:46:33] 4626 reviews (0 errors) this run, 2.21 s each, ~30843 left, ETA 19.0 h  | ~/source/repos/gismo6
+  [16:51:33] 4760 reviews (0 errors) this run, 2.21 s each, ~30709 left, ETA 18.9 h  | ~/source/repos/gismo6
+  [16:56:35] 4894 reviews (0 errors) this run, 2.22 s each, ~30575 left, ETA 18.8 h  | ~/source/repos/gismo6
+  [17:01:37] 5031 reviews (0 errors) this run, 2.22 s each, ~30438 left, ETA 18.7 h  | ~/source/repos/gismo6
+  [17:06:38] 5165 reviews (0 errors) this run, 2.22 s each, ~30304 left, ETA 18.7 h  | ~/source/repos/gismo6
+  [17:11:40] 5299 reviews (0 errors) this run, 2.22 s each, ~30170 left, ETA 18.6 h  | ~/source/repos/gismo6
+  [17:16:41] 5438 reviews (0 errors) this run, 2.22 s each, ~30031 left, ETA 18.5 h  | ~/source/repos/gismo6
+  [17:21:41] 5578 reviews (0 errors) this run, 2.21 s each, ~29891 left, ETA 18.4 h  | ~/source/repos/gismo6
+  [17:26:42] 5713 reviews (0 errors) this run, 2.21 s each, ~29756 left, ETA 18.3 h  | ~/source/repos/gismo6
+  [17:31:44] 5862 reviews (0 errors) this run, 2.21 s each, ~29607 left, ETA 18.2 h  | ~/source/repos/gismo6
+  [17:36:44] 6010 reviews (0 errors) this run, 2.21 s each, ~29459 left, ETA 18.0 h  | ~/source/repos/gismo6
+  [17:41:45] 6148 reviews (0 errors) this run, 2.2 s each, ~29321 left, ETA 18.0 h  | ~/source/repos/gismo6
+  [17:46:46] 6285 reviews (0 errors) this run, 2.2 s each, ~29184 left, ETA 17.9 h  | ~/source/repos/gismo6
+  [17:51:46] 6422 reviews (0 errors) this run, 2.2 s each, ~29047 left, ETA 17.8 h  | ~/source/repos/gismo6
+  [17:56:47] 6562 reviews (0 errors) this run, 2.2 s each, ~28907 left, ETA 17.7 h  | ~/source/repos/gismo6
+  [18:01:50] 6698 reviews (0 errors) this run, 2.2 s each, ~28771 left, ETA 17.6 h  | ~/source/repos/gismo6
+  [18:06:50] 6830 reviews (0 errors) this run, 2.2 s each, ~28639 left, ETA 17.5 h  | ~/source/repos/gismo6
+  [18:11:50] 6964 reviews (0 errors) this run, 2.21 s each, ~28505 left, ETA 17.5 h  | ~/source/repos/gismo6
+  [18:16:52] 7099 reviews (0 errors) this run, 2.21 s each, ~28370 left, ETA 17.4 h  | ~/source/repos/gismo6
+  [18:21:52] 7237 reviews (0 errors) this run, 2.21 s each, ~28232 left, ETA 17.3 h  | ~/source/repos/gismo6
+  [18:26:53] 7374 reviews (0 errors) this run, 2.21 s each, ~28095 left, ETA 17.2 h  | ~/source/repos/gismo6
+  [18:31:54] 7505 reviews (0 errors) this run, 2.21 s each, ~27964 left, ETA 17.1 h  | ~/source/repos/gismo6
+  [18:36:55] 7645 reviews (0 errors) this run, 2.21 s each, ~27824 left, ETA 17.0 h  | ~/source/repos/gismo6
+  [18:41:57] 7765 reviews (0 errors) this run, 2.21 s each, ~27704 left, ETA 17.0 h  | ~/source/repos/gismo6
+  [18:46:59] 7886 reviews (0 errors) this run, 2.21 s each, ~27583 left, ETA 17.0 h  | ~/source/repos/gismo6
+  [18:52:00] 8022 reviews (0 errors) this run, 2.21 s each, ~27447 left, ETA 16.9 h  | ~/source/repos/gismo6
+  [18:57:02] 8162 reviews (0 errors) this run, 2.21 s each, ~27307 left, ETA 16.8 h  | ~/source/repos/gismo6
+  [19:02:04] 8297 reviews (0 errors) this run, 2.21 s each, ~27172 left, ETA 16.7 h  | ~/source/repos/gismo6
+  [19:07:05] 8441 reviews (0 errors) this run, 2.21 s each, ~27028 left, ETA 16.6 h  | ~/source/repos/gismo6
+  [19:12:05] 8581 reviews (0 errors) this run, 2.21 s each, ~26888 left, ETA 16.5 h  | ~/source/repos/gismo6
+  [19:17:07] 8722 reviews (0 errors) this run, 2.21 s each, ~26747 left, ETA 16.4 h  | ~/source/repos/gismo6
+  [19:22:09] 8858 reviews (0 errors) this run, 2.21 s each, ~26611 left, ETA 16.3 h  | ~/source/repos/gismo6
+  [19:27:10] 9006 reviews (0 errors) this run, 2.21 s each, ~26463 left, ETA 16.2 h  | ~/source/repos/gismo6
+  [19:32:12] 9139 reviews (0 errors) this run, 2.21 s each, ~26330 left, ETA 16.2 h  | ~/source/repos/gismo6
+  [19:37:13] 9280 reviews (0 errors) this run, 2.21 s each, ~26189 left, ETA 16.1 h  | ~/source/repos/gismo6
+  [19:42:14] 9419 reviews (0 errors) this run, 2.21 s each, ~26050 left, ETA 16.0 h  | ~/source/repos/gismo6
+  [19:47:14] 9559 reviews (0 errors) this run, 2.21 s each, ~25910 left, ETA 15.9 h  | ~/source/repos/gismo6
+  [19:52:15] 9699 reviews (0 errors) this run, 2.2 s each, ~25770 left, ETA 15.8 h  | ~/source/repos/gismo6
+  [19:57:16] 9845 reviews (0 errors) this run, 2.2 s each, ~25624 left, ETA 15.7 h  | ~/source/repos/gismo6
+  [20:02:17] 9986 reviews (0 errors) this run, 2.2 s each, ~25483 left, ETA 15.6 h  | ~/source/repos/gismo6
+  [20:07:17] 10122 reviews (0 errors) this run, 2.2 s each, ~25347 left, ETA 15.5 h  | ~/source/repos/gismo6
+  [20:12:19] 10254 reviews (0 errors) this run, 2.2 s each, ~25215 left, ETA 15.4 h  | ~/source/repos/gismo6
+Exception in thread Thread-26281 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc3 in position 105: invalid continuation byte
+Exception in thread Thread-26359 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb4 in position 467: invalid start byte
+Exception in thread Thread-26361 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbd in position 15274: invalid start byte
+Exception in thread Thread-26369 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 489: invalid start byte
+Exception in thread Thread-26371 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc8 in position 894: invalid continuation byte
+Exception in thread Thread-26373 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb7 in position 416: invalid start byte
+Exception in thread Thread-26375 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa3 in position 84: invalid start byte
+Exception in thread Thread-26377 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc8 in position 1056: invalid continuation byte
+Exception in thread Thread-26379 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 1393: invalid start byte
+Exception in thread Thread-26381 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb2 in position 600: invalid start byte
+Exception in thread Thread-26383 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc8 in position 927: invalid continuation byte
+Exception in thread Thread-26385 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb6 in position 1125: invalid start byte
+Exception in thread Thread-26389 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb9 in position 935: invalid start byte
+Exception in thread Thread-26391 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 654: invalid start byte
+Exception in thread Thread-26393 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc3 in position 105: invalid continuation byte
+Exception in thread Thread-26395 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 1565: invalid start byte
+Exception in thread Thread-26397 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 432: invalid start byte
+Exception in thread Thread-26401 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd2 in position 634: invalid continuation byte
+  [20:17:21] 10388 reviews (0 errors) this run, 2.2 s each, ~25081 left, ETA 15.4 h  | ~/source/repos/gismo6
+  [20:22:22] 10524 reviews (0 errors) this run, 2.2 s each, ~24945 left, ETA 15.3 h  | ~/source/repos/gismo6
+  [20:27:23] 10658 reviews (0 errors) this run, 2.2 s each, ~24811 left, ETA 15.2 h  | ~/source/repos/gismo6
+  [20:32:25] 10804 reviews (0 errors) this run, 2.2 s each, ~24665 left, ETA 15.1 h  | ~/source/repos/gismo6
+Exception in thread Thread-27951 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc8 in position 880: invalid continuation byte
+Exception in thread Thread-27953 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbb in position 417: invalid start byte
+Exception in thread Thread-27955 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc8 in position 1081: invalid continuation byte
+Exception in thread Thread-27957 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 1433: invalid start byte
+Exception in thread Thread-27959 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb2 in position 550: invalid start byte
+Exception in thread Thread-27961 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc8 in position 958: invalid continuation byte
+Exception in thread Thread-27963 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb6 in position 989: invalid start byte
+Exception in thread Thread-27967 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xb9 in position 995: invalid start byte
+Exception in thread Thread-27969 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 570: invalid start byte
+  [20:37:27] 10947 reviews (0 errors) this run, 2.2 s each, ~24522 left, ETA 15.0 h  | ~/source/repos/gismo6
+  [20:42:29] 11087 reviews (0 errors) this run, 2.2 s each, ~24382 left, ETA 14.9 h  | ~/source/repos/gismo6
+  [20:47:30] 11229 reviews (0 errors) this run, 2.2 s each, ~24240 left, ETA 14.8 h  | ~/source/repos/gismo6
+  [20:52:31] 11378 reviews (0 errors) this run, 2.2 s each, ~24091 left, ETA 14.7 h  | ~/source/repos/gismo6
+  [20:57:32] 11518 reviews (0 errors) this run, 2.2 s each, ~23951 left, ETA 14.6 h  | ~/source/repos/gismo6
+  [21:02:32] 11653 reviews (0 errors) this run, 2.2 s each, ~23816 left, ETA 14.5 h  | ~/source/repos/gismo6
+  [21:07:33] 11788 reviews (0 errors) this run, 2.2 s each, ~23681 left, ETA 14.5 h  | ~/source/repos/gismo6
+  [21:12:34] 11920 reviews (0 errors) this run, 2.2 s each, ~23549 left, ETA 14.4 h  | ~/source/repos/gismo6
+  [21:17:36] 12050 reviews (0 errors) this run, 2.2 s each, ~23419 left, ETA 14.3 h  | ~/source/repos/gismo6
+  [21:22:37] 12182 reviews (0 errors) this run, 2.2 s each, ~23287 left, ETA 14.2 h  | ~/source/repos/gismo6
+  [21:27:40] 12317 reviews (0 errors) this run, 2.2 s each, ~23152 left, ETA 14.2 h  | ~/source/repos/gismo6
+  [21:32:41] 12454 reviews (0 errors) this run, 2.2 s each, ~23015 left, ETA 14.1 h  | ~/source/repos/gismo6
+  [21:37:42] 12585 reviews (0 errors) this run, 2.2 s each, ~22884 left, ETA 14.0 h  | ~/source/repos/gismo6
+  [21:42:44] 12720 reviews (0 errors) this run, 2.2 s each, ~22749 left, ETA 13.9 h  | ~/source/repos/gismo6
+  [21:47:45] 12852 reviews (0 errors) this run, 2.2 s each, ~22617 left, ETA 13.8 h  | ~/source/repos/gismo6
+  [21:52:46] 12984 reviews (0 errors) this run, 2.2 s each, ~22485 left, ETA 13.8 h  | ~/source/repos/gismo6
+  [21:57:46] 13120 reviews (0 errors) this run, 2.2 s each, ~22349 left, ETA 13.7 h  | ~/source/repos/gismo6
+  [22:02:47] 13258 reviews (0 errors) this run, 2.2 s each, ~22211 left, ETA 13.6 h  | ~/source/repos/gismo6
+  [22:07:47] 13402 reviews (0 errors) this run, 2.2 s each, ~22067 left, ETA 13.5 h  | ~/source/repos/gismo6
+  [22:12:48] 13538 reviews (0 errors) this run, 2.2 s each, ~21931 left, ETA 13.4 h  | ~/source/repos/gismo6
+  [22:17:48] 13679 reviews (0 errors) this run, 2.2 s each, ~21790 left, ETA 13.3 h  | ~/source/repos/gismo6
+  [22:22:49] 13816 reviews (0 errors) this run, 2.2 s each, ~21653 left, ETA 13.2 h  | ~/source/repos/gismo6
+  [22:27:51] 13963 reviews (0 errors) this run, 2.2 s each, ~21506 left, ETA 13.1 h  | ~/source/repos/gismo6
+  [22:32:51] 14091 reviews (0 errors) this run, 2.2 s each, ~21378 left, ETA 13.1 h  | ~/source/repos/gismo6
+  [22:37:52] 14226 reviews (0 errors) this run, 2.2 s each, ~21243 left, ETA 13.0 h  | ~/source/repos/gismo6
+  [22:42:53] 14359 reviews (0 errors) this run, 2.2 s each, ~21110 left, ETA 12.9 h  | ~/source/repos/gismo6
+  [22:47:55] 14501 reviews (0 errors) this run, 2.2 s each, ~20968 left, ETA 12.8 h  | ~/source/repos/gismo6
+  [22:52:55] 14648 reviews (0 errors) this run, 2.2 s each, ~20821 left, ETA 12.7 h  | ~/source/repos/gismo6
+  [22:57:56] 14795 reviews (0 errors) this run, 2.2 s each, ~20674 left, ETA 12.6 h  | ~/source/repos/gismo6
+  [23:02:58] 14931 reviews (0 errors) this run, 2.2 s each, ~20538 left, ETA 12.5 h  | ~/source/repos/gismo6
+  [23:07:59] 15059 reviews (0 errors) this run, 2.2 s each, ~20410 left, ETA 12.5 h  | ~/source/repos/gismo6
+  [23:12:59] 15203 reviews (0 errors) this run, 2.2 s each, ~20266 left, ETA 12.4 h  | ~/source/repos/gismo6
+  [23:18:00] 15350 reviews (0 errors) this run, 2.2 s each, ~20119 left, ETA 12.3 h  | ~/source/repos/gismo6
+  [23:23:01] 15486 reviews (0 errors) this run, 2.2 s each, ~19983 left, ETA 12.2 h  | ~/source/repos/gismo6
+  [23:28:03] 15634 reviews (0 errors) this run, 2.2 s each, ~19835 left, ETA 12.1 h  | ~/source/repos/gismo6
+  [23:33:04] 15784 reviews (0 errors) this run, 2.19 s each, ~19685 left, ETA 12.0 h  | ~/source/repos/gismo6
+  [23:38:05] 15926 reviews (0 errors) this run, 2.19 s each, ~19543 left, ETA 11.9 h  | ~/source/repos/gismo6
+  [23:43:07] 16066 reviews (0 errors) this run, 2.19 s each, ~19403 left, ETA 11.8 h  | ~/source/repos/gismo6
+  [23:48:08] 16206 reviews (0 errors) this run, 2.19 s each, ~19263 left, ETA 11.7 h  | ~/source/repos/gismo6
+  [23:53:09] 16341 reviews (0 errors) this run, 2.19 s each, ~19128 left, ETA 11.7 h  | ~/source/repos/gismo6
+  [23:58:11] 16499 reviews (0 errors) this run, 2.19 s each, ~18970 left, ETA 11.5 h  | ~/source/repos/gismo6
+  [00:03:13] 16638 reviews (0 errors) this run, 2.19 s each, ~18831 left, ETA 11.5 h  | ~/source/repos/gismo6
+  [00:08:14] 16779 reviews (0 errors) this run, 2.19 s each, ~18690 left, ETA 11.4 h  | ~/source/repos/gismo6
+  [00:13:16] 16918 reviews (0 errors) this run, 2.19 s each, ~18551 left, ETA 11.3 h  | ~/source/repos/gismo6
+  [00:18:16] 17052 reviews (0 errors) this run, 2.19 s each, ~18417 left, ETA 11.2 h  | ~/source/repos/gismo6
+  [00:23:17] 17187 reviews (0 errors) this run, 2.19 s each, ~18282 left, ETA 11.1 h  | ~/source/repos/gismo6
+  [00:28:17] 17333 reviews (0 errors) this run, 2.19 s each, ~18136 left, ETA 11.0 h  | ~/source/repos/gismo6
+  [00:33:18] 17469 reviews (0 errors) this run, 2.19 s each, ~18000 left, ETA 10.9 h  | ~/source/repos/gismo6
+  [00:38:20] 17610 reviews (0 errors) this run, 2.19 s each, ~17859 left, ETA 10.9 h  | ~/source/repos/gismo6
+  [00:43:21] 17749 reviews (0 errors) this run, 2.19 s each, ~17720 left, ETA 10.8 h  | ~/source/repos/gismo6
+  [00:48:22] 17900 reviews (0 errors) this run, 2.19 s each, ~17569 left, ETA 10.7 h  | ~/source/repos/gismo6
+  [00:53:23] 18042 reviews (0 errors) this run, 2.19 s each, ~17427 left, ETA 10.6 h  | ~/source/repos/gismo6
+  [00:58:24] 18177 reviews (0 errors) this run, 2.19 s each, ~17292 left, ETA 10.5 h  | ~/source/repos/gismo6
+  [01:03:24] 18314 reviews (0 errors) this run, 2.19 s each, ~17155 left, ETA 10.4 h  | ~/source/repos/gismo6
+  [01:08:26] 18459 reviews (0 errors) this run, 2.19 s each, ~17010 left, ETA 10.3 h  | ~/source/repos/gismo6
+  [01:13:28] 18595 reviews (0 errors) this run, 2.19 s each, ~16874 left, ETA 10.2 h  | ~/source/repos/gismo6
+  [01:18:29] 18741 reviews (0 errors) this run, 2.19 s each, ~16728 left, ETA 10.2 h  | ~/source/repos/gismo6
+  [01:23:31] 18878 reviews (0 errors) this run, 2.19 s each, ~16591 left, ETA 10.1 h  | ~/source/repos/gismo6
+  [01:28:31] 19026 reviews (0 errors) this run, 2.18 s each, ~16443 left, ETA 10.0 h  | ~/source/repos/gismo6
+  [01:33:34] 19164 reviews (0 errors) this run, 2.18 s each, ~16305 left, ETA 9.9 h  | ~/source/repos/gismo6
+  [01:38:36] 19304 reviews (0 errors) this run, 2.18 s each, ~16165 left, ETA 9.8 h  | ~/source/repos/gismo6
+  [01:43:36] 19444 reviews (0 errors) this run, 2.18 s each, ~16025 left, ETA 9.7 h  | ~/source/repos/gismo6
+  [01:48:37] 19579 reviews (0 errors) this run, 2.18 s each, ~15890 left, ETA 9.6 h  | ~/source/repos/gismo6
+  [01:53:37] 19713 reviews (0 errors) this run, 2.18 s each, ~15756 left, ETA 9.6 h  | ~/source/repos/gismo6
+  [01:58:37] 19854 reviews (0 errors) this run, 2.18 s each, ~15615 left, ETA 9.5 h  | ~/source/repos/gismo6
+  [02:03:40] 19962 reviews (0 errors) this run, 2.19 s each, ~15507 left, ETA 9.4 h  | ~/source/repos/gismo6
+  [02:08:40] 20094 reviews (0 errors) this run, 2.19 s each, ~15375 left, ETA 9.3 h  | ~/source/repos/gismo6
+  [02:13:41] 20259 reviews (0 errors) this run, 2.19 s each, ~15210 left, ETA 9.2 h  | ~/source/repos/gismo6
+  [02:18:42] 20351 reviews (0 errors) this run, 2.19 s each, ~15118 left, ETA 9.2 h  | ~/source/repos/gismo6
+  [02:23:45] 20448 reviews (0 errors) this run, 2.19 s each, ~15021 left, ETA 9.2 h  | ~/source/repos/gismo6
+  [02:28:47] 20548 reviews (0 errors) this run, 2.2 s each, ~14921 left, ETA 9.1 h  | ~/source/repos/gismo6
+  [02:33:47] 20632 reviews (0 errors) this run, 2.2 s each, ~14837 left, ETA 9.1 h  | ~/source/repos/gismo6
+Exception in thread Thread-52389 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0x92 in position 67921: invalid start byte
+  [02:38:47] 20730 reviews (0 errors) this run, 2.21 s each, ~14739 left, ETA 9.0 h  | ~/source/repos/gismo4
+  [02:43:49] 20844 reviews (0 errors) this run, 2.21 s each, ~14625 left, ETA 9.0 h  | ~/source/repos/gismo4
+  [02:48:50] 20960 reviews (0 errors) this run, 2.21 s each, ~14509 left, ETA 8.9 h  | ~/source/repos/gismo4
+  [02:53:52] 21068 reviews (0 errors) this run, 2.22 s each, ~14401 left, ETA 8.9 h  | ~/source/repos/gismo4
+  [02:58:54] 21184 reviews (0 errors) this run, 2.22 s each, ~14285 left, ETA 8.8 h  | ~/source/repos/gismo4
+  [03:03:55] 21299 reviews (0 errors) this run, 2.22 s each, ~14170 left, ETA 8.7 h  | ~/source/repos/gismo4
+  [03:08:56] 21412 reviews (0 errors) this run, 2.22 s each, ~14057 left, ETA 8.7 h  | ~/source/repos/gismo4
+  [03:13:57] 21528 reviews (0 errors) this run, 2.22 s each, ~13941 left, ETA 8.6 h  | ~/source/repos/gismo4
+  [03:18:59] 21636 reviews (0 errors) this run, 2.23 s each, ~13833 left, ETA 8.6 h  | ~/source/repos/gismo4
+  [03:24:00] 21751 reviews (0 errors) this run, 2.23 s each, ~13718 left, ETA 8.5 h  | ~/source/repos/gismo4
+  [03:29:00] 21863 reviews (0 errors) this run, 2.23 s each, ~13606 left, ETA 8.4 h  | ~/source/repos/gismo6
+  [03:34:01] 21978 reviews (0 errors) this run, 2.23 s each, ~13491 left, ETA 8.4 h  | ~/source/repos/gismo6
+  [03:39:02] 22092 reviews (0 errors) this run, 2.24 s each, ~13377 left, ETA 8.3 h  | ~/source/repos/gismo6
+  [03:44:03] 22212 reviews (0 errors) this run, 2.24 s each, ~13257 left, ETA 8.2 h  | ~/source/repos/gismo6
+  [03:49:06] 22357 reviews (0 errors) this run, 2.24 s each, ~13112 left, ETA 8.1 h  | ~/source/repos/gismo6
+  [03:54:07] 22496 reviews (0 errors) this run, 2.24 s each, ~12973 left, ETA 8.1 h  | ~/source/repos/gismo6
+  [03:59:09] 22622 reviews (0 errors) this run, 2.24 s each, ~12847 left, ETA 8.0 h  | ~/source/repos/gismo6
+  [04:04:12] 22738 reviews (0 errors) this run, 2.24 s each, ~12731 left, ETA 7.9 h  | ~/source/repos/gismo6
+  [04:09:12] 22853 reviews (0 errors) this run, 2.24 s each, ~12616 left, ETA 7.9 h  | ~/source/repos/gismo6
+  [04:14:14] 22971 reviews (0 errors) this run, 2.24 s each, ~12498 left, ETA 7.8 h  | ~/source/repos/gismo6
+  [04:19:16] 23108 reviews (0 errors) this run, 2.24 s each, ~12361 left, ETA 7.7 h  | ~/source/repos/gismo6
+  [04:24:19] 23225 reviews (0 errors) this run, 2.24 s each, ~12244 left, ETA 7.6 h  | ~/source/repos/gismo6
+  [04:29:21] 23342 reviews (0 errors) this run, 2.25 s each, ~12127 left, ETA 7.6 h  | ~/source/repos/gismo6
+  [04:34:23] 23455 reviews (0 errors) this run, 2.25 s each, ~12014 left, ETA 7.5 h  | ~/source/repos/gismo6
+  [04:39:23] 23573 reviews (0 errors) this run, 2.25 s each, ~11896 left, ETA 7.4 h  | ~/source/repos/gismo6
+  [04:44:26] 23692 reviews (0 errors) this run, 2.25 s each, ~11777 left, ETA 7.4 h  | ~/source/repos/gismo6
+  [04:49:26] 23815 reviews (0 errors) this run, 2.25 s each, ~11654 left, ETA 7.3 h  | ~/source/repos/gismo6
+  [04:54:29] 23933 reviews (0 errors) this run, 2.25 s each, ~11536 left, ETA 7.2 h  | ~/source/repos/gismo6
+  [04:59:29] 24052 reviews (0 errors) this run, 2.25 s each, ~11417 left, ETA 7.1 h  | ~/source/repos/gismo6
+  [05:04:29] 24459 reviews (0 errors) this run, 2.23 s each, ~11010 left, ETA 6.8 h  | ~/source/repos/gismo6
+  [05:09:29] 24610 reviews (0 errors) this run, 2.23 s each, ~10859 left, ETA 6.7 h  | ~/source/repos/gismo6
+  [05:14:30] 24725 reviews (0 errors) this run, 2.23 s each, ~10744 left, ETA 6.7 h  | ~/source/repos/gismo6
+  [05:19:32] 24841 reviews (0 errors) this run, 2.23 s each, ~10628 left, ETA 6.6 h  | ~/source/repos/gismo6
+Exception in thread Thread-58607 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbd in position 15280: invalid start byte
+Exception in thread Thread-58611 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc3 in position 105: invalid continuation byte
+  [05:24:33] 24956 reviews (0 errors) this run, 2.23 s each, ~10513 left, ETA 6.5 h  | ~/source/repos/gismo6
+Exception in thread Thread-58617 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 818: invalid start byte
+  [05:29:36] 25077 reviews (0 errors) this run, 2.23 s each, ~10392 left, ETA 6.4 h  | ~/source/repos/gismo6
+Exception in thread Thread-59027 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xa3 in position 84: invalid start byte
+Exception in thread Thread-59029 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xbc in position 1413: invalid start byte
+Exception in thread Thread-59031 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xc3 in position 105: invalid continuation byte
+  [05:34:36] 25234 reviews (0 errors) this run, 2.23 s each, ~10235 left, ETA 6.3 h  | ~/source/repos/gismo6
+  [05:39:37] 25585 reviews (0 errors) this run, 2.21 s each, ~9884 left, ETA 6.1 h  | ~/source/repos/gismo6
+  [05:44:37] 25699 reviews (0 errors) this run, 2.22 s each, ~9770 left, ETA 6.0 h  | ~/source/repos/gismo6
+  [05:49:39] 25816 reviews (0 errors) this run, 2.22 s each, ~9653 left, ETA 5.9 h  | ~/source/repos/gismo6
+  [05:54:40] 25961 reviews (0 errors) this run, 2.22 s each, ~9508 left, ETA 5.9 h  | ~/source/repos/gismo6
+  [05:59:42] 26077 reviews (0 errors) this run, 2.22 s each, ~9392 left, ETA 5.8 h  | ~/source/repos/gismo6
+  [06:04:43] 26192 reviews (0 errors) this run, 2.22 s each, ~9277 left, ETA 5.7 h  | ~/source/repos/gismo6
+  [06:09:45] 26321 reviews (0 errors) this run, 2.22 s each, ~9148 left, ETA 5.6 h  | ~/source/repos/gismo6
+  [06:14:45] 26443 reviews (0 errors) this run, 2.22 s each, ~9026 left, ETA 5.6 h  | ~/source/repos/gismo6
+  [06:19:46] 26590 reviews (0 errors) this run, 2.22 s each, ~8879 left, ETA 5.5 h  | ~/source/repos/gismo6
+  [06:24:48] 26730 reviews (0 errors) this run, 2.22 s each, ~8739 left, ETA 5.4 h  | ~/source/repos/gismo6
+  [06:29:50] 26880 reviews (0 errors) this run, 2.22 s each, ~8589 left, ETA 5.3 h  | ~/source/repos/gismo6
+  [06:34:53] 27043 reviews (0 errors) this run, 2.22 s each, ~8426 left, ETA 5.2 h  | ~/source/repos/gismo6
+  [06:39:53] 27156 reviews (0 errors) this run, 2.22 s each, ~8313 left, ETA 5.1 h  | ~/source/repos/gismo6
+  [06:44:55] 27267 reviews (0 errors) this run, 2.22 s each, ~8202 left, ETA 5.1 h  | ~/source/repos/gismo6
+  [06:49:57] 27383 reviews (0 errors) this run, 2.22 s each, ~8086 left, ETA 5.0 h  | ~/source/repos/gismo6
+  [06:54:58] 27496 reviews (0 errors) this run, 2.22 s each, ~7973 left, ETA 4.9 h  | ~/source/repos/gismo6
+  [06:59:58] 27610 reviews (0 errors) this run, 2.23 s each, ~7859 left, ETA 4.9 h  | ~/source/repos/gismo6
+  [07:04:58] 27846 reviews (0 errors) this run, 2.22 s each, ~7623 left, ETA 4.7 h  | ~/source/repos/gismo6
+  [07:09:59] 28044 reviews (0 errors) this run, 2.21 s each, ~7425 left, ETA 4.6 h  | ~/source/repos/gismo6
+  [07:15:00] 28167 reviews (0 errors) this run, 2.21 s each, ~7302 left, ETA 4.5 h  | ~/source/repos/gismo6
+  [07:20:01] 28293 reviews (0 errors) this run, 2.21 s each, ~7176 left, ETA 4.4 h  | ~/source/repos/gismo6
+  [07:25:02] 28408 reviews (0 errors) this run, 2.22 s each, ~7061 left, ETA 4.3 h  | ~/source/repos/gismo6
+  [07:30:03] 28522 reviews (0 errors) this run, 2.22 s each, ~6947 left, ETA 4.3 h  | ~/source/repos/gismo6
+  [07:35:05] 28634 reviews (0 errors) this run, 2.22 s each, ~6835 left, ETA 4.2 h  | ~/source/repos/gismo6
+  [07:40:05] 28752 reviews (0 errors) this run, 2.22 s each, ~6717 left, ETA 4.1 h  | ~/source/repos/gismo6
+  [07:45:08] 28872 reviews (0 errors) this run, 2.22 s each, ~6597 left, ETA 4.1 h  | ~/source/repos/gismo6
+  [07:50:10] 28987 reviews (0 errors) this run, 2.22 s each, ~6482 left, ETA 4.0 h  | ~/source/repos/gismo6
+  [07:55:13] 29108 reviews (0 errors) this run, 2.22 s each, ~6361 left, ETA 3.9 h  | ~/source/repos/gismo6
+  [08:00:14] 29231 reviews (0 errors) this run, 2.23 s each, ~6238 left, ETA 3.9 h  | ~/source/repos/gismo6
+  [08:05:15] 29372 reviews (0 errors) this run, 2.23 s each, ~6097 left, ETA 3.8 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:10:16] 29488 reviews (0 errors) this run, 2.23 s each, ~5981 left, ETA 3.7 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:15:18] 29609 reviews (0 errors) this run, 2.23 s each, ~5860 left, ETA 3.6 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:20:21] 29727 reviews (0 errors) this run, 2.23 s each, ~5742 left, ETA 3.6 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:25:23] 29821 reviews (0 errors) this run, 2.23 s each, ~5648 left, ETA 3.5 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:30:25] 29919 reviews (0 errors) this run, 2.24 s each, ~5550 left, ETA 3.4 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:35:26] 30012 reviews (0 errors) this run, 2.24 s each, ~5457 left, ETA 3.4 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:40:29] 30113 reviews (0 errors) this run, 2.24 s each, ~5356 left, ETA 3.3 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:45:30] 30217 reviews (0 errors) this run, 2.24 s each, ~5252 left, ETA 3.3 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:50:31] 30323 reviews (0 errors) this run, 2.25 s each, ~5146 left, ETA 3.2 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [08:55:32] 30419 reviews (0 errors) this run, 2.25 s each, ~5050 left, ETA 3.2 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [09:00:33] 30516 reviews (0 errors) this run, 2.25 s each, ~4953 left, ETA 3.1 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [09:05:36] 30617 reviews (0 errors) this run, 2.25 s each, ~4852 left, ETA 3.0 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [09:10:38] 30715 reviews (0 errors) this run, 2.26 s each, ~4754 left, ETA 3.0 h  | C:/workdir/claudeVersuch/gs_unref/casadi-src
+  [09:15:40] 30818 reviews (0 errors) this run, 2.26 s each, ~4651 left, ETA 2.9 h  | ~/.codex/.tmp/plugins
+  [09:20:42] 30921 reviews (0 errors) this run, 2.26 s each, ~4548 left, ETA 2.9 h  | ~/.codex/.tmp/plugins
+  [09:25:43] 31022 reviews (0 errors) this run, 2.26 s each, ~4447 left, ETA 2.8 h  | ~/.codex/.tmp/plugins
+  [09:30:43] 31132 reviews (0 errors) this run, 2.26 s each, ~4337 left, ETA 2.7 h  | ~/.codex/.tmp/plugins
+  [09:35:45] 31229 reviews (0 errors) this run, 2.27 s each, ~4240 left, ETA 2.7 h  | ~/.codex/.tmp/plugins
+  [09:40:47] 31328 reviews (0 errors) this run, 2.27 s each, ~4141 left, ETA 2.6 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [09:45:50] 31433 reviews (0 errors) this run, 2.27 s each, ~4036 left, ETA 2.5 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [09:50:50] 31532 reviews (0 errors) this run, 2.27 s each, ~3937 left, ETA 2.5 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [09:55:53] 31633 reviews (0 errors) this run, 2.28 s each, ~3836 left, ETA 2.4 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:00:54] 31733 reviews (0 errors) this run, 2.28 s each, ~3736 left, ETA 2.4 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:05:54] 31830 reviews (0 errors) this run, 2.28 s each, ~3639 left, ETA 2.3 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:10:56] 31928 reviews (0 errors) this run, 2.28 s each, ~3541 left, ETA 2.2 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:15:56] 32026 reviews (0 errors) this run, 2.29 s each, ~3443 left, ETA 2.2 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:20:57] 32122 reviews (0 errors) this run, 2.29 s each, ~3347 left, ETA 2.1 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:26:00] 32222 reviews (0 errors) this run, 2.29 s each, ~3247 left, ETA 2.1 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:31:02] 32320 reviews (0 errors) this run, 2.29 s each, ~3149 left, ETA 2.0 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:36:04] 32419 reviews (0 errors) this run, 2.3 s each, ~3050 left, ETA 1.9 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:41:06] 32516 reviews (0 errors) this run, 2.3 s each, ~2953 left, ETA 1.9 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:46:07] 32617 reviews (0 errors) this run, 2.3 s each, ~2852 left, ETA 1.8 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:51:08] 32713 reviews (0 errors) this run, 2.3 s each, ~2756 left, ETA 1.8 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [10:56:09] 32813 reviews (0 errors) this run, 2.3 s each, ~2656 left, ETA 1.7 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:01:10] 32910 reviews (0 errors) this run, 2.31 s each, ~2559 left, ETA 1.6 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:06:13] 33013 reviews (0 errors) this run, 2.31 s each, ~2456 left, ETA 1.6 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:11:14] 33114 reviews (0 errors) this run, 2.31 s each, ~2355 left, ETA 1.5 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:16:16] 33218 reviews (0 errors) this run, 2.31 s each, ~2251 left, ETA 1.4 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:21:19] 33319 reviews (0 errors) this run, 2.31 s each, ~2150 left, ETA 1.4 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:26:19] 33421 reviews (0 errors) this run, 2.32 s each, ~2048 left, ETA 1.3 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:31:22] 33522 reviews (0 errors) this run, 2.32 s each, ~1947 left, ETA 1.3 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:36:25] 33624 reviews (0 errors) this run, 2.32 s each, ~1845 left, ETA 1.2 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:41:28] 33726 reviews (0 errors) this run, 2.32 s each, ~1743 left, ETA 1.1 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:46:31] 33825 reviews (0 errors) this run, 2.32 s each, ~1644 left, ETA 1.1 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:51:34] 33924 reviews (0 errors) this run, 2.33 s each, ~1545 left, ETA 1.0 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [11:56:34] 34021 reviews (0 errors) this run, 2.33 s each, ~1448 left, ETA 0.9 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:01:34] 34124 reviews (0 errors) this run, 2.33 s each, ~1345 left, ETA 0.9 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:06:37] 34226 reviews (0 errors) this run, 2.33 s each, ~1243 left, ETA 0.8 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:11:39] 34329 reviews (0 errors) this run, 2.33 s each, ~1140 left, ETA 0.7 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:16:41] 34429 reviews (0 errors) this run, 2.34 s each, ~1040 left, ETA 0.7 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:21:41] 34528 reviews (0 errors) this run, 2.34 s each, ~941 left, ETA 0.6 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:26:44] 34630 reviews (0 errors) this run, 2.34 s each, ~839 left, ETA 0.5 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:31:47] 34735 reviews (0 errors) this run, 2.34 s each, ~734 left, ETA 0.5 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:36:48] 34839 reviews (0 errors) this run, 2.34 s each, ~630 left, ETA 0.4 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:41:49] 34945 reviews (0 errors) this run, 2.35 s each, ~524 left, ETA 0.3 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:46:52] 35070 reviews (0 errors) this run, 2.35 s each, ~399 left, ETA 0.3 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:51:52] 35195 reviews (0 errors) this run, 2.35 s each, ~274 left, ETA 0.2 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [12:56:54] 35317 reviews (0 errors) this run, 2.35 s each, ~152 left, ETA 0.1 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  [13:01:55] 35441 reviews (0 errors) this run, 2.35 s each, ~28 left, ETA 0.0 h  | ~/AppData/Local/Temp/claude/c--workdir-TDDkata/81e80427-256c-43ee-ae05-528f13a96391/scratchpad/b/_deps/googletest-src
+  every planned commit has been gone through
+  [13:03:06] 35469 reviews (0 errors) this run, 2.35 s each, ~0 left, ETA 0.0 h  | 
+<unknown>:45: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:52: SyntaxWarning: "\+" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\+"? A raw string is also an option.
+<unknown>:374: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:434: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:524: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:538: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:46: SyntaxWarning: "\." is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\."? A raw string is also an option.
+<unknown>:332: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:373: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:374: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:382: SyntaxWarning: "\e" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\e"? A raw string is also an option.
+<unknown>:384: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:385: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:388: SyntaxWarning: "\e" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\e"? A raw string is also an option.
+<unknown>:392: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:421: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:425: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:455: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:520: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:600: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:629: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:630: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:640: SyntaxWarning: "\e" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\e"? A raw string is also an option.
+<unknown>:648: SyntaxWarning: "\c" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\c"? A raw string is also an option.
+<unknown>:7: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:884: SyntaxWarning: "\D" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\D"? A raw string is also an option.
+<unknown>:2676: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:2878: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:2879: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:62: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:93: SyntaxWarning: "\{" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\{"? A raw string is also an option.
+<unknown>:94: SyntaxWarning: "\{" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\{"? A raw string is also an option.
+<unknown>:95: SyntaxWarning: "\|" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\|"? A raw string is also an option.
+<unknown>:96: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:97: SyntaxWarning: "\{" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\{"? A raw string is also an option.
+<unknown>:98: SyntaxWarning: "\{" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\{"? A raw string is also an option.
+<unknown>:99: SyntaxWarning: "\$" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\$"? A raw string is also an option.
+<unknown>:101: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:102: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:103: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<unknown>:107: SyntaxWarning: "\$" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\$"? A raw string is also an option.
+<unknown>:108: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:114: SyntaxWarning: "\{" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\{"? A raw string is also an option.
+<unknown>:118: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:119: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:120: SyntaxWarning: "\*" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\*"? A raw string is also an option.
+<unknown>:122: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:123: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<unknown>:125: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:126: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:21: SyntaxWarning: "\w" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\w"? A raw string is also an option.
+<unknown>:316: SyntaxWarning: "\s" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\s"? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:163: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:147: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:147: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:147: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:147: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:86: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:420: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:147: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:60: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:420: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:147: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:60: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:420: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:148: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:60: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:420: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:148: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:48: SyntaxWarning: "\?" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\?"? A raw string is also an option.
+<unknown>:60: SyntaxWarning: "\[" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\["? A raw string is also an option.
+<unknown>:420: SyntaxWarning: "\(" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\("? A raw string is also an option.
+<unknown>:145: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:144: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+<unknown>:144: SyntaxWarning: "\d" is an invalid escape sequence. Such sequences will not work in the future. Did you mean "\\d"? A raw string is also an option.
+
+  sessions -> C:\workdir\warf\WaRF\.warf-experiments\laya-sweep\sessions.jsonl

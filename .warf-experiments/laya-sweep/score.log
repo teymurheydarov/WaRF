@@ -1,0 +1,23 @@
+
+  36715 reviews; 22293 with a verdict from the history, unlabelled: 7798 less than 180 days of later history, 6176 shallow boundary, 273 revert, 175 reverted
+
+                                                        n    REJ  Laya REJECT on  mean p(REJECT) on  AUC p(REJECT)  AUC size  AUC p, same size
+                                                           label     REJ     APP       REJ      APP
+  all with a verdict                                22293   3567   0.010   0.006     0.166    0.155   0.543 ±0.005    0.667             0.508
+  phase A (<= 50 files)                             17244   3283   0.011   0.006     0.166    0.156   0.541 ±0.006    0.686             0.519
+  phase A, REJECTs too with 180 days later          16839   2878   0.012   0.006     0.165    0.156   0.534 ±0.006    0.679             0.513
+  phase A, state read in full                        2887    179   0.006   0.001     0.152    0.141   0.540 ±0.023    0.539             0.529
+  phase A, REJECTs whose blamed line Laya read      15747   1786   0.012   0.006     0.162    0.156   0.521 ±0.007    0.558             0.514
+  phase A, REJECTs whose blamed line it did not     15458   1497   0.009   0.006     0.171    0.156   0.565 ±0.008    0.840             0.526
+  phase B (> 50 files)                               5049    284   0.007   0.006     0.161    0.152   0.537 ±0.018    0.676             0.442
+  phase A, ~/source/repos/gismo6                    17189   3228   0.011   0.006     0.165    0.156   0.538 ±0.006    0.684             0.516
+
+  As WaRF's SPRT sees it (phase A): P1 = P(APPROVE | good) 0.994, P0 = P(APPROVE | bad) 0.989;
+  one APPROVE is worth LLR +0.005 and one REJECT -0.629 (WaRF assumes +0.981 and -1.253)
+
+  omega WaRF would learn from these verdicts, by domain (gamma 1: (1 + correct) / (2 + n)):
+  LOGIC        n  18520  correct  15763  omega 0.851  (an agent that always approves: 0.854)
+  PERFORMANCE  n   1113  correct    884  omega 0.794  (an agent that always approves: 0.801)
+  SECURITY     n   2660  correct   2006  omega 0.754  (an agent that always approves: 0.756)
+
+  -> C:\workdir\warf\WaRF\.warf-experiments\laya-sweep\score.json

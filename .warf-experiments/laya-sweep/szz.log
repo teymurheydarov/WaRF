@@ -1,0 +1,8 @@
+
+  2135 fix commits in the plan: 38 blamed before, 5 with more than 50 files left out, 2092 to blame (3 workers)
+
+  [18:40:31] 702/2092 fixes blamed (0 errors), ETA 2 min
+  [18:41:31] 1449/2092 fixes blamed (0 errors), ETA 1 min
+  [18:42:17] 2092/2092 fixes blamed (0 errors), ETA 0 min
+
+  -> C:\workdir\warf\WaRF\.warf-experiments\laya-sweep\szz.jsonl

@@ -1,0 +1,14 @@
+{
+  "updated": "2026-11-01T12:03:06.080538+00:00",
+  "profile": "laya_sweep",
+  "reviews_this_run": 35469,
+  "errors_this_run": 0,
+  "votes_this_run": {
+    "APPROVE": 35250,
+    "REJECT": 219
+  },
+  "seconds_per_review": 2.35,
+  "reviews_left_est": 0,
+  "eta_hours": 0.0,
+  "current": null
+}
