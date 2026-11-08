@@ -1,0 +1,46 @@
+[
+  {
+    "name": "CLAUDE",
+    "persona": "Should this change be merged as it is? A defect you can point to is a REJECT.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "SECURITY": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": null,
+    "provider": "claude_cli",
+    "model": "claude-opus-5-5",
+    "persona_hash": "30698a20810c"
+  },
+  {
+    "name": "JEV",
+    "persona": "Should this change be merged as it is? A defect you can point to is a REJECT.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "SECURITY": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": null,
+    "provider": "jev",
+    "model": "jev-latest",
+    "persona_hash": "30698a20810c"
+  }
+]

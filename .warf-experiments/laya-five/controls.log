@@ -1,0 +1,10 @@
+  98 reviews to run (2 done) -> controls.jsonl
+  10/98  5.6 s per review, ~8 min left
+  20/98  6.6 s per review, ~9 min left
+  30/98  7.1 s per review, ~8 min left
+  40/98  7.2 s per review, ~7 min left
+  50/98  7.6 s per review, ~6 min left
+  60/98  7.9 s per review, ~5 min left
+  70/98  8.3 s per review, ~4 min left
+  80/98  8.5 s per review, ~3 min left
+  done: 84 reviews in 12.0 min; 14 skipped, the patch adds no line to plant after

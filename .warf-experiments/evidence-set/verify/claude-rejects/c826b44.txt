@@ -1,0 +1,93 @@
+===== claude claude.w1.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+1. **`mapMesh` now applies the forward map instead of the inverse.** The comment directly above it says `//// NEEDS TO EVALUATE THE INVERSE MAP, NOT m_composition!!`. The old code called `m_composition->invertPoints(point,tmp,1e-6,true)`, which inverts the composition. The patch comments that out and calls `m_composition->eval_into(point,tmp)`, which evaluates the composition forward. Mesh vertices given in basis parameter space will be mapped the wrong way, so any mesh or plot built through this basis ends up in the wrong place. The leftover `gsDebugVar` lines and commented-out `invertPoints(...,1e-2,...)` suggest this was a debugging workaround committed by accident.
+
+2. **The tolerance in `support(i)` is much looser.** The inversion tolerance went from `1e-10`, which the global `support()` still uses, to `1e-4`. Corners of a basis function's support may be inverted with errors around 1e-4, giving bounding boxes that are too large or too small. That affects active-function detection and integration domains downstream, and the patch gives no reason for the change.
+
+3. **The bounding box from `support(i)` can be wrong.** Inverting only the corner points of the support box and taking their min and max is only correct for monotone, axis-aligned compositions. For a general nonlinear composition, the preimage's extent can lie between the corners, so the returned support can miss parts where the function is non-zero.
+
+4. **The loop index type mismatches.** `for (size_t d=0; d!=this->domainDim(); d++)` compares `size_t` against `short_t`, which triggers a signed/unsigned comparison warning, an error under `-Werror`.
+
+5. **The patch adds noise.** It brings in a dead, commented-out `#ifndef _NDEBUG` block in `_applyBounds`, which also uses the non-standard macro name `_NDEBUG`. It also keeps a commented-out `// return this->support();`. Neither belongs in a merge.
+
+Point 1 alone is enough to block the merge: it reverses the mapping direction that the code's own comment says is required.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+**1. `mapMesh` now applies the map in the wrong direction (concrete defect).**
+- The comment directly above the function says: `//// NEEDS TO EVALUATE THE INVERSE MAP, NOT m_composition!!`
+- The old code honoured that by calling `m_composition->invertPoints(point,tmp,1e-6,true)`.
+- The patch comments that out and calls `m_composition->eval_into(point,tmp)` instead. That is the forward map.
+- The mesh comes from `connectivity()`, which forwards to `m_basis->connectivity()`. Its vertices are therefore in `m_basis`'s parameter domain, which is the composition's target space.
+- To place them in the composed basis's domain, you must apply the inverse of the composition. Applying the forward map does the opposite.
+- Concrete case: take any non-identity, non-involutive composition, such as `x ↦ x²` on [0,1]. A vertex at basis coordinate 0.25 should map to 0.5. With this patch it maps to 0.0625.
+- Every visualisation or mesh produced through `mapMesh` (e.g. via `gsWriteParaview` of the basis) is then silently placed at wrong coordinates.
+- The commented-out `gsDebugVar` lines suggest this was a debugging workaround committed by accident.
+
+**2. `support(i)` loosens the inversion tolerance from 1e-10 to 1e-4.**
+- With this change, the returned per-function support boxes can be off by about 1e-4 in parameter space.
+- Code that uses `support(i)` for element and quadrature selection or active-set decisions can misclassify functions near support boundaries.
+- This is weaker than defect 1, but it is still a silent accuracy regression with no justification given.
+
+**3. Minor issues in `support(i)`.**
+- `for (size_t d=0; d!=this->domainDim(); d++)` compares an unsigned counter against a `short_t`, which triggers a signed/unsigned comparison warning.
+- `gsGridIterator<T,CUBE>(supp, 2^d)` samples 2^d points per direction. That is fine for a bounding box, but a non-monotone composition can still under-estimate the support between samples.
+
+**4. Dead debug code.**
+- The patch also adds a large commented-out debug block in `_applyBounds`. This is noise, not a bug.
+
+Defect 1 alone is a reproducible correctness error: the mesh is mapped forward when it should be inverted, directly contradicting the documented intent. The patch should be rejected.
+--- ADVOCATE 32e59155d0a3 REJECT
+The `mapMesh` change is a demonstrable defect.
+
+- **`mapMesh` now applies the map in the wrong direction.** The function sits directly under the comment `//// NEEDS TO EVALUATE THE INVERSE MAP, NOT m_composition!!`. The patch removes the `invertPoints` call and replaces it with `m_composition->eval_into(point,tmp)`. That is exactly the forward evaluation the comment forbids.
+  - The mesh comes from `connectivity()`, which delegates to `m_basis->connectivity(...)`. Its vertices are therefore in the inner basis's domain, which is the composition's *target* space.
+  - Turning those into parameters of the composed basis requires the inverse of `m_composition`. Applying the forward map sends vertices through the composition a second time, so meshes will be silently misplaced for any non-identity composition.
+  - Leftover commented `gsDebugVar` lines next to the removed call suggest this was a debugging workaround (perhaps because `invertPoints` was failing to converge) rather than a deliberate fix.
+
+Secondary concerns, which would not justify rejection on their own:
+
+- **Looser tolerance in `support(i)`.** The new code uses `1e-4`, where the original commented-out version used `1e-10`. The bounds of each basis function's support can now be off by up to that amount, which can change which elements are treated as active.
+- **Corners may not bound the support.** `support(i)` inverts only the corners of the inner basis's support box. For a non-monotone composition, the min/max of the inverted corners does not necessarily contain the true preimage.
+- **Inconsistent supports.** `support()` still returns the un-inverted inner-basis support, while `support(i)` now returns inverted supports. These two now live in different coordinate spaces.
+- **Commented-out debug code.** The patch adds this in `_applyBounds` and `mapMesh`.
+
+I found no security-relevant issue: no memory-safety, injection or trust-boundary concern. The rejection is for the correctness regression in `mapMesh`.
+--- AUDITOR 318509b9ab1f REJECT
+This is not a memory-safety or injection problem. The patch fails review for a correctness regression and code-hygiene issues.
+
+1. **`mapMesh` now uses the forward map, contradicting its own requirement.** The function sits directly under the comment `//// NEEDS TO EVALUATE THE INVERSE MAP, NOT m_composition!!`. The patch replaces `m_composition->invertPoints(...)` with `m_composition->eval_into(point, tmp)`, which evaluates exactly the forward map the comment warns against. Mesh vertices will be placed in the wrong space, giving silently wrong visualizations and geometry. Nothing in the patch, such as an updated comment or rationale, explains the change. The old call is left commented out with a different tolerance (`1e-2`) and debug-print stubs, so this looks like an experiment, not a deliberate fix.
+
+2. **`support(i)` loosens tolerance and depends on unverified convergence.**
+   - The re-enabled inversion uses `1e-4`, while the original code used `1e-10`. That is six orders of magnitude looser, and no justification is given.
+   - The result of `invertPoints` is never checked for convergence. Non-converged values flow straight into the min/max bounding box.
+   - That box drives element/function support queries, such as active-function detection and assembly sparsity. An inaccurate box can wrongly include or exclude basis functions.
+   - `support()` (no argument) still returns the untransformed basis support. The two overloads are now in different coordinate spaces.
+
+3. **Type and loop hygiene.** `for (size_t d=0; d!=this->domainDim(); d++)` compares unsigned `size_t` with the signed `short_t` returned by `domainDim()`. This triggers sign-compare warnings, and the code base elsewhere uses `short_t`/`index_t` for this.
+
+4. **Dead and debug code added to production.**
+   - `_applyBounds` gains a commented-out `#ifndef _NDEBUG` block. The macro name is also wrong (the standard one is `NDEBUG`), so the block would misbehave if re-enabled.
+   - `mapMesh` gains commented `gsDebugVar` lines.
+   - `support(i)` leaves a stale `// return this->support();`.
+   
+   This is work-in-progress residue and should not be merged.
+
+To be approvable, the patch should:
+- restore the inverse evaluation in `mapMesh`, or update the comment and documentation with a justified reason for the forward map;
+- justify the `1e-4` tolerance or restore a tight one, and handle non-convergence of `invertPoints`;
+- make `support()` and `support(i)` use the same coordinate space;
+- fix the loop index type;
+- remove the commented debug code.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+1. **`mapMesh` now applies the wrong map, and nothing reports it.** The comment directly above the function says `NEEDS TO EVALUATE THE INVERSE MAP, NOT m_composition!!`. The patch removes the `invertPoints` call and replaces it with `m_composition->eval_into(point, tmp)`, which is the forward map. Every mesh vertex is moved to a finite coordinate that looks reasonable, with no exception or warning. For the identity composition, or one that equals its own inverse, the result happens to be correct, so a simple test could pass. This is a real bug, and a silent one.
+
+2. **`support(i)` hides inversion failures and gives plausible wrong bounds.**
+   - **Failed inversion is not reported.** `invertPoints` in G+Smo handles a failed Newton-Raphson step (`iter == -1`) by issuing `gsWarn` and storing the unconverged guess in `result`. The caller receives normal-looking numbers.
+   - **The tolerance is much looser.** It drops from the earlier `1e-10` to `1e-4`, so inaccurate inversions become more likely.
+   - **The initial guess is in the wrong space.** `result = supp` uses points from the basis domain (the composition's target space) as starting points in the composition's parameter space. `useInitialPoint = true` then feeds them to Newton. If the two dimensions differ, `invertPoints` calls `result.resize(parDim, ...)` first, which discards those values. The starting point then depends on leftover memory contents.
+   - **Grid size uses the wrong dimension.** `gsGridIterator(supp, pow(2, this->domainDim()))` sizes the grid with the composition's domain dimension. But `supp` has `m_basis->domainDim()` rows, so the corner count is wrong whenever the two dimensions differ.
+   - **Corners do not bound a nonlinear preimage.** Taking the min and max of the inverted corners is only valid when the inverse is monotone. A nonlinear inverse can bulge past its corners. The result is an under-estimated support box that looks valid, and downstream code such as active-function queries or quadrature would quietly skip contributions.
+
+3. **`_applyBounds` clamps without any signal.** Points outside the basis support are silently projected onto its boundary, and the debug check that would have reported this stays commented out. Combined with (1) and (2), wrong coordinates are clamped into valid-looking values rather than producing an error.
+
+Each of these paths fails silently, and the `mapMesh` change contradicts its own documented requirement.

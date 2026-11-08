@@ -1,0 +1,221 @@
+diff --git a/src/gsCore/gsComposedGeometry.h b/src/gsCore/gsComposedGeometry.h
+index b19b9bf95..6fb11fd07 100644
+--- a/src/gsCore/gsComposedGeometry.h
++++ b/src/gsCore/gsComposedGeometry.h
+@@ -98,77 +98,123 @@ public:
+             m_composition = other.m_composition;
+             m_geom = other.m_geom->clone();
+             m_domainDim = other.m_domainDim;
+             Base::operator=(other);
+         }
+         return *this;
+     }
+ 
+     /// Move assignment operator
+     gsComposedGeometry& operator= ( gsComposedGeometry&& other )
+     {
+         if (this != &other)
+         {
+             m_composition = other.m_composition;
+             m_geom = give(other.m_geom);
+             m_domainDim = other.m_domainDim;
+             Base::operator=(other);
+         }
+         return *this;
+     }
+ 
+ 
+     ~gsComposedGeometry()
+     {
+         // if (m_geom!=nullptr)
+         //     delete m_geom;
+     }
+ 
+     short_t domainDim() const override { return m_domainDim; }
+ 
++    void compute(const gsMatrix<T> & in, gsFuncData<T> & out) const override
++    {
++        /*TAKEN FROM gsGeometry, WITHOUT SAME_ELEMENT*/
++        const unsigned flags = out.flags | NEED_ACTIVE;
++        const index_t  numPt = in.cols();
++        const index_t  numCo = m_coefs.cols();
++
++        gsFuncData<T> tmp(flags);
++        this->basis().compute(in, tmp);
++
++        out.values.resize(out.maxDeriv()+1);
++        out.dim.first  = tmp.dim.first;
++        out.dim.second = numCo;
++
++        gsMatrix<T> coefM;
++        const index_t derS = tmp.derivSize();
++        const index_t der2S = tmp.deriv2Size();
++
++        if (flags & NEED_VALUE)  out.values[0].resize(numCo,numPt);
++        if (flags & NEED_DERIV)  out.values[1].resize(numCo*derS,numPt);
++        if (flags & NEED_DERIV2) out.values[2].resize(numCo*der2S,numPt);
++        if (flags & NEED_ACTIVE)
++        {
++            this->basis().active_into(in, out.actives);
++            tmp.actives = out.actives;
++        }
++
++        for (index_t p=0; p<numPt;++p)
++        {
++            // extractRows(m_coefs,tmp.active(p),coefM);
++            coefM.resize(tmp.active(p).rows(), m_coefs.cols());
++            for (index_t r=0; r<tmp.active(p).rows();++r)
++                coefM.row(r)=m_coefs.row(tmp.active(p)(r,0));
++
++            if (flags & NEED_VALUE)
++                out.values[0].reshapeCol(p,1,numCo).noalias() = tmp.eval(p)*coefM;
++            if (flags & NEED_DERIV)
++                out.values[1].reshapeCol(p, derS, numCo).noalias() = tmp.deriv(p)*coefM;
++            if (flags & NEED_DERIV2)
++                out.values[2].reshapeCol(p, der2S, numCo).noalias() = tmp.deriv2(p)*coefM;
++        }
++    }
++
+     /**
+      * @brief      Gives the control point derivatives of \a *this. See gsFunction for more details
+      *
+      * @param[in]  points  The points in the parameter domain (of the composition)
+      * @param      result  The control point derivatives
+      */
+     void control_deriv_into(const gsMatrix<T> & points, gsMatrix<T> & result) const override
+     {
+         // The number of rows is the target dimension times the number of controls
+         // The number of cols is the number of points
+         result.resize(targetDim()*m_composition->nControls(),points.cols());
+ 
+         // Pre-compute the coordinates of the composition, the derivatives of G and the derivatives of the composition
+         gsMatrix<T> c, dc, dG;
+         m_composition->eval_into(points,c);
+         m_composition->control_deriv_into(points,dc);   // This is dc/dpi (pi is a control of c)
+         m_geom->deriv_into(c,dG);                       // This is dG/dc evaluated on c
+ 
+         // Store some sizes
+         index_t nControls = m_composition->nControls();
+         index_t dd = m_geom->domainDim();
+         index_t td = m_geom->targetDim();
+ 
+         // Loop over the points
+         for (index_t k=0; k!=points.cols(); k++)
+         {
+             // We need to compute dG/dpi = dG/dc * dc/dpi
+             gsAsMatrix<T> DG = result.reshapeCol(k,nControls,td);
+             DG = dc.reshapeCol(k,nControls,dd) * dG.reshapeCol(k,dd,td);
+         }
+     }
+ 
+     using Base::targetDim;
+ 
+     GISMO_BASIS_ACCESSORS;
+ 
+ protected:
+     // Map from parametric domain to geometry
+     const CompositionT * m_composition;
+     using Base::m_basis;
+ 
++    // for compute();
++    using Base::m_coefs;
++
+     // Map from composition to geometry
+     typename gsGeometry<T>::uPtr m_geom;
+ 
+     short_t m_domainDim;
+ };
+ }
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    void compute(const gsMatrix<T> & in, gsFuncData<T> & out) const override
+    {
+        /*TAKEN FROM gsGeometry, WITHOUT SAME_ELEMENT*/
+        const unsigned flags = out.flags | NEED_ACTIVE;
+        const index_t  numPt = in.cols();
+        const index_t  numCo = m_coefs.cols();
+
+        gsFuncData<T> tmp(flags);
+        this->basis().compute(in, tmp);
+
+        out.values.resize(out.maxDeriv()+1);
+        out.dim.first  = tmp.dim.first;
+        out.dim.second = numCo;
+
+        gsMatrix<T> coefM;
+        const index_t derS = tmp.derivSize();
+        const index_t der2S = tmp.deriv2Size();
+
+        if (flags & NEED_VALUE)  out.values[0].resize(numCo,numPt);
+        if (flags & NEED_DERIV)  out.values[1].resize(numCo*derS,numPt);
+        if (flags & NEED_DERIV2) out.values[2].resize(numCo*der2S,numPt);
+        if (flags & NEED_ACTIVE)
+        {
+            this->basis().active_into(in, out.actives);
+            tmp.actives = out.actives;
+        }
+
+        for (index_t p=0; p<numPt;++p)
+        {
+            // extractRows(m_coefs,tmp.active(p),coefM);
+            coefM.resize(tmp.active(p).rows(), m_coefs.cols());
+            for (index_t r=0; r<tmp.active(p).rows();++r)
+                coefM.row(r)=m_coefs.row(tmp.active(p)(r,0));
+
+            if (flags & NEED_VALUE)
+                out.values[0].reshapeCol(p,1,numCo).noalias() = tmp.eval(p)*coefM;
+            if (flags & NEED_DERIV)
+                out.values[1].reshapeCol(p, derS, numCo).noalias() = tmp.deriv(p)*coefM;
+            if (flags & NEED_DERIV2)
+                out.values[2].reshapeCol(p, der2S, numCo).noalias() = tmp.deriv2(p)*coefM;
+        }
+    }
+
+        gsFuncData<T> tmp(flags);
+        this->basis().compute(in, tmp);
+
+        out.values.resize(out.maxDeriv()+1);
+        out.dim.first  = tmp.dim.first;
+        out.dim.second = numCo;
+
+        gsMatrix<T> coefM;
+        const index_t derS = tmp.derivSize();
+        const index_t der2S = tmp.deriv2Size();
+
+        if (flags & NEED_VALUE)  out.values[0].resize(numCo,numPt);
+        if (flags & NEED_DERIV)  out.values[1].resize(numCo*derS,numPt);
+        if (flags & NEED_DERIV2) out.values[2].resize(numCo*der2S,numPt);
+        if (flags & NEED_ACTIVE)
+        {
+            this->basis().active_into(in, out.actives);
+            tmp.actives = out.actives;
+        }
+
+    void control_deriv_into(const gsMatrix<T> & points, gsMatrix<T> & result) const override
+    {
+        // The number of rows is the target dimension times the number of controls
+        // The number of cols is the number of points
+        result.resize(targetDim()*m_composition->nControls(),points.cols());
+
+        // Pre-compute the coordinates of the composition, the derivatives of G and the derivatives of the composition
+        gsMatrix<T> c, dc, dG;
+        m_composition->eval_into(points,c);
+        m_composition->control_deriv_into(points,dc);   // This is dc/dpi (pi is a control of c)
+        m_geom->deriv_into(c,dG);                       // This is dG/dc evaluated on c
+
+        // Store some sizes
+        index_t nControls = m_composition->nControls();
+        index_t dd = m_geom->domainDim();
+        index_t td = m_geom->targetDim();
+
+        // Loop over the points
+        for (index_t k=0; k!=points.cols(); k++)
+        {
+            // We need to compute dG/dpi = dG/dc * dc/dpi
+            gsAsMatrix<T> DG = result.reshapeCol(k,nControls,td);
+            DG = dc.reshapeCol(k,nControls,dd) * dG.reshapeCol(k,dd,td);
+        }
+    }

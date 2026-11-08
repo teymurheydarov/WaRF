@@ -1,0 +1,370 @@
+ID 8058d91:gsHDomain.h:clean
+commit 8058d917e8e3470dc76fba44f918c0b547db326c file src/gsDomain/gsHDomain.h date 2025-02-26 subj fix numElements for manual levels (#784)
+
+=== ONE decision REJECT
+[REJECT] **Defect: `numElementsBdr` converts indices using the wrong direction.**
+
+In the manual-levels branch of `numElementsBdr`, the loop runs over directions `i != s.direction()` and reads `it.lowerCorner()[i]` and `it.upperCorner()[i]`. It then converts them like this:
+
+```cpp
+m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), ll);
+m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), uu);
+```
+
+These are coordinates along direction `i`, but they are converted with the knot vector of direction `s.direction()`. The loop explicitly skips `s.direction()`, so this branch never uses the right direction. It should pass `i`, which is what the new `numElements` code does: `_diadicIndexToKnotIndex(it.level(), i, ll)`.
+
+**Consequence:** with manual levels, knot spacing usually differs between directions. When it does, the converted indices are wrong and `numElementsBdr` returns an incorrect boundary element count. Nothing fails visibly, so the error is silent. Counts come out right only by coincidence, when every direction has the same dyadic-to-knot mapping. That may be why tests with uniform or symmetric setups would not catch it.
+
+**The rest of the patch looks fine:**
+- `numElements` correctly uses `i` for the conversion.
+- Removing the redundant `dynamic_cast` in `leafOnBoundary` is correct, since `m_basis` is already a `gsHTensorBasis<d,T>`.
+- Taking the knot vector by `const&` instead of copying it is an improvement.
+
+**Fix:** in `numElementsBdr`, replace `s.direction()` with `i` in both `_diadicIndexToKnotIndex` calls.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+In `numElementsBdr`, the `manualLevels()` branch converts the index for dimension `i` using the wrong direction:
+
+```cpp
+for (short_t i = 0; i < d; ++i)
+    if (i != s.direction())
+    {
+        ...
+        m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), ll);
+        m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), uu);
+        nel_local *= uu - ll;
+    }
+```
+
+- The loop only runs for `i != s.direction()`.
+- `ll` and `uu` are dyadic coordinates in direction `i`.
+- But they are mapped to knot indices using the knot vector for `s.direction()`, which is exactly the direction being skipped.
+- The same patch gets this right in `numElements()`, which passes `i`.
+
+**Concrete failure:** take a 2D `gsHTensorBasis` with manual levels, where level 1 refines direction 0 and direction 1 differently. For example, knots are inserted only in x at that level, so the dyadic-to-knot maps for x and y differ. Call `numElementsBdr(boundary::west)`, so `s.direction() == 0`. For each leaf on that side, the loop runs with `i == 1`. The y-extent `[lowerCorner[1], upperCorner[1])` is then converted with the x-direction map. This gives the wrong knot span count, so the returned boundary element count does not match what the boundary iterator actually visits. Assembly or quadrature code that sizes buffers from `numElementsBdr` will then be wrong.
+
+**Fix:** pass `i` instead of `s.direction()` to `_diadicIndexToKnotIndex` in that loop.
+
+The other changes look fine:
+- Removing the `dynamic_cast` in `leafOnBoundary` is safe, since `m_basis` is already `gsHTensorBasis<d,T>&`.
+- Binding the knot vector by `const&` is safe.
+- The `numElements` change is correct.
+--- ADVOCATE [REJECT]
+The new `manualLevels()` branch in `numElementsBdr` converts indices using the wrong direction.
+
+```cpp
+for (short_t i = 0; i < d; ++i)
+    if (i != s.direction())
+    {
+        if (m_basis.manualLevels() )
+        {
+            index_t ll = it.lowerCorner()[i];
+            index_t uu = it.upperCorner()[i];
+            m_basis._diadicIndexToKnotIndex(it.level(),s.direction(),ll);   // should be i
+            m_basis._diadicIndexToKnotIndex(it.level(),s.direction(),uu);   // should be i
+            nel_local *= uu - ll;
+        }
+```
+
+- **What's wrong:** The loop body only runs when `i != s.direction()`. So `ll` and `uu` are always coordinates along direction `i`. They are then converted from dyadic to knot indices using the mapping for `s.direction()`, which is a different axis.
+- **Why it matters:** `_diadicIndexToKnotIndex(level, dir, idx)` looks up the knot vector for `dir`. When manual levels are used, each direction can have its own non-uniform dyadic-to-knot mapping. Using the boundary-normal direction's map for tangential coordinates gives wrong element counts, and can index out of range when the two directions have different knot counts.
+- **Inconsistency:** The sibling change in `numElements` gets this right with `_diadicIndexToKnotIndex(it.level(), i, ...)`. That confirms the intended pattern is to convert per axis `i`.
+
+**Fix:** Replace `s.direction()` with `i` in both `_diadicIndexToKnotIndex` calls inside `numElementsBdr`.
+
+The other changes are fine:
+- `numElements` now handles manual levels correctly by converting per axis.
+- In `leafOnBoundary`, dropping the redundant `dynamic_cast` (since `m_basis` is already `gsHTensorBasis<d,T>`) is safe.
+- Binding the knot vector by `const&` there avoids a copy and is also fine.
+--- AUDITOR [REJECT]
+The `numElementsBdr` change has a direction-index bug in the manual-levels branch.
+
+**Wrong direction in `numElementsBdr`.** The loop runs over every tangential direction `i != s.direction()` and reads `it.lowerCorner()[i]` and `it.upperCorner()[i]`. It then converts them with:
+
+```cpp
+m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), ll);
+m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), uu);
+```
+
+This maps the coordinates of direction `i` using the knot mapping of the boundary-normal direction `s.direction()`. That direction is the one excluded from the product, so its mapping should never apply here. It should be `i`, as in the new `numElements` code (`_diadicIndexToKnotIndex(it.level(), i, ll)`).
+
+Effects:
+- If the levels have non-uniform or direction-dependent knot refinement (the reason manual levels exist), boundary element counts will be wrong.
+- If the normal direction has fewer knots than direction `i`, the lookup can go out of range or produce nonsense indices.
+- Code that sizes boundary assembly or quadrature from `numElementsBdr` will silently get inconsistent results.
+
+The bug is easy to miss because the non-manual path and `numElements` are correct, and uniform tests with identical knot vectors in every direction would not expose it.
+
+**Other observations (acceptable):**
+- `numElements` now maps dyadic indices to knot indices per direction under manual levels, which looks like the intended fix.
+- In `leafOnBoundary`, dropping the redundant `dynamic_cast` (`m_basis` is already `gsHTensorBasis<d,T>`) and taking the knot vector by const reference instead of copying are good cleanups.
+- Minor: `ll`/`uu` are declared outside the loop in one function and inside it in the other. This is a style inconsistency only.
+
+**Required fix:** Replace `s.direction()` with `i` in the two `_diadicIndexToKnotIndex` calls in `numElementsBdr`. Add a test with manual levels and different knot vectors per direction that checks `numElementsBdr` against an iterator-based count.
+--- TEST-FOCUSED [REJECT]
+**Defect: `numElementsBdr` converts indices along the wrong axis.**
+
+In the `manualLevels()` branch of `numElementsBdr`, the loop runs over every direction `i != s.direction()`, but both conversions pass `s.direction()` as the axis:
+
+```cpp
+for (short_t i = 0; i < d; ++i)
+    if (i != s.direction())
+    {
+        ...
+        index_t ll = it.lowerCorner()[i];
+        index_t uu = it.upperCorner()[i];
+        m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), ll);   // should be i
+        m_basis._diadicIndexToKnotIndex(it.level(), s.direction(), uu);   // should be i
+        nel_local *= uu - ll;
+    }
+```
+
+So the corner coordinates along axis `i` are mapped through the knot vector of the boundary-normal axis. That axis is the one direction this loop deliberately skips. The sibling `numElements` gets this right: it passes `i`.
+
+**Why it is silent:** the result is a `size_t` that looks plausible.
+- If the knot vectors in the two directions have the same dyadic-to-knot mapping, the count is correct. This covers uniform or symmetric meshes, which most tests use.
+- If the mappings differ, the count is wrong, but nothing throws or asserts. The value is simply off.
+- `_diadicIndexToKnotIndex` may not check that the index lies within the range for `s.direction()`. In that case a mismatched length could also produce an out-of-range lookup or a garbage value rather than a crash.
+
+A caller sizing quadrature buffers or checking element counts would get a wrong but believable number. Only a test with anisotropic, manually leveled knot vectors would expose it.
+
+**Other paths traced (no issues found):**
+- `numElements`, manual branch: converts per axis `i`, accumulates correctly, and the non-manual branch matches the old behavior.
+- `leafOnBoundary`: dropping the `dynamic_cast` is fine, since `m_basis` is already `gsHTensorBasis<d,T>&`. The old code would have dereferenced a null pointer if the cast failed, which it couldn't. Binding `kv` by const reference is also fine, because `tensorLevel` returns a reference into the basis.
+
+**Fix:** replace `s.direction()` with `i` in the two `_diadicIndexToKnotIndex` calls inside `numElementsBdr`.
+
+=== DIFF
+diff --git a/src/gsDomain/gsHDomain.h b/src/gsDomain/gsHDomain.h
+index 6fc5fdc02..0617801c2 100644
+--- a/src/gsDomain/gsHDomain.h
++++ b/src/gsDomain/gsHDomain.h
+@@ -85,121 +85,133 @@ public:
+ 
+     template <class _T, short_t _d, class _Z>
+     friend class gsHDomainIterator;
+     template <class _T, short_t _d, class _Z>
+     friend class gsHDomainBoundaryIterator;
+ 
+ public:
+ 
+     explicit gsHDomain(const gsHTree<d,Z>& tree,
+                        const gsHTensorBasis<d,T>& basis)
+     :
+     m_tree(tree),
+     m_basis(basis)
+     {
+     }
+ 
+     domainIter beginAll() const override
+     {
+         return domainIter(new gsHDomainIterator<T,d,Z>(m_tree,m_basis));
+     }
+ 
+     domainIter beginBdr(const boxSide bs) const override
+     {
+         return domainIter(new gsHDomainBoundaryIterator<T,d,Z>(m_tree,m_basis, bs));
+     }
+ 
+     size_t numElements() const override
+     {
+         leafIterator it = m_tree.beginLeafIterator();
+         size_t nel(0);
+-        size_t nel_local;
+         while (it.good())
+         {
+-            nel_local = 1;
+-            nel_local = ( it.upperCorner() - it.lowerCorner() ).prod();
+-
+-            /*
+-            else if  (leafOnBoundary(s,it))
++            if (m_basis.manualLevels() )
+             {
++                index_t ll, uu;
++                size_t nel_local = 1;
+                 for (short_t i = 0; i < d; ++i)
+-                    if (i != s.direction())
+-                        nel_local *= it.upperCorner()[i] - it.lowerCorner()[i];
++                {
++                    ll = it.lowerCorner()[i];
++                    uu = it.upperCorner()[i];
++                    m_basis._diadicIndexToKnotIndex(it.level(),i,ll);
++                    m_basis._diadicIndexToKnotIndex(it.level(),i,uu);
++                    nel_local *= uu - ll;
++                }
++                nel += nel_local;
+             }
+-            */
+-
+-            nel +=  nel_local;
++            else
++                nel += ( it.upperCorner() - it.lowerCorner() ).prod();
+             it.next();
+         }
+         return nel;
+     }
+ 
+     size_t numElementsBdr(boxSide const & s = boundary::none) const override
+     {
+         GISMO_ASSERT(s != boundary::none, "Not implemented");
+         leafIterator it = m_tree.beginLeafIterator();
+         size_t nel(0);
+         size_t nel_local;
+         while (it.good())
+         {
+             if  (leafOnBoundary(s,it))
+             {
+                 nel_local = 1;
+                 for (short_t i = 0; i < d; ++i)
+                     if (i != s.direction())
+-                        nel_local *= it.upperCorner()[i] - it.lowerCorner()[i];
++                    {
++                        if (m_basis.manualLevels() )
++                        {
++                            index_t ll = it.lowerCorner()[i];
++                            index_t uu = it.upperCorner()[i];
++                            m_basis._diadicIndexToKnotIndex(it.level(),s.direction(),ll);
++                            m_basis._diadicIndexToKnotIndex(it.level(),s.direction(),uu);
++                            nel_local *= uu - ll;
++                        }
++                        else
++                            nel_local *= it.upperCorner()[i] - it.lowerCorner()[i];
++                    }
+                 nel +=  nel_local;
+             }
+             it.next();
+         }
+         return nel;
+     }
+ 
+     short_t degree(short_t i) const override
+     {
+         return m_basis.degree(i);
+     }
+ 
+     short_t dim() const override { return d; }
+ 
+     gsMatrix<T> boundingBox() const override
+     {
+         return m_basis.support();
+     }
+ 
+     const gsHTree<d,Z> & tree() const { return m_tree; }
+ 
+ private:
+ 
+     // WE SHOULD REMOVE THIS
+     bool leafOnBoundary(const boxSide & s, const leafIterator leaf) const
+     {
+         if ( s.parameter() )
+         {
+             // AM: a little ugly for now, to be improved
+             size_t diadicSize;
+-            const gsHTensorBasis<d,T> * hbasis = dynamic_cast<const gsHTensorBasis<d,T> * >(&m_basis);
+-            if (hbasis->manualLevels() )
++            if (m_basis.manualLevels() )
+             {
+-                gsKnotVector<T> kv = hbasis->tensorLevel(leaf.level()).knots(s.direction());
++                const gsKnotVector<T> & kv = m_basis.tensorLevel(leaf.level()).knots(s.direction());
+                 index_t start = 0;
+                 index_t end  = kv.uSize()-1;
+-                hbasis->_knotIndexToDiadicIndex(leaf.level(),s.direction(),start);
+-                hbasis->_knotIndexToDiadicIndex(leaf.level(),s.direction(),end);
++                m_basis._knotIndexToDiadicIndex(leaf.level(),s.direction(),start);
++                m_basis._knotIndexToDiadicIndex(leaf.level(),s.direction(),end);
+                 diadicSize = end - start;
+             }
+             else
+-                diadicSize = hbasis->tensorLevel(leaf.level()).knots(s.direction()).uSize() - 1;
++                diadicSize = m_basis.tensorLevel(leaf.level()).knots(s.direction()).uSize() - 1;
+             return static_cast<size_t>(leaf.upperCorner().at(s.direction()) ) == diadicSize;// todo: more efficient
+         }
+         else
+             return leaf.lowerCorner().at(s.direction()) == 0;
+     }
+ 
+ protected:
+     const gsHTree<d,Z> & m_tree;
+     const gsHTensorBasis<d,T> & m_basis;
+ 
+ };
+ 
+ }// end namespace gismo
+ 
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+        size_t nel(0);
+        while (it.good())
+        {
+            if (m_basis.manualLevels() )
+            {
+                index_t ll, uu;
+                size_t nel_local = 1;
+                for (short_t i = 0; i < d; ++i)
+                {
+                    ll = it.lowerCorner()[i];
+                    uu = it.upperCorner()[i];
+                    m_basis._diadicIndexToKnotIndex(it.level(),i,ll);
+                    m_basis._diadicIndexToKnotIndex(it.level(),i,uu);
+                    nel_local *= uu - ll;
+                }
+                nel += nel_local;
+            }
+            else
+                nel += ( it.upperCorner() - it.lowerCorner() ).prod();
+            it.next();
+        }
+
+        size_t nel(0);
+        size_t nel_local;
+        while (it.good())
+        {
+            if  (leafOnBoundary(s,it))
+            {
+                nel_local = 1;
+                for (short_t i = 0; i < d; ++i)
+                    if (i != s.direction())
+                    {
+                        if (m_basis.manualLevels() )
+                        {
+                            index_t ll = it.lowerCorner()[i];
+                            index_t uu = it.upperCorner()[i];
+                            m_basis._diadicIndexToKnotIndex(it.level(),s.direction(),ll);
+                            m_basis._diadicIndexToKnotIndex(it.level(),s.direction(),uu);
+                            nel_local *= uu - ll;
+                        }
+                        else
+                            nel_local *= it.upperCorner()[i] - it.lowerCorner()[i];
+                    }
+                nel +=  nel_local;
+            }
+            it.next();
+        }
+
+    bool leafOnBoundary(const boxSide & s, const leafIterator leaf) const
+    {
+        if ( s.parameter() )
+        {
+            // AM: a little ugly for now, to be improved
+            size_t diadicSize;
+            if (m_basis.manualLevels() )
+            {
+                const gsKnotVector<T> & kv = m_basis.tensorLevel(leaf.level()).knots(s.direction());
+                index_t start = 0;
+                index_t end  = kv.uSize()-1;
+                m_basis._knotIndexToDiadicIndex(leaf.level(),s.direction(),start);
+                m_basis._knotIndexToDiadicIndex(leaf.level(),s.direction(),end);
+                diadicSize = end - start;
+            }
+            else
+                diadicSize = m_basis.tensorLevel(leaf.level()).knots(s.direction()).uSize() - 1;
+            return static_cast<size_t>(leaf.upperCorner().at(s.direction()) ) == diadicSize;// todo: more efficient
+        }
+        else
+            return leaf.lowerCorner().at(s.direction()) == 0;
+    }
+

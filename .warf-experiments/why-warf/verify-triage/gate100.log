@@ -1,0 +1,57 @@
+
+defaults: HIGH 17, later fixed 10/17 = 0.588  CP [0.33, 0.82]
+   single Jev             top-16 (p >= 0.88; 17 commits at or above): HIGH in it 15/17; later fixed among top-16 (tie-averaged) 10.00
+   single Jev             top-17 (p >= 0.88; 17 commits at or above): HIGH in it 16/17; later fixed among top-17 (tie-averaged) 10.00
+   single Jev             top-20 (p >= 0.85; 20 commits at or above): HIGH in it 17/17; later fixed among top-20 (tie-averaged) 12.00
+   Claude                 top-16 (p >= 0.38; 16 commits at or above): HIGH in it 6/17; later fixed among top-16 (tie-averaged) 15.00
+   Claude                 top-17 (p >= 0.36; 18 commits at or above): HIGH in it 6/17; later fixed among top-17 (tie-averaged) 16.00
+   Claude                 top-20 (p >= 0.34; 20 commits at or above): HIGH in it 8/17; later fixed among top-20 (tie-averaged) 19.00
+   defaults SKEPTIC seat  top-16 (p >= 0.53; 16 commits at or above): HIGH in it 14/17; later fixed among top-16 (tie-averaged) 8.00
+   defaults SKEPTIC seat  top-17 (p >= 0.52; 20 commits at or above): HIGH in it 14/17; later fixed among top-17 (tie-averaged) 9.00
+   defaults SKEPTIC seat  top-20 (p >= 0.52; 20 commits at or above): HIGH in it 17/17; later fixed among top-20 (tie-averaged) 12.00
+   defaults SKEPTIC seat rejects 20 (min p among them 0.52); HIGH inside: 17/17
+
+five-Jev R1: HIGH 16, later fixed 9/16 = 0.562  CP [0.30, 0.80]
+   single Jev             top-16 (p >= 0.88; 17 commits at or above): HIGH in it 14/16; later fixed among top-16 (tie-averaged) 10.00
+   single Jev             top-17 (p >= 0.88; 17 commits at or above): HIGH in it 15/16; later fixed among top-17 (tie-averaged) 10.00
+   single Jev             top-20 (p >= 0.85; 20 commits at or above): HIGH in it 16/16; later fixed among top-20 (tie-averaged) 12.00
+   Claude                 top-16 (p >= 0.38; 16 commits at or above): HIGH in it 5/16; later fixed among top-16 (tie-averaged) 15.00
+   Claude                 top-17 (p >= 0.36; 18 commits at or above): HIGH in it 5/16; later fixed among top-17 (tie-averaged) 16.00
+   Claude                 top-20 (p >= 0.34; 20 commits at or above): HIGH in it 7/16; later fixed among top-20 (tie-averaged) 19.00
+   defaults SKEPTIC seat  top-16 (p >= 0.53; 16 commits at or above): HIGH in it 14/16; later fixed among top-16 (tie-averaged) 8.00
+   defaults SKEPTIC seat  top-17 (p >= 0.52; 20 commits at or above): HIGH in it 14/16; later fixed among top-17 (tie-averaged) 9.00
+   defaults SKEPTIC seat  top-20 (p >= 0.52; 20 commits at or above): HIGH in it 16/16; later fixed among top-20 (tie-averaged) 12.00
+   defaults SKEPTIC seat rejects 20 (min p among them 0.52); HIGH inside: 16/16
+
+five-Jev final: HIGH 17, later fixed 10/17 = 0.588  CP [0.33, 0.82]
+   single Jev             top-16 (p >= 0.88; 17 commits at or above): HIGH in it 15/17; later fixed among top-16 (tie-averaged) 10.00
+   single Jev             top-17 (p >= 0.88; 17 commits at or above): HIGH in it 16/17; later fixed among top-17 (tie-averaged) 10.00
+   single Jev             top-20 (p >= 0.85; 20 commits at or above): HIGH in it 17/17; later fixed among top-20 (tie-averaged) 12.00
+   Claude                 top-16 (p >= 0.38; 16 commits at or above): HIGH in it 6/17; later fixed among top-16 (tie-averaged) 15.00
+   Claude                 top-17 (p >= 0.36; 18 commits at or above): HIGH in it 6/17; later fixed among top-17 (tie-averaged) 16.00
+   Claude                 top-20 (p >= 0.34; 20 commits at or above): HIGH in it 8/17; later fixed among top-20 (tie-averaged) 19.00
+   defaults SKEPTIC seat  top-16 (p >= 0.53; 16 commits at or above): HIGH in it 14/17; later fixed among top-16 (tie-averaged) 8.00
+   defaults SKEPTIC seat  top-17 (p >= 0.52; 20 commits at or above): HIGH in it 14/17; later fixed among top-17 (tie-averaged) 9.00
+   defaults SKEPTIC seat  top-20 (p >= 0.52; 20 commits at or above): HIGH in it 17/17; later fixed among top-20 (tie-averaged) 12.00
+   defaults SKEPTIC seat rejects 20 (min p among them 0.52); HIGH inside: 17/17
+five-Jev R1, 5 of 5 REJECT: 11 commits, later fixed 6; HIGH among them 11 (later fixed 6)
+five-Jev R1, 4 of 5 REJECT: 6 commits, later fixed 4; HIGH among them 5 (later fixed 3)
+five-Jev R1, 3 of 5 REJECT: 6 commits, later fixed 3; HIGH among them 0 (later fixed 0)
+
+seed 101
+   jev5_R1_band     HIGH vs block_jev_single   at k = #HIGH: -0.062 [-0.260, +0.000] p 0.391
+   jevdef_R1_band   HIGH vs block_jev_single   at k = #HIGH: +0.000 [-0.161, +0.000] p 0.656
+   jev5_R1_band     HIGH vs block_claude       at k = #HIGH: -0.375 [-0.643, -0.143] p 0.002
+   jevdef_R1_band   HIGH vs block_claude       at k = #HIGH: -0.353 [-0.600, -0.125] p 0.002
+
+seed 202
+   jev5_R1_band     HIGH vs block_jev_single   at k = #HIGH: -0.062 [-0.250, +0.000] p 0.394
+   jevdef_R1_band   HIGH vs block_jev_single   at k = #HIGH: +0.000 [-0.143, +0.000] p 0.655
+   jev5_R1_band     HIGH vs block_claude       at k = #HIGH: -0.375 [-0.641, -0.166] p 0.002
+   jevdef_R1_band   HIGH vs block_claude       at k = #HIGH: -0.353 [-0.591, -0.133] p 0.003
+
+seed 303
+   jev5_R1_band     HIGH vs block_jev_single   at k = #HIGH: -0.062 [-0.250, +0.000] p 0.411
+   jevdef_R1_band   HIGH vs block_jev_single   at k = #HIGH: +0.000 [-0.158, +0.000] p 0.655
+   jev5_R1_band     HIGH vs block_claude       at k = #HIGH: -0.375 [-0.647, -0.156] p 0.003
+   jevdef_R1_band   HIGH vs block_claude       at k = #HIGH: -0.353 [-0.600, -0.143] p 0.004

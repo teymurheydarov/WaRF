@@ -1,0 +1,34 @@
+132 of 132 items answered by every arm (66 defective, 66 clean)
+
+== all items: 66 defective, 66 clean ==
+  arm                              BA      recall     false alarms
+  one Claude                       0.758   64/66      30/66
+  one Claude, strict bar           0.856   52/66      5/66
+  ADVOCATE alone                   0.841   55/66      10/66
+  W1 WaRF five personas            0.826   55/66      12/66
+  W2 WaRF Claude+Jev log-odds      0.795   56/66      17/66
+  Jev alone (W2's seat)            0.705   60/66      33/66
+
+== defects both judges call visible from the diff, with all clean items: 41 defective, 66 clean ==
+  arm                              BA      recall     false alarms
+  one Claude                       0.761   40/41      30/66
+  one Claude, strict bar           0.926   38/41      5/66
+  ADVOCATE alone                   0.900   39/41      10/66
+  W1 WaRF five personas            0.885   39/41      12/66
+  W2 WaRF Claude+Jev log-odds      0.810   36/41      17/66
+  Jev alone (W2's seat)            0.713   38/41      33/66
+
+== Preregistered comparisons (all items): WaRF arm minus single-call arm ==
+  W1 WaRF five personas - one Claude: +0.068 [-0.008, +0.136]  only WaRF 18, only single 9, McNemar p 0.122
+  W1 WaRF five personas - one Claude, strict bar: -0.030 [-0.083, +0.023]  only WaRF 4, only single 8, McNemar p 0.388
+  W1 WaRF five personas - ADVOCATE alone: -0.015 [-0.053, +0.023]  only WaRF 3, only single 5, McNemar p 0.727
+  W2 WaRF Claude+Jev log-odds - one Claude: +0.038 [-0.030, +0.106]  only WaRF 14, only single 9, McNemar p 0.405
+  W2 WaRF Claude+Jev log-odds - one Claude, strict bar: -0.061 [-0.152, +0.023]  only WaRF 14, only single 22, McNemar p 0.243
+  W2 WaRF Claude+Jev log-odds - ADVOCATE alone: -0.045 [-0.129, +0.038]  only WaRF 14, only single 20, McNemar p 0.392
+
+== Preregistered verdict ==
+  W1 WaRF five personas: worst p over single arms 0.727 (Holm threshold 0.05), bootstrap lower bound > 0 against all: False
+  W2 WaRF Claude+Jev log-odds: worst p over single arms 0.405 (Holm threshold 0.025), bootstrap lower bound > 0 against all: False
+  VERDICT: no case for WaRF
+
+  calls: one Claude 132, one Claude, strict bar 132, ADVOCATE alone 132, W1 WaRF five personas 597; W2 uses claude + jev (132 each)

@@ -1,0 +1,96 @@
+===== claude claude.w2.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+The new `compute` drops output the old one produced, and it rebuilds the request flags from a fixed list.
+
+1. **`out.actives` is no longer filled.** The old code filled `out.actives` through `basis().active_into(in, out.actives)`. The new code asks `Base::compute` for `NEED_ACTIVE` into `tmp`, but only copies `tmp.dim` and `tmp.values` back to `out`. A caller that passes `NEED_ACTIVE`, or relies on actives being present, now gets an empty or stale `out.actives`. Code that indexes control points or assembles by active functions would then read wrong or out-of-range indices. That is a silent correctness defect, and possibly a memory-safety one.
+
+2. **Most requested flags are discarded.** The old code passed `out.flags | NEED_ACTIVE` through unchanged. The new code keeps only `NEED_VALUE`, `NEED_DERIV` and `NEED_DERIV2`. Anything else the caller asks for is never computed, for example `NEED_DIV`, `NEED_CURL`, `NEED_LAPLACIAN`, `NEED_MEASURE` or `NEED_GRAD_TRANSFORM`. The old code also resized `out.values` to `out.maxDeriv()+1`, based on what the caller asked for. Now `out.values` is overwritten with whatever size `tmp` has, which can differ from what callers expect.
+
+3. **The intent behind the old override is removed.** The deleted comment says this override was a deliberate copy of `gsGeometry::compute` "WITHOUT SAME_ELEMENT". A composed geometry's active functions change from point to point, because the composition moves points into different elements. Sending the work back to `Base::compute` re-couples this class to the base implementation's element assumptions. The local flag filtering happens to strip `SAME_ELEMENT` today. But the reason for having an override is gone, nothing documents it anymore, and the new code does not explicitly guard against the per-point active-set problem.
+
+4. **`out.flags` is left as the caller set it**, while the returned data only reflects the reduced flag set. This makes the mismatch in (2) harder to spot.
+
+The refactor is not behaviour-preserving, and (1) alone is a concrete regression.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+The rewrite drops the `out.actives` assignment, so callers get stale or empty active indices.
+
+**Old behaviour.** The old `compute` always added `NEED_ACTIVE` to the flags. It then filled the caller's actives explicitly:
+```cpp
+this->basis().active_into(in, out.actives);
+tmp.actives = out.actives;
+```
+
+**New behaviour.** The new code requests `NEED_ACTIVE` only on the internal `tmp` object. It then copies back just two fields:
+```cpp
+out.dim = tmp.dim;
+out.values = tmp.values;
+```
+`out.actives` is never written.
+
+**Failing call sequence:**
+```cpp
+gsFuncData<T> fd(NEED_VALUE | NEED_ACTIVE);
+composedGeom.compute(pts, fd);
+fd.active(0);   // previously: active basis indices at point 0
+                // now: column of an empty or stale matrix
+```
+- Assembler or evaluator code that consumes `fd.actives` reads an empty matrix, which is out-of-bounds access in release builds.
+- If `fd` is reused across calls, it silently gets actives from a previous evaluation or a different geometry.
+- The values in `out.values` are then paired with the wrong active indices.
+
+**Secondary issue.** The incoming flags are reduced to `VALUE`, `DERIV`, `DERIV2` and `ACTIVE`. Other requested flags (for example `NEED_MEASURE` and `NEED_GRAD_TRANSFORM`) are now dropped on the way to `tmp`, and their results are never copied back. The old code passed the full `out.flags | NEED_ACTIVE` down to the basis compute. Even so, it filled only actives and values in `out`, so that part is a narrower change.
+
+**What is handled correctly.** Filtering the flags does strip `SAME_ELEMENT`. So delegating to `gsGeometry::compute` keeps the "without SAME_ELEMENT" guarantee the old comment asked for. That part is safe.
+
+**Fix.** Copy the actives back as well, e.g. `out.actives = tmp.actives;`. This assumes `Base::compute` fills them when `NEED_ACTIVE` is set; otherwise call `this->basis().active_into(in, out.actives)` directly.
+--- ADVOCATE 32e59155d0a3 REJECT
+The refactor drops outputs the original `compute` produced, so callers can get missing or empty data.
+
+**1. `out.actives` is no longer populated (main defect).**
+- The original always added `NEED_ACTIVE` and wrote the active indices straight into the caller's object: `this->basis().active_into(in, out.actives);`.
+- The new code asks for actives only in the local `tmp`, then copies just `tmp.dim` and `tmp.values` into `out`.
+- `out.actives` is never assigned, so any caller that requests `NEED_ACTIVE` gets an empty or stale matrix.
+- Code that then indexes with `out.active(p)` (for example, to map onto coefficient rows or global DoFs) can read out of bounds. That is a memory-safety risk, which matters for the SECURITY domain. A one-line `out.actives = tmp.actives;` would restore the old behavior.
+
+**2. The flag whitelist changes behavior beyond dropping `SAME_ELEMENT`.**
+- Dropping `SAME_ELEMENT` is correct and keeps the original intent. Points in one element of the composition's domain can map to different elements of the underlying basis, which is why the old copy said "WITHOUT SAME_ELEMENT".
+- But the whitelist also drops `NEED_HESSIAN`, `NEED_LAPLACIAN`, `NEED_2ND_DER`, `NEED_JACOBIAN` and similar flags.
+- The original sized `out.values` with `out.maxDeriv()+1`, which comes from the caller's full flags. The new code copies `tmp.values`, which is sized from the reduced flags.
+- So a caller who asks only for, say, `NEED_HESSIAN` now gets a shorter `values` vector. Accessing `values[2]` is then out of range, where before the slot existed.
+
+**3. What is fine.**
+- Routing through `Base::compute` (`gsGeometry::compute`) still calls the virtual `this->basis()`, so it uses the composed basis as before.
+- Copying `out.dim` from `tmp.dim` is equivalent to the old `dim.first`/`dim.second` assignment.
+
+The goal of reusing the base implementation while avoiding the `SAME_ELEMENT` path is sound. As written, though, the patch silently stops filling `out.actives` and can shrink `out.values`, which changes the output contract and can lead to out-of-bounds access downstream. To fix it:
+- Propagate `tmp.actives` into `out`.
+- Either pass through the full flag set with only `SAME_ELEMENT` masked off (`out.flags & ~SAME_ELEMENT | NEED_ACTIVE`), or resize `out.values` to `out.maxDeriv()+1`.
+--- AUDITOR 318509b9ab1f REJECT
+The patch replaces a deliberately customized `compute()` with a delegation to `Base::compute()` on a filtered copy of the flags. That changes the output contract, and the change could cause unsafe memory access downstream.
+
+1. **`out.actives` is no longer populated.** The old code always called `this->basis().active_into(in, out.actives)`, since `NEED_ACTIVE` was always forced on. The new code computes actives into `tmp` but copies only `tmp.dim` and `tmp.values` back to `out`. Any caller that requested `NEED_ACTIVE` and then reads `out.active(p)` gets an empty or stale matrix from a previous evaluation. G+Smo builds that index through Eigen without bounds checks (release builds) could then read or write out of bounds.
+
+2. **Requested flags are silently dropped.** Only `NEED_VALUE`, `NEED_DERIV` and `NEED_DERIV2` are forwarded. Flags such as `NEED_LAPLACIAN`, `NEED_DIV`, `NEED_MEASURE`, `NEED_GRAD_TRANSFORM` and `NEED_NORMAL` are discarded. Previously `out.values.resize(out.maxDeriv()+1)` sized the output from the caller's flags. Now `out.values` takes the size of `tmp`, which can be smaller than `out.maxDeriv()+1`. Code that trusts `out.flags` and indexes `out.values[k]` could go past the end of the vector.
+
+3. **The original design intent is undone without explanation.** The removed comment says "TAKEN FROM gsGeometry, WITHOUT SAME_ELEMENT". The override existed specifically to avoid the base implementation's behavior. The patch strips `SAME_ELEMENT` from `tmp`, which may preserve the per-point path. But it gives no rationale or tests showing that `gsGeometry::compute` is otherwise equivalent for composed bases. Composed bases can have point-dependent active sets.
+
+4. **The patch does not show what problem it solves.** There is no test, changelog, or linked issue. For a security-domain review, behavior that is less defined than before is grounds for rejection.
+
+To make this acceptable, the patch should:
+- Copy `tmp.actives` into `out.actives`, or not advertise them.
+- Forward or explicitly reject the other requested flags.
+- Size `out.values` consistently with `out.flags`.
+- Add regression tests comparing old and new outputs, including actives, for points spanning several elements.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+The rewrite stops copying the active indices back to the caller, and it silently drops several request flags. Both leave stale or empty data in `out` with no error.
+
+1. **Active indices are lost.** The old code filled `out.actives` from `this->basis().active_into(in, out.actives)`. The new code always computes actives in `tmp` (`flags = NEED_ACTIVE`), but it copies back only `tmp.dim` and `tmp.values`. A caller that sets `NEED_ACTIVE` gets whatever was already in `out.actives`: empty, or left over from a previous call on other points. That is a plausible-looking wrong value. It would only show up downstream, for example in assembly or scattering code using `out.active(p)`. This is the main defect, and it is silent.
+
+2. **Other flags are discarded.** The old code passed `out.flags | NEED_ACTIVE` through. The new code keeps only `NEED_VALUE`, `NEED_DERIV` and `NEED_DERIV2`. Flags such as `NEED_HESSIAN`, `NEED_LAPLACIAN`, `NEED_DIV`, `NEED_CURL`, or any higher-derivative request are dropped. The matching fields in `out` are never filled, so they keep stale contents or stay empty. Nothing tells the caller the request was ignored.
+
+3. **The original design constraint is ignored.** The removed comment ("TAKEN FROM gsGeometry, WITHOUT SAME_ELEMENT") shows the custom loop existed because the generic `gsGeometry::compute` path was unsafe for a composed basis. Here, evaluation points in the composition's domain can land in different elements of the underlying basis. The patch now delegates to `Base::compute`, the very routine the old code avoided. Stripping `SAME_ELEMENT` from `flags` may cover the obvious case. But nothing in the diff shows that `Base::compute` handles the composed basis's per-point active sets correctly, and any mismatch would produce wrong but finite numbers.
+
+4. **Stale fields in `out`.** Assigning `out.values = tmp.values` copies only the slots `tmp` filled. Any fields outside `values` and `dim` that the caller's flags expect are left as they were.
+
+Minimum fix: assign `out.actives = tmp.actives` and pass through all requested flags (`out.flags | NEED_ACTIVE`, with `SAME_ELEMENT` cleared). Also confirm that `Base::compute` is valid for a composed basis.

@@ -1,0 +1,10 @@
+  claude_cli/claude-opus-5-5; worker 0 of 2: 66 reviews to run (1 done) -> claude-commit-strict-tools@low.w0.jsonl
+  worker 0: 10/66  11.0 s per review, ~10 min left
+  worker 0: 20/66  11.2 s per review, ~9 min left
+  worker 0: 30/66  10.9 s per review, ~7 min left
+  worker 0: 40/66  11.0 s per review, ~5 min left
+  worker 0: 50/66  11.4 s per review, ~3 min left
+  ed02c62:gsOptionList.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  a14570f:gsFitting.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  dda93df:gsSurfaceReparameterization.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

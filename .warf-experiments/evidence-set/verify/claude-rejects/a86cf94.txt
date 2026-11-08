@@ -1,0 +1,110 @@
+===== claude claude.w2.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+The new default arguments change what `gsSquareDomain()` produces, and the result is broken.
+
+**Old behavior:**
+- `degreeElevate()` elevates the degree by 1 by default.
+- `uniformRefine()` inserts 1 knot per direction by default.
+- `BSplineSquare()` is bilinear with 2×2 control points.
+- So the old default gave bi-degree 2 with one interior knot: 4×4 = 16 control points, of which 2×2 interior ones are free.
+
+**New behavior with the defaults (`numElevation = 0`, `numRefine = 0`):**
+- `degreeElevate(0)` does nothing.
+- `numKts = 2^0 - 1 = 0`, so `uniformRefine(0)` does nothing.
+- The domain stays bilinear with 2×2 control points.
+- The constructor then eliminates every boundary coefficient, and with only four corner points that is all of them.
+- So `m_mapper.freeSize()` is 0 and `m_parameters` is empty.
+
+Any existing code that default-constructs `gsSquareDomain` silently gets an object with no free controls. Optimization or parameterization code that relied on the old default would quietly do nothing or fail.
+
+**Fix:** use defaults that preserve the old result, i.e. `numElevation = 1, numRefine = 1`. That gives `numKts = 2^1 - 1 = 1`, matching the original single knot.
+
+**Smaller issues:**
+- `pow(2, numRefine)` computes in floating point and then converts implicitly to `index_t`. An integer shift (`(index_t(1) << numRefine) - 1`) is cleaner and avoids rounding concerns.
+- Because every parameter now has a default, the constructor can be called with one `index_t` argument, which makes it an implicit conversion from `index_t`. It should be marked `explicit`.
+- The commented-out old constructor and the "default constructor" comment are leftover noise.
+===== claude-standard claude-standard.w0.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+The default constructor's behaviour silently changes, and the default domain loses all of its parameters.
+
+**Old behaviour**
+- `degreeElevate()` uses G+Smo's default argument `i = 1`, so it elevates the degree by 1.
+- `uniformRefine()` uses the default `numKnots = 1`, so it inserts one knot per direction.
+- Result: bi-degree (2,2) with 4×4 = 16 control points. Of those, 4 are interior, so `m_parameters` has 4 × 2 = 8 entries.
+
+**New behaviour**
+- The defaults are `numElevation = 0` and `numRefine = 0`.
+- That gives `degreeElevate(0)` and `uniformRefine(pow(2,0) - 1) = uniformRefine(0)`, so nothing is elevated or refined.
+- Result: bi-linear (1,1) with only 2×2 = 4 control points. All of them are on the boundary, so the loop over `allBoundary()` eliminates every DOF.
+- `m_mapper.freeSize() == 0` and `m_parameters` is empty.
+
+**Concrete failure**
+Any existing caller that writes `gsSquareDomain<2,real_t> dom;` now gets a domain with zero free controls. Before the patch it got 8. Optimisation or derivative code that relies on `controls()` or `nControls()` now works on an empty vector. That is either a no-op or an out-of-range access if indices are assumed.
+
+**Fix**
+To keep backward compatibility, the defaults would need to be `numElevation = 1, numRefine = 1`. With those values the new code reproduces the old behaviour, since `pow(2,1) - 1 = 1` knot.
+
+**Minor issue**
+`pow(2, numRefine)` returns a floating-point value that is implicitly narrowed to `index_t`. A negative `numRefine` produces `numKts = 0` (via 0.5 − 1 → truncation) with no error. The integer form `(1 << numRefine) - 1` plus an argument check would be safer.
+--- ADVOCATE 32e59155d0a3 REJECT
+The patch silently changes what the default constructor produces. A default-constructed `gsSquareDomain` ends up with no optimization parameters.
+
+**Old behavior of `gsSquareDomain()`:**
+- `BSplineSquare()` starts as bi-linear, with 2×2 control points.
+- `degreeElevate()` raises it by one degree, to bi-quadratic.
+- `uniformRefine()` inserts one knot per direction.
+- The result is 4×4 = 16 control points, 4 of them interior. With `targetDim()` = 2, that gives 8 free DOFs in `m_parameters`.
+
+**New behavior with the defaults `(0, 0)`:**
+- `degreeElevate(0)` does nothing, so the domain stays bi-linear.
+- `numKts = 2^0 - 1 = 0`, so `uniformRefine(0)` does nothing.
+- The result is 2×2 = 4 control points, and all of them are corners on the boundary.
+- The boundary loop eliminates every DOF, so `m_mapper.freeSize() == 0` and `m_parameters` is empty.
+
+Any existing code that calls `gsSquareDomain<2,T>()` and treats the free control points as a parametrization now gets a fixed domain with nothing to adjust. Gradients and controls are empty vectors. The comment `// default constructor` directly above the new signature suggests the author meant to keep the default-constructor behavior, but the chosen defaults don't. Reproducing the old behavior needs `numElevation = 1, numRefine = 1`.
+
+The new refinement mapping itself is reasonable. `pow(2, numRefine) - 1` knots per direction gives `numRefine` dyadic refinements, and `numRefine = 1` matches the old single knot. The real problem is the default arguments.
+
+**Minor issue:** `pow` returns a `double`, which is implicitly narrowed to `index_t`. For these small values it works, but an integer shift such as `(1 << numRefine) - 1` would be cleaner and avoid the float round-trip.
+
+**Fix:** change the signature to `gsSquareDomain(index_t numElevation = 1, index_t numRefine = 1)`, or keep a separate no-argument constructor that preserves the previous behavior.
+--- AUDITOR 318509b9ab1f REJECT
+**1. The default constructor's behavior silently changes (blocking).**
+- **Before:** `gsSquareDomain()` called `m_domain.degreeElevate()` and `m_domain.uniformRefine()`. In G+Smo both default to 1, so the domain was elevated once and refined once (one interior knot per direction).
+- **After:** `gsSquareDomain()` resolves to `gsSquareDomain(0, 0)`. That calls `degreeElevate(0)` and `uniformRefine(2^0 - 1 = 0)`, so nothing is elevated or refined.
+- Every existing caller that default-constructs this class now gets a bilinear, unrefined domain instead of a biquadratic, refined one. That changes the number of free control points (`m_mapper.freeSize()`), the size of `m_parameters`, and any downstream optimization or shape-parameter dimensions.
+- Nothing in the patch shows those call sites were reviewed. This is a logic regression.
+- **Fix:** use defaults that preserve the old behavior (`numElevation = 1`, `numRefine = 1`; `numRefine = 1` gives `2^1 - 1 = 1` knot, matching the original), or update and document every call site.
+
+**2. The refinement count uses floating-point math.**
+- `index_t numKts = pow(2, numRefine) - 1;` computes a `double` and then narrows it to `index_t`. Most compilers warn about this, and it is the wrong tool for integer powers of two.
+- **Fix:** use `(index_t(1) << numRefine) - 1`.
+- Inserting `2^n - 1` knots in one pass is only equivalent to `n` dyadic refinements because the starting square has a single span. That assumption is fine here but should be commented.
+
+**3. Inputs are not validated.**
+- A negative `numElevation` or `numRefine` is accepted without checks. For example, `pow(2, -1) - 1 = -0.5` truncates to 0, which silently masks caller errors.
+- **Fix:** add a `GISMO_ASSERT(numElevation >= 0 && numRefine >= 0, ...)`.
+
+**4. The constructor can convert implicitly.**
+- Because both parameters have defaults, the constructor can be called with a single argument. Without `explicit`, it becomes an implicit conversion from `index_t` to `gsSquareDomain<DIM,T>`, which can enable unintended conversions.
+- **Fix:** mark it `explicit`.
+
+**5. Housekeeping (non-blocking).**
+- The patch leaves a stale commented-out `// gsSquareDomain()` line.
+- It keeps unconditional `gsInfo` output in a library constructor.
+- The file header still says `gsMultiBasis.h`.
+
+Issue 1 alone justifies rejection, because the patch changes default runtime behavior for existing users without acknowledging it. Issues 2–4 should be fixed in the same revision.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**The default constructor's behavior changed silently.** Before the patch, `gsSquareDomain()` called `m_domain.degreeElevate()` and `m_domain.uniformRefine()`. In G+Smo these default to one degree elevation and one inserted knot per direction. After the patch, a default-constructed object gets `numElevation = 0` and `numRefine = 0`. That means `degreeElevate(0)` and `uniformRefine(pow(2,0)-1) = uniformRefine(0)`, so the domain is left as a bilinear 2×2 patch. Existing callers of `gsSquareDomain<DIM,T>()` compile unchanged and run without error, but they now get a different discretization. To match the old behavior the defaults would need to be `(1, 1)`, since `2^1 - 1 = 1` knot equals the old `uniformRefine()`.
+
+**The new default is degenerate, and nothing reports it.** On a bilinear 2×2 patch every control point is a boundary DoF. The constructor eliminates all boundary DoFs, so `m_mapper.freeSize() == 0` and `m_parameters` is empty. The object still builds normally. The only clue is a `gsInfo` line printing degree (1,1) and 4 coefs. Any optimization or control vector built on top of it is empty but looks valid. This is a plausible-but-wrong state with no exception.
+
+**Bad arguments are accepted silently:**
+- `numRefine` goes through `pow(2, numRefine) - 1`, which is a `double` that gets truncated into `index_t`. A negative `numRefine` gives `pow(2,-1)-1 = -0.5`, which truncates to `0`. The request is quietly turned into "no refinement" instead of being rejected.
+- A large `numRefine` overflows `index_t` after the double conversion, which is undefined behavior rather than a loud error. Integer `1 << numRefine` with a range check would avoid this.
+- A negative `numElevation` is passed straight to `degreeElevate` with no validation.
+
+**Implicit conversion.** The constructor takes one argument with a default for the other and is not marked `explicit`. So it acts as an implicit conversion from `index_t`: `gsSquareDomain<2,real_t> d = 3;` or passing an integer where a `gsSquareDomain` is expected will compile and silently build a domain.
+
+The first point is a real regression for existing callers. The others are failure paths whose wrong results look reasonable and are never reported to the caller.

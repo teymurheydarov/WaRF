@@ -1,0 +1,83 @@
+diff --git a/src/gsHSplines/gsTHBSplineBasis.hpp b/src/gsHSplines/gsTHBSplineBasis.hpp
+index c6b4a98db..f8dac8d72 100644
+--- a/src/gsHSplines/gsTHBSplineBasis.hpp
++++ b/src/gsHSplines/gsTHBSplineBasis.hpp
+@@ -1317,63 +1317,63 @@ void gsTHBSplineBasis<d,T>::evalAllDers_into(const gsMatrix<T> & u, int n,
+     gsMatrix<T> tmp(1,1);
+     std::vector<gsMatrix<T> > cw(d), cwb, cwt(d);
+     for ( short_t k=0; k<d; ++k)
+         cw[k].resize(n+1,1);
+     gsVector<index_t, d> ti;
+     gsVector<index_t> str(n+1);
+ 
+     this->active_into(u, indices);
+     for (int l = 0; l <= n; l++)
+     {
+         str[l] = numCompositions(l,d);
+         result[l].setZero(indices.rows() * str[l], u.cols());
+     }
+ 
+     for (index_t i = 0; i < indices.cols(); i++) // for all points
+     {
+         for (index_t j = 0; j < indices.rows(); j++) // for all active functions
+         {
+             const index_t index = indices(j, i);
+             if (j != 0 && index == 0)
+                 break;
+ 
+             const index_t level = this->m_is_truncated[index];
+             if (level == -1)  // basis function not truncated
+             {
+                 unsigned level = this->levelOf(index);
+                 ti = this->m_bases[level]->tensorIndex(flatTensorIndexOf(index, level));
+                 for(short_t k = 0; k!=d; ++k)
+                 {
+                     *tmp.data() = u(k,i);
+-                    //this->m_bases[level]->component(k).evalAllDersSingle_into(ti[k], tmp, n, cw[k]); // has a bug
++                    //this->m_bases[level]->component(k).evalAllDersSingle_into(ti[k], tmp, n, cw[k], sameElement); // has a bug
+                     // less efficient alternative
+-                    this->m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb);
++                    this->m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb, sameElement);
+                     const index_t first = this->m_bases[level]->component(k).firstActive(tmp.value());
+ 
+                     for (int l = 0; l <= n; l++)
+                     {
+                         cw[k].at(l) = cwb[l].at(ti[k]-first);
+                     }
+                     //end less efficient alternative
+                 }
+                 // -- Start eval
+                 if (n>-1)
+                 {
+                     result[0](j,i) = cw[0].at(0);
+                     for ( short_t k=1; k<d; ++k)
+                         result[0](j,i) *= cw[k].at(0);
+                 }
+ 
+                 if (n>0)
+                 {
+                     T * acc = result[1].col(i).data() + str[1]*j;
+                     for ( short_t k=0; k<d; ++k)
+                     {
+                         // derivative w.r.t. k-th variable
+                         *acc = cw[k].at(1);
+                         for ( short_t l=0; l<k; ++l)
+                             *acc *= cw[l].at(0);
+                         for ( short_t l=k+1; l<d; ++l)
+                             *acc *= cw[l].at(0);
+                         ++acc;
+                     }
+                 }
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    gsVector<index_t> str(n+1);
+
+    this->active_into(u, indices);
+    for (int l = 0; l <= n; l++)
+    {
+        str[l] = numCompositions(l,d);
+        result[l].setZero(indices.rows() * str[l], u.cols());
+    }

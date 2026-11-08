@@ -1,0 +1,123 @@
+===== claude claude.w1.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+The integer type-to-VTK mapping is wrong, and that corrupts any integer `DataArray`, especially in binary mode.
+
+**1. Every integer type is mapped to a VTK type half its size.**
+- `short int` is 16 bits but is labelled `Int8`.
+- `unsigned short` is labelled `UInt8`.
+- `int` is 32 bits but is labelled `Int16`.
+- `unsigned int` is labelled `UInt16`.
+- `long int` is 64 bits on LP64 (Linux/macOS) but is labelled `Int32`.
+- `unsigned long` is labelled `UInt32`.
+
+With `export_base64 == true`, the header says `copy_of_matrix.size() * sizeof(T)` bytes and the payload uses `sizeof(T)` per element. But the `type` attribute tells ParaView to read 1, 2 or 4-byte elements. ParaView will either misparse the array (wrong values, wrong element count against `NumberOfComponents`/`NumberOfTuples`) or reject it. In ASCII mode, values outside the declared narrower range (e.g. an `int` connectivity index above 32767 labelled `Int16`) are also invalid. Integer arrays are what VTK uses for connectivity, offsets and cell types, so this will break mesh export, not just optional fields.
+
+The correct mapping should be based on `sizeof(T)` and `std::is_signed<T>`, not on hard-coded C++ type names. That also fixes the platform dependence of `long`, which is 32 bits on Windows and 64 bits on Linux.
+
+**2. The lambda has undefined behaviour for unlisted types.** If `T` is anything else (e.g. `long double`, `mpq_class`, a `char`, or `index_t` when it is a typedef not covered), control falls off the end of a lambda returning `std::string`. That is undefined behaviour, and the compiler will typically warn. It should end with a `static_assert` or a fallback/throw.
+
+**3. Minor issues:**
+- The signature changed from `const gsMatrix<T>& points` to `const gsMatrix<T> matrix`. That copies the whole matrix on every call for no reason, and it diverges from the documented `@param points`.
+- The default `attributes={{"",""}}` relies on skipping empty keys, which works but is a smell.
+- "Determing" is a typo.
+
+Point 1 alone produces malformed VTK output for integer data, so this should not be merged as is.
+===== claude-standard claude-standard.w0.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+The new inline `toDataArray` writes the wrong VTK `type` attribute for every integer type. Each is labelled with half its real width:
+
+| C++ type (typical width) | Patch emits | Correct VTK type |
+|---|---|---|
+| `short` (16-bit) | `Int8` | `Int16` |
+| `unsigned short` (16-bit) | `UInt8` | `UInt16` |
+| `int` (32-bit) | `Int16` | `Int32` |
+| `unsigned int` (32-bit) | `UInt16` | `UInt32` |
+| `long` (64-bit on LP64 Linux/macOS) | `Int32` | `Int64` |
+| `unsigned long` (64-bit on LP64) | `UInt32` | `UInt64` |
+
+**Concrete failure:** call `toDataArray(gsMatrix<int>, {}, 5, true)` on a 1×N matrix. This is the kind of call used for connectivity, offsets or cell types.
+- The header says `type="Int16"`.
+- The byte-count prefix is `N * sizeof(int) = 4N`, and the payload holds 4-byte integers.
+- ParaView decodes the 4N bytes as 2N `Int16` values. Every value comes out corrupted, and the element count no longer matches the point or cell count. The file is unreadable or silently wrong.
+
+In ASCII mode, any `int` value above 32767 (for example a connectivity index in a mesh with more than 32k points) is out of range for the declared `Int16` and gets rejected or truncated.
+
+**Undefined behaviour for other types:** the type-selection lambda has no final `return`. For any `T` not in the list (`long double`, `char`, `unsigned char`, `bool`, `gsMpfr`, etc.), the lambda reaches its end without returning a value. That is undefined behaviour, and the result is used to construct a `std::string`, which will likely crash. A `static_assert` or a default branch is needed.
+
+**Minor issues (not grounds for rejection on their own):**
+- The parameter changed from `const gsMatrix<T>&` to `const gsMatrix<T>` by value, which forces an unnecessary copy of potentially large point arrays.
+- The default `attributes={{"",""}}` relies on skipping empty keys, which works but is awkward.
+
+The integer type mismatch alone produces incorrect output for a specific, realistic input, so the patch should be rejected. The fix is to map types by `sizeof` or to use `int16/int32/int64` fixed-width checks, and to add a `static_assert` for unsupported `T`.
+--- ADVOCATE 32e59155d0a3 REJECT
+The integer branches of the `vtk_typename` lambda declare the wrong bit width for every integer type, so the `type` attribute doesn't match the data actually written.
+
+**The mapping is shifted down by half:**
+
+| C++ type | Typical size | Declared VTK type | Correct VTK type |
+|---|---|---|---|
+| `short int` | 16 bits | `Int8` | `Int16` |
+| `unsigned short int` | 16 bits | `UInt8` | `UInt16` |
+| `int` | 32 bits | `Int16` | `Int32` |
+| `unsigned int` | 32 bits | `UInt16` | `UInt32` |
+| `long int` | 64 bits on LP64 (Linux/macOS) | `Int32` | `Int64` (platform-dependent) |
+| `unsigned long int` | 64 bits on LP64 | `UInt32` | `UInt64` (platform-dependent) |
+
+The floating-point and `long long` cases are correct. Every other integer case is wrong.
+
+**Why this breaks output:**
+
+1. **Base64 mode corrupts the data.** The payload is written with `sizeof(T)` bytes per element, and the byte-count header is `size() * sizeof(T)`. ParaView decodes elements using the width from `type`. For `int` (`index_t` on many builds, used for connectivity, offsets and cell types), the header says `Int16` but each element is 4 bytes. The reader sees twice as many values, all garbage. Connectivity arrays are the most common integer use of this helper, so meshes will be scrambled or fail to load.
+2. **ASCII mode is also wrong.** Any `int` value outside ±32767 written under `type="Int16"` overflows the declared type. ParaView will reject it or truncate it.
+
+**Secondary issue:** the lambda has no final `return`. Any `T` not listed (`long double`, `char`, `bool`, or a `real_t` configured as something else) falls off the end of a function returning `std::string`. That is undefined behavior, not a clean compile error. A `static_assert`, or a final `return` / `GISMO_ERROR`, would fix it.
+
+**Fix:** map by actual width, e.g. `"Int"` + `std::to_string(8*sizeof(T))` with a `U` prefix for unsigned types. Alternatively, correct the table to `short→Int16`, `int→Int32`, `long→Int32/Int64` according to `sizeof(long)`, and so on.
+
+Changing the parameter from `const gsMatrix<T>&` to by-value `const gsMatrix<T>` adds a copy but is not a correctness bug. The type mismatch alone is a clear, demonstrable defect.
+--- AUDITOR 318509b9ab1f REJECT
+The integer branches of the `vtk_typename` lambda map every integer type to a VTK type half its actual width. On the platforms G+Smo targets (LP64 Linux/macOS, LLP64 Windows):
+
+| C++ type | Patch emits | Correct VTK type |
+|---|---|---|
+| `short` (16-bit) | Int8 | Int16 |
+| `unsigned short` | UInt8 | UInt16 |
+| `int` (32-bit) | Int16 | Int32 |
+| `unsigned int` | UInt16 | UInt32 |
+| `long` (64-bit LP64 / 32-bit LLP64) | Int32 | Int64 / Int32 |
+| `long long` (64-bit) | Int64 | Int64 is right, but VTK has no wider type for anything above it |
+
+This is a real correctness bug, not a cosmetic one:
+
+- **Binary path:** The header records `copy_of_matrix.size() * sizeof(T)` bytes. The declared `type` tells ParaView each element is half that size. ParaView will either read twice as many values (garbage or a size mismatch error) or reject the file. Data passed as `gsMatrix<index_t>`, for example connectivity or offsets, would come out corrupt.
+- **ASCII path:** Values can overflow the declared type. For example, an `int` value of 40000 does not fit in Int16, so it would be truncated or rejected.
+
+The mapping should be based on `sizeof(T)` and `std::is_signed<T>`, or on fixed-width types (`int16_t`, `int32_t`, `int64_t`), not on assumed widths for named types.
+
+**Secondary issues:**
+
+1. **Missing return:** The lambda has no final `return`. Any other `T` (e.g., `long double`, `char`, or a custom scalar such as mpq/mpfr, which G+Smo supports) falls off the end of a non-void lambda. That is undefined behavior. Unsupported types should be rejected at compile time with a `static_assert`, or given a defined fallback.
+2. **Copy on every call:** The parameter changed from `const gsMatrix<T>&` to `const gsMatrix<T>` (by value). This copies a potentially large matrix on every call for no reason and also departs from the documented `points` parameter name. It should stay a const reference.
+3. **Possible duplicate definition:** The declaration became an inline template definition in the header. If `gsParaviewUtils.hpp` or a `.cpp` still contains a definition or explicit instantiation of `toDataArray`, this causes redefinition or ODR conflicts. I could not verify this from the diff.
+4. **Unrelated include:** Adding `<gsCore/gsLinearAlgebra.h>` is unrelated to the change and increases header coupling. This is minor.
+
+Because the type mapping produces malformed or misinterpreted VTK output for every integer type, the patch should not be merged as is.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**Wrong VTK type names (outright defect, silent).** The lambda maps C++ types to VTK type names that don't match their sizes:
+- `short int` (16-bit) becomes `"Int8"`
+- `int` (32-bit) becomes `"Int16"`
+- `long int` becomes `"Int32"`, but it is 64-bit on LP64 Linux and macOS
+- the unsigned variants have the same problems
+
+In the base64 branch the payload is written as `sizeof(T)` bytes per element, and the byte-count prefix is also `size() * sizeof(T)`. So for `gsMatrix<int>` the header says `Int16` while the data holds 4-byte integers. ParaView reads it without error, gets twice as many values as expected, and shows garbage. No exception is thrown and the returned string looks well-formed. A test would only catch this if it decoded the payload and checked it against the declared type, which nobody does by accident.
+
+**The `long` case depends on the platform.** `long int` → `"Int32"` is correct on Windows (LLP64) but wrong on Linux and macOS (LP64). The same test can pass on one CI platform and produce corrupt output on another. This is exactly the kind of failure tied to an environment a test cannot control.
+
+**Undefined behavior for any other `T`.** If `T` is not one of the listed types, the lambda falls off the end of a non-void function. That includes `long double`, `char`, `unsigned char`, `bool`, and any multiprecision or custom scalar G+Smo might be built with. Reading the result as `std::string` is undefined behavior: it might crash, or it might quietly produce a bad header. It should be a `static_assert` or an explicit fallback. Since only `std::is_same` is evaluated, the compiler will at most warn.
+
+**Smaller issues:**
+- The parameter changed from `const gsMatrix<T>&` to by-value `const gsMatrix<T>`. Every call now deep-copies the whole point or value matrix for no reason.
+- The definition moved inline into the header. If a `.hpp` or explicit instantiation still defines `toDataArray`, you get an ODR or redefinition conflict.
+- `<type_traits>` and `<sstream>` are relied on but not included directly.
+
+The type-name and size mismatch alone is a real bug whose symptom (a plausible but wrong VTK file) won't surface to any caller.

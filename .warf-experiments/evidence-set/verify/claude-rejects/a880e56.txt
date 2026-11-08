@@ -1,0 +1,104 @@
+===== claude claude.w2.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+**Main defect: about 4× more objective evaluations in the default gradient.**
+
+- **Before:** forward difference, `(e1 - e0) / h`. It evaluates `e0` once outside the loop, then once per coordinate, for **n + 1** calls to `evalObj` in total.
+- **After:** five-point central stencil. Each coordinate needs `e1`, `e2`, `e3` and `e4`, for **4n** calls in total.
+
+`evalObj` is usually the expensive part, such as a PDE solve or an assembly plus solve in G+Smo shape optimization. So this roughly quadruples the cost of every gradient for any subclass that does not override `gradObj_into`. That cost repeats on every optimizer iteration. For large `n`, it can turn a workable run into an impractical one.
+
+**The math is correct.** `(8(f(x+h) − f(x−h)) − f(x+2h) + f(x−2h)) / (12h)` with `12h = 0.00012` is the standard O(h⁴) stencil, and the ordering of `e1` through `e4` is right. Even so, the change has these problems:
+
+- **It silently changes cost and accuracy for all callers.** The more accurate stencil should be an opt-in choice, such as a flag, a template or strategy parameter, or a separate method, rather than the new default.
+- **The accuracy gain is limited at this step size.** With a fixed `h = 1e-5` in double precision, rounding error grows as ε/h, so the higher-order stencil does not improve accuracy by as much as its 4× price suggests.
+- **It brings back code that had been deliberately commented out,** apparently because of this same cost trade-off. The patch gives no benchmark or reason for reversing that.
+- **The bounds-check TODO is still open and now matters more.** The stencil now evaluates at `u ± 2h`, which can step outside `m_desLowerBounds` and `m_desUpperBounds`.
+
+**Recommendation:** keep the cheap forward difference as the default, or at most use a 2n-call central difference. Offer the five-point stencil as an optional mode.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+The new formula is mathematically correct, but the patch roughly quadruples the cost of the default gradient. In the PERFORMANCE domain, that is a concrete regression.
+
+**Correctness of the new formula.** The five-point central stencil is f'(x) ≈ (−f(x+2h) + 8f(x+h) − 8f(x−h) + f(x−2h)) / (12h).
+- With h = 1e-5, 12h = 0.00012, and the code maps e1 = f(x+h), e2 = f(x−h), e3 = f(x+2h), e4 = f(x−2h).
+- `tmp[i] += h` and `tmp[i] = u[i] + h` are equivalent, because `uu` is a fresh copy of `u` and `tmp[i]` is reset to `u[i]` each iteration.
+- Indexing, `c++` and the reset are fine.
+
+**Regression 1: objective evaluations go from n + 1 to 4n.**
+- Before: one baseline call `e0` plus one call per design variable.
+- After: four calls per design variable.
+- `evalObj` is usually the expensive part of a G+Smo optimisation problem, often a full PDE assembly and solve. For n = 100 design variables, the default `gradObj_into` goes from 101 solves to 400 solves. That is about 3.96× slower on every gradient request, and the optimiser asks for one each iteration.
+- The five-point version was already present as commented-out code. The forward difference was apparently chosen on purpose. This patch reverses that choice, and every subclass relying on the default pays for it.
+
+**Regression 2: evaluations now go below the design point.** The forward difference only stepped upward from `u`. The new stencil also evaluates at `u[i] − 1e-5` and `u[i] − 2e-5`. Take a design variable sitting exactly on its lower bound, such as a thickness or weight of 0 that IPOPT drives to the bound. The default gradient now calls `evalObj` at a negative value. That point is outside the feasible design space and can fail, for example by producing an invalid geometry or a singular system. The existing "to do: add m_desLowerBounds check" comment shows that bounds are not enforced, and the patch makes that gap matter on the lower side as well.
+
+The gain is about four extra digits of accuracy in a fallback that the docs say subclasses should override with an exact gradient. That does not justify the 4× cost and the new out-of-bounds evaluations. If higher accuracy is wanted, it should be opt-in, for example through a flag or a separate method, rather than replacing the cheap default.
+--- ADVOCATE 32e59155d0a3 REJECT
+**The patch introduces a clear performance regression on a default code path.**
+
+**Cost comparison.** The old default was a forward difference:
+- One baseline evaluation `e0`, hoisted out of the loop.
+- One evaluation per design variable.
+- Total: **n + 1** calls to `evalObj` per gradient.
+
+The new code is a 4-point central difference:
+- Four evaluations per design variable (`e1`, `e3`, `e2`, `e4`).
+- Total: **4n** calls to `evalObj` per gradient.
+
+For any non-trivial n, each gradient now costs about 4× as much. This matters because:
+- `gradObj_into` is the fallback for every subclass that doesn't override it, so the slowdown affects all such users without them opting in.
+- `evalObj` in this setting (shape or parameter optimization in G+Smo) often means assembling and solving a PDE system, so each call is expensive.
+- Optimizers call the gradient every iteration, often many times.
+
+**Correctness is fine.** The formula `(8·(f(x+h) − f(x−h)) − (f(x+2h) − f(x−2h))) / (12h)` with h = 1e-5 is the standard 4th-order central stencil. The code computes `8*(e1-e2) + e4 - e3` over `0.00012`, which matches. Resetting `tmp[i] = u[i]` restores the copy correctly. So this is a deliberate accuracy-for-cost trade, not a math bug.
+
+**Why reject anyway.** Accuracy alone doesn't justify the cost here:
+- The comment says "overriding it should provide exact gradient," so callers who need accuracy are expected to override.
+- Truncation error is not the main problem with a 1e-5 step. Error at that step size is usually dominated by cancellation and by noise in `evalObj` (e.g. iterative-solver tolerance). A higher-order stencil doesn't fix either.
+- The patch silently makes the default about 4× more expensive, with no option to choose between schemes.
+
+**Suggested fix.** Keep the forward difference (with the hoisted `e0`) as the default. If higher accuracy is wanted, add the central/4-point scheme as an opt-in, for example via an option or a separate method.
+--- AUDITOR 318509b9ab1f REJECT
+**Performance regression.** In a performance review, the key change is the number of objective evaluations per gradient call:
+
+- **Before:** one baseline evaluation `e0`, then one forward-perturbed evaluation per variable. That is **n + 1** calls to `evalObj`.
+- **After:** four evaluations per variable (`x+h`, `x+2h`, `x−h`, `x−2h`) and no shared baseline. That is **4n** calls.
+
+For large n this makes the default `gradObj_into` about 4× more expensive. `evalObj` is virtual and in G+Smo usually involves assembly or solves, so it dominates the cost. Any optimizer that relies on the default gradient (gsGradientDescent, the gsHLBFGS wrappers, IpOpt/gsOptim adapters without an exact gradient) will run roughly 4× slower per iteration. The patch also reinstates code that had been deliberately commented out in favor of the cheaper scheme, so it reverses an earlier optimization.
+
+**Correctness (for completeness):**
+- The five-point stencil formula is correct: `f'(x) ≈ [8(f(x+h) − f(x−h)) − f(x+2h) + f(x−2h)] / (12h)`, and with `h = 1e-5`, `12h = 0.00012` matches.
+- Resetting `tmp[i]` works because `uu` is a copy of `u`, and `tmp[i] = u[i]` restores it each iteration.
+- Accuracy improves from O(h) ≈ 1e-5 truncation error to O(h⁴), with round-off around eps/h ≈ 1e-11 for double. This is a real benefit.
+- For `T = float`, `h = 1e-5` is close to or below the round-off floor in both versions, so the accuracy gain is not guaranteed for every instantiation.
+
+**Recommendation:** Changing the default accuracy/cost trade-off of a widely inherited base method should not be done silently. Acceptable alternatives:
+1. Keep forward differences as the default and add the higher-order stencil as an opt-in, for example through an option, an enum parameter, or a separate `gradObj_central_into`.
+2. If more accuracy is needed by default, use the 2-point central difference `(e1 − e2)/(2h)`. It costs 2n evaluations, gives O(h²) error, and is the usual compromise.
+3. Include benchmark evidence (optimizer wall time and iteration counts) showing the extra accuracy cuts iterations enough to offset the 4× cost per gradient.
+
+Without such justification, this change is a significant, undocumented performance regression in a hot path and should not be merged as is.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+The formula is correct, but the patch roughly quadruples the cost of every gradient call, and no test would notice.
+
+**Correctness checks out.** With h = 1e-5:
+- e1 = f(x+h), e2 = f(x−h), e3 = f(x+2h), e4 = f(x−2h).
+- The result `(8(e1−e2) + e4 − e3) / 0.00012` matches the standard fourth-order central stencil `(−f(x+2h) + 8f(x+h) − 8f(x−h) + f(x−2h)) / 12h`.
+- The first `tmp[i] += h` starts from the copied `u`, so all four offsets are consistent.
+- `tmp[i] = u[i]` restores the coordinate before the next iteration.
+- Removing `e0` is safe because it is no longer used.
+
+**The cost regression is silent.**
+- **Before:** forward differences call `evalObj` n + 1 times per gradient (one shared `e0`, plus one per coordinate).
+- **After:** the five-point stencil calls it 4n times, about 4× as many for any realistic n.
+- **Why it matters:** this is the default gradient for any `gsOptProblem` that does not override `gradObj_into`. Optimizers call it every iteration, and in G+Smo `evalObj` is often a full PDE or isogeometric solve. Optimization runs on such problems become about 4× slower.
+- **Why nothing would catch it:**
+  - Nothing errors or asserts.
+  - The return values look normal; they are slightly more accurate, so any value-based test still passes or even improves.
+  - The slowdown only shows up under wall-clock or evaluation-count conditions that a unit test does not check.
+
+Accuracy versus cost is a legitimate trade-off, but a default this many subclasses inherit should not change silently. To accept it, the patch should do one of the following:
+- keep forward differences as the default and offer the higher-order stencil as an option or flag, or
+- document the change and confirm that callers relying on the default gradient (as opposed to overriding it) can afford 4n evaluations.
+
+As written, the patch slows down every user of the default gradient without notice, so I reject it.

@@ -1,0 +1,416 @@
+ID 6fc3f69:gsMultiBasis.hpp:clean
+commit 6fc3f6949d13e2c68ae1e8e2b79e5653e331588b file src/gsCore/gsMultiBasis.hpp date 2025-09-05 subj ADD - Functions for refinement and coarsening of finer /coarser levels in gsHTensorBasis - Multi-component DofMapper support for gsMultibasis::getMapper - Initialization of DoFmapper using BCS (taken from gsFESpace)
+
+=== ONE decision REJECT
+[REJECT] **Main defect: the first `getMapper` overload ignores the `conforming` flag.**
+- `getMapper(bool conforming, index_t nComp, gsDofMapper& mapper, bool finalize)` removed the `if (conforming) { ... matchInterface(*it, mapper); }` block.
+- It now calls `gsDofMapper(*this, this->topology(), nComp)` and never reads `conforming`.
+- The result is the same whatever the caller passes:
+  - If that constructor matches interfaces, callers asking for `conforming == false` (discontinuous or non-matching patches) silently get glued interface DOFs.
+  - If it does not, callers asking for `conforming == true` silently get unglued DOFs.
+- Either way the DOF count and numbering are wrong, so assembly and transfer operators break with no error raised.
+- The second overload does forward `conforming` (`gsDofMapper(*this, bc, nComp, unk, conforming)`). This shows the flag is still meant to matter, and that the first overload simply dropped it.
+
+**Secondary issues:**
+- **Signature change:** both `getMapper` overloads gained an `nComp` parameter in the middle of the argument list, and `unk` changed from `int` to `index_t`. The header change is not in the diff, so existing callers, such as `uniformRefine_withTransfer` and other `getMapper` overloads, may no longer compile. Worse, an `int` argument could bind to `nComp` and shift every later argument.
+- **Swapped assertion messages:** in `combineTransferMatrices`, the message for the `cols()` check talks about rows, and the message for the `rows()` check talks about columns. This misleads debugging but does not change behaviour.
+- **Unchecked size assumption:** the new multi-component loop assumes `localTransferMatrices[j]` has the same size for every component. That holds only if all components share one basis per patch. This is acceptable but should be documented.
+
+Ignoring the `conforming` argument is a real behaviour regression, so the patch should not be merged as is.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+**The defect: the `conforming` flag is silently ignored in the first `getMapper` overload.**
+
+```cpp
+void gsMultiBasis<T>::getMapper(bool conforming, index_t nComp,
+                                gsDofMapper & mapper, bool finalize) const
+{
+    mapper = gsDofMapper(*this,this->topology(),nComp);
+    ...
+}
+```
+
+- **Before the patch**, the mapper was built without interface information. Interfaces were then glued with `matchInterface` only `if (conforming)`.
+- **After the patch**, the mapper is always built from `this->topology()`. `conforming` is never read. The only reason to pass the topology to the constructor is to match interface DOFs, so interfaces are now always glued.
+
+**Concrete failing call:** take a two-patch `gsMultiBasis` with one interface and call `getMapper(false, 1, mapper)`.
+
+- **Expected (old behaviour):** both patches keep their own copies of the interface DOFs, so `freeSize() == size(patch0) + size(patch1)`.
+- **Actual (new code):** the interface DOFs are glued, as if `conforming == true`. This gives fewer free DOFs and couples the patches.
+
+Code that relies on `conforming = false` breaks: discontinuous Galerkin, mortar or Nitsche coupling, and per-patch independent systems. It now gets a conforming numbering and the wrong system size.
+
+The patch handles the flag correctly in the second overload. There it forwards `conforming` into the constructor: `gsDofMapper(*this, bc, nComp, unk, conforming)`. That makes the omission in the first overload an inconsistency, not a deliberate design choice.
+
+**Other changes checked and found acceptable:**
+
+- **`combineTransferMatrices`:** the per-component loop is correct. It uses `index(it.col(), j, dim)` for the coarse mapper and `index(it.row(), j, dim)` for the fine mapper. It also checks that the coarse `patchSize` equals `cols()` and the fine `patchSize` equals `rows()`. The new reserve of `nonzeros * componentsSize()` is right.
+- **Assertion messages** in `combineTransferMatrices` swap "rows" and "columns" in their text. This is cosmetic only, because the conditions themselves are correct.
+- **The added `nComp` and `unk` parameters** change the function signatures. Callers would need updating, but that is an API change, not a logic bug.
+--- ADVOCATE [REJECT]
+The first `getMapper(bool conforming, index_t nComp, gsDofMapper&, bool finalize)` overload now ignores its `conforming` argument.
+
+**Before the patch**, interfaces were matched only on request:
+```cpp
+mapper = gsDofMapper(*this);
+if ( conforming )
+    for (each interface it) matchInterface(*it, mapper);
+```
+
+**After the patch**, the body is:
+```cpp
+mapper = gsDofMapper(*this, this->topology(), nComp);
+if (finalize) mapper.finalize();
+```
+
+`conforming` is never read. Whether that constructor glues interface DOFs or not, it does the same thing for `conforming == true` and `conforming == false`. So one of the two cases is now wrong:
+- If it always glues, a caller asking for a non-conforming mapper (`conforming=false`) gets merged interface DOFs. This silently couples patches that should be independent.
+- If it never glues, `conforming=true` callers lose interface continuity.
+
+Either way, the mapper's free-DOF numbering changes, and so do the system size and the assembled operator.
+
+The sibling overload in the same patch shows this isn't intended. It forwards the flag explicitly: `gsDofMapper(*this, bc, nComp, unk, conforming)`. The first overload has no equivalent, so it looks like the flag was dropped during the refactor rather than deliberately encoded in the constructor.
+
+**Fix:** pass `conforming` through, mirroring the bc overload. Alternatively, keep `gsDofMapper(*this, nComp)` and restore the `if (conforming) matchInterface(...)` loop.
+
+**Minor, non-blocking:** in `combineTransferMatrices`, the assertion messages have rows and columns swapped. The coarse `patchSize` check is against `cols()`, but the message says "rows"; the fine check has the opposite mix-up. The checks themselves are correct. The per-component expansion of the transfer matrix (looping `dim` over `componentsSize()` and indexing with `index(i, j, dim)`) also looks correct, as does the scaled `reserve`.
+--- AUDITOR [REJECT]
+**Blocking issue: the first `getMapper` overload ignores `conforming`**
+
+```cpp
+void gsMultiBasis<T>::getMapper(bool conforming, index_t nComp,
+                                gsDofMapper & mapper, bool finalize) const
+{
+    mapper = gsDofMapper(*this, this->topology(), nComp);
+    ...
+}
+```
+
+The old code matched interface DOFs only when `conforming == true`. The new code passes the full topology to the `gsDofMapper` constructor every time, and that constructor matches interfaces itself. `conforming` is never read.
+
+As a result, a caller asking for a non-conforming mapper (`conforming == false`) silently gets interface DOFs merged. That changes the DOF count and couples patches that should stay independent, for example in DG or mortar discretizations. Nothing fails at compile or run time; the results are just wrong.
+
+The second overload does pass `conforming` through (`gsDofMapper(*this, bc, nComp, unk, conforming)`). So the two overloads now handle the same flag differently, which also suggests the first one is an oversight rather than a deliberate change.
+
+**Secondary concerns (not blocking on their own)**
+
+1. **Swapped assertion messages.** In `combineTransferMatrices`, the check against `localTransferMatrices[j].cols()` says "number of rows", and the check against `.rows()` says "number of columns". The checks are correct, but the messages will mislead anyone debugging a failure.
+2. **Signature change for existing callers.** The second overload changes from `(bool, bc, int unk, mapper, bool)` to `(bool, bc, index_t nComp, index_t unk, mapper, bool)`. The header and every call site must be updated together. An old call `getMapper(c, bc, unk, mapper)` could silently bind `unk` to `nComp` if implicit conversions allow it. The diff gives no evidence that callers were audited.
+3. **`matchInterface` is now unused by `getMapper`.** It is still public and iterates over all components, but nothing in this patch calls it any more. That is worth confirming.
+
+**What looks correct**
+
+The multi-component rewrite of `combineTransferMatrices` is sound:
+- Each component's DOFs are mapped through `index(i, patch, comp)`, which is the right argument order.
+- Reserving `nonzeros * componentsSize()` entries matches the number of triplets added.
+- The new consistency assertions on patch count, component count, and per-patch sizes are useful.
+
+**To fix**
+
+- Restore the `conforming` behaviour in the first overload. Either build the mapper without topology and call `matchInterface` when `conforming` is true, or pass `conforming` to the constructor as the second overload does.
+- Correct the two assertion messages.
+- Confirm that all call sites of the changed overload have been updated.
+--- TEST-FOCUSED [REJECT]
+**1. The first `getMapper` overload silently ignores `conforming`.**
+
+```cpp
+void gsMultiBasis<T>::getMapper(bool conforming, index_t nComp,
+                                gsDofMapper & mapper, bool finalize) const
+{
+    mapper = gsDofMapper(*this,this->topology(),nComp);
+```
+
+The old code matched interface DOFs only when `conforming` was true. The new code passes the topology to the constructor unconditionally and never reads `conforming`. The second overload does forward it (`gsDofMapper(*this, bc, nComp, unk, conforming)`), so the two overloads now behave differently for the same flag.
+
+A caller asking for `conforming=false`, such as a discontinuous Galerkin setup, gets back a mapper with interfaces glued. Nothing throws. The mapper is valid, just with fewer free DOFs. The error then surfaces far away as a plausible but wrong system size or solution. A test would only catch this if it checked the DOF count of a non-conforming multipatch mapper against an exact expected value.
+
+**2. Size checks in `combineTransferMatrices` are debug-only.**
+
+The new patch-size checks use `GISMO_ASSERT`, which is compiled out in release builds. In release, a mismatch between a local transfer matrix and the mapper's patch size reaches `coarseMapper.index(it.col(), j, dim)` with an out-of-range local index. That either reads another patch's or component's slots, producing a wrong but valid-looking free index, or reads out of bounds. Neither is guaranteed to be loud.
+
+The assert messages also have rows and columns swapped. The coarse check compares against `.cols()` but its message says "rows", and the fine check is the reverse. This will mislead whoever debugs a failure.
+
+**3. Duplicate triplets are resolved silently.**
+
+`take_first` keeps whichever duplicate entry happens to come first. With interface-matched DOFs now reached once per component, any disagreement between patches is discarded without any signal.
+
+**4. Minor issues.**
+
+- `trRows` and `trCols` are computed but never used.
+- The signature change inserts `nComp` before `mapper`. Mismatched callers will fail to compile, which is loud. However, if the header gives `nComp` a default value, existing calls like `getMapper(true, mapper)` could bind in unexpected ways.
+
+Item 1 alone is a real defect whose failure is silent.
+
+=== DIFF
+diff --git a/src/gsCore/gsMultiBasis.hpp b/src/gsCore/gsMultiBasis.hpp
+index 171c226c1..29f380dce 100644
+--- a/src/gsCore/gsMultiBasis.hpp
++++ b/src/gsCore/gsMultiBasis.hpp
+@@ -121,87 +121,98 @@ int gsMultiBasis<T>::findBasisIndex( gsBasis<T>* g ) const
+     typename BasisContainer::const_iterator it
+         = std::find( m_bases.begin(), m_bases.end(), g );
+     assert( it != m_bases.end() );
+     return it - m_bases.begin();
+ }
+ 
+ template<class T>
+ void gsMultiBasis<T>::addInterface( gsBasis<T>* g1, boxSide s1,
+                                     gsBasis<T>* g2, boxSide s2 )
+ {
+     int p1 = findBasisIndex( g1 );
+     int p2 = findBasisIndex( g2 );
+     m_topology.addInterface( p1, s1, p2, s2);
+ }
+ 
+ namespace {
+ template <typename T>
+ struct take_first {
+     T operator() (const T& a, const T&) { return a; }
+ };
+ }
+ 
+ template <typename T>
+ void gsMultiBasis<T>::combineTransferMatrices(
+     const std::vector< gsSparseMatrix<T, RowMajor> >& localTransferMatrices,
+     const gsDofMapper& coarseMapper,
+     const gsDofMapper& fineMapper,
+     gsSparseMatrix<T, RowMajor>& transferMatrix
+     )
+ {
++    GISMO_ASSERT(coarseMapper.numPatches() == fineMapper.numPatches(),
++                    "Coarse and fine mapper have different number of patches.");
++    GISMO_ASSERT(coarseMapper.componentsSize() == fineMapper.componentsSize(),
++                    "Coarse and fine mapper have different number of components.");
++
+     const index_t nBases = localTransferMatrices.size();
+ 
+     index_t nonzeros = 0;
+     index_t trRows = 0;
+     index_t trCols = 0;
+ 
+     for (index_t j=0; j<nBases; ++j)
+     {
+         nonzeros += localTransferMatrices[j].nonZeros();
+         trRows += localTransferMatrices[j].rows();
+         trCols += localTransferMatrices[j].cols();
+     }
+ 
+     gsSparseEntries<T> entries;
+-    entries.reserve( nonzeros );
++    entries.reserve( nonzeros*coarseMapper.componentsSize() );
+ 
+     for (index_t j=0; j<nBases; ++j)
+     {
+-        for (index_t k=0; k < localTransferMatrices[j].outerSize(); ++k)
++        for (size_t dim = 0; dim!=coarseMapper.componentsSize(); ++dim)
+         {
+-            for (typename gsSparseMatrix<T, RowMajor>::iterator it(localTransferMatrices[j],k); it; ++it)
++            GISMO_ASSERT((index_t)coarseMapper.patchSize(j,dim) == localTransferMatrices[j].cols(),
++                        "Full size of the coarse mapper in direction " + std::to_string(dim) + " does not correspond with number of rows of the full local transfer matrix of patch " + std::to_string(j) + ".");
++            GISMO_ASSERT((index_t)fineMapper.patchSize(j,dim) == localTransferMatrices[j].rows(),
++                        "Full size of the fine mapper in direction " + std::to_string(dim) + " does not correspond with number of columns of the full local transfer matrix of patch " + std::to_string(j) + ".");
++            for (index_t k=0; k < localTransferMatrices[j].outerSize(); ++k)
+             {
+-                const index_t coarse_dof_idx = coarseMapper.index(it.col(),j);
+-                const index_t   fine_dof_idx = fineMapper.index(it.row(),j);
+-
+-                if (coarseMapper.is_free_index(coarse_dof_idx) && fineMapper.is_free_index(fine_dof_idx))
+-                    entries.add(fine_dof_idx, coarse_dof_idx, it.value());
++                for (typename gsSparseMatrix<T, RowMajor>::iterator it(localTransferMatrices[j],k); it; ++it)
++                {
++                    const index_t coarse_dof_idx = coarseMapper.index(it.col(),j,dim);
++                    const index_t   fine_dof_idx = fineMapper.index(it.row(),j,dim);
++                    if (coarseMapper.is_free_index(coarse_dof_idx) && fineMapper.is_free_index(fine_dof_idx))
++                        entries.add(fine_dof_idx, coarse_dof_idx, it.value());
++                }
+             }
+         }
+     }
+ 
+     transferMatrix.resize(fineMapper.freeSize(), coarseMapper.freeSize());
+     transferMatrix.setFromTriplets(entries.begin(), entries.end(), take_first<T>());
+     transferMatrix.makeCompressed();
+ }
+ 
+ template <typename T>
+ void gsMultiBasis<T>::uniformRefine_withTransfer(
+         gsSparseMatrix<T, RowMajor>& transferMatrix,
+         const gsBoundaryConditions<T>& boundaryConditions,
+         const gsOptionList& assemblerOptions,
+         int numKnots,
+         int mul,
+         index_t unk)
+ {
+     // Get coarse mapper
+     gsDofMapper coarseMapper;
+     this->getMapper(
+             (dirichlet::strategy)assemblerOptions.askInt("DirichletStrategy",11),
+             (iFace    ::strategy)assemblerOptions.askInt("InterfaceStrategy", 1),
+             boundaryConditions,
+             coarseMapper,
+             unk
+     );
+ 
+     // Refine
+     std::vector< gsSparseMatrix<T, RowMajor> > localTransferMatrices(nBases());
+@@ -351,96 +362,78 @@ short_t gsMultiBasis<T>::maxCwiseDegree() const
+     GISMO_ASSERT(m_bases.size(), "Empty multibasis.");
+     short_t result = m_bases[0]->maxDegree();
+     for (size_t i = 0; i < m_bases.size(); ++i)
+         result = math::max(m_bases[i]->maxDegree(), result);
+     return result;
+ }
+ 
+ template<class T>
+ short_t gsMultiBasis<T>::minCwiseDegree() const
+ {
+     GISMO_ASSERT(m_bases.size(), "Empty multibasis.");
+     short_t result = m_bases[0]->minDegree();
+     for (size_t i = 0; i < m_bases.size(); ++i)
+         result = math::min(m_bases[i]->minDegree(), result);
+     return result;
+ }
+ 
+ template<class T>
+ short_t gsMultiBasis<T>::minDegree(short_t k) const
+ {
+     GISMO_ASSERT(m_bases.size(), "Empty multibasis.");
+     short_t result = m_bases[0]->degree(k);
+     for (size_t i = 0; i < m_bases.size(); ++i)
+         if (m_bases[i]->degree(k) < result )
+             result = m_bases[i]->degree(k);
+     return result;
+ }
+ 
+ template<class T>
+ void gsMultiBasis<T>::getMapper(bool conforming,
++                                index_t nComp,
+                                 gsDofMapper & mapper,
+                                 bool finalize) const
+ {
+-    mapper = gsDofMapper(*this);//.init(*this);
+-
+-    if ( conforming )  // Conforming boundaries ?
+-    {
+-        for ( gsBoxTopology::const_iiterator it = m_topology.iBegin();
+-              it != m_topology.iEnd(); ++it )
+-        {
+-            matchInterface(*it,mapper);
+-        }
+-    }
+-
++    mapper = gsDofMapper(*this,this->topology(),nComp);//.init(*this);
+     if (finalize)
+         mapper.finalize();
+ }
+ 
+ template<class T>
+ void gsMultiBasis<T>::getMapper(bool conforming,
+                                 const gsBoundaryConditions<T> & bc,
+-                                int unk,
++                                index_t nComp,
++                                index_t unk,
+                                 gsDofMapper & mapper,
+                                 bool finalize) const
+ {
+-    mapper = gsDofMapper(*this, bc, unk); //.init(*this, bc, unk);
+-
+-    if ( conforming ) // Conforming boundaries ?
+-    {
+-        for ( gsBoxTopology::const_iiterator it = m_topology.iBegin();
+-              it != m_topology.iEnd(); ++it )
+-        {
+-            matchInterface(*it,mapper);
+-        }
+-    }
+-
++    mapper = gsDofMapper(*this, bc, nComp,unk,conforming); //.init(*this, bc, unk);
+     if (finalize)
+         mapper.finalize();
+ }
+ 
+ template<class T>
+ void gsMultiBasis<T>::matchInterface(const boundaryInterface & bi, gsDofMapper & mapper) const
+ {
+     // should work for all basis which have matchWith() implementeds
+     gsMatrix<index_t> b1, b2;
+     m_bases[bi.first().patch]->matchWith(bi, *m_bases[bi.second().patch],
+                                          b1, b2);
+ 
+     // Match the dofs on the interface
+     for (size_t i = 0; i!=mapper.componentsSize(); ++i)
+         mapper.matchDofs(bi.first().patch, b1, bi.second().patch, b2, i );
+ }
+ 
+ template<class T>
+ bool gsMultiBasis<T>::repairInterface( const boundaryInterface & bi )
+ {
+     bool changed = false;
+ 
+     std::vector<index_t> refEltsFirst;
+     std::vector<index_t> refEltsSecond;
+ 
+     // Find the areas/elements that do not match...
+     switch( this->dim() )
+     {
+     case 2:
+         changed = this->template repairInterfaceFindElements<2>( bi, refEltsFirst, refEltsSecond );
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    T operator() (const T& a, const T&) { return a; }
+};
+}
+
+template <typename T>
+void gsMultiBasis<T>::combineTransferMatrices(
+    const std::vector< gsSparseMatrix<T, RowMajor> >& localTransferMatrices,
+    const gsDofMapper& coarseMapper,
+    const gsDofMapper& fineMapper,
+    gsSparseMatrix<T, RowMajor>& transferMatrix
+    )
+{
+    GISMO_ASSERT(coarseMapper.numPatches() == fineMapper.numPatches(),
+                    "Coarse and fine mapper have different number of patches.");
+    GISMO_ASSERT(coarseMapper.componentsSize() == fineMapper.componentsSize(),
+                    "Coarse and fine mapper have different number of components.");
+
+    const index_t nBases = localTransferMatrices.size();
+
+    index_t nonzeros = 0;
+    index_t trRows = 0;
+    index_t trCols = 0;
+
+    for (index_t j=0; j<nBases; ++j)
+    {
+        nonzeros += localTransferMatrices[j].nonZeros();
+        trRows += localTransferMatrices[j].rows();
+        trCols += localTransferMatrices[j].cols();
+    }
+
+    gsSparseEntries<T> entries;
+    entries.reserve( nonzeros*coarseMapper.componentsSize() );
+
+    for (index_t j=0; j<nBases; ++j)
+    {
+        for (size_t dim = 0; dim!=coarseMapper.componentsSize(); ++dim)
+        {
+            GISMO_ASSERT((index_t)coarseMapper.patchSize(j,dim) == localTransferMatrices[j].cols(),
+                        "Full size of the coarse mapper in direction " + std::to_string(dim) + " does not correspond with number of rows of the full local transfer matrix of patch " + std::to_string(j) + ".");
+            GISMO_ASSERT((index_t)fineMapper.patchSize(j,dim) == localTransferMatrices[j].rows(),
+                        "Full size of the fine mapper in direction " + std::to_string(dim) + " does not correspond with number of columns of the full local transfer matrix of patch " + std::to_string(j) + ".");
+            for (index_t k=0; k < localTransferMatrices[j].outerSize(); ++k)
+            {
+                for (typename gsSparseMatrix<T, RowMajor>::iterator it(localTransferMatrices[j],k); it; ++it)
+                {
+                    const index_t coarse_dof_idx = coarseMapper.index(it.col(),j,dim);
+                    const index_t   fine_dof_idx = fineMapper.index(it.row(),j,dim);
+                    if (coarseMapper.is_free_index(coarse_dof_idx) && fineMapper.is_free_index(fine_dof_idx))
+                        entries.add(fine_dof_idx, coarse_dof_idx, it.value());
+                }
+            }
+        }
+

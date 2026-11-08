@@ -1,0 +1,5 @@
+== tie handling; distinct values: vote panel 3, Claude p 41, Jev p 57, Laya p 96
+  strict   vote panel 0.400; Claude 0.733, Jev 0.636, Laya 0.586; vote panel minus Claude -0.333 [-0.436, -0.228]
+  half     vote panel 0.616; Claude 0.745, Jev 0.641, Laya 0.586; vote panel minus Claude -0.128 [-0.219, -0.036]
+  lenient  vote panel 0.833; Claude 0.756, Jev 0.647, Laya 0.586; vote panel minus Claude +0.077 [-0.002, +0.167]
+  vote panel lenient minus Claude strict (most favourable to the panel): +0.100 [+0.010, +0.187]

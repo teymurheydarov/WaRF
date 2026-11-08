@@ -1,0 +1,7 @@
+old corpus, clusters by artifact: 46 clusters (sizes {1: 34, 2: 10, 4: 2}); band - WaRF random -0.128 [-0.210, -0.023] p 0.024; band - first random [-0.260, +0.026] p 0.102
+old corpus, clusters by path: 43 clusters (sizes {1: 30, 2: 9, 3: 2, 4: 2}); band - WaRF random -0.128 [-0.213, -0.012] p 0.026; band - first random [-0.255, +0.023] p 0.109
+pair bootstrap jev5_R1_band - jev_single: AURC +0.099 [+0.026, +0.171] p 0.006; trust -0.032 [-0.152, +0.090] p 0.600
+pair bootstrap jevdef_R1_band - jev_single: AURC +0.089 [+0.018, +0.158] p 0.014; trust -0.024 [-0.148, +0.100] p 0.711
+pair bootstrap jev5_fin_band - jev_single: AURC +0.086 [+0.012, +0.156] p 0.016; trust -0.069 [-0.189, +0.056] p 0.259
+pair bootstrap jev5_R1_band - jev5_seat_SKEPTIC: AURC +0.050 [-0.045, +0.136] p 0.310; trust -0.013 [-0.116, +0.094] p 0.802
+pair bootstrap laya5_R1_band - laya_single: AURC +0.148 [+0.050, +0.234] p 0.002; trust -0.137 [-0.247, -0.029] p 0.017

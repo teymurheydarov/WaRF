@@ -1,0 +1,7 @@
+  claude_cli/claude-opus-5-5; worker 2 of 3: 44 reviews to run (0 done) -> claude-commit-strict-tools@high.w2.jsonl
+  worker 2: 10/44  29.2 s per review, ~17 min left
+  worker 2: 20/44  27.8 s per review, ~11 min left
+  ec3d317:gsQuadRule.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  24dfb28:gsAdaptiveRefUtils.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  90be00a:gsPde.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 2 stopping: 3 consecutive errors

@@ -1,0 +1,4099 @@
+{
+ "fold": {
+  "4030af7:gsFunctionSet.hpp:defective": 0,
+  "f6eede5:gsTHBSplineBasis.hpp:defective": 1,
+  "717697d:gsTensorNurbs.h:defective": 2,
+  "640ac27:gsParaviewDataSet.h:defective": 3,
+  "2871374:gsTriMeshToSolid.hpp:defective": 4,
+  "af3171e:gsExpressions.h:defective": 0,
+  "9366184:gsTensorBasis.hpp:defective": 1,
+  "f46c458:gsOptionList.cpp:defective": 2,
+  "8690d1e:gsMultiPatch.hpp:defective": 3,
+  "cb2a24d:gsG1Mapper.h:defective": 4,
+  "42f88b6:gsVisitorGradGrad.h:defective": 0,
+  "f5c66ad:gsVisitorDg.h:defective": 1,
+  "99b2161:gsBoundaryConditions.h:defective": 2,
+  "b351585:gsNorm.h:defective": 3,
+  "9d1136e:gsLinPLapAssembler.h:defective": 4,
+  "43d4274:gsAssembler.hpp:defective": 0,
+  "330f307:gsKnotVector.hpp:defective": 1,
+  "319444f:gsHDomainIterator.h:defective": 2,
+  "f104284:gsBoehm_.cpp:defective": 3,
+  "bb2767a:gsWriteParaview.hpp:defective": 4,
+  "e2ef56b:gsCPPInterface.h:defective": 0,
+  "2a371e4:gsBoundaryConditions.hpp:defective": 1,
+  "6bb81e9:gsUtils.cpp:defective": 2,
+  "c1895d2:gsBenchmark.h:defective": 3,
+  "c909edc:gsAssembler.h:defective": 4,
+  "607477e:gsEigenAddons.h:defective": 0,
+  "7eccbe3:gsAdaptiveParametrization.hpp:defective": 1,
+  "37899c9:gsVisitorBiharmonic.h:defective": 2,
+  "4d810d7:gsExpressions.h:defective": 3,
+  "138f4a7:grad_expr.h:defective": 4,
+  "4aab81c:gsCompactKnotVector.hpp:defective": 0,
+  "cb54e9d:gsSmoother.cpp:defective": 1,
+  "8096363:gsExprEvaluator.h:defective": 2,
+  "b0cd373:gsSysInfo.cpp:defective": 3,
+  "e44d418:gsIetiMapper.hpp:defective": 4,
+  "c75d957:gsLanczosMatrix.h:defective": 0,
+  "cea32c6:gsFreeformSubdivision.cpp:defective": 1,
+  "ef8e659:gsOpenMP.h:defective": 2,
+  "c74cda8:gsRationalBasis.h:defective": 3,
+  "ec3c452:gsGridIterator.h:defective": 4,
+  "b654d88:gsPiecewiseFunction.h:defective": 0,
+  "e05b6b0:gsG1System.h:defective": 1,
+  "c270deb:gsHTensorBasis.hpp:defective": 2,
+  "be4426c:gsBoundaryConditions.h:defective": 3,
+  "96c1195:gsExprAssembler.h:defective": 4,
+  "4f443cc:gsKroneckerMatrix.h:defective": 0,
+  "87f74c2:gsNorms_.cpp:defective": 1,
+  "52308ea:gsExpressions.h:defective": 2,
+  "a68c232:gsVisitorCDR.h:defective": 3,
+  "18cd1e3:gsBoxTopology.cpp:defective": 4,
+  "1dc79db:gsTHBSplineBasis.hpp:defective": 0,
+  "090f874:gsTensorBSpline.hpp:defective": 1,
+  "be071ba:gsPointGrid.hpp:defective": 2,
+  "f7ea620:gsHTensorBasis.h:defective": 3,
+  "6d1d6fb:gsKnotVector_.cpp:defective": 4,
+  "d729485:gsScaledDirichletPrec.hpp:defective": 0,
+  "419e2f1:gsSparseSystem.h:defective": 1,
+  "0104462:gsFunction.hpp:defective": 2,
+  "24dfb28:gsAdaptiveRefUtils.h:defective": 3,
+  "fcd9e3c:gsParaviewDataSet.h:defective": 4,
+  "840cdfa:gsHBSpline.h:defective": 0,
+  "44fe50d:gsBoxTopology.h:defective": 1,
+  "36bd8d7:gsAsG1Domain.hpp:defective": 2,
+  "bdb91a5:gsExpressions.h:defective": 3,
+  "c421685:gsMpiComm.h:defective": 4,
+  "73f5cb9:gsFileData.hpp:defective": 0,
+  "fbbc87e:gsDofMapper.h:clean": 0,
+  "4ba5f2c:gsMatrix.h:clean": 1,
+  "a4d2374:gsHTensorBasis.hpp:clean": 2,
+  "7c4698b:gsRemapInterface.h:clean": 3,
+  "e9f06bd:gsBasis.h:clean": 4,
+  "655c2f4:gsDofMapper.h:clean": 0,
+  "26a9fe5:gsMesh.h:clean": 1,
+  "dda93df:gsSurfaceReparameterization.h:clean": 2,
+  "30f14c9:gsVector.h:clean": 3,
+  "17dd67d:gsPatchGenerator.h:clean": 4,
+  "6666703:gsKnotVector.hpp:clean": 0,
+  "60b7fa3:gsBasis.h:clean": 1,
+  "be6b13e:gsSurfMesh.h:clean": 2,
+  "c0d775e:gsSparseSolver.h:clean": 3,
+  "3939220:gsTHBSplineBasis.hpp:clean": 4,
+  "05e9cec:gsKnotVector_.cpp:clean": 0,
+  "e9bc4fc:gsTensorBSpline.h:clean": 1,
+  "cb3d0b4:gsIterativeSolver.h:clean": 2,
+  "9e10b21:gsMath.h:clean": 3,
+  "accfbe9:gsExprAssembler.h:clean": 4,
+  "268423a:gsExprAssembler.h:clean": 0,
+  "b32ddaa:gsDofMapper.cpp:clean": 1,
+  "a17350b:gsBasis.hpp:clean": 2,
+  "83a4260:gsHElementHelper.h:clean": 3,
+  "69a0857:gsAssembler.h:clean": 4,
+  "a14570f:gsFitting.h:clean": 0,
+  "4386a0d:gsProperty.h:clean": 1,
+  "657a917:gsMatrix.h:clean": 2,
+  "2538e1a:gsGeometry.hpp:clean": 3,
+  "55d9864:gsPyBind11.cpp:clean": 4,
+  "fa51062:gsWeightMapper.h:clean": 0,
+  "7b9d7de:gsBasis.hpp:clean": 1,
+  "ab6e57f:gsFileData.hpp:clean": 2,
+  "7924470:gsOptionList.h:clean": 3,
+  "79f3785:gsNurbsCreator.h:clean": 4,
+  "6b89774:gsIterativeSolver.h:clean": 0,
+  "90be00a:gsPde.h:clean": 1,
+  "f1ddb14:gsHBoxContainer.h:clean": 2,
+  "9b85bea:gsTrimSurface.h:clean": 3,
+  "6c33a77:gsMultiPatch_.cpp:clean": 4,
+  "ed02c62:gsOptionList.h:clean": 0,
+  "f518d8f:gsSortedVector.h:clean": 1,
+  "653aa04:gsAdaptiveMeshing.h:clean": 2,
+  "1288e1a:gsBoehm_.cpp:clean": 3,
+  "4743852:gsBasis.h:clean": 4,
+  "ec3d317:gsQuadRule.h:clean": 0,
+  "b54fbdb:gsBoundary.h:clean": 1,
+  "fac47e8:gsMatrix.h:clean": 2,
+  "a3ecf67:gsUtils.h:clean": 3,
+  "134b4e8:gsSparseSystem.h:clean": 4,
+  "93db8f9:gsJITCompiler.h:clean": 0,
+  "0d921f0:gsExprEvaluator.h:clean": 1,
+  "2a7b94b:gismo.h:clean": 2,
+  "4d7cbdf:gsSurfMesh.h:clean": 3,
+  "3ced7df:gsMath.h:clean": 4,
+  "825f3f0:gsMemory.h:clean": 0,
+  "e53eaa2:gsWeightMapper_.cpp:clean": 1,
+  "220eca8:gsVolumeBlock.h:clean": 2,
+  "f598dfa:gsAssembler.hpp:clean": 3,
+  "4affa99:gsBoundary.h:clean": 4,
+  "eb23fba:gsMultiGrid.h:clean": 0,
+  "79096cb:gsKnotVector.h:clean": 1,
+  "da8ecd6:gsBasis.h:clean": 2,
+  "6bc3c46:gsMultiBasis.h:clean": 3,
+  "4da8593:gsExprAssembler.h:clean": 4,
+  "f9d6b06:gsMultiPatch_.cpp:clean": 0
+ },
+ "items": {
+  "42f88b6:gsVisitorGradGrad.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4711572762882597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "840cdfa:gsHBSpline.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.0863059703639735,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "1dc79db:gsTHBSplineBasis.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4711572762882597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "b654d88:gsPiecewiseFunction.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.6108204944621675,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.73,
+     "evidence": 0.06290860024067635,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4aab81c:gsCompactKnotVector.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.0863059703639735,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4030af7:gsFunctionSet.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8770886280420676,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.92,
+     "evidence": -1.2033595333392237,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "6666703:gsKnotVector.hpp:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.0422946000864666,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.29,
+     "evidence": 1.7160236947893104,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "607477e:gsEigenAddons.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4711572762882597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "825f3f0:gsMemory.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.9925421458869153,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.28,
+     "evidence": 1.758949924379821,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "43d4274:gsAssembler.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.0863059703639735,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "6b89774:gsIterativeSolver.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.0613728597289542,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.53,
+     "evidence": 0.8277806382218601,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c75d957:gsLanczosMatrix.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.6626895721722268,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.9,
+     "evidence": -0.9889604774693831,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "fbbc87e:gsDofMapper.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.7079078615705727,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.35,
+     "evidence": 1.4743156400634785,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "af3171e:gsExpressions.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.8478919358022937,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.78,
+     "evidence": -0.1741628410994499,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "93db8f9:gsJITCompiler.h:clean": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.28231236886980404,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.65,
+     "evidence": 0.39141672583303977,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "ec3d317:gsQuadRule.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.1095957088621646,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.77,
+     "evidence": -0.1239965126449295,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "d729485:gsScaledDirichletPrec.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.0863059703639735,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "73f5cb9:gsFileData.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.7645091676886822,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.91,
+     "evidence": -1.0907800729858383,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "eb23fba:gsMultiGrid.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.434725764063481,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.19,
+     "evidence": 2.201133542556387,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "655c2f4:gsDofMapper.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.412982616882772,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.43,
+     "evidence": 1.1793903953756777,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f9d6b06:gsMultiPatch_.cpp:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.8841411042927074,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.58,
+     "evidence": 0.650548882785613,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "e2ef56b:gsCPPInterface.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4711572762882597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "fa51062:gsWeightMapper.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.9925421458869153,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.28,
+     "evidence": 1.758949924379821,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "ed02c62:gsOptionList.h:clean": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.2375650547811654,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.2335922215070942,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4711572762882597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "a14570f:gsFitting.h:clean": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.0863059703639735,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "268423a:gsExprAssembler.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.36422263297181434,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.47,
+     "evidence": 1.0379517276746582,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "05e9cec:gsKnotVector_.cpp:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.000235487654854,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.3,
+     "evidence": 1.6739645823576979,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4f443cc:gsKroneckerMatrix.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.6737290947028438,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4711572762882597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "090f874:gsTensorBSpline.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1978374675878705,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4856420920572306,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "44fe50d:gsBoxTopology.h:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.9759210180068729,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.37,
+     "evidence": 1.6881163935375127,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "b54fbdb:gsBoundary.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.933079235104007,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.1,
+     "evidence": 3.2589305856774784,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "cb54e9d:gsSmoother.cpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1978374675878705,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4856420920572306,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f518d8f:gsSortedVector.h:clean": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.805634249958066,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.97,
+     "evidence": -2.0934388744274264,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "330f307:gsKnotVector.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.830364461135393,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.92,
+     "evidence": -1.1181690856047533,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "79096cb:gsKnotVector.h:clean": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.02829498940412345,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.63,
+     "evidence": 0.6839003861265164,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "e9bc4fc:gsTensorBSpline.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.13043805085783455,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.59,
+     "evidence": 0.8426334263884744,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "87f74c2:gsNorms_.cpp:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.4441756818861275,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.35,
+     "evidence": 1.7700270324595988,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4ba5f2c:gsMatrix.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.1920357463875613,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.67,
+     "evidence": 0.5178870969610325,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "9366184:gsTensorBasis.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.8340552758962079,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.8,
+     "evidence": -0.12185990036556804,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "419e2f1:gsSparseSystem.h:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.861349639605396,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.149154264074756,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "60b7fa3:gsBasis.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 6.300511025121079,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.07,
+     "evidence": 3.6263623756945504,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f5c66ad:gsVisitorDg.h:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.0906050343683973,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.84,
+     "evidence": -0.37840965883775746,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "7b9d7de:gsBasis.hpp:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.228136584004105,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.19,
+     "evidence": 2.553987934577576,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "90be00a:gsPde.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.9356715347104365,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.48,
+     "evidence": 1.2615228852839078,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "e05b6b0:gsG1System.h:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.3196038490040738,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.87,
+     "evidence": -0.607408473473434,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "e53eaa2:gsWeightMapper_.cpp:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.947626643182385,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.24,
+     "evidence": 2.273477993755857,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "b32ddaa:gsDofMapper.cpp:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.8733614897461623,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.74,
+     "evidence": 0.1992128403196337,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "26a9fe5:gsMesh.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.318542990513499,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.29,
+     "evidence": 2.030738366044139,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "2a371e4:gsBoundaryConditions.hpp:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.43607087955177226,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.51,
+     "evidence": 1.148266255082412,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f6eede5:gsTHBSplineBasis.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.861349639605396,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.149154264074756,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "7eccbe3:gsAdaptiveParametrization.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1978374675878705,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.4856420920572306,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4386a0d:gsProperty.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.7872348434130798,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.6741486494265287,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.9,
+     "evidence": -0.8869138060134489,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "cea32c6:gsFreeformSubdivision.cpp:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.4738130143013748,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.5,
+     "evidence": 1.1860083898320146,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "0d921f0:gsExprEvaluator.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.1419343071723564,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7121953755306398,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.33,
+     "evidence": 1.8541296827029963,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "99b2161:gsBoundaryConditions.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.0470879399131494,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.83,
+     "evidence": -0.3147200461999228,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "a17350b:gsBasis.hpp:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.8905448380358862,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.61,
+     "evidence": 0.5879597450418403,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "a4d2374:gsHTensorBasis.hpp:clean": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.7933600893924319,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.78,
+     "evidence": -0.06099219567920533,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "fac47e8:gsMatrix.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.5338850917586324,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.41,
+     "evidence": 1.2312999987645867,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "220eca8:gsVolumeBlock.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6107700741037814,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.69,
+     "evidence": 0.30818498110973536,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "0104462:gsFunction.hpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.8758908312553983,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.143522937542172,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "657a917:gsMatrix.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.344588347656568,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.2,
+     "evidence": 2.042003254662523,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "717697d:gsTensorNurbs.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.1246208076851993,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.95,
+     "evidence": -1.3922529139719728,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "be071ba:gsPointGrid.hpp:defective": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.7362988129885186,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.34,
+     "evidence": 1.4686667067017452,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "37899c9:gsVisitorBiharmonic.h:defective": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.24203294104640483,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.49,
+     "evidence": 0.9744008347596314,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "6bb81e9:gsUtils.cpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.2971446982495953,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.87,
+     "evidence": -0.5647768045363689,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "2a7b94b:gismo.h:clean": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.7933600893924319,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.78,
+     "evidence": -0.06099219567920533,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "cb3d0b4:gsIterativeSolver.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.719271879080229,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.66,
+     "evidence": 0.41668678608618326,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f46c458:gsOptionList.cpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.7264636782293064,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.92,
+     "evidence": -0.9940957845160797,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "ab6e57f:gsFileData.hpp:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.667307883798088,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.37,
+     "evidence": 1.3647227908040422,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "ef8e659:gsOpenMP.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.8758908312553983,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.143522937542172,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f1ddb14:gsHBoxContainer.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.24203294104640483,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.49,
+     "evidence": 0.9744008347596314,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "da8ecd6:gsBasis.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.5985188579020888,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.38,
+     "evidence": 1.3308867516153153,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "8096363:gsExprEvaluator.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.8758908312553983,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.143522937542172,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "653aa04:gsAdaptiveMeshing.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.30558286556712644,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.47,
+     "evidence": 1.037950759280353,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c270deb:gsHTensorBasis.hpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.3098765555492946,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.96,
+     "evidence": -1.577508661836068,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "dda93df:gsSurfaceReparameterization.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6475234753162393,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.302585092994046,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.68,
+     "evidence": 0.34493838232219354,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "319444f:gsHDomainIterator.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.971648885083185,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.94,
+     "evidence": -1.2392809913699585,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "be6b13e:gsSurfMesh.h:clean": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.04564930182830329,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.58,
+     "evidence": 0.6867185918849232,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "52308ea:gsExpressions.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.433604879928846,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -2.7012369862156196,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "36bd8d7:gsAsG1Domain.hpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.3098765555492946,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7323678937132265,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.96,
+     "evidence": -1.577508661836068,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "9b85bea:gsTrimSurface.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.517511060257349,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.32,
+     "evidence": 1.776671036332148,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "1288e1a:gsBoehm_.cpp:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.1892849870888227,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.53,
+     "evidence": 0.9815230702929989,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "30f14c9:gsVector.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.211353977897838,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.18,
+     "evidence": 2.4705139539726373,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "9e10b21:gsMath.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.593007837602052,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.96,
+     "evidence": -1.8007697543978753,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f598dfa:gsAssembler.hpp:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.93677999511056,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.09,
+     "evidence": 3.195939971185359,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "b351585:gsNorm.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8065010781018158,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.91,
+     "evidence": -1.0142629948976396,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "7924470:gsOptionList.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.22490479436776967,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.64,
+     "evidence": 0.5673332888364065,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "a68c232:gsVisitorCDR.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8065010781018158,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.91,
+     "evidence": -1.0142629948976396,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "2538e1a:gsGeometry.hpp:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": 0.04215317081226977,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.57,
+     "evidence": 0.834391254016446,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "6bc3c46:gsMultiBasis.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.238673410749891,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.39,
+     "evidence": 1.4978333868246905,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f7ea620:gsHTensorBasis.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.0549444459571884,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.93,
+     "evidence": -1.2627063627530124,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "24dfb28:gsAdaptiveRefUtils.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.882350310001976,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -3.0901122267977996,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "7c4698b:gsRemapInterface.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 6.0538909715250275,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.08,
+     "evidence": 3.3130509475998267,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "b0cd373:gsSysInfo.cpp:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.8641892015270276,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.97,
+     "evidence": -2.0719511183228514,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c1895d2:gsBenchmark.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.42940223023519164,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.69,
+     "evidence": 0.3628358529689846,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "8690d1e:gsMultiPatch.hpp:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.0549444459571884,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.93,
+     "evidence": -1.2627063627530124,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4d810d7:gsExpressions.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.2424408276047734,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.450202744400597,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "be4426c:gsBoundaryConditions.h:defective": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.04215317081226977,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.57,
+     "evidence": 0.834391254016446,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "bdb91a5:gsExpressions.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": 0.22577213782414018,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.52,
+     "evidence": 1.0180102210283164,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c0d775e:gsSparseSolver.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.0549444459571884,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.93,
+     "evidence": -1.2627063627530124,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "640ac27:gsParaviewDataSet.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.081075060889093,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.82,
+     "evidence": -0.2888369776849169,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c74cda8:gsRationalBasis.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.593007837602052,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.96,
+     "evidence": -1.8007697543978753,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "83a4260:gsHElementHelper.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.3281456534183753,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.94,
+     "evidence": -1.4126943705068256,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4d7cbdf:gsSurfMesh.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.8529884330102178,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.78,
+     "evidence": -0.06075034980604155,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "f104284:gsBoehm_.cpp:defective": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.5005182042525664,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.740840023925201,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.59,
+     "evidence": 0.7596781803273658,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "a3ecf67:gsUtils.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.678275870768461,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7922380832041762,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.18,
+     "evidence": 2.4705139539726373,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "3939220:gsTHBSplineBasis.hpp:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.3164639852854716,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.3353749158170367,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.78,
+     "evidence": -0.018910930531564896,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "e9f06bd:gsBasis.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.369200498944505,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.3353749158170367,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.22,
+     "evidence": 2.0338255831274683,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "ec3c452:gsGridIterator.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.153469777734136,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.95,
+     "evidence": -1.3802798895006543,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "134b4e8:gsSparseSystem.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3752738131454905,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.3353749158170367,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.49,
+     "evidence": 1.0398988973284535,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c421685:gsMpiComm.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.9217307771302905,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.1485408888968087,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "17dd67d:gsPatchGenerator.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3428322421149885,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.3353749158170367,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.5,
+     "evidence": 1.0074573262979518,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4743852:gsBasis.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.4628293101373875,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.43,
+     "evidence": 1.2360191983708693,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "18cd1e3:gsBoxTopology.cpp:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.4611795931257026,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.89,
+     "evidence": -0.6879897048922208,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "cb2a24d:gsG1Mapper.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4920582745259092,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -2.7188683862924274,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "c909edc:gsAssembler.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4920582745259092,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -2.7188683862924274,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "9d1136e:gsLinPLapAssembler.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.9217307771302905,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.98,
+     "evidence": -2.1485408888968087,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "2871374:gsTriMeshToSolid.hpp:defective": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.3316962001076287,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.47,
+     "evidence": 1.1048860883411105,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "3ced7df:gsMath.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.0715373251073278,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.55,
+     "evidence": 0.8447272133408096,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "69a0857:gsAssembler.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.219030819590719,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.3353749158170367,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.09,
+     "evidence": 2.8836559037736818,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "96c1195:gsExprAssembler.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.9953859383732904,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.82,
+     "evidence": -0.2221960501398086,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "e44d418:gsIetiMapper.hpp:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4920582745259092,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.99,
+     "evidence": -2.7188683862924274,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4da8593:gsExprAssembler.h:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.45283276962460106,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.7,
+     "evidence": 0.3203571186088807,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "55d9864:gsPyBind11.cpp:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.12847196243302106,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.61,
+     "evidence": 0.6447179258004607,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "79f3785:gsNurbsCreator.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.6658586179292199,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.37,
+     "evidence": 1.4390485061627016,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "bb2767a:gsWriteParaview.hpp:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.6419311394112601,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.91,
+     "evidence": -0.8687412511777783,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "4affa99:gsBoundary.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.233731142023299,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "p_reject": null,
+     "evidence": 2.3353749158170367,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.25,
+     "evidence": 1.8983562262062614,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "fcd9e3c:gsParaviewDataSet.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.9970381906207795,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.94,
+     "evidence": -1.2238483023872977,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "138f4a7:grad_expr.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": 0.005705565991552808,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.57,
+     "evidence": 0.7788954542250346,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "accfbe9:gsExprAssembler.h:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.45283276962460106,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.7,
+     "evidence": 0.3203571186088807,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "6c33a77:gsMultiPatch_.cpp:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.34002186813045454,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": -1,
+     "p_reject": 0.67,
+     "evidence": 0.43316802010302724,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  },
+  "6d1d6fb:gsKnotVector_.cpp:defective": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.6312573314846932,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "p_reject": null,
+     "evidence": -0.7731898882334818,
+     "calibration": "rates",
+     "provider": "claude_cli",
+     "model": "claude-opus-5-5"
+    },
+    {
+     "agent": "JEV",
+     "vote": 1,
+     "p_reject": 0.38,
+     "evidence": 1.404447219718175,
+     "calibration": "platt",
+     "provider": "jev",
+     "model": "jev-latest"
+    }
+   ]
+  }
+ },
+ "leakage": []
+}

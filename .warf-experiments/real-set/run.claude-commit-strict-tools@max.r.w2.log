@@ -1,0 +1,7 @@
+  claude_cli/claude-opus-5-5; worker 2 of 4: 30 reviews to run (11 done) -> claude-commit-strict-tools@max.w2.jsonl
+  worker 2: 10/30  141.3 s per review, ~47 min left
+  worker 2: 20/30  162.4 s per review, ~27 min left
+  a14570f:gsFitting.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  268423a:gsExprAssembler.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  4386a0d:gsProperty.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 2 stopping: 3 consecutive errors

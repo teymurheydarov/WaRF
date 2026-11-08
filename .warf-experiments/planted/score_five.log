@@ -1,0 +1,42 @@
+54 of 54 bases reviewed by both arms
+
+== all: 54 bases ==
+  balanced accuracy [95 %]   planted caught   clean passed
+  Claude alone                         0.824 [0.750, 0.889]   52/54   37/54
+  Five Claudes (WaRF default panel)    0.861 [0.796, 0.926]   51/54   42/54
+  five minus one: +0.037 [+0.000, +0.083]; only five right 5, only one right 1, McNemar p 0.219
+    only five right: ['d6c93de:gsFileManager.cpp:clean', '893626d:test_spectra.cpp:clean', '838db33:gsKnotDomainIterator.h:clean', '9790e5a:gsFileManager.cpp:clean', '9e5b11e:gsBSplineBasis.h:clean']
+    only one right:  ['be9bf4b:Householder.h:planted']
+
+== cleaned (no harmless/dead/non-compiling plants, no defective originals): 35 bases ==
+  balanced accuracy [95 %]   planted caught   clean passed
+  Claude alone                         0.929 [0.871, 0.971]   35/35   30/35
+  Five Claudes (WaRF default panel)    0.957 [0.914, 1.000]   35/35   32/35
+  five minus one: +0.029 [+0.000, +0.071]; only five right 2, only one right 0, McNemar p 0.500
+    only five right: ['d6c93de:gsFileManager.cpp:clean', '838db33:gsKnotDomainIterator.h:clean']
+    only one right:  []
+
+== Claude alone's REJECTs of clean items, by hand class, and the five Claudes' verdict ==
+  #3  false alarm                   five: APPROVE MEDIUM  votes AAARA  d6c93de:gsFileManager.cpp
+  #5  real defect in the original   five: REJECT  HIGH    votes RRRR  5f4e141:gsUtils.h
+  #7  real defect in the original   five: APPROVE MEDIUM  votes ARARA  893626d:test_spectra.cpp
+  #8  judgement call                five: REJECT  MEDIUM  votes ARRRR  1c89c40:ActiveLevelCommandImplementation.cpp
+  #9  judgement call                five: REJECT  HIGH    votes RRRR  0064799:gsBiharmonicAssembler.hpp
+  #18 judgement call                five: REJECT  HIGH    votes RRRR  bdbd602:gsMatrixCrossApproximation.h
+  #26 real defect in the original   five: REJECT  HIGH    votes RRRR  42f88b6:gsVisitorHelmholtz.h
+  #30 judgement call                five: REJECT  MEDIUM  votes ARRRR  5cf8a87:gsGradientMethod.hpp
+  #31 real defect in the original   five: REJECT  MEDIUM  votes RAARR  f00bb12:gsConjugateGradient.cpp
+  #35 false alarm                   five: REJECT  MEDIUM  votes ARRRA  d3c723f:gsSurface.hpp
+  #36 real defect in the original   five: REJECT  HIGH    votes RRRR  47c2bbc:gsHBSplineBasis.hpp
+  #39 real defect in the original   five: REJECT  HIGH    votes RRRR  419e389:gsMatrixCrossApproximation_2.hpp
+  #47 minor real                    five: REJECT  HIGH    votes RRRR  77338a8:gsReadFile.h
+  #48 false alarm                   five: APPROVE MEDIUM  votes AARRA  838db33:gsKnotDomainIterator.h
+  #52 real defect in the original   five: APPROVE MEDIUM  votes ARARA  9790e5a:gsFileManager.cpp
+  #53 real defect in the original   five: REJECT  HIGH    votes RRRR  8d2794b:gsAsMatrix.h
+  #54 false alarm                   five: APPROVE MEDIUM  votes AAAAA  9e5b11e:gsBSplineBasis.h
+
+== How the five seats vote ==
+  (seats asked, REJECT votes): items  (4, 4): 59, (5, 0): 20, (5, 1): 20, (5, 2): 5, (5, 3): 2, (5, 4): 2
+  REJECT rate per seat, clean / planted: SKEPTIC 9/54 / 51/54; ADVOCATE 13/54 / 51/54; AUDITOR 14/54 / 51/54; TEST-FOCUSED 33/54 / 54/54; BOUNDARY 3/46 / 1/3
+  verdict equals Claude alone on 102 of 108 items
+  Claude calls: 481

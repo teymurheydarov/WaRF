@@ -1,0 +1,3 @@
+150 candidates: both judges confirm 66, disagree on 10, both reject 74
+clean controls: 66; date gap median 93 days, max 307
+defect visibility (both judges): diff 41, needs_other_file 17, not_visible 2, split 6

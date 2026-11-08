@@ -1,0 +1,129 @@
+{
+ "auc": {
+  "Jev, one question": [
+   0.6414,
+   0.05516812810300859
+  ],
+  "Jev SKEPTIC, Round 1": [
+   0.5998,
+   0.05660959168027365
+  ],
+  "Jev ADVOCATE, Round 1": [
+   0.64,
+   0.05522507072114032
+  ],
+  "Jev AUDITOR, Round 1": [
+   0.6374,
+   0.055329243266993615
+  ],
+  "Jev TEST-FOCUSED, Round 1": [
+   0.6176,
+   0.056055822452116086
+  ],
+  "Jev BOUNDARY, Round 1": [
+   0.625,
+   0.05579800921330287
+  ],
+  "Jev panel, mean p, Round 1": [
+   0.6276,
+   0.05570354653988811
+  ],
+  "Jev panel, mean p, final": [
+   0.633,
+   0.05550087619410024
+  ],
+  "Jev panel, REJECT votes, final": [
+   0.5872,
+   0.05694548223485077
+  ],
+  "Jev standard panel, mean p of agents asked": [
+   0.6242,
+   0.05582666792532449
+  ],
+  "Jev standard panel, WaRF's Lambda": [
+   0.5858,
+   0.0569799547327596
+  ],
+  "Jev standard panel, WaRF's decision": [
+   0.53,
+   0.0578959558116662
+  ],
+  "Laya, one question (sweep)": [
+   0.586,
+   0.05697506486565752
+  ],
+  "Laya panel, mean p, Round 1": [
+   0.5568,
+   0.057567000432748795
+  ],
+  "Laya panel, mean p, final": [
+   0.5178,
+   0.05797827968380929
+  ],
+  "Claude, blinded": [
+   0.7446,
+   0.04924638813345249
+  ],
+  "patch characters": [
+   0.5016,
+   0.05802262281719243
+  ]
+ },
+ "diff": {
+  "Jev, one question - Laya, one question (sweep)": [
+   0.055400000000000005,
+   -0.11519999999999997,
+   0.22919999999999996
+  ],
+  "Jev panel, mean p, Round 1 - Laya panel, mean p, Round 1": [
+   0.07080000000000009,
+   -0.09719999999999995,
+   0.23560000000000003
+  ],
+  "Jev panel, mean p, final - Laya panel, mean p, final": [
+   0.11519999999999997,
+   -0.05259999999999998,
+   0.27999999999999997
+  ],
+  "Jev panel, mean p, Round 1 - Jev, one question": [
+   -0.013799999999999923,
+   -0.04799999999999993,
+   0.019999999999999907
+  ],
+  "Jev panel, mean p, final - Jev panel, mean p, Round 1": [
+   0.00539999999999996,
+   -0.020399999999999974,
+   0.032200000000000006
+  ],
+  "Claude, blinded - Jev, one question": [
+   0.10320000000000007,
+   -0.0010000000000000009,
+   0.20420000000000005
+  ],
+  "Jev standard panel, mean p of agents asked - Jev, one question": [
+   -0.017199999999999993,
+   -0.05159999999999998,
+   0.017199999999999993
+  ],
+  "Jev standard panel, mean p of agents asked - Jev panel, mean p, Round 1": [
+   -0.0034000000000000696,
+   -0.013800000000000034,
+   0.007000000000000006
+  ],
+  "Jev standard panel, mean p of agents asked - Laya, one question (sweep)": [
+   0.03820000000000001,
+   -0.13579999999999992,
+   0.20800000000000007
+  ],
+  "Claude, blinded - Jev standard panel, mean p of agents asked": [
+   0.12040000000000006,
+   0.017199999999999993,
+   0.21900000000000003
+  ]
+ },
+ "repeat": {
+  "identical": 2,
+  "n": 20,
+  "flips": 1
+ }
+}

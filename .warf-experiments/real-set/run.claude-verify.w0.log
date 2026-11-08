@@ -1,0 +1,5 @@
+  claude_cli/claude-opus-5-5; worker 0 of 3: 31 reviews to run (1 done) -> claude-verify.w0.jsonl
+  worker 0: 10/31  17.7 s per review, ~6 min left
+  worker 0: 20/31  16.2 s per review, ~3 min left
+  worker 0: 30/31  15.2 s per review, ~0 min left
+  worker 0 done: 31 reviews in 7.9 min

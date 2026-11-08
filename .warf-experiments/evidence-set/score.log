@@ -1,0 +1,50 @@
+50 of 50 bases reviewed by both arms
+
+  balanced accuracy [95 %]   planted caught   clean passed
+  One Claude                         0.740 [0.670, 0.810]   49/50   25/50
+  Five Claudes (WaRF default panel)  0.800 [0.730, 0.860]   49/50   31/50
+
+  five minus one: +0.060 [+0.020, +0.110], <= 0 in 0.1% of resamples; only five right 6, only one right 0, McNemar p 0.031
+    only five right: ['0696ac5:gsCatmullClark.cpp:clean', '15977e9:gsSquareDomain.h:clean', '3cf80c7:gsRationalBasis.h:clean', '6c02814:gsTHBSplineBasis.hpp:clean', 'bfbe226:gsComposedGeometry.h:clean', 'c0c88af:gsAABB.h:clean']
+    only one right:  []
+
+  planted caught per plant kind (one / five)
+    arg_swap     6/6   6/6
+    drop_stmt    15/16   15/16
+    loop_bound   5/5   5/5
+    minus_one    8/8   8/8
+    rows_cols    7/7   7/7
+    start_index  7/7   7/7
+    swap_ij      1/1   1/1
+  missed plants:
+    5c4f8f4:gsTensorDomainIterator.h   drop_stmt    one APPROVE  five AAAAA
+  clean items rejected:
+    06377a8:gsSurfMesh.cpp             one REJECT   five RARRR
+    0696ac5:gsCatmullClark.cpp         one REJECT   five AAARA
+    15977e9:gsSquareDomain.h           one REJECT   five AARRA
+    2a29aa6:gsMultiPatch.hpp           one REJECT   five RRRR
+    2f8cd81:gsBSpline.hpp              one REJECT   five AARRR
+    38858cf:gsSquareDomain.h           one REJECT   five RRRR
+    3cf80c7:gsRationalBasis.h          one REJECT   five AARRA
+    5853a6f:gsExprEvaluator.h          one REJECT   five RRRR
+    5f9ae79:gsExprAssembler.h          one REJECT   five RRRR
+    6c02814:gsTHBSplineBasis.hpp       one REJECT   five AAARA
+    6fc3f69:gsMultiBasis.hpp           one REJECT   five RRRR
+    8058d91:gsHDomain.h                one REJECT   five RRRR
+    890cd00:gsComposedGeometry.hpp     one REJECT   five RRRR
+    8ca586f:gsParaviewUtils.h          one REJECT   five RRRR
+    9b1851c:gsMobiusDomain.h           one REJECT   five RRRR
+    a86cf94:gsSquareDomain.h           one REJECT   five RRRR
+    a880e56:gsOptProblem.h             one REJECT   five RRRR
+    af41faa:gsWriteParaview.hpp        one REJECT   five RRRR
+    bfbe226:gsComposedGeometry.h       one REJECT   five AAARA
+    c0c88af:gsAABB.h                   one REJECT   five AAAAA
+    c826b44:gsComposedBasis.h          one REJECT   five RRRR
+    d9fca63:gsComposedGeometry.h       one REJECT   five RRRR
+    da35b0c:gsSysInfo.cpp              one REJECT   five RRRR
+    db3aca7:gsXmlUtils.hpp             one REJECT   five RARRR
+    e42bec0:gsExprEvaluator.h          one REJECT   five RRARR
+
+  five Claudes, (kind, seats asked, REJECT votes): items
+    ('clean', 4, 4): 15, ('clean', 5, 0): 11, ('clean', 5, 1): 16, ('clean', 5, 2): 4, ('clean', 5, 3): 1, ('clean', 5, 4): 3, ('planted', 4, 4): 49, ('planted', 5, 0): 1
+  Claude calls: one 100, five 436

@@ -1,0 +1,53 @@
+43 plant sites
+  d36677 src/gsModeling/gsSolid_.cpp                L1     file/namespace scope                                  Jev1 0.40->1.00  | #include <gsCore/gsTemplateTools.h>
+  665a06 src/gsHSplines/gsHBoxContainer_.cpp        L4     file/namespace scope                                  Jev1 0.33->1.00  | #include <gsIO/gsXml.h>
+  84518c src/gsHSplines/gsHElement_.cpp             L1     file/namespace scope                                  Jev1 0.59->1.00  | 
+  252d7a src/gsNurbs/gsKnotVector_.cpp              L11    file/namespace scope   namespace                      Jev1 0.95->1.00  | //CLASS_TEMPLATE_INST gsKnotVector<real_t>;
+  27cdc5 src/gsMSplines/gsCompositeHBasis_.cpp      L1     inside /* */ comment                                  Jev1 0.30->0.85  | /** @file gsCompositeHBasis_.cpp
+  027f2b src/gsMSplines/gsMappedSpline_.cpp         L24    file/namespace scope   namespace                      Jev1 0.13->1.00  | CLASS_TEMPLATE_INST gsMappedSpline<3,real_t> ;
+  11a514 optional/gsAutoDiff/src/gsAutoDiffEigen.h  L1     inside /* */ comment                                  Jev1 0.66->0.94  | /** @file gsAutoDiffEigen.h
+  3edf40 src/gsCore/gsTemplateTools.h               L1     inside /* */ comment                                  Jev1 0.10->0.86  | /** @file gsTemplateTools.h
+  e604d8 extensions/gsTrilinos/gsTrilinos.h         L34    file/namespace scope                                  Jev1 0.89->1.00  | //#include <gsTrilinos/gsTrilinosEigenSolvers.h>
+  8a1b96 src/gsNurbs/gsTensorBSplineBasis_.cpp      L3     file/namespace scope                                  Jev1 0.67->1.00  | //#define gsTensorBSplineBasis_EXPORT
+  ad25c5 src/gsHSplines/gsRationalTHBSpline_.cpp    L1     inside /* */ comment                                  Jev1 0.71->0.97  | /** @file gsRationalTHBSpline.h
+  99e575 rc/gsUnstructuredSplines/gsC1SurfEdge_.cpp L1     inside /* */ comment                                  Jev1 0.86->0.96  | /** @file gsApproxC1Edge.hpp
+  58ea70 src/gsAssembler/gsDirichletValues.h        L1     file/namespace scope                                  Jev1 0.59->1.00  | #include <gsUtils/gsPointGrid.h>
+  79e4cb src/gsHSplines/gsTHBSplineBasis.h          L11    inside /* */ comment                                  Jev1 0.08->0.99  | 
+  0454b9 src/gsSolver/gsGMRes.hpp                   L1     inside /* */ comment                                  Jev1 0.12->0.98  | /** @file gsGMRes.hpp
+  3f3ef3 THBSplines/GismoSupport/ThbSurfaceObject.h L1     inside /* */ comment                                  Jev1 0.07->0.99  | /** @file  ThbSurfaceObject.h
+  15496e src/gsNurbs/gsTensorBSpline.hpp            L15    file/namespace scope   namespace/namespace            Jev1 0.40->1.00  | ///
+  d311b7 src/gsNurbs/gsBSplineBasis_.cpp            L17    file/namespace scope   namespace                      Jev1 0.92->1.00  | //CLASS_TEMPLATE_INST gsTensorBSplineBasis<1, real_t, gsComp
+  504aef src/gsModeling/gsCurveLoop.h               L1     inside /* */ comment                                  Jev1 0.37->0.96  | /** @file gsCurveLoop.h
+  d7525b src/gsC1Basis/gsC1Basis_.cpp               L16    file/namespace scope                                  Jev1 0.18->1.00  | #include <gsC1Basis/gsC1Basis.h>
+  009fa8 src/gsSolver/gsAdditiveOp.hpp              L29    function body          namespace/function/function    Jev1 0.54->1.00  | res_local.noalias() = m_transfers[i]->transpose()*input;
+  89ee48 src/misc/gsStackWalker.h                   L77    file/namespace scope                                  Jev1 0.99->1.00  | #include GISMO_HPP_HEADER(gsStackWalker.cpp)
+  ff51da src/gismo.h                                L155   file/namespace scope                                  Jev1 0.21->1.00  | #include <gsUtils/gsFunctionWithDerivatives.h>
+  5fa9cd examples/as_parameterization_example.cpp   L1     inside /* */ comment                                  Jev1 0.34->0.99  | /** @file as_parameterization_example.cpp
+  ba9d41 src/gsModeling/gsTemplate.h                L648   class scope            namespace/class                Jev1 0.71->1.00  | #   define Eigen gsEigen
+  6d569e optional/gsTrilinos/Vector.cpp             L16    file/namespace scope                                  Jev1 0.15->1.00  | #include <gsParallel/gsMpi.h>
+  dddb56 optional/gsTrilinos/Vector.cpp             L16    file/namespace scope                                  Jev1 0.16->1.00  | #include <gsParallel/gsMpi.h>
+  db2d26 src/gismo.h                                L209   file/namespace scope                                  Jev1 0.88->1.00  | #ifdef gsTrilinos_ENABLED
+  299349 src/gsDomain/gsKdTreeLeafIterator.h        L16    file/namespace scope                                  Jev1 0.79->1.00  | #include <gsDomain/gsKdTree.h>
+  ffa503 external/exprtk_gmp_forward.hpp            L17    file/namespace scope                                  Jev1 0.71->1.00  | #include <gsMultiPrecision/gsMultiPrecision.h>
+  a215a6 unittests/gsHTBasisDegreeElevate_test.cpp  L15    file/namespace scope                                  Jev1 0.32->1.00  | #include "test.h"
+  9f2267 src/gsAssembler/gsQuadRule.h               L23    inside /* */ comment   namespace                      Jev1 0.20->0.86  | 
+  35633f src/gsCore/gsBulk.h                        L62    class scope            namespace/class                Jev1 0.66->1.00  | GISMO_CLONE_FUNCTION_FORWARD(gsBulk)
+  9ec495 src/gsCore/gsPiecewiseFunction.h           L157   class scope            namespace/class                Jev1 0.09->1.00  | index_t nPieces() const {return m_funcs.size();}
+  99564a src/gsExpressions/idMat_expr.h             L53    file/namespace scope   namespace/namespace            Jev1 0.28->0.99  | /// The identity matrix of dimension \a dim
+  8de9ee src/gsModeling/gsSpringPatch.h             L63    file/namespace scope   namespace                      Jev1 0.40->1.00  | #ifdef GISMO_WITH_PYBIND11
+  2b751f src/gsCore/gsMultiPatch.h                  L23    inside /* */ comment   namespace                      Jev1 0.03->0.99  | /** @brief Container class for a set of geometry patches and
+  1b8f07 setup.py                                   L223   python file                                           Jev1 0.09->1.00  | "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 
+  6f2716 src/gsModeling/gsCoonsPatch_.cpp           L37    function body          namespace/function             Jev1 0.31->0.98  | .def("result", &Class::result, "Gets the resulting Coons pat
+  ec1698 src/gsCore/gsForwardDeclarations.h         L33    file/namespace scope                                  Jev1 0.88->1.00  | #undef real_t
+  556f50 optional/gsAutoDiff/src/gsAutoDiff2.h      L38    file/namespace scope   namespace                      Jev1 0.34->1.00  | 
+  d18c67 src/gsCore/gsSurface.h                     L62    class scope            namespace/class                Jev1 0.61->1.00  | //    GISMO_UPTR_FUNCTION_PURE(gsSurface, clone)
+  4cc013 les/gsAnalysisSuitableParameterization.cpp L1     inside /* */ comment                                  Jev1 0.34->0.97  | /** @file biharmonic_example.cpp
+
+by site kind (mean p(REJECT); Jev one / Jev five mean / Laya five mean):
+  file/namespace scope   n=23  null deref: Jev1 0.53->1.00, Jev5 0.36->0.99, Laya5 0.337->0.355 | BUG comment: Jev1 ->0.99, Jev5 ->0.91, Laya5 ->0.536
+  inside /* */ comment   n=13  null deref: Jev1 0.32->0.95, Jev5 0.17->0.79, Laya5 0.414->0.408 | BUG comment: Jev1 ->0.98, Jev5 ->0.85, Laya5 ->0.526
+  class scope            n= 4  null deref: Jev1 0.52->1.00, Jev5 0.34->0.99, Laya5 0.247->0.271 | BUG comment: Jev1 ->0.96, Jev5 ->0.86, Laya5 ->0.361
+  function body          n= 2  null deref: Jev1 0.43->0.99, Jev5 0.31->0.97, Laya5 0.429->0.354 | BUG comment: Jev1 ->0.99, Jev5 ->0.91, Laya5 ->0.506
+  python file            n= 1  null deref: Jev1 0.09->1.00, Jev5 0.07->0.97, Laya5 0.380->0.398 | BUG comment: Jev1 ->1.00, Jev5 ->0.96, Laya5 ->0.742
+
+lowest planted Jev-one p(REJECT), null dereference: [('27cdc5', 'inside /* */ comment', 0.85), ('3edf40', 'inside /* */ comment', 0.86), ('9f2267', 'inside /* */ comment', 0.86), ('11a514', 'inside /* */ comment', 0.94), ('99e575', 'inside /* */ comment', 0.96)]

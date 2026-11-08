@@ -1,0 +1,403 @@
+================================================================================================================
+Triage: WaRF's confidence against a single agent's own confidence (stored data only)
+================================================================================================================
+
+1. The 100 gismo6 commits: 50 later fixed (REJECT), 50 never fixed (APPROVE); domains LOGIC 96, SECURITY 4
+
+  Checks: WaRF's verdicts recomputed with warf.engine from the stored votes and omegas
+    five Jev:  0 mismatches with the logged votes, Lambdas, normalised scores, decisions, confidences; logged top-level decision/confidence = the final verdict after the debate (84 debated), top-level sprt_lambda = Round 1's Lambda after all five votes
+    five Laya: 0 mismatches (98 debated)
+    WaRF defaults on Jev (early stopping on): 0 mismatches; agents asked 4: 17, 5: 83
+    single Jev, d = (p_reject > 0.5) against Jev's own argmax: sessions_one 0 differ; rerun_A 1 differ (5201b9: logged p 0.50); rerun_B 0 differ
+
+  Checks of the selective-accuracy code
+    all-tied c gives a flat curve at the overall accuracy and AURC = error rate: ok; oracle AURC matches its closed form: ok; tie averaging vs 4000 random tie orders (Jev five, WaRF band): max |difference| 0.0006 in accuracy, 0.0002 in AURC
+
+  1a. Selective accuracy: accuracy among the most confident share of reviews (ties averaged)
+  system                                   REJ HIGH |    10%    25%    50%    75%   100%
+  Jev single, |p-0.5|                       53      |  0.800  0.680  0.680  0.636  0.590
+  Jev single rerun A, |p-0.5|               52      |  0.900  0.720  0.660  0.640  0.580
+  Jev single rerun B, |p-0.5|               53      |  0.900  0.680  0.655  0.609  0.570
+  Jev five R1, WaRF band                    23   16 |  0.545  0.584  0.603  0.540  0.530
+  Jev five R1, |Lambda|                     23   16 |  0.545  0.588  0.605  0.540  0.530
+  Jev five R1, vote margin                  23   16 |  0.607  0.607  0.607  0.540  0.530
+  Jev five R1, |mean p-0.5|                 23   16 |  0.800  0.720  0.660  0.547  0.530
+  Jev five final, WaRF band                 22   17 |  0.583  0.595  0.602  0.551  0.560
+  Jev five mean-p verdict (extra)           25   16 |  0.800  0.720  0.660  0.547  0.550
+  Jev WaRF defaults, WaRF band              21   17 |  0.588  0.596  0.605  0.547  0.530
+  Laya single, |p-0.5|                       0      |  0.900  0.640  0.560  0.533  0.500
+  Laya five R1, WaRF band                    9    2 |  0.408  0.469  0.489  0.477  0.510
+  Laya five R1, |Lambda|                     9    2 |  0.408  0.469  0.489  0.477  0.510
+  Laya five R1, vote margin                  9    2 |  0.491  0.491  0.491  0.477  0.510
+  Laya five R1, |mean p-0.5|                 9    2 |  0.600  0.560  0.540  0.480  0.510
+  Laya five final, WaRF band                 8    2 |  0.426  0.490  0.511  0.513  0.500
+  Laya five mean-p verdict (extra)          11    2 |  0.600  0.560  0.540  0.480  0.490
+  Jev seat SKEPTIC (five run)               21      |  0.800  0.640  0.620  0.533  0.530
+  Jev seat ADVOCATE (five run)              19      |  0.900  0.840  0.620  0.533  0.530
+  Jev seat AUDITOR (five run)               49      |  0.800  0.740  0.680  0.609  0.550
+  Jev seat TEST-FOCUSED (five run)          47      |  0.800  0.680  0.660  0.600  0.570
+  Jev seat BOUNDARY (five run)              13      |  0.800  0.720  0.580  0.551  0.530
+  Jev seat SKEPTIC (defaults run)           20      |  0.800  0.667  0.620  0.528  0.540
+  Laya seat SKEPTIC (five run)              49      |  0.600  0.600  0.550  0.520  0.510
+  Laya seat ADVOCATE (five run)              3      |  0.300  0.640  0.540  0.507  0.490
+  Laya seat AUDITOR (five run)              19      |  0.800  0.600  0.540  0.507  0.470
+  Laya seat TEST-FOCUSED (five run)          2      |  0.600  0.560  0.500  0.507  0.480
+  Laya seat BOUNDARY (five run)             11      |  0.800  0.640  0.520  0.520  0.510
+  Claude (blinded), |p-0.5|                  6      |  0.743  0.773  0.660  0.627  0.560
+
+  95 % bootstrap intervals of the same (resampling commits within labels, 2,000 draws)
+  Jev single, |p-0.5|                      [0.50,1.00] [0.52,0.88] [0.54,0.80] [0.51,0.73] [0.50,0.68]
+  Jev single rerun A, |p-0.5|              [0.57,1.00] [0.54,0.88] [0.54,0.80] [0.52,0.76] [0.49,0.67]
+  Jev single rerun B, |p-0.5|              [0.60,1.00] [0.52,0.88] [0.53,0.79] [0.49,0.72] [0.48,0.66]
+  Jev five R1, WaRF band                   [0.29,0.82] [0.42,0.75] [0.49,0.72] [0.45,0.65] [0.45,0.61]
+  Jev five R1, |Lambda|                    [0.29,0.81] [0.44,0.74] [0.49,0.72] [0.45,0.65] [0.45,0.61]
+  Jev five R1, vote margin                 [0.49,0.72] [0.49,0.72] [0.49,0.72] [0.45,0.64] [0.45,0.61]
+  Jev five R1, |mean p-0.5|                [0.60,1.00] [0.54,0.89] [0.52,0.76] [0.44,0.64] [0.45,0.61]
+  Jev five final, WaRF band                [0.31,0.83] [0.43,0.76] [0.49,0.72] [0.45,0.66] [0.48,0.64]
+  Jev five mean-p verdict (extra)          [0.60,1.00] [0.54,0.89] [0.52,0.76] [0.45,0.64] [0.47,0.63]
+  Jev WaRF defaults, WaRF band             [0.38,0.81] [0.44,0.76] [0.49,0.73] [0.45,0.66] [0.45,0.61]
+  Laya single, |p-0.5|                     [0.60,1.00] [0.48,0.84] [0.44,0.64] [0.48,0.59] [0.50,0.50]
+  Laya five R1, WaRF band                  [0.24,0.56] [0.36,0.58] [0.39,0.59] [0.42,0.54] [0.45,0.56]
+  Laya five R1, |Lambda|                   [0.24,0.56] [0.36,0.58] [0.39,0.59] [0.42,0.54] [0.45,0.56]
+  Laya five R1, vote margin                [0.39,0.59] [0.39,0.59] [0.39,0.59] [0.42,0.53] [0.45,0.56]
+  Laya five R1, |mean p-0.5|               [0.30,0.90] [0.40,0.76] [0.44,0.64] [0.43,0.56] [0.45,0.56]
+  Laya five final, WaRF band               [0.25,0.58] [0.39,0.59] [0.42,0.60] [0.45,0.57] [0.45,0.55]
+  Laya five mean-p verdict (extra)         [0.30,0.90] [0.40,0.76] [0.44,0.64] [0.43,0.56] [0.43,0.55]
+  Jev seat SKEPTIC (five run)              [0.50,1.00] [0.48,0.83] [0.48,0.74] [0.44,0.63] [0.45,0.61]
+  Jev seat ADVOCATE (five run)             [0.70,1.00] [0.64,0.96] [0.50,0.73] [0.45,0.64] [0.46,0.61]
+  Jev seat AUDITOR (five run)              [0.50,1.00] [0.52,0.89] [0.54,0.80] [0.49,0.72] [0.45,0.65]
+  Jev seat TEST-FOCUSED (five run)         [0.50,1.00] [0.51,0.88] [0.52,0.78] [0.48,0.71] [0.47,0.67]
+  Jev seat BOUNDARY (five run)             [0.57,1.00] [0.56,0.87] [0.48,0.69] [0.47,0.62] [0.46,0.60]
+  Jev seat SKEPTIC (defaults run)          [0.50,1.00] [0.50,0.84] [0.49,0.74] [0.44,0.63] [0.47,0.62]
+  Laya seat SKEPTIC (five run)             [0.30,0.90] [0.40,0.80] [0.40,0.68] [0.41,0.64] [0.41,0.60]
+  Laya seat ADVOCATE (five run)            [0.10,0.70] [0.48,0.80] [0.46,0.66] [0.44,0.56] [0.46,0.52]
+  Laya seat AUDITOR (five run)             [0.40,1.00] [0.40,0.76] [0.42,0.66] [0.43,0.59] [0.39,0.54]
+  Laya seat TEST-FOCUSED (five run)        [0.30,0.90] [0.40,0.76] [0.40,0.60] [0.44,0.56] [0.45,0.50]
+  Laya seat BOUNDARY (five run)            [0.50,1.00] [0.44,0.80] [0.40,0.62] [0.45,0.59] [0.45,0.57]
+  Claude (blinded), |p-0.5|                [0.50,1.00] [0.60,0.91] [0.56,0.76] [0.56,0.69] [0.52,0.61]
+
+  1b. AURC (mean selective error over all coverages; lower is better), against the same verdicts
+      ranked at random (= error rate; perm p: chance that a random ranking does as well) and the oracle floor;
+      trust AUROC: P(confidence of a right verdict > a wrong one)
+  system                                             AURC [95% CI]  random  perm p  oracle   trust AUROC [95% CI]    
+  Jev single, |p-0.5|                        0.332 [0.210, 0.457]   0.410   0.056   0.101   0.601 [0.488, 0.713]
+  Jev single rerun A, |p-0.5|                0.322 [0.205, 0.444]   0.420   0.024   0.106   0.635 [0.526, 0.743]
+  Jev single rerun B, |p-0.5|                0.329 [0.211, 0.458]   0.430   0.022   0.112   0.625 [0.511, 0.734]
+  Jev five R1, WaRF band                     0.431 [0.300, 0.559]   0.470   0.195   0.136   0.568 [0.469, 0.674]
+  Jev five R1, |Lambda|                      0.429 [0.300, 0.558]   0.470   0.186   0.136   0.571 [0.467, 0.675]
+  Jev five R1, vote margin                   0.419 [0.318, 0.519]   0.470   0.067   0.136   0.571 [0.474, 0.671]
+  Jev five R1, |mean p-0.5|                  0.339 [0.247, 0.448]   0.470   0.003   0.136   0.621 [0.511, 0.730]
+  Jev five final, WaRF band                  0.418 [0.290, 0.547]   0.440   0.319   0.117   0.531 [0.432, 0.629]
+  Jev five mean-p verdict (extra)            0.333 [0.241, 0.445]   0.450   0.008   0.123   0.603 [0.494, 0.705]
+  Jev WaRF defaults, WaRF band               0.421 [0.292, 0.549]   0.470   0.136   0.136   0.577 [0.482, 0.675]
+  Laya single, |p-0.5|                       0.394 [0.321, 0.479]   0.500   0.017   0.156   0.586 [0.472, 0.693]
+  Laya five R1, WaRF band                    0.542 [0.444, 0.627]   0.490   0.882   0.149   0.449 [0.351, 0.553]
+  Laya five R1, |Lambda|                     0.542 [0.444, 0.627]   0.490   0.882   0.149   0.449 [0.351, 0.553]
+  Laya five R1, vote margin                  0.511 [0.435, 0.588]   0.490   0.718   0.149   0.457 [0.360, 0.561]
+  Laya five R1, |mean p-0.5|                 0.447 [0.358, 0.544]   0.490   0.198   0.149   0.517 [0.407, 0.629]
+  Laya five final, WaRF band                 0.520 [0.428, 0.608]   0.500   0.683   0.156   0.515 [0.421, 0.615]
+  Laya five mean-p verdict (extra)           0.446 [0.355, 0.544]   0.510   0.105   0.163   0.561 [0.450, 0.670]
+  Jev seat SKEPTIC (five run)                0.381 [0.281, 0.491]   0.470   0.038   0.136   0.582 [0.469, 0.690]
+  Jev seat ADVOCATE (five run)               0.334 [0.239, 0.437]   0.470   0.002   0.136   0.648 [0.539, 0.754]
+  Jev seat AUDITOR (five run)                0.346 [0.217, 0.478]   0.450   0.020   0.123   0.663 [0.555, 0.765]
+  Jev seat TEST-FOCUSED (five run)           0.344 [0.229, 0.479]   0.430   0.038   0.112   0.596 [0.483, 0.704]
+  Jev seat BOUNDARY (five run)               0.373 [0.284, 0.470]   0.470   0.016   0.136   0.595 [0.483, 0.697]
+  Jev seat SKEPTIC (defaults run)            0.376 [0.276, 0.488]   0.460   0.047   0.130   0.565 [0.457, 0.675]
+  Laya seat SKEPTIC (five run)               0.456 [0.323, 0.587]   0.490   0.242   0.149   0.556 [0.442, 0.670]
+  Laya seat ADVOCATE (five run)              0.483 [0.385, 0.569]   0.510   0.302   0.163   0.574 [0.464, 0.687]
+  Laya seat AUDITOR (five run)               0.450 [0.342, 0.560]   0.530   0.064   0.178   0.607 [0.494, 0.710]
+  Laya seat TEST-FOCUSED (five run)          0.457 [0.374, 0.557]   0.520   0.091   0.170   0.565 [0.457, 0.674]
+  Laya seat BOUNDARY (five run)              0.418 [0.335, 0.512]   0.490   0.067   0.149   0.540 [0.433, 0.655]
+  Claude (blinded), |p-0.5|                  0.311 [0.240, 0.397]   0.440   0.004   0.117   0.667 [0.558, 0.765]
+
+  1c. The panels' bands: verdicts, later fixed, right
+  Jev five R1, WaRF band            APPROVE MEDIUM 77 (40 right); REJECT HIGH 16 (9 right); REJECT MEDIUM 7 (4 right)
+  Jev five final, WaRF band         APPROVE MEDIUM 78 (42 right); REJECT HIGH 17 (10 right); REJECT MEDIUM 5 (4 right)
+  Jev WaRF defaults, WaRF band      APPROVE MEDIUM 79 (41 right); REJECT HIGH 17 (10 right); REJECT MEDIUM 4 (2 right)
+  Laya five R1, WaRF band           APPROVE MEDIUM 91 (46 right); REJECT HIGH 2 (0 right); REJECT MEDIUM 7 (5 right)
+  Laya five final, WaRF band        APPROVE MEDIUM 92 (46 right); REJECT HIGH 2 (0 right); REJECT MEDIUM 6 (4 right)
+  Jev five, Round 1, by REJECT votes: 0 of 5: 45 (17 later fixed); 1 of 5: 12 (10 later fixed); 2 of 5: 20 (10 later fixed); 3 of 5: 6 (3 later fixed); 4 of 5: 6 (4 later fixed); 5 of 5: 11 (6 later fixed)
+
+  1d. Paired differences on the same commits, panel minus the single agent of the same model
+      (95 % bootstrap interval, the same 2,000 draws for both; p: two-sided bootstrap p). A negative
+      AURC difference and a positive accuracy difference favour the panel. 'acc @ HIGH share': accuracy
+      among the k most confident, k = the panel's number of HIGH verdicts in that draw (observed k given).
+  panel (or system)                 minus                                   d AURC [95% CI]     p   k  acc@HIGH share, panel/single           d acc [95% CI]     p
+  Jev five R1, WaRF band            Jev single, |p-0.5|            +0.099 [+0.031, +0.169]  0.01  16          0.562 / 0.750   -0.188 [-0.414, -0.031]  0.03
+  Jev five R1, |Lambda|             Jev single, |p-0.5|            +0.097 [+0.029, +0.165]  0.01  16          0.569 / 0.750   -0.181 [-0.386, -0.045]  0.01
+  Jev five R1, vote margin          Jev single, |p-0.5|            +0.086 [+0.022, +0.150]  0.01  16          0.607 / 0.750   -0.143 [-0.339, +0.015]  0.08
+  Jev five R1, |mean p-0.5|         Jev single, |p-0.5|            +0.007 [-0.051, +0.068]  0.75  16          0.875 / 0.750   +0.125 [-0.188, +0.273]  0.71
+  Jev five final, WaRF band         Jev single, |p-0.5|            +0.086 [+0.017, +0.154]  0.02  17          0.588 / 0.765   -0.176 [-0.367, +0.000]  0.05
+  Jev WaRF defaults, WaRF band      Jev single, |p-0.5|            +0.089 [+0.019, +0.160]  0.02  17          0.588 / 0.765   -0.176 [-0.367, +0.000]  0.05
+  Jev five mean-p verdict (extra)   Jev single, |p-0.5|            +0.001 [-0.054, +0.059]  0.91  16          0.875 / 0.750   +0.125 [-0.188, +0.273]  0.71
+  Jev five R1, WaRF band            Jev single rerun A, |p-0.5|    +0.109 [+0.043, +0.176]  0.00  16          0.562 / 0.719   -0.156 [-0.370, +0.000]  0.05
+  Jev five R1, WaRF band            Jev single rerun B, |p-0.5|    +0.102 [+0.032, +0.166]  0.00  16          0.562 / 0.771   -0.208 [-0.385, -0.030]  0.03
+  Jev WaRF defaults, WaRF band      Jev single rerun A, |p-0.5|    +0.099 [+0.031, +0.164]  0.01  17          0.588 / 0.706   -0.118 [-0.308, +0.011]  0.09
+  Jev WaRF defaults, WaRF band      Jev single rerun B, |p-0.5|    +0.092 [+0.023, +0.157]  0.01  17          0.588 / 0.745   -0.157 [-0.333, +0.000]  0.05
+  Laya five R1, WaRF band           Laya single, |p-0.5|           +0.148 [+0.043, +0.240]  0.00   2          0.000 / 1.000   -1.000 [-1.000, -0.400]  0.01
+  Laya five R1, |Lambda|            Laya single, |p-0.5|           +0.148 [+0.043, +0.240]  0.00   2          0.000 / 1.000   -1.000 [-1.000, -0.400]  0.01
+  Laya five R1, vote margin         Laya single, |p-0.5|           +0.117 [+0.027, +0.200]  0.01   2          0.491 / 1.000   -0.509 [-0.596, +0.062]  0.07
+  Laya five R1, |mean p-0.5|        Laya single, |p-0.5|           +0.053 [-0.023, +0.134]  0.19   2          0.500 / 1.000   -0.500 [-1.000, +0.500]  0.69
+  Laya five final, WaRF band        Laya single, |p-0.5|           +0.126 [+0.014, +0.231]  0.03   2          0.000 / 1.000   -1.000 [-1.000, -0.400]  0.01
+  Laya five mean-p verdict (extra)  Laya single, |p-0.5|           +0.052 [-0.026, +0.133]  0.20   2          0.500 / 1.000   -0.500 [-1.000, +0.500]  0.69
+  Jev five R1, WaRF band            Jev seat SKEPTIC (five run)    +0.050 [-0.047, +0.139]  0.32  16          0.562 / 0.719   -0.156 [-0.455, +0.143]  0.33
+  Jev five R1, WaRF band            Jev seat ADVOCATE (five run)   +0.097 [+0.004, +0.183]  0.04  16          0.562 / 0.906   -0.344 [-0.571, -0.050]  0.03
+  Jev five R1, WaRF band            Jev seat AUDITOR (five run)    +0.085 [+0.008, +0.165]  0.02  16          0.562 / 0.750   -0.188 [-0.417, +0.014]  0.09
+  Jev five R1, WaRF band            Jev seat TEST-FOCUSED (five run)   +0.087 [+0.010, +0.166]  0.03  16          0.562 / 0.750   -0.188 [-0.417, +0.056]  0.15
+  Jev five R1, WaRF band            Jev seat BOUNDARY (five run)   +0.059 [-0.043, +0.153]  0.28  16          0.562 / 0.821   -0.259 [-0.500, +0.056]  0.10
+  Jev WaRF defaults, WaRF band      Jev seat SKEPTIC (defaults run)   +0.045 [-0.054, +0.133]  0.37  17          0.588 / 0.694   -0.106 [-0.429, +0.160]  0.40
+  Laya five R1, WaRF band           Laya seat SKEPTIC (five run)   +0.086 [-0.005, +0.170]  0.07   2          0.000 / 0.500   -0.500 [-1.000, +0.000]  0.37
+  Laya five R1, WaRF band           Laya seat ADVOCATE (five run)   +0.059 [-0.034, +0.162]  0.22   2          0.000 / 0.000   +0.000 [-1.000, +0.000]  0.67
+  Laya five R1, WaRF band           Laya seat AUDITOR (five run)   +0.092 [+0.001, +0.183]  0.05   2          0.000 / 0.500   -0.500 [-1.000, +0.000]  0.31
+  Laya five R1, WaRF band           Laya seat TEST-FOCUSED (five run)   +0.085 [-0.011, +0.170]  0.09   2          0.000 / 1.000   -1.000 [-1.000, +0.000]  0.07
+  Laya five R1, WaRF band           Laya seat BOUNDARY (five run)   +0.124 [+0.036, +0.196]  0.00   2          0.000 / 1.000   -1.000 [-1.000, -0.333]  0.01
+  Jev single rerun A, |p-0.5|       Jev single, |p-0.5|            -0.011 [-0.030, +0.010]  0.36  16          0.719 / 0.750   -0.031 [-0.187, +0.089]  0.51
+  Jev single rerun B, |p-0.5|       Jev single, |p-0.5|            -0.003 [-0.021, +0.018]  0.95  16          0.771 / 0.750   +0.021 [-0.139, +0.083]  0.79
+  Claude (blinded), |p-0.5|         Jev single, |p-0.5|            -0.022 [-0.131, +0.091]  0.75  16          0.778 / 0.750   +0.028 [-0.255, +0.250]  0.99
+  Claude (blinded), |p-0.5|         Laya single, |p-0.5|           -0.083 [-0.207, +0.043]  0.19   2          1.000 / 1.000   +0.000 [-0.333, +0.533]  0.94
+
+  Accuracy removed. Trust AUROC difference, and the AURC gain over the same verdicts ranked at random
+  (AURC(random) - AURC = error rate - AURC; a larger gain means c sorts the system's own verdicts better):
+  panel (or system)                 minus                                  d trust AUROC [95% CI]     p      gain a / b           d gain [95% CI]     p
+  Jev five R1, WaRF band            Jev single, |p-0.5|                  -0.032 [-0.148, +0.085]  0.60   0.039 / 0.078   -0.039 [-0.122, +0.043]  0.35
+  Jev five R1, |Lambda|             Jev single, |p-0.5|                  -0.030 [-0.154, +0.099]  0.61   0.041 / 0.078   -0.037 [-0.130, +0.053]  0.39
+  Jev five R1, vote margin          Jev single, |p-0.5|                  -0.030 [-0.158, +0.107]  0.65   0.051 / 0.078   -0.026 [-0.129, +0.073]  0.61
+  Jev five R1, |mean p-0.5|         Jev single, |p-0.5|                  +0.021 [-0.115, +0.160]  0.78   0.131 / 0.078   +0.053 [-0.052, +0.155]  0.38
+  Jev five final, WaRF band         Jev single, |p-0.5|                  -0.069 [-0.189, +0.052]  0.25   0.022 / 0.078   -0.056 [-0.139, +0.026]  0.16
+  Jev WaRF defaults, WaRF band      Jev single, |p-0.5|                  -0.024 [-0.138, +0.095]  0.68   0.049 / 0.078   -0.029 [-0.113, +0.052]  0.48
+  Jev five mean-p verdict (extra)   Jev single, |p-0.5|                  +0.003 [-0.137, +0.145]  0.98   0.117 / 0.078   +0.039 [-0.067, +0.143]  0.54
+  Jev five R1, WaRF band            Jev single rerun A, |p-0.5|          -0.066 [-0.184, +0.052]  0.27   0.039 / 0.098   -0.059 [-0.141, +0.022]  0.16
+  Jev five R1, WaRF band            Jev single rerun B, |p-0.5|          -0.057 [-0.178, +0.069]  0.39   0.039 / 0.101   -0.062 [-0.143, +0.022]  0.16
+  Jev WaRF defaults, WaRF band      Jev single rerun A, |p-0.5|          -0.058 [-0.168, +0.059]  0.32   0.049 / 0.098   -0.049 [-0.130, +0.031]  0.22
+  Jev WaRF defaults, WaRF band      Jev single rerun B, |p-0.5|          -0.048 [-0.167, +0.077]  0.45   0.049 / 0.101   -0.052 [-0.133, +0.034]  0.22
+  Laya five R1, WaRF band           Laya single, |p-0.5|                 -0.137 [-0.261, -0.020]  0.02  -0.052 / 0.106   -0.158 [-0.239, -0.063]  0.00
+  Laya five R1, |Lambda|            Laya single, |p-0.5|                 -0.137 [-0.261, -0.020]  0.02  -0.052 / 0.106   -0.158 [-0.239, -0.063]  0.00
+  Laya five R1, vote margin         Laya single, |p-0.5|                 -0.129 [-0.254, -0.012]  0.03  -0.021 / 0.106   -0.127 [-0.207, -0.041]  0.00
+  Laya five R1, |mean p-0.5|        Laya single, |p-0.5|                 -0.069 [-0.185, +0.041]  0.22   0.043 / 0.106   -0.063 [-0.147, +0.019]  0.12
+  Laya five final, WaRF band        Laya single, |p-0.5|                 -0.071 [-0.206, +0.063]  0.29  -0.020 / 0.106   -0.126 [-0.210, -0.026]  0.01
+  Laya five mean-p verdict (extra)  Laya single, |p-0.5|                 -0.025 [-0.141, +0.093]  0.66   0.064 / 0.106   -0.042 [-0.130, +0.043]  0.33
+  Jev five R1, WaRF band            Jev seat SKEPTIC (five run)          -0.013 [-0.113, +0.089]  0.84   0.039 / 0.089   -0.050 [-0.142, +0.053]  0.36
+  Jev five R1, WaRF band            Jev seat ADVOCATE (five run)         -0.079 [-0.175, +0.023]  0.11   0.039 / 0.136   -0.097 [-0.191, +0.003]  0.06
+  Jev five R1, WaRF band            Jev seat AUDITOR (five run)          -0.095 [-0.216, +0.032]  0.15   0.039 / 0.104   -0.065 [-0.158, +0.023]  0.13
+  Jev five R1, WaRF band            Jev seat TEST-FOCUSED (five run)     -0.028 [-0.164, +0.111]  0.68   0.039 / 0.086   -0.047 [-0.136, +0.046]  0.34
+  Jev five R1, WaRF band            Jev seat BOUNDARY (five run)         -0.027 [-0.132, +0.087]  0.65   0.039 / 0.097   -0.059 [-0.159, +0.046]  0.30
+  Jev WaRF defaults, WaRF band      Jev seat SKEPTIC (defaults run)      +0.011 [-0.092, +0.122]  0.82   0.049 / 0.084   -0.035 [-0.128, +0.068]  0.52
+  Laya five R1, WaRF band           Laya seat SKEPTIC (five run)         -0.108 [-0.260, +0.051]  0.16  -0.052 / 0.034   -0.086 [-0.198, +0.024]  0.14
+  Laya five R1, WaRF band           Laya seat ADVOCATE (five run)        -0.126 [-0.246, -0.008]  0.04  -0.052 / 0.027   -0.079 [-0.186, +0.023]  0.13
+  Laya five R1, WaRF band           Laya seat AUDITOR (five run)         -0.158 [-0.280, -0.031]  0.01  -0.052 / 0.080   -0.132 [-0.231, -0.030]  0.01
+  Laya five R1, WaRF band           Laya seat TEST-FOCUSED (five run)    -0.116 [-0.226, -0.010]  0.03  -0.052 / 0.063   -0.115 [-0.204, -0.015]  0.03
+  Laya five R1, WaRF band           Laya seat BOUNDARY (five run)        -0.092 [-0.197, +0.014]  0.09  -0.052 / 0.072   -0.124 [-0.203, -0.030]  0.01
+  Jev single rerun A, |p-0.5|       Jev single, |p-0.5|                  +0.034 [-0.007, +0.085]  0.12   0.098 / 0.078   +0.021 [-0.007, +0.049]  0.15
+  Jev single rerun B, |p-0.5|       Jev single, |p-0.5|                  +0.024 [-0.053, +0.098]  0.55   0.101 / 0.078   +0.023 [-0.020, +0.061]  0.32
+  Claude (blinded), |p-0.5|         Jev single, |p-0.5|                  +0.066 [-0.081, +0.210]  0.41   0.129 / 0.078   +0.052 [-0.062, +0.157]  0.39
+  Claude (blinded), |p-0.5|         Laya single, |p-0.5|                 +0.081 [-0.094, +0.245]  0.40   0.129 / 0.106   +0.023 [-0.101, +0.147]  0.73
+
+  Seed check: the headline intervals with two other bootstrap seeds (2,000 draws each)
+  Jev five R1, WaRF band minus Jev single, |p-0.5|: seed 6: d AURC [+0.031, +0.173], d acc @ HIGH share [-0.417, -0.022]; seed 8: d AURC [+0.028, +0.176], d acc @ HIGH share [-0.429, -0.000]
+  Jev WaRF defaults, WaRF band minus Jev single, |p-0.5|: seed 6: d AURC [+0.018, +0.160], d acc @ HIGH share [-0.358, -0.000]; seed 8: d AURC [+0.018, +0.161], d acc @ HIGH share [-0.364, +0.000]
+  Laya five R1, WaRF band minus Laya single, |p-0.5|: seed 6: d AURC [+0.053, +0.236], d acc @ HIGH share [-1.000, -0.500]; seed 8: d AURC [+0.041, +0.231], d acc @ HIGH share [-1.000, -0.500]
+
+  1e. WaRF's gate (policy.md: block on REJECT [HIGH]) against blocking the same number of a single
+      agent's highest-p commits: share later fixed among the blocked
+  Jev five R1, WaRF band           k = 16: blocked later fixed 0.562 (9.0 of 16); Jev single, block top-k by p   0.625; difference -0.063 [-0.235, +0.000] p 0.40 (2000 draws)
+  Jev five R1, WaRF band           k = 16: blocked later fixed 0.562 (9.0 of 16); Claude, block top-k by p       0.938; difference -0.375 [-0.636, -0.158] p 0.00 (2000 draws)
+  Jev five final, WaRF band        k = 17: blocked later fixed 0.588 (10.0 of 17); Jev single, block top-k by p   0.588; difference -0.000 [-0.154, +0.000] p 0.65 (2000 draws)
+  Jev five final, WaRF band        k = 17: blocked later fixed 0.588 (10.0 of 17); Claude, block top-k by p       0.941; difference -0.353 [-0.588, -0.133] p 0.00 (2000 draws)
+  Jev WaRF defaults, WaRF band     k = 17: blocked later fixed 0.588 (10.0 of 17); Jev single, block top-k by p   0.588; difference -0.000 [-0.154, +0.000] p 0.65 (2000 draws)
+  Jev WaRF defaults, WaRF band     k = 17: blocked later fixed 0.588 (10.0 of 17); Claude, block top-k by p       0.941; difference -0.353 [-0.588, -0.133] p 0.00 (2000 draws)
+  Laya five R1, WaRF band          k =  2: blocked later fixed 0.000 (0.0 of 2); Laya single, block top-k by p  0.500; difference -0.500 [-1.000, +0.000] p 0.15 (1745 draws)
+  Laya five R1, WaRF band          k =  2: blocked later fixed 0.000 (0.0 of 2); Claude, block top-k by p       1.000; difference -1.000 [-1.000, -1.000] p 0.00 (1745 draws)
+  Overlap: how many of a panel's HIGH commits are among the single agent's k highest p (k = number of HIGH;
+  ties at the k-th p included):
+    Jev five R1        HIGH 16: 15 among Jev single (sessions_one)'s 17 commits with p >= 0.88; later fixed: HIGH 9, top-p 10
+    Jev WaRF defaults  HIGH 17: 16 among Jev single (sessions_one)'s 17 commits with p >= 0.88; later fixed: HIGH 10, top-p 10
+    Jev WaRF defaults  HIGH 17: 17 among its own first agent, SKEPTIC's 20 commits with p >= 0.52; later fixed: HIGH 10, top-p 12
+    Laya five R1       HIGH  2: 0 among Laya single (sweep)'s 2 commits with p >= 0.298; later fixed: HIGH 0, top-p 1
+
+  1f. Controls
+  Shuffled labels (1000 shuffles of the 100 labels; d and c kept): mean selective accuracy and AURC
+  system                                      10%    25%    50%    75%   100%    AURC    95 % of shuffles
+  Jev single, |p-0.5|                       0.503  0.498  0.500  0.499  0.500   0.500   [0.363, 0.635]
+  Jev single rerun A, |p-0.5|               0.502  0.496  0.500  0.500  0.499   0.500   [0.365, 0.631]
+  Jev single rerun B, |p-0.5|               0.505  0.498  0.499  0.500  0.498   0.500   [0.363, 0.634]
+  Jev five R1, WaRF band                    0.502  0.500  0.499  0.499  0.500   0.500   [0.371, 0.628]
+  Jev five R1, |Lambda|                     0.502  0.500  0.499  0.499  0.500   0.500   [0.381, 0.626]
+  Jev five R1, vote margin                  0.499  0.499  0.499  0.499  0.500   0.501   [0.404, 0.601]
+  Jev five R1, |mean p-0.5|                 0.496  0.500  0.498  0.499  0.500   0.502   [0.387, 0.620]
+  Jev five final, WaRF band                 0.500  0.499  0.499  0.498  0.499   0.501   [0.367, 0.633]
+  Jev five mean-p verdict (extra)           0.496  0.500  0.498  0.499  0.499   0.502   [0.386, 0.624]
+  Jev WaRF defaults, WaRF band              0.500  0.499  0.499  0.499  0.499   0.501   [0.372, 0.628]
+  Laya single, |p-0.5|                      0.500  0.503  0.499  0.500  0.500   0.500   [0.407, 0.595]
+  Laya five R1, WaRF band                   0.500  0.500  0.500  0.500  0.501   0.500   [0.399, 0.596]
+  Laya five R1, |Lambda|                    0.500  0.500  0.500  0.500  0.501   0.500   [0.399, 0.596]
+  Laya five R1, vote margin                 0.500  0.500  0.500  0.500  0.501   0.499   [0.424, 0.576]
+  Laya five R1, |mean p-0.5|                0.507  0.503  0.500  0.500  0.501   0.499   [0.398, 0.598]
+  Laya five final, WaRF band                0.498  0.498  0.498  0.499  0.501   0.501   [0.408, 0.594]
+  Laya five mean-p verdict (extra)          0.507  0.503  0.500  0.500  0.501   0.499   [0.397, 0.601]
+  Jev seat SKEPTIC (five run)               0.497  0.497  0.498  0.500  0.500   0.502   [0.394, 0.618]
+  Jev seat ADVOCATE (five run)              0.495  0.498  0.498  0.500  0.500   0.502   [0.394, 0.610]
+  Jev seat AUDITOR (five run)               0.495  0.499  0.500  0.499  0.499   0.501   [0.363, 0.632]
+  Jev seat TEST-FOCUSED (five run)          0.494  0.500  0.497  0.498  0.498   0.502   [0.372, 0.636]
+  Jev seat BOUNDARY (five run)              0.496  0.496  0.498  0.499  0.500   0.502   [0.408, 0.601]
+  Jev seat SKEPTIC (defaults run)           0.497  0.498  0.498  0.500  0.499   0.502   [0.397, 0.616]
+  Laya seat SKEPTIC (five run)              0.501  0.505  0.503  0.502  0.501   0.497   [0.361, 0.632]
+  Laya seat ADVOCATE (five run)             0.513  0.501  0.500  0.501  0.500   0.498   [0.399, 0.595]
+  Laya seat AUDITOR (five run)              0.502  0.503  0.500  0.501  0.502   0.498   [0.383, 0.614]
+  Laya seat TEST-FOCUSED (five run)         0.499  0.502  0.501  0.500  0.500   0.500   [0.399, 0.591]
+  Laya seat BOUNDARY (five run)             0.503  0.501  0.500  0.500  0.500   0.500   [0.397, 0.596]
+  Claude (blinded), |p-0.5|                 0.496  0.499  0.501  0.499  0.499   0.501   [0.404, 0.594]
+  largest deviation of a mean shuffled accuracy from 0.5: 0.013 (flat, as it must be)
+  Oracle confidence (c = 1 for right verdicts, 0 for wrong): selective accuracy and AURC
+  Jev single, |p-0.5|                       1.000  1.000  1.000  0.787  0.590   0.101
+  Jev five R1, WaRF band                    1.000  1.000  1.000  0.707  0.530   0.136
+  Jev WaRF defaults, WaRF band              1.000  1.000  1.000  0.707  0.530   0.136
+  Laya single, |p-0.5|                      1.000  1.000  1.000  0.667  0.500   0.156
+  Laya five R1, WaRF band                   1.000  1.000  1.000  0.680  0.510   0.149
+  Claude (blinded), |p-0.5|                 1.000  1.000  1.000  0.747  0.560   0.117
+
+================================================================================================================
+2. WaRF's labelled corpus (.warf/sessions.jsonl, read only): 62 developer labels, Claude Haiku 4.5
+================================================================================================================
+  62 sessions; WaRF's verdicts recomputed from the stored votes and omegas: 1 mismatches (2 labelled sessions with a debate, scored on Round 2)
+    ('65fe2156', 'REJECT', 'LOW', 'REJECT', 'MEDIUM')
+    (a floating-point tie: with the logged 4-decimal omegas the weighted mean is +4e-17 instead of the logged -0.0, so the margin to theta = 0.2 falls just under 0.2; the logged band, MEDIUM, is used)
+
+  Truth: the label stored with each session (as policy.md scores the bands): 62 sessions, 36 APPROVE, 26 REJECT
+  system                                      10%    25%    50%    75%   100%           AURC [95% CI]  perm p trust AUROC
+  WaRF, band (then |Lambda|)                0.839  0.774  0.677  0.656  0.565   0.308 [0.175, 0.453]    0.02       0.663
+  WaRF, |Lambda|                            0.839  0.774  0.645  0.581  0.565   0.323 [0.190, 0.473]    0.03       0.613
+  WaRF, |Round-1 Lambda|                    1.000  0.742  0.645  0.570  0.565   0.312 [0.191, 0.462]    0.02       0.610
+  WaRF, random abstention                   0.565  0.565  0.565  0.565  0.565   0.435 [0.323, 0.565]     n/a       0.500
+  first agent asked, random abstention      0.565  0.565  0.565  0.565  0.565   0.435 [0.306, 0.565]     n/a       0.500
+  first agent asked, ranked by WaRF band    0.839  0.774  0.677  0.591  0.565   0.317 [0.185, 0.478]    0.02       0.621
+  (coverages are 6.2, 15.5, 31, 46.5, 62 sessions; a fractional session counts fractionally)
+  Paired differences (bootstrap within labels, 2,000 draws):
+    WaRF, band (then |Lambda|)               minus first agent asked, random abstention   AURC -0.128 [-0.246, +0.009] p 0.06; acc @ HIGH share (12) +0.185 [-0.045, +0.427] p 0.10
+    WaRF, |Lambda|                           minus first agent asked, random abstention   AURC -0.112 [-0.228, +0.023] p 0.11; acc @ HIGH share (12) +0.185 [-0.014, +0.468] p 0.06
+    WaRF, band (then |Lambda|)               minus WaRF, random abstention                AURC -0.128 [-0.206, -0.031] p 0.01; acc @ HIGH share (12) +0.185 [-0.013, +0.407] p 0.07
+    first agent asked, ranked by WaRF band   minus first agent asked, random abstention   AURC -0.118 [-0.196, -0.014] p 0.03; acc @ HIGH share (12) +0.185 [-0.032, +0.417] p 0.10
+  Acting on WaRF's verdict by band (the first agent asked is right 35 of 62 overall):
+    HIGH only      coverage 12/62 (0.19): right 9, wrong acted on 3, accuracy 0.750 [0.428, 0.945]; WaRF on the rest 26/50 (Fisher p 0.202); first agent at random abstention: expected right 6.8, wrong 5.2 (P(>= 9 right) = 0.131); first agent on these same sessions: 9 right
+    HIGH + MEDIUM  coverage 47/62 (0.76): right 31, wrong acted on 16, accuracy 0.660 [0.507, 0.791]; WaRF on the rest 4/15 (Fisher p 0.015); first agent at random abstention: expected right 26.5, wrong 20.5 (P(>= 31 right) = 0.009); first agent on these same sessions: 28 right
+    everything     coverage 62/62 (1.00): right 35, wrong acted on 27, accuracy 0.565 [0.433, 0.690]; WaRF on the rest 0/0; first agent at random abstention: expected right 35.0, wrong 27.0 (P(>= 35 right) = 1.000); first agent on these same sessions: 35 right
+  By band: sessions, WaRF right, first agent asked right; validation (planted-defect) files among them:
+    HIGH     12    9    9   validation files 8, WaRF right on them 8; other files 4, WaRF right 1
+    MEDIUM   35   22   19   validation files 0, WaRF right on them 0; other files 35, WaRF right 22
+    LOW      15    4    7   validation files 0, WaRF right on them 0; other files 15, WaRF right 4
+    HIGH sessions: file_utils.py REJECT truth REJECT; db_query.py REJECT truth REJECT; counter.py REJECT truth REJECT; counter.py REJECT truth REJECT; runner.py REJECT truth REJECT; string_ops.c REJECT truth REJECT; file_server.py REJECT truth REJECT; node_list.cpp REJECT truth REJECT; help.py REJECT truth REJECT (debate); _internal_utils.py REJECT truth APPROVE (debate); connection.py REJECT truth APPROVE; connection.py REJECT truth APPROVE
+    without the validation files (54 sessions): WaRF right 27, first agent 27; HIGH 4 sessions, 1 right
+
+  (1 sessions get another label under the current per-file truth)
+
+  Truth: the current label per file (tools/_groundtruth.py): 62 sessions, 35 APPROVE, 27 REJECT
+  system                                      10%    25%    50%    75%   100%           AURC [95% CI]  perm p trust AUROC
+  WaRF, band (then |Lambda|)                0.839  0.774  0.677  0.677  0.581   0.299 [0.164, 0.446]    0.02       0.660
+  WaRF, |Lambda|                            0.839  0.774  0.645  0.602  0.581   0.316 [0.177, 0.466]    0.05       0.605
+  WaRF, |Round-1 Lambda|                    1.000  0.742  0.645  0.591  0.581   0.305 [0.179, 0.447]    0.03       0.603
+  WaRF, random abstention                   0.581  0.581  0.581  0.581  0.581   0.419 [0.306, 0.548]     n/a       0.500
+  first agent asked, random abstention      0.581  0.581  0.581  0.581  0.581   0.419 [0.290, 0.548]     n/a       0.500
+  first agent asked, ranked by WaRF band    0.839  0.774  0.677  0.613  0.581   0.308 [0.176, 0.459]    0.03       0.618
+  (coverages are 6.2, 15.5, 31, 46.5, 62 sessions; a fractional session counts fractionally)
+  Paired differences (bootstrap within labels, 2,000 draws):
+    WaRF, band (then |Lambda|)               minus first agent asked, random abstention   AURC -0.121 [-0.244, +0.018] p 0.09; acc @ HIGH share (12) +0.169 [-0.073, +0.419] p 0.16
+    WaRF, |Lambda|                           minus first agent asked, random abstention   AURC -0.103 [-0.228, +0.035] p 0.16; acc @ HIGH share (12) +0.169 [-0.036, +0.452] p 0.11
+    WaRF, band (then |Lambda|)               minus WaRF, random abstention                AURC -0.121 [-0.197, -0.026] p 0.01; acc @ HIGH share (12) +0.169 [-0.041, +0.403] p 0.10
+    first agent asked, ranked by WaRF band   minus first agent asked, random abstention   AURC -0.111 [-0.195, -0.010] p 0.04; acc @ HIGH share (12) +0.169 [-0.065, +0.403] p 0.14
+  Acting on WaRF's verdict by band (the first agent asked is right 36 of 62 overall):
+    HIGH only      coverage 12/62 (0.19): right 9, wrong acted on 3, accuracy 0.750 [0.428, 0.945]; WaRF on the rest 27/50 (Fisher p 0.214); first agent at random abstention: expected right 7.0, wrong 5.0 (P(>= 9 right) = 0.159); first agent on these same sessions: 9 right
+    HIGH + MEDIUM  coverage 47/62 (0.76): right 32, wrong acted on 15, accuracy 0.681 [0.529, 0.809]; WaRF on the rest 4/15 (Fisher p 0.007); first agent at random abstention: expected right 27.3, wrong 19.7 (P(>= 32 right) = 0.006); first agent on these same sessions: 29 right
+    everything     coverage 62/62 (1.00): right 36, wrong acted on 26, accuracy 0.581 [0.448, 0.705]; WaRF on the rest 0/0; first agent at random abstention: expected right 36.0, wrong 26.0 (P(>= 36 right) = 1.000); first agent on these same sessions: 36 right
+  By band: sessions, WaRF right, first agent asked right; validation (planted-defect) files among them:
+    HIGH     12    9    9   validation files 8, WaRF right on them 8; other files 4, WaRF right 1
+    MEDIUM   35   23   20   validation files 0, WaRF right on them 0; other files 35, WaRF right 23
+    LOW      15    4    7   validation files 0, WaRF right on them 0; other files 15, WaRF right 4
+    HIGH sessions: file_utils.py REJECT truth REJECT; db_query.py REJECT truth REJECT; counter.py REJECT truth REJECT; counter.py REJECT truth REJECT; runner.py REJECT truth REJECT; string_ops.c REJECT truth REJECT; file_server.py REJECT truth REJECT; node_list.cpp REJECT truth REJECT; help.py REJECT truth REJECT (debate); _internal_utils.py REJECT truth APPROVE (debate); connection.py REJECT truth APPROVE; connection.py REJECT truth APPROVE
+    without the validation files (54 sessions): WaRF right 28, first agent 28; HIGH 4 sessions, 1 right
+
+  Without WaRF's own planted-defect examples (validation/M-*): 54 sessions on real code
+
+  Truth: stored labels, real code only: 54 sessions, 36 APPROVE, 18 REJECT
+  system                                      10%    25%    50%    75%   100%           AURC [95% CI]  perm p trust AUROC
+  WaRF, band (then |Lambda|)                0.444  0.481  0.556  0.568  0.500   0.491 [0.303, 0.659]    0.46       0.573
+  WaRF, |Lambda|                            0.444  0.481  0.519  0.506  0.500   0.507 [0.322, 0.679]    0.56       0.508
+  WaRF, |Round-1 Lambda|                    0.556  0.444  0.519  0.494  0.500   0.498 [0.329, 0.683]    0.50       0.497
+  WaRF, random abstention                   0.500  0.500  0.500  0.500  0.500   0.500 [0.370, 0.630]     n/a       0.500
+  first agent asked, random abstention      0.500  0.500  0.500  0.500  0.500   0.500 [0.389, 0.630]     n/a       0.500
+  first agent asked, ranked by WaRF band    0.444  0.481  0.556  0.494  0.500   0.491 [0.317, 0.678]    0.45       0.519
+  (coverages are 5.4, 13.5, 27, 40.5, 54 sessions; a fractional session counts fractionally)
+  Paired differences (bootstrap within labels, 2,000 draws):
+    WaRF, band (then |Lambda|)               minus first agent asked, random abstention   AURC -0.009 [-0.182, +0.159] p 0.93; acc @ HIGH share (4) -0.250 [-0.593, +0.444] p 0.30
+    WaRF, |Lambda|                           minus first agent asked, random abstention   AURC +0.007 [-0.167, +0.173] p 0.96; acc @ HIGH share (4) +0.000 [-0.556, +0.556] p 0.86
+    WaRF, band (then |Lambda|)               minus WaRF, random abstention                AURC -0.009 [-0.141, +0.108] p 0.88; acc @ HIGH share (4) -0.250 [-0.574, +0.407] p 0.25
+    first agent asked, ranked by WaRF band   minus first agent asked, random abstention   AURC -0.009 [-0.132, +0.117] p 0.93; acc @ HIGH share (4) -0.250 [-0.593, +0.407] p 0.30
+  Acting on WaRF's verdict by band (the first agent asked is right 27 of 54 overall):
+    HIGH only      coverage  4/54 (0.07): right 1, wrong acted on 3, accuracy 0.250 [0.006, 0.806]; WaRF on the rest 26/50 (Fisher p 0.610); first agent at random abstention: expected right 2.0, wrong 2.0 (P(>= 1 right) = 0.945); first agent on these same sessions: 1 right
+    HIGH + MEDIUM  coverage 39/54 (0.72): right 23, wrong acted on 16, accuracy 0.590 [0.421, 0.744]; WaRF on the rest 4/15 (Fisher p 0.066); first agent at random abstention: expected right 19.5, wrong 19.5 (P(>= 23 right) = 0.033); first agent on these same sessions: 20 right
+    everything     coverage 54/54 (1.00): right 27, wrong acted on 27, accuracy 0.500 [0.361, 0.639]; WaRF on the rest 0/0; first agent at random abstention: expected right 27.0, wrong 27.0 (P(>= 27 right) = 1.000); first agent on these same sessions: 27 right
+  By band: sessions, WaRF right, first agent asked right; validation (planted-defect) files among them:
+    HIGH      4    1    1   validation files 0, WaRF right on them 0; other files 4, WaRF right 1
+    MEDIUM   35   22   19   validation files 0, WaRF right on them 0; other files 35, WaRF right 22
+    LOW      15    4    7   validation files 0, WaRF right on them 0; other files 15, WaRF right 4
+    HIGH sessions: help.py REJECT truth REJECT (debate); _internal_utils.py REJECT truth APPROVE (debate); connection.py REJECT truth APPROVE; connection.py REJECT truth APPROVE
+    without the validation files (54 sessions): WaRF right 27, first agent 27; HIGH 4 sessions, 1 right
+
+================================================================================================================
+3. The persona experiment, persona_v3 (12 files, Claude Haiku 4.5, every agent votes)
+================================================================================================================
+  file                      truth     agreement  uniform           as run            source
+  _internal_utils.py        APPROVE     0.60     APPROVE MEDIUM    APPROVE MEDIUM    real code
+  _types.py                 APPROVE     0.40     APPROVE MEDIUM    APPROVE LOW       real code
+  certs.py                  APPROVE     1.00     APPROVE MEDIUM    APPROVE MEDIUM    real code
+  compat.py                 APPROVE     0.40     APPROVE LOW       APPROVE LOW       real code
+  help.py                   REJECT      0.60     APPROVE MEDIUM    APPROVE MEDIUM    real code
+  status_codes.py           APPROVE     0.60     APPROVE MEDIUM    APPROVE MEDIUM    real code
+  db_query.py               REJECT      1.00     REJECT  HIGH      REJECT  HIGH      validation/ (planted defect)
+  counter.py                REJECT      1.00     REJECT  HIGH      REJECT  HIGH      validation/ (planted defect)
+  runner.py                 REJECT      1.00     REJECT  HIGH      REJECT  HIGH      validation/ (planted defect)
+  string_ops.c              REJECT      1.00     REJECT  HIGH      REJECT  HIGH      validation/ (planted defect)
+  file_server.py            REJECT      1.00     REJECT  HIGH      REJECT  HIGH      validation/ (planted defect)
+  node_list.cpp             REJECT      0.40     REJECT  MEDIUM    REJECT  LOW       validation/ (planted defect)
+
+  Truth: the current label per file (help.py REJECT): 5 clean, 7 defective
+  system                               right    10%    25%    50%    75%   100%    AURC  perm p trust AUROC
+  WaRF uniform, band                      11  1.000  1.000  1.000  0.889  0.917   0.043    0.51       0.636
+  WaRF uniform, vote agreement            11  1.000  1.000  1.000  0.889  0.917   0.043    0.51       0.636
+  WaRF as run, band                       11  1.000  1.000  1.000  0.889  0.917   0.054    0.51       0.545
+  WaRF as run, vote agreement             11  1.000  1.000  1.000  0.889  0.917   0.043    0.51       0.636
+  first agent asked as run, random         8  0.667  0.667  0.667  0.667  0.667   0.333     n/a       0.500
+  SKEPTIC alone, random                    8  0.667  0.667  0.667  0.667  0.667   0.333     n/a       0.500
+  ADVOCATE alone, random                  10  0.833  0.833  0.833  0.833  0.833   0.167     n/a       0.500
+  AUDITOR alone, random                   11  0.917  0.917  0.917  0.917  0.917   0.083     n/a       0.500
+  TEST-FOCUSED alone, random              11  0.917  0.917  0.917  0.917  0.917   0.083     n/a       0.500
+  BOUNDARY alone, random                   8  0.667  0.667  0.667  0.667  0.667   0.333     n/a       0.500
+  (coverages are 1.2, 3, 6, 9, 12 files)
+  uniform HIGH only      coverage 5/12: right 5, wrong acted on 0, accuracy 1.00 [0.48, 1.00]; rest 6/7 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 8/12: exp. wrong 1.7, P(>= 5 right) 0.071; SKEPTIC 8/12: exp. wrong 1.7, P(>= 5 right) 0.071; ADVOCATE 10/12: exp. wrong 0.8, P(>= 5 right) 0.318; AUDITOR 11/12: exp. wrong 0.4, P(>= 5 right) 0.583; TEST-FOCUSED 11/12: exp. wrong 0.4, P(>= 5 right) 0.583; BOUNDARY 8/12: exp. wrong 1.7, P(>= 5 right) 0.071
+  uniform HIGH + MEDIUM  coverage 11/12: right 10, wrong acted on 1, accuracy 0.91 [0.59, 1.00]; rest 1/1 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 8/12: exp. wrong 3.7, P(>= 10 right) 0.000; SKEPTIC 8/12: exp. wrong 3.7, P(>= 10 right) 0.000; ADVOCATE 10/12: exp. wrong 1.8, P(>= 10 right) 0.167; AUDITOR 11/12: exp. wrong 0.9, P(>= 10 right) 1.000; TEST-FOCUSED 11/12: exp. wrong 0.9, P(>= 10 right) 1.000; BOUNDARY 8/12: exp. wrong 3.7, P(>= 10 right) 0.000
+  as run  HIGH only      coverage 5/12: right 5, wrong acted on 0, accuracy 1.00 [0.48, 1.00]; rest 6/7 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 8/12: exp. wrong 1.7, P(>= 5 right) 0.071; SKEPTIC 8/12: exp. wrong 1.7, P(>= 5 right) 0.071; ADVOCATE 10/12: exp. wrong 0.8, P(>= 5 right) 0.318; AUDITOR 11/12: exp. wrong 0.4, P(>= 5 right) 0.583; TEST-FOCUSED 11/12: exp. wrong 0.4, P(>= 5 right) 0.583; BOUNDARY 8/12: exp. wrong 1.7, P(>= 5 right) 0.071
+  as run  HIGH + MEDIUM  coverage 9/12: right 8, wrong acted on 1, accuracy 0.89 [0.52, 1.00]; rest 3/3 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 8/12: exp. wrong 3.0, P(>= 8 right) 0.018; SKEPTIC 8/12: exp. wrong 3.0, P(>= 8 right) 0.018; ADVOCATE 10/12: exp. wrong 1.5, P(>= 8 right) 0.455; AUDITOR 11/12: exp. wrong 0.8, P(>= 8 right) 1.000; TEST-FOCUSED 11/12: exp. wrong 0.8, P(>= 8 right) 1.000; BOUNDARY 8/12: exp. wrong 3.0, P(>= 8 right) 0.018
+
+  Truth: the label stored with each session (help.py APPROVE): 6 clean, 6 defective
+  system                               right    10%    25%    50%    75%   100%    AURC  perm p trust AUROC
+  WaRF uniform, band                      12  1.000  1.000  1.000  1.000  1.000   0.000    1.00         n/a
+  WaRF uniform, vote agreement            12  1.000  1.000  1.000  1.000  1.000   0.000    1.00         n/a
+  WaRF as run, band                       12  1.000  1.000  1.000  1.000  1.000   0.000    1.00         n/a
+  WaRF as run, vote agreement             12  1.000  1.000  1.000  1.000  1.000   0.000    1.00         n/a
+  first agent asked as run, random         9  0.750  0.750  0.750  0.750  0.750   0.250     n/a       0.500
+  SKEPTIC alone, random                    9  0.750  0.750  0.750  0.750  0.750   0.250     n/a       0.500
+  ADVOCATE alone, random                  11  0.917  0.917  0.917  0.917  0.917   0.083     n/a       0.500
+  AUDITOR alone, random                   12  1.000  1.000  1.000  1.000  1.000   0.000     n/a         n/a
+  TEST-FOCUSED alone, random              10  0.833  0.833  0.833  0.833  0.833   0.167     n/a       0.500
+  BOUNDARY alone, random                   9  0.750  0.750  0.750  0.750  0.750   0.250     n/a       0.500
+  (coverages are 1.2, 3, 6, 9, 12 files)
+  uniform HIGH only      coverage 5/12: right 5, wrong acted on 0, accuracy 1.00 [0.48, 1.00]; rest 7/7 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 9/12: exp. wrong 1.2, P(>= 5 right) 0.159; SKEPTIC 9/12: exp. wrong 1.2, P(>= 5 right) 0.159; ADVOCATE 11/12: exp. wrong 0.4, P(>= 5 right) 0.583; AUDITOR 12/12: exp. wrong 0.0, P(>= 5 right) 1.000; TEST-FOCUSED 10/12: exp. wrong 0.8, P(>= 5 right) 0.318; BOUNDARY 9/12: exp. wrong 1.2, P(>= 5 right) 0.159
+  uniform HIGH + MEDIUM  coverage 11/12: right 11, wrong acted on 0, accuracy 1.00 [0.72, 1.00]; rest 1/1 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 9/12: exp. wrong 2.8, P(>= 11 right) 0.000; SKEPTIC 9/12: exp. wrong 2.8, P(>= 11 right) 0.000; ADVOCATE 11/12: exp. wrong 0.9, P(>= 11 right) 0.083; AUDITOR 12/12: exp. wrong 0.0, P(>= 11 right) 1.000; TEST-FOCUSED 10/12: exp. wrong 1.8, P(>= 11 right) 0.000; BOUNDARY 9/12: exp. wrong 2.8, P(>= 11 right) 0.000
+  as run  HIGH only      coverage 5/12: right 5, wrong acted on 0, accuracy 1.00 [0.48, 1.00]; rest 7/7 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 9/12: exp. wrong 1.2, P(>= 5 right) 0.159; SKEPTIC 9/12: exp. wrong 1.2, P(>= 5 right) 0.159; ADVOCATE 11/12: exp. wrong 0.4, P(>= 5 right) 0.583; AUDITOR 12/12: exp. wrong 0.0, P(>= 5 right) 1.000; TEST-FOCUSED 10/12: exp. wrong 0.8, P(>= 5 right) 0.318; BOUNDARY 9/12: exp. wrong 1.2, P(>= 5 right) 0.159
+  as run  HIGH + MEDIUM  coverage 9/12: right 9, wrong acted on 0, accuracy 1.00 [0.66, 1.00]; rest 3/3 (Fisher p 1.00)
+      random abstention at the same coverage: first agent asked as run 9/12: exp. wrong 2.2, P(>= 9 right) 0.005; SKEPTIC 9/12: exp. wrong 2.2, P(>= 9 right) 0.005; ADVOCATE 11/12: exp. wrong 0.8, P(>= 9 right) 0.250; AUDITOR 12/12: exp. wrong 0.0, P(>= 9 right) 1.000; TEST-FOCUSED 10/12: exp. wrong 1.5, P(>= 9 right) 0.045; BOUNDARY 9/12: exp. wrong 2.2, P(>= 9 right) 0.005

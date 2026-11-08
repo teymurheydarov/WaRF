@@ -1,0 +1,53 @@
+A=2.8904 B=-2.2513 LLR+=0.9808 LLR-=-1.2528; panel ['SKEPTIC', 'ADVOCATE', 'AUDITOR', 'TEST-FOCUSED', 'BOUNDARY']
+claude-one: 100 lines in ['claude-one.w0.jsonl', 'claude-one.w1.jsonl'], 100 distinct ids, missing []
+claude-standard: 100 lines in ['claude-standard.w0.jsonl', 'claude-standard.w1.jsonl', 'claude-standard.w2.jsonl', 'claude-standard.w3.jsonl'], 100 distinct ids, missing []
+jev-one: 100 lines in ['jev-one.w0.jsonl'], 100 distinct ids, missing []
+jev-standard: 100 lines in ['jev-standard.w0.jsonl'], 100 distinct ids, missing []
+SPRT/synthesis re-derived for 400 records
+Claude calls: {'claude-one': 100, 'claude-standard': 490}; models {'claude-opus-5-5': 590}; first words {'APPROVE': 433, 'REJECT': 157}
+ids where Claude calls got more than one distinct message: 0 []
+replies matching tool/history words: 19
+    ('claude-one', 'd36677', 'CLAUDE', 'Grep')
+    ('claude-one', 'a9e798', 'CLAUDE', 'grep')
+    ('claude-one', '009fa8', 'CLAUDE', 'tool')
+    ('claude-one', '99564a', 'CLAUDE', 'grep')
+    ('claude-one', 'ec1698', 'CLAUDE', 'tool')
+    ('claude-standard', 'b2330f', 'SKEPTIC', 'I searched')
+    ('claude-standard', 'b4f8a3', 'SKEPTIC', 'I searched')
+    ('claude-standard', '6017c0', 'SKEPTIC', 'I ran')
+    ('claude-standard', '16af02', 'ADVOCATE', 'grep')
+    ('claude-standard', 'a9e798', 'SKEPTIC', 'grep')
+    ('claude-standard', 'a9e798', 'TEST-FOCUSED', 'grep')
+    ('claude-standard', 'a9e798', 'BOUNDARY', 'grep')
+    ('claude-standard', '6c7df7', 'SKEPTIC', 'I searched')
+    ('claude-standard', 'db2d26', 'AUDITOR', 'grep')
+    ('claude-standard', 'ec1698', 'AUDITOR', 'tool')
+    ('claude-standard', 'c2f1b9', 'SKEPTIC', 'Grep')
+    ('claude-standard', 'c2f1b9', 'BOUNDARY', 'grep')
+    ('claude-standard', 'd05ce2', 'BOUNDARY', 'tool')
+    ('claude-standard', '99564a', 'ADVOCATE', 'grep')
+Jev: decimals of stored p_reject {2: 536, 1: 40, 0: 6}; choice != (p_reject>0.5): 0 []
+len(reply-format tail) = 108
+  rebuild 515d5f: state 274 chars, msg sha 83dbb909e77fff75; record sha 83dbb909e77fff75; tail ok True
+  rebuild d36677: state 435 chars, msg sha 66bdfc68ef542f7f; record sha 66bdfc68ef542f7f; tail ok True
+  rebuild c518a5: state 328 chars, msg sha 183af753a1f3d6e7; record sha 183af753a1f3d6e7; tail ok True
+rebuild: 100/100 messages identical in sha256[:16] and length (Claude) and length (Jev)
+WARF_HOME during rebuild: C:\workdir\warf\WaRF\.warf-experiments\laya-five
+
+score.log: 49 lines, recomputed 49; differing lines: 0
+
+Seed check (seed 12345, 2000 resamples), all 100:
+  BA claude-one       [0.460, 0.650]
+  BA claude-standard  [0.460, 0.600]
+  BA jev-one          [0.480, 0.670]
+  BA jev-standard     [0.480, 0.640]
+  AUC Claude, one agent (vote)                   [0.460, 0.650]
+  AUC WaRF Claude, -Lambda                       [0.474, 0.688]
+  AUC WaRF Claude, REJECT-vote share             [0.474, 0.688]
+  AUC Jev, one agent, p(REJECT)                  [0.520, 0.746]
+  AUC WaRF Jev, -Lambda                          [0.474, 0.678]
+  AUC WaRF Jev, mean p(REJECT) of agents asked   [0.510, 0.733]
+
+score.json n = {'all': 100, 'without 18': 82}
+
+PROBLEMS: 0

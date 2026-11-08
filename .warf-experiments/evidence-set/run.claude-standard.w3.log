@@ -1,0 +1,6 @@
+  claude_cli/claude-opus-5-5; worker 3 of 4: 24 reviews to run (2 done) -> claude-standard.w3.jsonl
+  worker 3: 10/24  44.7 s per review, ~10 min left
+  worker 3: 20/24  46.4 s per review, ~3 min left
+  2f8cd81:gsBSpline.hpp:planted: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  8058d91:gsHDomain.h:planted: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 3 done: 22 reviews in 18.9 min

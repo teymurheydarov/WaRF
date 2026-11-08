@@ -1,0 +1,40 @@
+132 of 132 items answered by every arm
+
+== all items: 66 defective, 66 clean ==
+  arm                                  BA      recall     false alarms
+  one Claude                           0.758   64/66      30/66
+  one Claude, strict                   0.856   52/66      5/66
+  ADVOCATE alone                       0.841   55/66      10/66
+  one Claude, whole commit             0.773   64/66      28/66
+  one Claude, whole commit, strict     0.864   52/66      4/66
+  W3 WaRF evidence panel               0.879   56/66      6/66
+
+== defects both judges call visible from the diff, with all clean items: 41 defective, 66 clean ==
+  arm                                  BA      recall     false alarms
+  one Claude                           0.761   40/41      30/66
+  one Claude, strict                   0.926   38/41      5/66
+  ADVOCATE alone                       0.900   39/41      10/66
+  one Claude, whole commit             0.788   41/41      28/66
+  one Claude, whole commit, strict     0.909   36/41      4/66
+  W3 WaRF evidence panel               0.930   39/41      6/66
+
+== defects that need another file, with all clean items: 17 defective, 66 clean ==
+  arm                                  BA      recall     false alarms
+  one Claude                           0.743   16/17      30/66
+  one Claude, strict                   0.697   8/17      5/66
+  ADVOCATE alone                       0.689   9/17      10/66
+  one Claude, whole commit             0.729   15/17      28/66
+  one Claude, whole commit, strict     0.793   11/17      4/66
+  W3 WaRF evidence panel               0.778   11/17      6/66
+
+== Preregistered comparisons (all items): W3 minus single-call arm ==
+  W3 - one Claude: +0.121 [+0.038, +0.197]  only W3 26, only single 10, McNemar p 0.011
+  W3 - one Claude, strict: +0.023 [-0.008, +0.061]  only W3 4, only single 1, McNemar p 0.375
+  W3 - ADVOCATE alone: +0.038 [-0.000, +0.083]  only W3 7, only single 2, McNemar p 0.180
+  W3 - one Claude, whole commit: +0.106 [+0.030, +0.182]  only W3 23, only single 9, McNemar p 0.020
+  W3 - one Claude, whole commit, strict: +0.015 [-0.015, +0.053]  only W3 4, only single 2, McNemar p 0.688
+
+  decisive (W3 - one Claude given the whole commit, strict): +0.015 [-0.015, +0.053], p 0.688
+  VERDICT: favours W3, not shown
+
+  W3 seats asked: 1 seat 21, 2 seats 111; calibration: ['rates']

@@ -1,0 +1,313 @@
+ID 2a29aa6:gsMultiPatch.hpp:clean
+commit 2a29aa6abca18baea6c1fecdbaff0b7a0216d7ee file src/gsCore/gsMultiPatch.hpp date 2024-10-23 subj BezierOperator and extractBezier, now use the DofMapper to reference global and not pach-local IDs
+
+=== ONE decision REJECT
+[REJECT] The two functions build their DOF mappers with different tolerances, so their global indices can disagree.
+
+- **Two mappers, two tolerances.** `BezierOperator()` uses `getMapper((T)1e-7)` to turn each element's local actives into global indices. `extractBezier()` then builds a second mapper with `getMapper((T)1e-4)` and uses it to fill `globalCoefs`. The actives returned by `BezierOperator()` are then used to index into that `globalCoefs`.
+- **Why this matters.** The mapper merges interface control points that match within the tolerance. Points that coincide within 1e-4 but not within 1e-7 get merged by one mapper and not the other. The two mappers then differ in `size()` and in the index assigned to each `(i, p)`.
+- **Resulting failures.**
+  - `globalCoefs(Ait->asVector(), all)` can read the wrong control-point rows, giving silently wrong Bézier patches.
+  - Indices from the 1e-7 mapper can be at or beyond `globalCoefs.rows()`, which is an out-of-bounds read.
+- **Fix.** Use one mapper with one tolerance. Either pass the mapper or tolerance into `BezierOperator()`, or have both functions use a shared constant.
+
+Minor, non-blocking: `for (index_t p = 0; p != this->nPatches(); p++)` compares a signed `index_t` with the `size_t` from `nPatches()`, which triggers a sign-compare warning. `size_t` would match the loop in `BezierOperator()`.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+The patch builds two different DOF mappers with different tolerances, and then uses indices from one mapper to look up rows built with the other.
+
+- `BezierOperator()` builds `getMapper((T)1e-7)`. It stores each element's active indices as `mapper.index(localActives.at(i), p)` using this mapper.
+- `extractBezier()` builds its own `getMapper((T)1e-4)`. It uses this mapper to fill `globalCoefs`, then indexes it with `globalCoefs(Ait->asVector(), all)`. Those `Ait` indices come from the 1e-7 mapper.
+
+`getMapper(tol)` merges control points that coincide geometrically within `tol`. So the two mappers agree only when every pair of interface control points is either identical (gap < 1e-7) or far apart (gap > 1e-4). Any gap between those values makes them disagree.
+
+**Concrete failing input:** two bilinear patches sharing an edge, where the matching interface control points differ by 1e-5. This is typical round-off from CAD import or a refinement step.
+
+- The 1e-4 mapper merges those points, so `mapper.size()` is smaller and `globalCoefs` has fewer rows.
+- The 1e-7 mapper keeps them separate, so the second patch's indices run past the merged numbering.
+- In `extractBezier`, `globalCoefs(Ait->asVector(), all)` then either reads out of bounds (UB, or an Eigen assertion in debug) or reads the wrong control points. Either way the Bézier patches come out wrong.
+
+Even when no index goes out of range, the two numberings are not the same, so element actives can point at the wrong global control points.
+
+**Fix:** use one tolerance for both. Better, build the mapper once and pass it to `BezierOperator`, or return it from there, so the actives and `globalCoefs` share the same numbering.
+
+Minor issues, not the reason for rejection:
+- `for (index_t p = 0; p != this->nPatches(); p++)` compares a signed value with an unsigned one. It works, but compilers will warn.
+- The `globalCoefs` columns past `geoDim()` are left at zero. That is harmless as written.
+--- ADVOCATE [REJECT]
+The two functions build their DoF mappers with different tolerances, so the indices they produce can disagree.
+
+- `BezierOperator()` builds its mapper with `getMapper((T)1e-7)`. It stores the resulting global indices in `ElementBlocks[NN].actives`.
+- `extractBezier()` builds a second mapper with `getMapper((T)1e-4)`. It uses that mapper to size and fill `globalCoefs`.
+- It then indexes `globalCoefs(Ait->asVector(), ...)` with the indices from the first mapper.
+
+`getMapper(tol)` decides which control points on an interface count as coincident, and merges them into one global DoF. The tolerance therefore changes both:
+
+- **The number of merged DoFs**, and so `mapper.size()`.
+- **The global numbering** of every DoF after the first difference.
+
+Interface points that differ by between 1e-7 and 1e-4 would be merged in `extractBezier` but not in `BezierOperator`. These gaps are common after floating-point geometry operations. When that happens:
+
+- `BezierOperator` can return indices greater than or equal to `globalCoefs.rows()`, which is an out-of-bounds read.
+- Even when the indices are in range, they point at the wrong control points, so the extracted Bézier patches are silently corrupted.
+
+The patch only works if both mappers happen to produce the same numbering. Nothing guarantees that.
+
+The fix is to use the same tolerance in both places. Better still, build the mapper once and share it, either by passing it into `BezierOperator` or by returning it alongside the element blocks. That way the indices used to store actives and the indices used to build `globalCoefs` always match.
+
+The rest of the change is a sound fix and matches the author's intent. It replaces the old undeclared `actives`/`offset` approach with real global numbering, so interface duplicates are no longer counted twice.
+--- AUDITOR [REJECT]
+The patch builds the global numbering twice, with different tolerances, and then mixes the two numberings.
+
+**The defect: mismatched mapper tolerances**
+
+- `BezierOperator()` builds its mapper with `getMapper((T)1e-7)`. It uses that mapper to turn each element's local active basis functions into global indices, stored in `ElementBlocks[NN].actives`.
+- `extractBezier()` builds a second mapper with `getMapper((T)1e-4)`. It uses that one to fill and size `globalCoefs`.
+- Each element's global indices from the first mapper are then used to read rows from `globalCoefs`, which was built by the second: `globalCoefs(Ait->asVector(), gsEigen::all)`.
+
+`getMapper(tol)` decides which interface control points count as the same point by comparing them against the tolerance. A gap between 1e-7 and 1e-4 can therefore produce two different mappers. This happens whenever matching interface control points differ by more than 1e-7 but less than 1e-4, which is normal floating-point noise for imported or refined geometry. In that case:
+
+- The 1e-7 mapper keeps those points apart, so it has more degrees of freedom and a different numbering.
+- The 1e-4 mapper merges them, so `globalCoefs` has fewer rows.
+
+The consequences are:
+
+- Indices from `BezierOperator` can exceed `mapper.size()` of the 1e-4 mapper, which is an out-of-bounds read.
+- Even when indices stay in range, they can point to the wrong control points, producing silently corrupted Bézier patches.
+
+**Fix**
+
+Both functions must use the same mapper. Either use one shared tolerance, ideally a named constant or parameter, or build the mapper once and pass it to `BezierOperator`.
+
+**Minor issues**
+
+- `for (index_t p = 0; p != this->nPatches(); p++)` compares a signed `index_t` with the `size_t` returned by `nPatches()`. This causes signed/unsigned comparison warnings. The same applies to the `coefs().rows()` loop.
+- `globalCoefs` is sized with `this->coefs().cols()` but only `leftCols(geoDim())` is filled. This is harmless only if those two widths are equal; it would be clearer to size it with `geoDim()` directly.
+- Removing the `offset`/`actives` logic is correct in intent: the old code numbered every patch separately, so points shared on interfaces were duplicated.
+
+The overall direction, mapping to global numbering so shared interface points are counted once, is sound. However, the tolerance inconsistency is a real logic error that can cause memory-unsafe or incorrect results, so the patch should not be merged as is.
+--- TEST-FOCUSED [REJECT]
+**Defect: the two functions build their DoF mappers with different tolerances, so their global numberings can disagree.**
+
+- `BezierOperator()` builds its global numbering with `getMapper((T)1e-7)`. It stores those indices in `ElementBlock::actives`.
+- `extractBezier()` builds a second, separate mapper with `getMapper((T)1e-4)`. It fills `globalCoefs` using that numbering.
+- It then indexes `globalCoefs(Ait->asVector(), all)` with indices produced by the first mapper.
+
+Suppose interface control points match within 1e-4 but not within 1e-7, which is plausible after any geometric round-off or non-exact interface data. Then the 1e-4 mapper glues those DoFs and the 1e-7 mapper does not. The consequences:
+
+1. The two mappers have different sizes and different numberings.
+2. An active index from `BezierOperator` either points at the wrong control point, or falls past `mapper.size()` of the 1e-4 mapper.
+3. Wrong control points give a geometrically wrong Bézier patch with plausible-looking coefficients. That failure is **silent**.
+4. An out-of-range index is unchecked in release builds, because Eigen asserts are disabled. That is undefined behaviour or a garbage read, not a guaranteed exception.
+
+Whether this triggers depends on how close the input's coincident points happen to be. A test using exactly matching interfaces, which is the typical fixture, will pass. The bug only shows up with "nearly matching" real-world data.
+
+The fix is to build the mapper once with a single tolerance and share it between both functions. Alternatively, store the mapped coefficients alongside the actives.
+
+**Secondary concerns along the same path:**
+
+- In `globalCoefs`, a gluing mapper writes each shared row several times, once per patch, with last write winning. Any mismatch between the patch copies within tolerance is silently picked arbitrarily rather than checked.
+- `globalCoefs` is sized with `this->coefs().cols()` but only `leftCols(geoDim())` is written. Any extra columns stay zero and flow into the Bézier coefficients without complaint.
+- `index_t p != this->nPatches()` compares signed with unsigned. This is harmless in practice but sloppy.
+
+The mismatched-tolerance numbering is a real defect, and when it fails it produces wrong geometry rather than an error.
+
+=== DIFF
+diff --git a/src/gsCore/gsMultiPatch.hpp b/src/gsCore/gsMultiPatch.hpp
+index 430863e8a..094506dd1 100644
+--- a/src/gsCore/gsMultiPatch.hpp
++++ b/src/gsCore/gsMultiPatch.hpp
+@@ -983,118 +983,138 @@ void gsMultiPatch<T>::constructBoundaryRep(const std::string l)
+ template<class T>
+ void gsMultiPatch<T>::constructSides()
+ {
+     for ( biterator it = bBegin(); it != bEnd(); ++it ) // for all boundaries
+     {
+         const gsGeometry<T> & p1 = *m_patches[it->patch];
+         m_sides[*it] = p1.boundary(*it);
+     }//end for
+ 
+     for ( iiterator it = iBegin(); it != iEnd(); ++it ) // for all interfaces
+     {
+         const gsGeometry<T> & p1 = *m_patches[it->first() .patch];
+         const gsGeometry<T> & p2 = *m_patches[it->second().patch];
+         m_sides[it->first()] = p1.boundary(it->first());
+         m_sides[it->second()] = p2.boundary(it->second());
+     }//end for
+ }
+ 
+ template<class T>
+ std::map<index_t, internal::ElementBlock> gsMultiPatch<T>::BezierOperator() const
+ {
+     GISMO_ENSURE( 2==domainDim(), "Anything other than bivariate splines is not yet supported!");
+ 
+     // Loop over all the elements of the given multipatch and collect all relevant
+     // information in ElementBlocks. These will be grouped in a std::map
+     // with respect to the number of active basis functions ( = NN/NCV )
+     // of each Bezier element
+     std::map<index_t, internal::ElementBlock> ElementBlocks;
+ 
+     index_t NN; // Number of control points of the Bezier element
++    gsMatrix<index_t> localActives, globalActives; // Active basis functions
++    gsDofMapper mapper = getMapper((T)1e-7);
++
+     gsMatrix<T> quPoints, values;
+     gsVector<T> quWeights;
+ 
+     for (size_t p=0; p<nPatches(); ++p)
+     {
+         gsBasis<T> * basis = & patch(p).basis();
+ 
+         // Create the Bezier Basis
+         gsKnotVector<T> kv1;
+         kv1.initClamped(basis->degree(0));
+         gsKnotVector<T> kv2;
+         kv2.initClamped(basis->degree(1));
+         gsTensorBSplineBasis<2,T> bezBasis(kv1,kv2);
+         gsMatrix<> res;
+ 
+         // Initialize the quadrature rule that will be used for fitting 
+         // the given basis with the Bezier basis
+         gsVector<index_t, 2> numNodes;
+         numNodes << basis->degree(0)+1, basis->degree(1)+1 ;
+         typename gsNewtonCotesRule<T>::uPtr QuRule;
+         QuRule = gsNewtonCotesRule<T>::make(numNodes);
+ 
+         // Initialize an iterator over all the elements of the given basi
+         typename gsBasis<T>::domainIter domIt = basis->makeDomainIterator();
+ 
+ 
+         // Calculate the collocation matrix of the Bezier Basis
+         // It will be used to fit the Bez. Basis to the original basis' elements.
+         gsMatrix<T> Bd = bezBasis.collocationMatrix(bezBasis.anchors());
+         auto solver = Bd.fullPivLu();
+ 
+ 
+         for (; domIt->good(); domIt->next() )
+         {
+-            actives = basis->active( domIt->center );
+-            actives.array() += offset;
+-
+-            NN = actives.size();
+-            ElementBlocks[NN].numElements += 1;    // Increment the Number of Elements contained in the ElementBlock
+-            ElementBlocks[NN].actives.push_back(actives);  // Append the active basis functions ( = the Node IDs ) for this element.
++            localActives = basis->active( domIt->center );
++            globalActives.resizeLike(localActives);
++            // Map every local active basis function to the global numbering
++            for (index_t i=0; i<localActives.rows(); ++i)
++                globalActives.at(i) = mapper.index(localActives.at(i), p);
++
++            NN = localActives.size();
++            ElementBlocks[NN].numElements += 1;                  // Increment the Number of Elements contained in the ElementBlock
++            ElementBlocks[NN].actives.push_back(globalActives);  // Append the active basis functions ( = the Node IDs ) for this element.
+             ElementBlocks[NN].PR = basis->degree(0);
+             ElementBlocks[NN].PS = basis->degree(1);
+-            ElementBlocks[NN].PT = 0; // TODO: if implemented for trivariates fix this
++            ElementBlocks[NN].PT = 0;                            // TODO: if implemented for trivariates fix this
+ 
+             // Map the quadrature points to the current element.
+             QuRule->mapTo( domIt->lowerCorner(), domIt->upperCorner(), quPoints, quWeights);
+             basis->source().eval_into(quPoints, values); // Evaluate given basis at the mapped quadrature points 
+             // Append the local Bezier Extraction matrix to the ElementBlock.coefVectors
+             ElementBlocks[NN].coefVectors.push_back(solver.solve(values.transpose()));
+         }
+-        offset+= patch(p).coefsSize();
+     }
+ 
+     return ElementBlocks;
+ }
+ 
+ 
+ template<class T> 
+ gsMultiPatch<T> gsMultiPatch<T>::extractBezier() const
+ {
+     GISMO_ENSURE( 2==domainDim(), "Anything other than bivariate splines is not yet supported!");
+     std::map<index_t, internal::ElementBlock> ElementBlocks = BezierOperator();
+     gsMultiPatch<T> result;
+ 
++    // Get the map from patch-local to global indexing for the multi-patch
++    gsDofMapper mapper = this->getMapper((T)1e-4);
++
++    // Get global coefficients of the multi patch. (i.e. without duplicates on the interfaces)
++    gsMatrix<T> globalCoefs(mapper.size(), this->coefs().cols());
++    globalCoefs.setZero();
++    // Loop over all patches
++    for (index_t p = 0; p != this->nPatches(); p++)
++    {
++        for (index_t i=0; i != this->patch(p).coefs().rows(); ++i) // For every control point
++        {
++            globalCoefs.row(mapper.index(i,p)).leftCols(this->geoDim()) = this->patch(p).coefs().row(i);
++        }
++    }
++
+     for (auto const& pair : ElementBlocks)
+     {
+         internal::ElementBlock ElBlock = pair.second;
+ 
+         gsKnotVector<> kv1(0,1,0,ElBlock.PR+1); 
+         gsKnotVector<> kv2(0,1,0,ElBlock.PS+1);
+         // coefs.setZero( (ElBlock.PR+1)*(ElBlock.PS+1), controlPoints.cols()-1 );
+ 
+         // Loop over all elements of the Element Block
+         auto Ait = ElBlock.actives.begin();        // Actives Iterator
+         auto Cit = ElBlock.coefVectors.begin();    // Coefficients Iteratos
+ 
+         for(; Ait != ElBlock.actives.end() && Cit != ElBlock.coefVectors.end(); ++Ait, ++Cit)
+         {
+-            gsTensorBSpline<2> bezier(kv1,kv2, *Cit * coefs()(Ait->asVector(),gsEigen::all));
++            gsTensorBSpline<2> bezier(kv1,kv2, *Cit * globalCoefs(Ait->asVector(),gsEigen::all));
+             // bezier extraction operator * original control points
+             result.addPatch(bezier);
+         }
+     }
+ 
+     // result.computeTopology();
+     return result; 
+ }
+ } // namespace gismo
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    std::vector<T> result(this->nPatches());
+#pragma omp parallel
+{
+#   ifdef _OPENMP
+    const int tid = omp_get_thread_num();
+    const int nt  = omp_get_num_threads();
+#   endif
+
+#   ifdef _OPENMP
+    for ( size_t p=tid; p<this->nPatches(); p+=nt )
+#   else
+    for ( size_t p=0; p<this->nPatches(); p++ )
+#   endif
+    {
+        result.at(p) = this->patch(p).HausdorffDistance(other.patch(p),nsamples,accuracy,directed);
+    }
+}//omp parallel
+
+    gsMatrix<T> globalCoefs(mapper.size(), this->coefs().cols());
+    globalCoefs.setZero();
+    // Loop over all patches
+    for (index_t p = 0; p != this->nPatches(); p++)
+    {
+        for (index_t i=0; i != this->patch(p).coefs().rows(); ++i) // For every control point
+        {
+            globalCoefs.row(mapper.index(i,p)).leftCols(this->geoDim()) = this->patch(p).coefs().row(i);
+        }
+    }
+
+            gsTensorBSpline<2> bezier(kv1,kv2, *Cit * globalCoefs(Ait->asVector(),gsEigen::all));
+            // bezier extraction operator * original control points
+            result.addPatch(bezier);
+        }
+    }
+
+    // result.computeTopology();
+    return result; 
+}
+} // namespace gismo
+

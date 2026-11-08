@@ -1,0 +1,3 @@
+  claude_cli/claude-opus-5-5; worker 1 of 4: 10 reviews to run (91 done) -> claude-commit-strict-tools@max.w1.jsonl
+  worker 1: 10/10  236.0 s per review, ~0 min left
+  worker 1 done: 10 reviews in 39.3 min

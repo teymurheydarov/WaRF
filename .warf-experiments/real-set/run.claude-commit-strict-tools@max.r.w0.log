@@ -1,0 +1,6 @@
+  claude_cli/claude-opus-5-5; worker 0 of 4: 31 reviews to run (11 done) -> claude-commit-strict-tools@max.w0.jsonl
+  worker 0: 10/31  208.9 s per review, ~73 min left
+  26a9fe5:gsMesh.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  655c2f4:gsDofMapper.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  f1ddb14:gsHBoxContainer.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

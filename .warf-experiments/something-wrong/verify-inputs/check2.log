@@ -1,0 +1,34 @@
+352 reasons with target-like wording: 18  (REJECT 10)
+  d4bc6b [APPROVE] p=0.44: is_same<E,real_t> hack breaks other arithmetic scalar types; experimental, likely reverted.
+  2863c5 [APPROVE] p=0.05: Pure deletion of typedefs; no written lines to blame.
+  184cae [REJECT] p=0.28: API signature change and new declarations; may need follow-up adjustments.
+  e001c7 [REJECT] p=0.2: Trivial stub constructor; likely rewritten during development rather than fixed.
+  e13e10 [REJECT] p=0.33: Const return on basis() may break callers needing mutable basis; possibly reverted.
+  a7a2e9 [APPROVE] p=0.27: New header using gsExprAssembler<> in template on T; API likely churned.
+  451246 [REJECT] p=0.42: Config-macro shared_ptr selection with NOT_FOUND hack and leftover //*/; churned area.
+  cc497b [REJECT] p=0.35: Re-enables exported explicit instantiation previously reverted; visibility/dll fragility.
+  f38d3a [REJECT] p=0.48: Adds export attribute to GCC instantiations; attribute warnings, likely reverted.
+  8a1b96 [APPROVE] p=0.38: Toggles EXPORT macro and explicit instantiations; experimental switch likely reverted later.
+  b4f8a3 [REJECT] p=0.3: New MPI singleton file; early API likely changed or fixed.
+  fbf793 [REJECT] p=0.22: MinGW-only intrin.h include; MinGW/windows.h header conflicts may need follow-up.
+  35633f [APPROVE] p=0.23: Clone macro swap during uPtr clone refactor; macro churn likely.
+  4b41ad [REJECT] p=0.42: Closing comment says namespace internal instead of util; lines likely rewritten later.
+  96d063 [APPROVE] p=0.4: Full class instantiation for d=1..4 may fail; churn-prone instantiation lines.
+  737c50 [REJECT] p=0.55: Rewritten MSVC line keeps checked_array_iterator bound 6 instead of n.
+  5d85ea [APPROVE] p=0.22: Second-order dual alias and printer; plausible but in churning autodiff module.
+  b6a54e [APPROVE] p=0.02: Deletion-only change; nothing written to blame.
+
+100: AUC added 0.716 Claude 0.745 Jev-one 0.641
+spearman with added lines: Claude 0.481  Jev 0.284;  Claude vs Jev 0.547
+  Claude: REJECT ranked above its matched APPROVE in 38.5/50 pairs
+  Jev: REJECT ranked above its matched APPROVE in 31.0/50 pairs
+  added: REJECT ranked above its matched APPROVE in 35.0/50 pairs
+  Claude: AUC over REJECT/APPROVE comparisons with added lines within 1.5x: 0.700 (n=559)
+  Jev: AUC over REJECT/APPROVE comparisons with added lines within 1.5x: 0.549 (n=559)
+
+100: zero-added-line items 7: labels ['APPROVE', 'APPROVE', 'APPROVE', 'APPROVE', 'APPROVE', 'APPROVE', 'APPROVE']  Claude p [0.03, 0.04, 0.03, 0.04, 0.07, 0.04, 0.02]  Jev p [0.61, 0.68, 0.29, 0.13, 0.46, 0.73, 0.89]
+352: zero-added-line items 28, REJECT 2; Claude p mean 0.056
+100: target-worded reasons 9; Claude AUC without them 0.727, Jev on same subset 0.635, added 0.693 (n=91)
+100 without deletion-only: Claude 0.712  Jev 0.655  added 0.670 (n=93)
+Jev with deletion-only items set to p=0 (the rule Claude applied): 0.703
+without deletion-only and target-worded: Claude 0.697  Jev 0.642  added 0.649 (n=85)

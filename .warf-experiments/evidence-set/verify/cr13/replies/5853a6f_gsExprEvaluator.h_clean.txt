@@ -1,0 +1,283 @@
+ID 5853a6f:gsExprEvaluator.h:clean
+commit 5853a6fbcddc3b403e7fe62b2ed052d60a4bd21d file src/gsAssembler/gsExprEvaluator.h date 2024-12-09 subj improve openmp instrumentation
+
+=== ONE decision REJECT
+[REJECT] 1. **Build fails without OpenMP.** `T thValue = _op::init();` is declared inside `#ifdef _OPENMP`, but `thValue` is used unconditionally in `_op::acc(elVal, (T)1, thValue);` and `_op::acc_global(thValue, m_value);`. A non-OpenMP build will not compile.
+
+2. **Build fails for min/max reductions.** `compute_impl` now calls `_op::acc_global(...)`, but only `plus_op` defines `acc_global`. `min_op` and `max_op` have none, so any min or max evaluation (e.g. `max()`/`min()` on the evaluator) fails to compile. There is also no good atomic fallback for them: `#pragma omp atomic` does not support `min`/`max` updates on older OpenMP versions, so they would need a critical section or a proper reduction.
+
+3. **Element-wise storage is wrong, and the code says so.** `m_elWise[domIt->id()] = elVal; // wrong...`. `domIt->id()` is the element index *within the current patch*. On a multipatch domain, every patch writes to indices starting at 0. Earlier patches' values get overwritten, and the tail of `m_elWise` (sized to `totalElements()`) is never filled. The old per-patch offset logic (`patch_cnt`/`c`) was removed without a replacement. This also creates a cross-thread data race, since threads working on different patches can write the same slot. The author's own "wrong..." comment shows the change is known to be incomplete.
+
+4. **Minor issues:**
+   - The `(T)1` weight in `_op::acc(elVal, (T)1, thValue)` is fine for `plus_op`.
+   - Removing the `critical` section is the right idea for sums, but the overall refactor is unfinished.
+   - Tabs mixed into space-indented code create formatting noise.
+
+The thread-local accumulation is a good direction. As written, though, the patch breaks compilation in two configurations and silently produces incorrect element-wise results on multipatch geometries.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+1. **Non-OpenMP builds will not compile.** `T thValue = _op::init();` is declared inside the `#ifdef _OPENMP` block. However, `_op::acc(elVal, (T)1, thValue);` and `_op::acc_global(thValue, m_value);` are outside any `#ifdef`. Built without `_OPENMP`, `thValue` is an undeclared identifier.
+
+2. **`min_op` and `max_op` have no `acc_global`.** `compute_impl` now calls `_op::acc_global(...)` for every `_op`. Any instantiation with `min_op` or `max_op` (e.g. `max()` / `min()` evaluations) will fail to compile. Even if `acc_global` were added, it couldn't just copy the `plus_op` version: `#pragma omp atomic` cannot express a min/max. The old code used a `critical` section for those; this patch removes it and adds no safe replacement.
+
+3. **Element-wise storage is wrong for multipatch.** `m_elWise[domIt->id()] = elVal;` uses the domain iterator's element id, which is local to each patch (starting at 0). `m_elWise` is sized to `totalElements()` across all patches. With two or more patches, elements from patch 1 and later overwrite the entries for patch 0, and the upper part of `m_elWise` stays zero. The old code kept a running per-patch offset (`patch_cnt`) to avoid this. The patch's own comment, `// wrong...`, admits the problem.
+
+4. **`m_value` is updated with no synchronization except `plus_op`'s atomic.** For any `_op` that gets an `acc_global` without its own synchronization, threads race on `m_value`.
+
+Concrete failing case: a 2-patch geometry evaluated with `storeElWise=true` gives an incorrect `m_elWise` vector. A build without OpenMP, or any call to `max()`/`min()`, fails to compile.
+--- ADVOCATE [REJECT]
+The patch has several clear defects. Two of them break the build.
+
+1. **The build fails without OpenMP.** `T thValue = _op::init();` is declared inside `#ifdef _OPENMP`. It is then used outside that guard, in `_op::acc(elVal, (T)1, thValue);` inside the element loop and in `_op::acc_global(thValue, m_value);` after the patch loop. On a non-OpenMP build `thValue` is undeclared, so compilation fails.
+
+2. **`min_op` and `max_op` have no `acc_global`.** `compute_impl<E, storeElWise, _op>` now calls `_op::acc_global(...)` unconditionally. Only `plus_op` defines it. Any instantiation with `min_op` or `max_op`, which the `min`/`max` evaluators use, will not compile. Atomic min/max would also need a different approach, such as `omp critical` or a CAS loop. A plain `omp atomic` cannot express `res = min(res, x)` before OpenMP 5.1.
+
+3. **The element-wise indexing is wrong and can write out of bounds.** The old code kept a running global element counter (`patch_cnt + tid`, then `c += nt`) so that `m_elWise` indexing spanned all patches. The patch replaces this with `m_elWise[domIt->id()]`, which the author's own comment marks as `// wrong...`.
+   - `domIt->id()` is a per-patch element index. On multipatch geometries, entries from patch *k* overwrite those of patch 0, and the tail of `m_elWise` is left at its default value.
+   - For some bases, such as hierarchical or THB bases, `id()` is not guaranteed to be a dense index in `[0, numElements)` matching the iteration order. It can then exceed `m_elWise.size()`, which is `totalElements()`. `operator[]` does no bounds check, so this is an out-of-bounds heap write. In a security review, that alone is disqualifying.
+
+4. **The accumulation semantics changed.** The reduction now accumulates locally per thread and then combines atomically. That part is a reasonable improvement over the per-element `omp critical`. However, it depends on (1) and (2) being fixed. As written, it only works for `plus_op` on OpenMP builds.
+
+The intent is sound: replace a contended critical section with a per-thread partial result and one atomic combine. But the patch is visibly unfinished, as the "wrong..." comment shows. It breaks compilation in common configurations and introduces a potential out-of-bounds write. It should be reworked before merging:
+- Move `thValue` outside the `#ifdef`.
+- Add `acc_global` to `min_op` and `max_op`, using a critical section.
+- Restore a correct global element offset for `m_elWise`.
+--- AUDITOR [REJECT]
+The patch should not be merged. It has build failures in common configurations, and it computes wrong per-element results while still returning plausible numbers.
+
+1. **`min_op` and `max_op` will not compile.** `compute_impl` now calls `_op::acc_global(thValue, m_value)` for every operator. Only `plus_op` defines `acc_global`. Any use of `compute_impl` with `min_op` or `max_op` (the min/max evaluators) fails to compile. Before this patch, those reductions went through `_op::acc` inside a named critical section, so they worked.
+
+2. **Builds without OpenMP will not compile.** `thValue` is declared inside `#ifdef _OPENMP`, but it is used unconditionally in the element loop and in the final `_op::acc_global` call. The serial build path therefore references an undeclared identifier.
+
+3. **Per-element results are written to the wrong slots.** `m_elWise[domIt->id()] = elVal; // wrong...` uses the element index within the current patch as if it were a global index. `m_elWise` has one entry per element across all patches (`totalElements()`). In a multipatch domain:
+   - Every patch writes into the low indices, overwriting the earlier patches' values.
+   - The entries for later patches are never written.
+   - Nothing crashes, so the corrupted output looks valid to callers.
+
+   The author's own comment shows they knew this was incorrect. The old `patch_cnt` and `c` offset logic, which handled this, was removed without a replacement.
+
+4. **The atomic update may not work for all value types.** `#pragma omp atomic` on `res += contrib` requires `T` to be a built-in scalar type. G+Smo supports non-native value types such as multiprecision and AD types, so this breaks on those types or compiles with undefined behaviour. The removed `omp critical` worked for any type.
+
+5. **Correctness is traded for a small speedup.** Reducing per thread and combining once is a good idea. Done properly, it needs:
+   - `acc_global` for every operator, for example a critical section for min and max;
+   - `thValue` declared outside the OpenMP guard;
+   - a correct global element offset for `m_elWise`.
+
+**Security and robustness impact:** shared output state gets silently corrupted, and the patch introduces build failures on some configurations. Silent corruption of evaluation results is an integrity risk for anything that relies on these values, such as error estimates or adaptive refinement decisions. The patch is incomplete and should be reworked before merging.
+--- TEST-FOCUSED [REJECT]
+1. **Element-wise storage silently writes to the wrong slots (silent failure).** `m_elWise[domIt->id()] = elVal;` replaces the global running counter with `domIt->id()`, which is the element index *within the current patch*. On a multipatch basis, patch 1's elements reuse indices `0..n1-1` and overwrite patch 0's entries. The tail of `m_elWise` (sized to `totalElements()`) is left at its default value. Nothing throws, and the vector has the right length with plausible-looking numbers. A caller using it for error indicators or adaptive refinement gets quietly wrong per-element values. The author's own comment `// wrong...` acknowledges this. Even on a single patch, nothing guarantees that `id()` is contiguous and bounded by `totalElements()` for every basis type, such as hierarchical or THB. If it isn't, this is an out-of-bounds write with no bounds check.
+
+2. **Non-OpenMP builds fail to compile.** `T thValue = _op::init();` is declared inside `#ifdef _OPENMP`. However, `_op::acc(elVal, (T)1, thValue);` and `_op::acc_global(thValue, m_value);` are used unconditionally. A serial build is broken outright.
+
+3. **`min_op` and `max_op` have no `acc_global`.** `compute_impl` now calls `_op::acc_global(...)` for every `_op`. Any instantiation with `min_op` or `max_op` (the min/max evaluators) fails to compile.
+
+4. **No safe cross-thread reduction for min/max.** Even if `acc_global` were added to `min_op` and `max_op`, `#pragma omp atomic` cannot express `res = min(contrib, res)`. The old `critical` section was removed, so a naive implementation would race on `m_value`. That race depends on thread scheduling and cannot be reliably caught by a test.
+
+5. **Minor:** `max_op::init()` returns `math::limits::min()`, which for floating-point `T` is the smallest *positive* value, not the lowest. The max of an all-negative expression would then be wrong silently. This predates the patch, but it lives in the code the patch touches.
+
+The plus-reduction change itself (per-thread partial sum plus an atomic add) is sound. However, the patch introduces a silent data-corruption path in `m_elWise` and breaks compilation for two of the three operators and for serial builds.
+
+=== DIFF
+diff --git a/src/gsAssembler/gsExprEvaluator.h b/src/gsAssembler/gsExprEvaluator.h
+index b73c1533c..bb7d7d39e 100644
+--- a/src/gsAssembler/gsExprEvaluator.h
++++ b/src/gsAssembler/gsExprEvaluator.h
+@@ -333,153 +333,151 @@ public:
+                        std::string const & fn)
+     { writeParaview_impl<E,false>(expr,m_exprdata->getMap(),fn); }
+ 
+ private:
+ 
+     template<class E, bool gmap>
+     void writeParaview_impl(const expr::_expr<E> & expr,
+                             geometryMap G, std::string const & fn);
+ 
+ 
+ 
+     template<class E, bool storeElWise, class _op>
+     T compute_impl(const expr::_expr<E> & expr);
+ 
+     template<class E, class _op>
+     T computeBdr_impl(const expr::_expr<E> & expr, const bContainer & bdrlist);
+ 
+     template<class E, class _op>
+     T computeBdrBc_impl(const bcRefList & BCs, const expr::_expr<E> & expr);
+ 
+     template<class E, class _op>
+     T computeInterface_impl(const expr::_expr<E> & expr, const intContainer & iFaces);
+ 
+     template<class E>
+     void computeGrid_impl(const expr::_expr<E> & expr, const index_t patchInd);
+ 
+     struct plus_op
+     {
+         static inline T init() { return 0; }
+         static inline void acc(const T contrib, const T w, T & res)
+-        { res += w * contrib; }
++        {
++	  res += w * contrib;
++	}
++
++        static inline void acc_global(const T contrib, T & res)
++        {
++#         pragma omp atomic
++	  res += contrib;
++	}
++
+     };
+     struct min_op
+     {
+         static inline T init() { return math::limits::max(); }
+         static inline void acc (const T contrib, const T, T & res)
+-        { res = math::min(contrib, res); } //note: min/max are not atomic
++        {
++	  res = math::min(contrib, res);
++	}
+     };
+     struct max_op
+     {
+         static inline T init() { return math::limits::min(); }
+         static inline void acc (const T contrib, const T, T & res)
+-        { res = math::max(contrib, res); }
++        {
++	  res = math::max(contrib, res);
++	}
+     };
+ 
+ };
+ 
+ template<class T>
+ template<class E, bool storeElWise, class _op>
+ T gsExprEvaluator<T>::compute_impl(const expr::_expr<E> & expr)
+ {
+     m_value = _op::init();
+     m_elWise.clear();
+     if ( storeElWise )
+         m_elWise.resize(m_exprdata->multiBasis().totalElements());
+ 
+ #pragma omp parallel
+ {
+ #   ifdef _OPENMP
+     const int tid = omp_get_thread_num();
+     const int nt  = omp_get_num_threads();
+-    index_t patch_cnt = 0;
++    T thValue = _op::init();
+ #   endif
+ 
+     gsQuadRule<T> QuRule;  // Quadrature rule
+     gsVector<T> quWeights; // quadrature weights
+ 
+     auto _arg = expr.val();
+     m_exprdata->parse(_arg);
+     m_exprdata->activateFlags(SAME_ELEMENT);
+     
+     // Computed value on element
+     T elVal;
+-    index_t c = 0;
+     for (unsigned patchInd=0; patchInd < m_exprdata->multiBasis().nBases(); ++patchInd)
+     {
+         // Quadrature rule
+         QuRule =  gsQuadrature::get(m_exprdata->multiBasis().basis(patchInd), m_options);
+ 
+         // Initialize domain element iterator
+         typename gsBasis<T>::domainIter domIt =
+             m_exprdata->multiBasis().piece(patchInd).makeDomainIterator();
+         m_exprdata->getElement().set(*domIt,quWeights);
+ 
+         // Start iteration over elements of patchInd
++
+ #       ifdef _OPENMP
+-        if ( storeElWise )
+-        {
+-            c = patch_cnt + tid;
+-            patch_cnt += domIt->numElements();// a bit costy
+-        }
+         for ( domIt->next(tid); domIt->good(); domIt->next(nt) )
+ #       else
+         for (; domIt->good(); domIt->next() )
+ #       endif
+         {
+             // Map the Quadrature rule to the element
+             QuRule.mapTo( domIt->lowerCorner(), domIt->upperCorner(),
+                           m_exprdata->points(), quWeights);
+ 
+             // Perform required pre-computations on the quadrature nodes
+             m_exprdata->precompute(patchInd);
+ 
+             // Compute on element
+             elVal = _op::init();
+             for (index_t k = 0; k != quWeights.rows(); ++k) // loop over quad. nodes
+                 _op::acc(_arg.eval(k), quWeights[k], elVal);
+-
++            _op::acc(elVal, (T)1, thValue);
+             if ( storeElWise )
+-            {
+-#               ifdef _OPENMP
+-                m_elWise[c] = elVal;
+-                c += nt;
+-#               else
+-                m_elWise[c++] = elVal;
+-#               endif
+-            }
+-
+-#           pragma omp critical (_op_acc)
+-            _op::acc(elVal, 1, m_value);
++	      m_elWise[domIt->id()] = elVal; // wrong...
+         }
+     }
+-
++    _op::acc_global(thValue, m_value);
+ }//omp parallel
+     return m_value;
+ }
+ 
+ template<class T>
+ template<class E, class _op>
+ T gsExprEvaluator<T>::computeBdr_impl(const expr::_expr<E> & expr,
+                                       const bContainer & bdrlist)
+ {
+     // GISMO_ASSERT( expr.isScalar(),
+     //               "Expecting scalar expression instead of "
+     //               <<expr.cols()<<" x "<<expr.rows() );
+ 
+     //expr.print(gsInfo);
+ 
+     gsQuadRule<T> QuRule;  // Quadrature rule
+     gsVector<T> quWeights; // quadrature weights
+ 
+     auto _arg = expr.val();
+     m_exprdata->parse(_arg);
+     m_exprdata->activateFlags(SAME_ELEMENT);
+ 
+     // Computed value
+     T elVal;
+     m_value = _op::init();
+     m_elWise.clear();
+ 
+     for (typename gsBoxTopology::const_biterator bit = //!! not multipatch!
+              bdrlist.begin(); bit != bdrlist.end(); ++bit)
+     {
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    void computeGrid_impl(const expr::_expr<E> & expr, const index_t patchInd);
+
+    struct plus_op
+    {
+        static inline T init() { return 0; }
+        static inline void acc(const T contrib, const T w, T & res)
+        {
+	  res += w * contrib;
+	}
+
+        static inline void acc_global(const T contrib, T & res)
+        {
+#         pragma omp atomic
+	  res += contrib;
+	}
+
+    };
+

@@ -1,0 +1,4 @@
+  label delay   0 days: labels applied before the last review 99; decisions differing from uniform 0; BA 0.560; AUC of -Lambda 0.596
+  label delay  30 days: labels applied before the last review 98; decisions differing from uniform 0; BA 0.560; AUC of -Lambda 0.599
+  label delay 180 days: labels applied before the last review 95; decisions differing from uniform 0; BA 0.560; AUC of -Lambda 0.607
+  label delay 365 days: labels applied before the last review 90; decisions differing from uniform 0; BA 0.560; AUC of -Lambda 0.606

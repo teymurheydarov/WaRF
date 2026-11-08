@@ -1,0 +1,4 @@
+  claude_cli/claude-haiku-4-5-20251001; arm five, worker 2 of 4: 25 reviews to run (1 done) -> five.w2.jsonl
+  worker 2: 5/25  247 s per review, ~82 min left
+  worker 2: 10/25  222 s per review, ~56 min left
+  worker 2: 15/25  204 s per review, ~34 min left

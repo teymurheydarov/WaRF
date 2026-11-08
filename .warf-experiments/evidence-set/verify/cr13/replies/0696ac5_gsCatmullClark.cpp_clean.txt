@@ -1,0 +1,471 @@
+ID 0696ac5:gsCatmullClark.cpp:clean
+commit 0696ac5e862fb0571d3bc0b6d70d0a6a75490e32 file src/gsMesh2/gsCatmullClark.cpp date 2026-06-19 subj Update and simplify classes
+
+=== ONE decision REJECT
+[REJECT] The defect I can point to is in the sharp-vertex branch (`2 == sd`), which this refactor copies over unchanged:
+
+```cpp
+auto h1 = mesh.halfedge(v);
+while (!sharp[h1] || mesh.touches_boundary(h1))   // loop 1
+    h1 = mesh.cw_rotated_halfedge(h1);
+Halfedge h2 = h1;
+h1 = mesh.ccw_rotated_halfedge(mesh.halfedge(v));
+while (!sharp[h1] || mesh.is_boundary(h1))        // loop 2
+    h1 = mesh.ccw_rotated_halfedge(h1);
+```
+
+- **The two searches use different exclusion tests.** Loop 1 skips any halfedge whose edge lies on the boundary (`touches_boundary`). Loop 2 skips only halfedges that themselves have no face (`is_boundary`).
+- **It can hang.** If both sharp edges at `v` are boundary edges, which is the usual case when the boundary is flagged sharp, loop 1 rejects every halfedge around `v`. The `while` then never ends.
+- **It can pick the wrong neighbour.** If only one sharp edge is on the boundary, the loops apply different rules. They can select the same neighbour twice, or mix rules. The crease result `(2v + m1 + m2)/4` is then wrong.
+- **Likely fix:** use the same test in both loops, probably `is_boundary`. Also make sure the second search can't land on `h2` again.
+
+Moving this logic into a new public static `apply(gsSurfMesh&)` exposes it to more callers. That makes this the right time to fix it rather than carry it forward.
+
+Secondary concern:
+- **Possible build break.** The patch deletes the file-level typedefs (`Point`, `Halfedge`, etc.), but the body still uses unqualified `Point tmp;` and `Halfedge h2`. That only compiles if `gsCatmullClark` or its base class declares those names. The header isn't in the diff, so I can't confirm it. Either keep the typedefs or write `gsSurfMesh::Point` / `gsSurfMesh::Halfedge`.
+
+I checked the rest of the arithmetic and it is unchanged and correct:
+- edge midpoints `/2`
+- face points as the average of the 4 corner vertices
+- interior edge points `/4`
+- boundary vertex rule `(2v+m1+m2)/4`, which equals `(6v+a+b)/8`
+- interior vertex rule `(n(n−3)v + 4ΣE − ΣF)/n²`
+
+=== FIVE decision APPROVE
+--- SKEPTIC [APPROVE]
+I compared every statement in the new `gsCatmullClark::apply(gsSurfMesh&)` against the old `subdivide()` body. The patch is a behaviour-preserving refactor: `m_mesh->` becomes `mesh.`, the indentation changes, and `subdivide_impl()` now asserts that `m_mesh` is non-null and forwards to the static `apply`.
+
+**Edge points**
+- The skip condition for edges with both halfedges on the boundary is unchanged.
+- The midpoint `(from + to) / 2` is unchanged.
+- `add_vertex` followed by `insert_vertex(he, v)` is unchanged.
+
+**Face points**
+- The loop still steps two vertices at a time, sums four corner positions and divides by 4.
+- `env` and `fnv` are captured at the same points as before.
+
+**Quad split**
+- Face vertex ids are still `fnv + i++`.
+- The loop still starts from an original vertex (`idx() >= env` causes `++fv`) and calls `quad_split(fit, v, fv.he())`.
+
+**Interior edge points (`env..fnv`)**
+- The sharp check comes first, then the boundary check. The flagged context line, the boundary `continue`, is identical to the original: boundary edge points stay midpoints.
+- The rest is unchanged: the circulator sum, `/ 4`, and the OpenMP pragma with `private(v,tmp)`.
+
+**Original vertices (`0..env`)**
+- `n <= 2` still skips the vertex.
+- The crease rule (`sd == 2`) is unchanged.
+  - The first search still uses `touches_boundary` with `cw_rotated_halfedge`.
+  - The second still uses `is_boundary` with `ccw_rotated_halfedge`. This asymmetry already existed in the old code, so the patch introduces nothing new here.
+  - The weights `*2`, `+h2`, `+h1`, `/4` are unchanged.
+- `sd != 1` still triggers `continue`.
+- The boundary rule is unchanged: `*2`, right and left neighbours, `/4`.
+- The interior rule `(n(n-3)P + 4E - F) / n²` is unchanged.
+
+**Removed file-scope typedefs**
+- The new code still uses `Point` and `Halfedge` unqualified.
+- Inside a member function these are expected to resolve through the class or base (`gsSubdivScheme`) scope.
+- I can't see the header, so this is unverified. If they did not resolve, the result would be a compile error, not silent misbehaviour.
+
+I found no input, mesh state or call sequence where the new code produces a different result from the old code, so there is no demonstrable defect.
+--- ADVOCATE [APPROVE]
+This patch is a mechanical refactor: the body of `subdivide()` moves into a new `apply(gsSurfMesh&)`, `m_mesh->` becomes `mesh.`, and a thin `subdivide_impl()` wrapper is added. I compared the removed and added code line by line and found no semantic change.
+
+- **Edge points:** Midpoints are still inserted only on edges that are not boundary on both sides.
+- **Face points:** Every other vertex of each face is still averaged and divided by 4, giving the centroid of the four original corners.
+- **Quad split:** It still starts from an original vertex (`idx() >= env` skips one) with the same `fnv + i` face vertex.
+- **Edge-point smoothing:** The OpenMP loop is unchanged. Sharp points stay as midpoints, boundary points are skipped, and interior points take the average of their 4 neighbours.
+- **Original-vertex update:**
+  - The corner skip (`n <= 2`) is unchanged.
+  - The sharp crease rule is unchanged, including the original asymmetry where one search uses `touches_boundary` and the other uses `is_boundary`.
+  - The dart and corner `continue` and the boundary 1-2-1 rule are unchanged.
+  - The interior rule is still `(n(n-3)·v + 4E − F) / n²`.
+- **Tooling and reservation:** The OpenMP `private` clauses and the reserve sizes are the same.
+
+The only other changes are re-indentation and removal of the file-scope typedefs (`Point`, `Halfedge`, etc.). The code still refers to `Point` and `Halfedge` without qualification. That compiles as long as the header (not shown) provides these names in the class or namespace, which fits the coordinated header change that `subdivide_impl` and `apply` require anyway. No defect is demonstrable from this diff. The new `GISMO_ASSERT` on `m_mesh` is a small improvement.
+--- AUDITOR [APPROVE]
+**Behavior is unchanged.** I compared each block of the old `subdivide()` with the new `apply(gsSurfMesh&)`:
+
+- **Edge-point insertion:** the condition `!(is_boundary(he) && is_boundary(opposite))`, the midpoint value and `insert_vertex` are identical.
+- **Face points:** the stride-2 iteration over face vertices and `tmp /= 4` are identical.
+- **Quad split:** the face-vertex ids `fnv + i`, the skip of edge vertices when `idx() >= env`, and `quad_split` are identical.
+- **Edge-point finalization (OpenMP loop):** sharp vertices stay midpoints, and boundary vertices are skipped (the highlighted `else if (mesh.is_boundary(v)) continue;` matches the original). Interior edge points still use the 4-neighbour average (A+B+F1+F2)/4, which is the correct Catmull-Clark edge rule.
+- **Original-vertex relocation (OpenMP loop):**
+  - Rigid corners (`n <= 2`) are still skipped.
+  - The sharp rule is unchanged: the `sd == 2` crease average, the `cw`/`ccw` searches and their asymmetric `touches_boundary`/`is_boundary` predicates are the same as before.
+  - The dart fall-through on `sd == 1` is unchanged.
+  - The boundary rule (2V + left + right)/4 is unchanged.
+  - The interior formula `(n(n-3)V + Σ(4E − F)) / n²` is unchanged.
+- **OpenMP clauses** (`default(shared) private(v,tmp)` / `private(v)`) and the data dependencies are the same. Each loop still writes only to vertices in its own index range and reads only positions that the loop does not modify.
+
+**Structural changes:**
+
+- `subdivide()` becomes `subdivide_impl()`, which asserts `m_mesh` is not null and delegates to a reusable `apply(gsSurfMesh&)`. The new assertion is a strict improvement.
+- The namespace-scope typedefs (`Point`, `Vertex`, `Face`, `Halfedge`, `Edge`) are removed, and every `m_mesh->` becomes `mesh.`.
+- The rest is re-indentation.
+
+**One thing to confirm before merging:** the body still uses unqualified `Point` and `Halfedge`. This only compiles if `gsCatmullClark` or its base `gsSubdivScheme` defines these as class-scope typedefs. That is plausible given the new `subdivide_impl` hook, but the header diff is not shown. Some pre-existing oddities are carried over unchanged and are not regressions:
+
+- the hard-coded `/4` for the face and edge averages assumes an all-quad mesh;
+- the `cw`/`ccw` predicate asymmetry;
+- the odd do-while indentation.
+
+I found no logic regression introduced by this patch.
+--- TEST-FOCUSED [REJECT]
+The refactor itself is faithful. Moving from `m_mesh->` to `mesh.` in a static `apply` changes no logic. I compared every loop, and the edge-point, face-point, quad-split, crease, boundary and interior rules match the original. But the code it carries has paths whose failure would be silent, and `apply(gsSurfMesh&)` now exposes them through a new entry point.
+
+1. **Non-quad faces give wrong face points with no error.** After edge points are inserted, the face-point loop steps through the face vertices two at a time and always divides by 4 (`tmp /= 4`). This assumes every face started as a quad.
+   - A triangle gives 3 summed points divided by 4.
+   - A pentagon gives 5 summed points divided by 4.
+   - In both cases the result is a plausible point shifted toward or away from the origin.
+   - `quad_split` then runs on the wrong vertex count. Nothing checks the face valence, and no assertion or return value tells the caller. The interior rule `tmp /= 4; // =valence(v)` makes the same assumption.
+
+2. **Index ranges assume no deleted vertices.** The code sets `env = n_vertices()` and `fnv = n_vertices()`, then rebuilds handles with `Vertex(fnv + i)` and loops `for (i = env; i < fnv; ++i)`.
+   - This assumes new vertices take indices `[n_vertices(), ...)` in order.
+   - In this surface-mesh design, `n_vertices()` usually excludes deleted vertices that have not been garbage-collected yet, while `add_vertex` adds at the end of the storage.
+   - On a mesh with pending deletions, the loops would treat original vertices as edge points and the wrong vertices as face centers. The result is a moved or wrongly connected mesh, not an exception.
+   - The static `apply` accepts any caller's mesh without calling `garbage_collection()` or asserting there are no deletions.
+
+3. **The crease search can hang depending on the input.** In the `sd == 2` branch, `while (!sharp[h1] || mesh.touches_boundary(h1))` has no exit if both sharp halfedges touch the boundary. The two searches also use different tests (`touches_boundary` and `is_boundary`), so they can disagree about which sharp neighbors count. Whether this hangs depends on how sharp flags spread through `insert_vertex`. A test cannot control that, and the result is a hang, not a clear failure.
+
+4. **The only new guard disappears in release builds.** `GISMO_ASSERT(nullptr != m_mesh)` is not checked in release builds. A null mesh then becomes undefined behavior instead of a clear error.
+
+Each of these is a path whose failure is a plausible-looking wrong mesh or a hang, not something a caller can assert on.
+--- BOUNDARY [APPROVE]
+This patch is a pure refactor. It replaces the `m_mesh->` member body of `subdivide()` with a static `apply(gsSurfMesh&)`, and `subdivide_impl()` forwards to it after asserting `m_mesh != nullptr`. I compared old and new line by line: every expression, loop bound, condition and constant is the same, so the patch introduces no new boundary behaviour.
+
+**New boundary added by the patch**
+- **Null mesh:** `subdivide_impl()` asserts `nullptr != m_mesh` before dereferencing. This is handled (a). In release builds where `GISMO_ASSERT` compiles out, the old code dereferenced `m_mesh` unchecked anyway, so nothing gets worse.
+
+**Boundaries inherited unchanged from the original**
+- **Empty mesh** (0 vertices, edges or faces): `reserve(0,0,0)` is fine, every range loop is empty, and `env == fnv == 0`, so both OpenMP loops run zero times. Handled (a).
+- **Edges with both halfedges on the boundary** (isolated edges): these are skipped during edge-point insertion, as before. Handled (a).
+- **Face-point averaging:** stepping by `++vc, ++vc` and dividing by 4 assumes quads, which after edge insertion have 8 vertices. Non-quad input is outside the Catmull-Clark caller contract in this implementation, and the behaviour is unchanged (b).
+- **Edge-point valence:** dividing by a hard-coded 4 is correct because each interior edge point has exactly 2 original-vertex and 2 face-point neighbours after `quad_split`. Handled (a).
+- **Low-valence original vertices:** the `n <= 2` early `continue` guards the `n*(n-3)` and `/(n*n)` terms, so a valence of 0 (isolated vertex) cannot cause division by zero. Handled (a).
+- **Sharp vertex with `sd == 2`:** the first search uses `touches_boundary` and the second uses `is_boundary`. This asymmetry exists verbatim in the original. Both `while` loops could spin forever if no qualifying halfedge exists, but `sd == 2` guarantees two sharp halfedges. Outside the contract (b) and not introduced here.
+- **Boundary vertex rotation:** the `while (!touches_boundary(hh))` loop terminates because `is_boundary(v)` was just checked. Handled (a).
+- **Mixed-signedness loop index:** `int i` against `index_t env/fnv` is the same as before. It would only matter for meshes above `INT_MAX` vertices, which is impractical and unchanged (b).
+
+**Typedefs**
+- The removed file-scope typedefs (`Point`, `Halfedge`) are still used unqualified. This is a compile concern rather than a logic boundary. Because `apply` is a member, class-scope typedefs from `gsSubdivScheme` or the header would resolve them, and the diff gives no evidence of a wrong runtime result.
+
+No boundary falls in category (c), meaning genuinely mishandled with a concrete input producing a wrong result.
+
+=== DIFF
+diff --git a/src/gsMesh2/gsCatmullClark.cpp b/src/gsMesh2/gsCatmullClark.cpp
+index 45bce9afe..c449b1369 100644
+--- a/src/gsMesh2/gsCatmullClark.cpp
++++ b/src/gsMesh2/gsCatmullClark.cpp
+@@ -1,170 +1,170 @@
+ /** @file gsCatmullClark.cpp
+ 
+     @brief Catmull-Clark subdivision on a  mesh.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): A. Mantzaflaris, D. Tolis, L. Mussmaecher
+ */
+ 
+ 
+ #include <gsMesh2/gsCatmullClark.h>
+ #include <gsMesh2/gsSubdivScheme.h>
+ 
+ namespace gismo {
+ 
+-    typedef gsSurfMesh::Point Point;
+-    typedef gsSurfMesh::Vertex Vertex;
+-    typedef gsSurfMesh::Face Face;
+-    typedef gsSurfMesh::Halfedge Halfedge;
+-    typedef gsSurfMesh::Edge Edge;
+-
+-    void gsCatmullClark::subdivide() {
+-      
+-        gsSurfMesh::Vertex v;
+-        gsSurfMesh::Halfedge he;
+-
+-        // reserve vertices, edges, faces
+-        m_mesh->reserve(m_mesh->n_vertices() + m_mesh->n_edges() + m_mesh->n_faces(),
+-            2 * m_mesh->n_edges(), 4 * m_mesh->n_faces());
+-        std::vector<std::string> he_props = m_mesh->halfedge_properties();
+-        const bool do_sharp = std::find(he_props.begin(), he_props.end(), "h:sharp") != he_props.end();
+-        gsSurfMesh::Halfedge_property<bool> sharp;
+-        if (do_sharp)
+-            sharp = m_mesh->get_halfedge_property<bool>("h:sharp");
+-
+-        index_t env = m_mesh->n_vertices(); // edge vertices start here
+-
+-        // loop over all edges, add edge points
+-        Point tmp;
+-        for (auto eit : m_mesh->edges())
++void gsCatmullClark::subdivide_impl()
++{
++    GISMO_ASSERT(nullptr!=m_mesh,"Invalid mesh");
++    gsCatmullClark::apply(*m_mesh);
++}
++
++void gsCatmullClark::apply(gsSurfMesh& mesh)
++{
++    gsSurfMesh::Vertex v;
++    gsSurfMesh::Halfedge he;
++
++    // reserve vertices, edges, faces
++    mesh.reserve(mesh.n_vertices() + mesh.n_edges() + mesh.n_faces(),
++                    2 * mesh.n_edges(), 4 * mesh.n_faces());
++    std::vector<std::string> he_props = mesh.halfedge_properties();
++    const bool do_sharp = std::find(he_props.begin(), he_props.end(), "h:sharp") != he_props.end();
++    gsSurfMesh::Halfedge_property<bool> sharp;
++    if (do_sharp)
++        sharp = mesh.get_halfedge_property<bool>("h:sharp");
++
++    index_t env = mesh.n_vertices(); // edge vertices start here
++
++    // loop over all edges, add edge points
++    Point tmp;
++    for (auto eit : mesh.edges())
++    {
++        he = mesh.halfedge(eit, 0);
++        if (!(mesh.is_boundary(he) && mesh.is_boundary(mesh.opposite_halfedge(he))))
+         {
+-            he = m_mesh->halfedge(eit, 0);
+-            if (!(m_mesh->is_boundary(he) && m_mesh->is_boundary(m_mesh->opposite_halfedge(he))))
+-            {
+-                tmp = (m_mesh->position(m_mesh->from_vertex(he)) + m_mesh->position(m_mesh->to_vertex(he))) / 2;
+-                v = m_mesh->add_vertex(tmp);// edge points initialized as midpoints
+-                m_mesh->insert_vertex(he, v);
+-            }
++            tmp = (mesh.position(mesh.from_vertex(he)) + mesh.position(mesh.to_vertex(he))) / 2;
++            v = mesh.add_vertex(tmp);// edge points initialized as midpoints
++            mesh.insert_vertex(he, v);
+         }
++    }
+ 
+-        index_t fnv = m_mesh->n_vertices(); // face vertices start here
++    index_t fnv = mesh.n_vertices(); // face vertices start here
++
++    // loop over all faces, add face points
++    for (auto fit : mesh.faces())
++    {
++        auto fv = mesh.vertices(fit);
++        tmp.setZero();
++        for (auto vc = fv.begin(); vc != fv.end(); ++vc, ++vc)
++            tmp += mesh.position(*vc);
++        tmp /= 4;
++        mesh.add_vertex(tmp);  // vertex gets shifted face id
++    }
+ 
+-        // loop over all faces, add face points
+-        for (auto fit : m_mesh->faces())
+-        {
+-            auto fv = m_mesh->vertices(fit);
+-            tmp.setZero();
+-            for (auto vc = fv.begin(); vc != fv.end(); ++vc, ++vc)
+-                tmp += m_mesh->position(*vc);
+-            tmp /= 4;
+-            m_mesh->add_vertex(tmp);  // vertex gets shifted face id
+-        }
++    int i = 0;
++    for (auto fit : mesh.faces())
++    {
++        v = gsSurfMesh::Vertex(fnv + (i++));//face vertex id ?
++        //Start from an original vertex
++        auto fv = mesh.vertices(fit).begin();
++        if ((*fv).idx() >= env) ++fv; //todo: add -> operator
++        //assert ( (*fv).idx() < nv )
++        mesh.quad_split(fit, v, fv.he());
++    }
+ 
+-        int i = 0;
+-        for (auto fit : m_mesh->faces())
++#   pragma omp parallel for default(shared) private(v,tmp)
++    for (i = env; i < fnv; ++i)
++    {
++        v = gsSurfMesh::Vertex(i); //edge points
++
++        if (do_sharp && mesh.has_flag(v, sharp))
++            continue; //remain midpoints
++        else if (mesh.is_boundary(v))
+         {
+-            v = gsSurfMesh::Vertex(fnv + (i++));//face vertex id ?
+-            //Start from an original vertex
+-            auto fv = m_mesh->vertices(fit).begin();
+-            if ((*fv).idx() >= env) ++fv; //todo: add -> operator
+-            //assert ( (*fv).idx() < nv )
+-            m_mesh->quad_split(fit, v, fv.he());
++            //gsWarn<< "Boundary vertex "<< v.idx() <<"\n";
++            continue;
+         }
+-
+-#   pragma omp parallel for default(shared) private(v,tmp)
+-        for (i = env; i < fnv; ++i)
++        else
+         {
+-            v = gsSurfMesh::Vertex(i); //edge points
+-
+-            if (do_sharp && m_mesh->has_flag(v, sharp))
+-                continue; //remain midpoints
+-            else if (m_mesh->is_boundary(v))
+-            {
+-                //gsWarn<< "Boundary vertex "<< v.idx() <<"\n";
+-                continue;
+-            }
+-            else
+-            {
+-                //Interior edge points finalized here
+-                auto vit = m_mesh->vertices(v);
+-                auto vcp = vit;
+-                tmp.setZero();
+-                if (vit) do
+-                {
+-                    tmp += m_mesh->position(*vit);
+-                } while (++vit != vcp);
+-                tmp /= 4; // =valence(v);
+-                m_mesh->position(v) = tmp;
+-            }
++            //Interior edge points finalized here
++            auto vit = mesh.vertices(v);
++            auto vcp = vit;
++            tmp.setZero();
++            if (vit) do
++                     {
++                         tmp += mesh.position(*vit);
++                     } while (++vit != vcp);
++            tmp /= 4; // =valence(v);
++            mesh.position(v) = tmp;
+         }
++    }
+ 
+ #   pragma omp parallel for default(shared) private(v)
+-        for (i = 0; i < env; ++i)
+-        {
+-            v = gsSurfMesh::Vertex(i); // original vertices
+-            auto n = m_mesh->valence(v);
++    for (i = 0; i < env; ++i)
++    {
++        v = gsSurfMesh::Vertex(i); // original vertices
++        auto n = mesh.valence(v);
+ 
+-            // Rigid corner ?
+-            if (n <= 2) continue;
++        // Rigid corner ?
++        if (n <= 2) continue;
+ 
+-            //original vertex positions are computed using new edge/face points only
+-            auto& pt = m_mesh->position(v);
++        //original vertex positions are computed using new edge/face points only
++        auto& pt = mesh.position(v);
+ 
+-            if (do_sharp && m_mesh->has_flag(v, sharp))
++        if (do_sharp && mesh.has_flag(v, sharp))
++        {
++            unsigned int sd = mesh.hcount(v, sharp);
++            if (2 == sd)
+             {
+-                unsigned int sd = m_mesh->hcount(v, sharp);
+-                if (2 == sd)
+-                {
+-                    auto h1 = m_mesh->halfedge(v);
+-                    while (!sharp[h1] || m_mesh->touches_boundary(h1))
+-                        h1 = m_mesh->cw_rotated_halfedge(h1);
+-                    Halfedge h2 = h1;
+-                    h1 = m_mesh->ccw_rotated_halfedge(m_mesh->halfedge(v));
+-                    while (!sharp[h1] || m_mesh->is_boundary(h1))
+-                        h1 = m_mesh->ccw_rotated_halfedge(h1);
+-
+-                    pt *= 2; //2~6
+-                    pt += m_mesh->position(m_mesh->to_vertex(h2)); // first flagged neighbor
+-                    pt += m_mesh->position(m_mesh->to_vertex(h1)); // second flagged neighbor
+-                    pt /= 4; // /4~8
+-                }
+-
+-                if (sd != 1) // dart: use smooth rule, else  no relocation
+-                    continue;
++                auto h1 = mesh.halfedge(v);
++                while (!sharp[h1] || mesh.touches_boundary(h1))
++                    h1 = mesh.cw_rotated_halfedge(h1);
++                Halfedge h2 = h1;
++                h1 = mesh.ccw_rotated_halfedge(mesh.halfedge(v));
++                while (!sharp[h1] || mesh.is_boundary(h1))
++                    h1 = mesh.ccw_rotated_halfedge(h1);
++
++                pt *= 2; //2~6
++                pt += mesh.position(mesh.to_vertex(h2)); // first flagged neighbor
++                pt += mesh.position(mesh.to_vertex(h1)); // second flagged neighbor
++                pt /= 4; // /4~8
+             }
+ 
+-            if (m_mesh->is_boundary(v))
+-            {
+-                pt *= 2;
+-                auto hh = m_mesh->halfedge(v);
+-                while (!(m_mesh->touches_boundary(hh)))
+-                    hh = m_mesh->cw_rotated_halfedge(hh);
+-                //GISMO_ASSERT(touches_boundary(hh), "Did not find a boundary halfedge.");
+-                pt += m_mesh->position(m_mesh->to_vertex(hh)); //  right boundary neighbor
+-                hh = m_mesh->next_halfedge(m_mesh->opposite_halfedge(hh));
+-                pt += m_mesh->position(m_mesh->to_vertex(hh)); // left boundary neighbor
+-                pt /= 4;
+-            }
+-            else
+-            {
+-                auto vit = m_mesh->halfedges(v);
+-                auto vcp = vit;
+-                //formula: pt = ( (n*(n-3))*points[v] + 4*E - F ) / (n*n);
+-                pt *= n * (n - 3);
+-                if (vit)
+-                    do
+-                    { //pt += 4*E-F
+-                        pt += 4 * m_mesh->position(m_mesh->to_vertex(*vit))
+-                            - m_mesh->position(m_mesh->to_vertex(m_mesh->next_halfedge(*vit)));
+-                    } while (++vit != vcp);
+-                pt /= n * n;
+-            }
++            if (sd != 1) // dart: use smooth rule, else  no relocation
++                continue;
++        }
++
++        if (mesh.is_boundary(v))
++        {
++            pt *= 2;
++            auto hh = mesh.halfedge(v);
++            while (!(mesh.touches_boundary(hh)))
++                hh = mesh.cw_rotated_halfedge(hh);
++            //GISMO_ASSERT(touches_boundary(hh), "Did not find a boundary halfedge.");
++            pt += mesh.position(mesh.to_vertex(hh)); //  right boundary neighbor
++            hh = mesh.next_halfedge(mesh.opposite_halfedge(hh));
++            pt += mesh.position(mesh.to_vertex(hh)); // left boundary neighbor
++            pt /= 4;
++        }
++        else
++        {
++            auto vit = mesh.halfedges(v);
++            auto vcp = vit;
++            //formula: pt = ( (n*(n-3))*points[v] + 4*E - F ) / (n*n);
++            pt *= n * (n - 3);
++            if (vit)
++                do
++                { //pt += 4*E-F
++                    pt += 4 * mesh.position(mesh.to_vertex(*vit))
++                        - mesh.position(mesh.to_vertex(mesh.next_halfedge(*vit)));
++                } while (++vit != vcp);
++            pt /= n * n;
+         }
+     }
++}
+ 
+ }
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+        else if (mesh.is_boundary(v))
+        {
+            //gsWarn<< "Boundary vertex "<< v.idx() <<"\n";
+            continue;
+        }
+

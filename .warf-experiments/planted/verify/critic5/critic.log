@@ -1,0 +1,46 @@
+== 1. Relabel: clean originals with a defect Claude named (ORIG_DEFECT) count as defective ==
+  one: TPR 0.968 (n 62)  TNR 0.804 (n 46)  BA 0.8860
+  five: TPR 0.919 (n 62)  TNR 0.870 (n 46)  BA 0.8945
+  only five right 3 [(3, 'p:clean'), (48, 'h:clean'), (54, 'h:clean')]; only one right 3 [(7, 'p:clean'), (22, 'planted'), (52, 'p:clean')]
+  exact McNemar p 1.000
+
+== 2. Error ledger: every panel error vs Claude alone's errors (scored as in score_five) ==
+  Claude alone errors 19, panel errors 15, shared 14
+  shared: [(5, 'clean'), (8, 'clean'), (9, 'clean'), (18, 'clean'), (26, 'clean'), (30, 'clean'), (31, 'clean'), (31, 'planted'), (33, 'planted'), (35, 'clean'), (36, 'clean'), (39, 'clean'), (47, 'clean'), (53, 'clean')]
+  panel only: [(22, 'planted')]   one only: [(3, 'clean'), (7, 'clean'), (48, 'clean'), (52, 'clean'), (54, 'clean')]
+
+== 3. Panel REJECT-vote count as a graded score (RRRR early stop = 4) ==
+  REJECT if >= 1 R votes: BA 0.6852  caught 54/54 passed 20/54
+  REJECT if >= 2 R votes: BA 0.8333  caught 52/54 passed 38/54
+  REJECT if >= 3 R votes: BA 0.8611  caught 51/54 passed 42/54
+  REJECT if >= 4 R votes: BA 0.8796  caught 51/54 passed 44/54
+  AUC of R count 0.8906; Claude alone (binary) AUC = its BA 0.8241
+  R count on clean, by Claude alone's verdict:
+    Claude alone REJECT: R=0..4 [1, 1, 3, 2, 10]
+    Claude alone APPROVE: R=0..4 [19, 17, 1, 0, 0]
+
+== 4. Is the seats' agreement within-item dependence or item difficulty? ==
+  Fleiss kappa, 4 seats, all clean: +0.411 (n 54)
+  ... within Claude alone REJECT items: +0.295 (n 17)
+  ... within Claude alone APPROVE items: -0.107 (n 37)
+  2-class conditional-independence fit (4 seats + Claude alone), clean items: share 'suspicious' 0.280, loglik -97.84
+    class 0: P(REJECT) SKEPTIC 0.00 ADVOCATE 0.00 AUDITOR 0.05 TEST-FOCUSED 0.46 ONE 0.05
+    class 1: P(REJECT) SKEPTIC 0.60 ADVOCATE 0.86 AUDITOR 0.79 TEST-FOCUSED 1.00 ONE 1.00
+    4-seat R count 0..4 observed [20, 18, 5, 3, 8], under the fit [19.9, 18.2, 3.0, 6.8, 6.1]
+    Claude alone REJECT rate by class 0.05 / 1.00; majority of 5 iid samples -> 0.001 / 1.000; expected clean false alarms 15.2 (one sample 17.0, panel observed 12)
+
+== 5. Same comparison on 100 real gismo6 commits (four-arms), recomputed from records ==
+  one: n 100  REJECTs 47  TPR 0.520 TNR 0.580 BA 0.550
+  five: n 100  REJECTs 15  TPR 0.180 TNR 0.880 BA 0.530
+  only five right 16, only one right 18
+  panel REJECTs that Claude alone also rejected: 14/15
+
+== 6. Single seats as one-call reviewers on the planted set (post hoc) ==
+  SKEPTIC       BA 0.8889 caught 51/54 passed 45/54
+  ADVOCATE      BA 0.8519 caught 51/54 passed 41/54
+  AUDITOR       BA 0.8426 caught 51/54 passed 40/54
+  TEST-FOCUSED  BA 0.6944 caught 54/54 passed 21/54
+  four-arms seats SKEPTIC       BA 0.520  REJECTs 14
+  four-arms seats ADVOCATE      BA 0.510  REJECTs 13
+  four-arms seats AUDITOR       BA 0.550  REJECTs 41
+  four-arms seats TEST-FOCUSED  BA 0.570  REJECTs 41

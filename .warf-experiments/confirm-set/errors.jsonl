@@ -1,0 +1,12 @@
+{"id": "a064e38:gismo.h:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:37.342838+00:00"}
+{"id": "d7b6ac9:gsMesh.h:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:41.601143+00:00"}
+{"id": "910f0ac:gsRationalBasis.h:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:45.991807+00:00"}
+{"id": "7296bc7:gsMemory.h:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:48.616714+00:00"}
+{"id": "378137e:gsQuadratureRules_test.cpp:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:48.913072+00:00"}
+{"id": "ce31268:gsCurveFitting.h:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:53.067612+00:00"}
+{"id": "612b66b:gsAssembler.hpp:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:53.617590+00:00"}
+{"id": "34dbddb:kirchhoff-Love_example.cpp:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:57.466575+00:00"}
+{"id": "e924dc2:gsMpiComm.h:defective", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:17:58.225091+00:00"}
+{"id": "e9f4f59:gsAssembler.h:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:18:02.057385+00:00"}
+{"id": "37d7812:gsMesh.hpp:clean", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:18:05.402785+00:00"}
+{"id": "4ed7de2:test.h:defective", "arm": "claude-commit-strict-tools@max", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-07T19:18:09.603787+00:00"}

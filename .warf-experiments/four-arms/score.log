@@ -1,0 +1,49 @@
+Reviews per arm: claude-one 100, claude-standard 100, jev-one 100, jev-standard 100; scored on the 100 all four have.
+
+== all: 100 changes, 50 later fixed, 50 never fixed ==
+WaRF's verdict: balanced accuracy [95 %], REJECTs (later fixed), HIGH verdicts right
+  Claude, one agent            0.550 [0.450, 0.650]   REJECT 47 (26)   HIGH 0/0
+  WaRF Claude (5 personas)     0.530 [0.460, 0.600]   REJECT 15 (9)   HIGH 5/10
+  Jev, one agent               0.580 [0.480, 0.670]   REJECT 52 (30)   HIGH 0/0
+  WaRF Jev (5 personas)        0.560 [0.480, 0.640]   REJECT 24 (15)   HIGH 11/18
+Ranking: AUC [95 %]
+  Claude, one agent (vote)                   0.550 [0.450, 0.650]
+  WaRF Claude, -Lambda                       0.580 [0.475, 0.680]
+  WaRF Claude, REJECT-vote share             0.580 [0.475, 0.680]
+  Jev, one agent, p(REJECT)                  0.637 [0.527, 0.735]
+  WaRF Jev, -Lambda                          0.579 [0.477, 0.678]
+  WaRF Jev, mean p(REJECT) of agents asked   0.626 [0.515, 0.729]
+Differences in balanced accuracy, paired [95 %], share of resamples <= 0
+  Claude, one agent - Jev, one agent: -0.030 [-0.130, +0.070]  0.736
+  WaRF Claude (5 personas) - WaRF Jev (5 personas): -0.030 [-0.130, +0.080]  0.719
+  WaRF Claude (5 personas) - Claude, one agent: -0.020 [-0.110, +0.070]  0.679
+  WaRF Jev (5 personas) - Jev, one agent: -0.020 [-0.110, +0.070]  0.697
+  Claude, one agent - WaRF Jev (5 personas): -0.010 [-0.110, +0.090]  0.604
+
+== without 18: 82 changes, 50 later fixed, 32 never fixed ==
+WaRF's verdict: balanced accuracy [95 %], REJECTs (later fixed), HIGH verdicts right
+  Claude, one agent            0.557 [0.449, 0.664]   REJECT 39 (26)   HIGH 0/0
+  WaRF Claude (5 personas)     0.559 [0.492, 0.624]   REJECT 11 (9)   HIGH 5/7
+  Jev, one agent               0.581 [0.470, 0.685]   REJECT 44 (30)   HIGH 0/0
+  WaRF Jev (5 personas)        0.572 [0.479, 0.659]   REJECT 20 (15)   HIGH 11/14
+Ranking: AUC [95 %]
+  Claude, one agent (vote)                   0.557 [0.449, 0.664]
+  WaRF Claude, -Lambda                       0.601 [0.476, 0.713]
+  WaRF Claude, REJECT-vote share             0.601 [0.476, 0.713]
+  Jev, one agent, p(REJECT)                  0.642 [0.507, 0.753]
+  WaRF Jev, -Lambda                          0.585 [0.462, 0.695]
+  WaRF Jev, mean p(REJECT) of agents asked   0.638 [0.504, 0.752]
+Differences in balanced accuracy, paired [95 %], share of resamples <= 0
+  Claude, one agent - Jev, one agent: -0.024 [-0.137, +0.094]  0.660
+  WaRF Claude (5 personas) - WaRF Jev (5 personas): -0.013 [-0.120, +0.088]  0.616
+  WaRF Claude (5 personas) - Claude, one agent: +0.002 [-0.106, +0.108]  0.494
+  WaRF Jev (5 personas) - Jev, one agent: -0.009 [-0.106, +0.093]  0.562
+  Claude, one agent - WaRF Jev (5 personas): -0.015 [-0.136, +0.103]  0.608
+
+== The panels' seats (all 100) ==
+  WaRF Claude (5 personas): 10 reviews stopped early; REJECT votes per seat (of the reviews it voted on): SKEPTIC 14/100, ADVOCATE 13/100, AUDITOR 41/100, TEST-FOCUSED 41/100, BOUNDARY 1/90
+    verdict equals the same model's one agent on 66 of 100
+  WaRF Jev (5 personas): 18 reviews stopped early; REJECT votes per seat (of the reviews it voted on): SKEPTIC 22/100, ADVOCATE 20/100, AUDITOR 47/100, TEST-FOCUSED 45/100, BOUNDARY 1/82
+    verdict equals the same model's one agent on 72 of 100
+
+Jev cost: $0.0206. Claude calls: claude-one 100, claude-standard 490

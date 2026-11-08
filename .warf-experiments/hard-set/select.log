@@ -1,0 +1,3 @@
+116 candidates: both judges keep 62, disagree on 2, both reject 52
+pilot: 20 bases; accumulate 1, first_second 4, plus_one 9, wrong_var 6; visible from the diff (both judges): 20
+test: 42 bases; accumulate 10, first_second 4, plus_one 6, wrong_var 22; visible from the diff (both judges): 41

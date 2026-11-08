@@ -1,0 +1,13 @@
+Out-of-fold log-odds mode on the 100 commits (later fixed = REJECT); AUC of -Λ, balanced accuracy
+of the verdict, right/total per confidence band, calibration tags used.
+
+  Jev alone                          AUC 0.629   BA 0.540   LOW 40/79  MEDIUM 14/21   [platt]
+  Laya alone                         AUC 0.579   BA 0.530   LOW 53/100   [platt]
+  Claude alone                       AUC 0.737   BA 0.650   HIGH 1/1  LOW 26/53  MEDIUM 38/46   [platt]
+  five Jev personas (one model)      AUC 0.616   BA 0.570   LOW 48/87  MEDIUM 9/13   [platt]
+  Jev + Laya                         AUC 0.644   BA 0.630   LOW 46/78  MEDIUM 17/22   [platt]
+  Jev + Claude                       AUC 0.727   BA 0.620   HIGH 4/5  LOW 17/40  MEDIUM 41/55   [platt]
+  Jev + Laya + Claude                AUC 0.731   BA 0.610   HIGH 3/4  LOW 16/39  MEDIUM 42/57   [platt]
+
+For reference, vote mode (uniform ω, every seat votes at p > 0.5):
+  Jev + Laya + Claude, votes         AUC 0.616

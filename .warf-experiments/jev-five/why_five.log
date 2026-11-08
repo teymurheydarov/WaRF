@@ -1,0 +1,53 @@
+
+  100 commits, 50 later fixed (the five-Laya selection); stored scores only
+
+  1. How alike the members are: correlation of their logit p(REJECT) across commits,
+     overall and within each label (the part that is not signal)
+
+  five Jev personas (Round 1)
+                      SKEPTIC     ADVOCATE      AUDITOR TEST-FOCUSED     BOUNDARY
+  SKEPTIC                             0.90         0.90         0.89         0.92
+  ADVOCATE               0.90                      0.96         0.86         0.89
+  AUDITOR                0.90         0.96                      0.87         0.90
+  TEST-FOCUSED           0.89         0.86         0.87                      0.90
+  BOUNDARY               0.92         0.89         0.90         0.90             
+  REJECT votes per persona: SKEPTIC 21, ADVOCATE 19, AUDITOR 48, TEST-FOCUSED 47, BOUNDARY 13
+
+  five Laya personas (Round 1)
+                      SKEPTIC     ADVOCATE      AUDITOR TEST-FOCUSED     BOUNDARY
+  SKEPTIC                             0.74         0.81         0.83         0.86
+  ADVOCATE               0.74                      0.87         0.73         0.72
+  AUDITOR                0.81         0.87                      0.76         0.81
+  TEST-FOCUSED           0.83         0.73         0.76                      0.91
+  BOUNDARY               0.86         0.72         0.81         0.91             
+  REJECT votes per persona: SKEPTIC 49, ADVOCATE 3, AUDITOR 19, TEST-FOCUSED 2, BOUNDARY 11
+
+  2. What averaging gains, against what the binormal model predicts from the members alone.
+     n_eff = n / (1 + (n - 1) * mean within-label correlation): the number of independent
+     reviewers the members are worth. Prediction: AUC of the mean of the members' d' times
+     sqrt(n_eff); 'if independent' sets n_eff = n.
+
+                                        members AUC  r within  n_eff  predicted  if indep.  observed
+  five Jev personas (Round 1)    0.600 to 0.640      0.89   1.09      0.629      0.760     0.630
+                                 average beats its mean member by +0.006 [-0.006, +0.017], its best (Jev ADVOCATE) by -0.010 [-0.042, +0.023]
+  five Laya personas (Round 1)   0.528 to 0.565      0.80   1.18      0.553      0.608     0.557
+                                 average beats its mean member by +0.008 [-0.011, +0.028], its best (Laya BOUNDARY) by -0.009 [-0.050, +0.038]
+  Jev asked three times          0.633 to 0.651      0.99   1.01      0.642      0.736     0.646
+                                 average beats its mean member by +0.004 [-0.002, +0.010], its best (Jev, rerun A) by -0.005 [-0.017, +0.004]
+  Laya + Jev                     0.586 to 0.641     -0.20   2.49      0.676      0.659     0.678
+                                 average beats its mean member by +0.065 [+0.013, +0.115], its best (Jev, one question) by +0.037 [-0.065, +0.136]
+  Jev + Claude                   0.641 to 0.745      0.53   1.31      0.720      0.765     0.718
+                                 average beats its mean member by +0.025 [-0.000, +0.052], its best (Claude, blinded) by -0.026 [-0.082, +0.027]
+  Laya + Jev + Claude            0.586 to 0.745      0.04   2.80      0.755      0.762     0.768
+                                 average beats its mean member by +0.110 [+0.061, +0.157], its best (Claude, blinded) by +0.023 [-0.062, +0.106]
+
+  3. WaRF's SPRT adds the five votes as five independent pieces of evidence.
+     Later-fixed share by the number of Jev REJECT votes in Round 1 (half of all commits are later fixed):
+     0 of 5 REJECT:  45 commits, 17 later fixed (0.38)
+     1 of 5 REJECT:  12 commits, 10 later fixed (0.83)
+     2 of 5 REJECT:  20 commits, 10 later fixed (0.50)
+     3 of 5 REJECT:   6 commits,  3 later fixed (0.50)
+     4 of 5 REJECT:   6 commits,  4 later fixed (0.67)
+     5 of 5 REJECT:  11 commits,  6 later fixed (0.55)
+     one Jev agent: APPROVE MEDIUM 47 (19 later fixed); REJECT MEDIUM 53 (31 later fixed)
+     five-Jev panel: APPROVE MEDIUM 78 (36 later fixed); REJECT HIGH 17 (10 later fixed); REJECT MEDIUM 5 (4 later fixed)

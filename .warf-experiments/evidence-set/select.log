@@ -1,0 +1,4 @@
+120 candidates: both judges keep 74, they disagree on 11, both reject 35
+set: 50 bases (100 items); operators: arg_swap 6, drop_stmt 16, loop_bound 5, minus_one 8, rows_cols 7, start_index 7, swap_ij 1
+visible from the diff, both judges: 48; needs another file, either judge: 2
+commits after 2026-06-30 (after Claude Opus 5.5's training cutoff): 4

@@ -1,0 +1,34 @@
+A. Negative control: 1,000 label shuffles (50/50 kept); mean selective accuracy at 10/25/50/75/100 % and AURC
+   jev_single           0.496/0.499/0.498/0.499/0.500   AURC 0.502
+   jev_rerunA           0.498/0.500/0.498/0.499/0.500   AURC 0.501
+   jev_rerunB           0.496/0.500/0.498/0.500/0.500   AURC 0.501
+   laya_single          0.500/0.500/0.502/0.501/0.500   AURC 0.500
+   claude               0.500/0.501/0.499/0.501/0.500   AURC 0.499
+   jev5_R1_band         0.499/0.499/0.500/0.501/0.501   AURC 0.500
+   jev5_R1_lam          0.499/0.499/0.500/0.501/0.501   AURC 0.500
+   jev5_fin_band        0.500/0.500/0.500/0.501/0.500   AURC 0.500
+   jevdef_R1_band       0.500/0.500/0.500/0.500/0.500   AURC 0.500
+   laya5_R1_band        0.506/0.503/0.502/0.501/0.500   AURC 0.497
+   laya5_fin_band       0.504/0.502/0.501/0.501/0.501   AURC 0.498
+   jev5_seat_SKEPTIC    0.495/0.499/0.501/0.499/0.500   AURC 0.501
+   jev5_R1_meanp        0.495/0.497/0.500/0.500/0.501   AURC 0.500
+   largest |mean accuracy - 0.5| over systems and coverages: 0.006
+
+B. Calibration under the null: 200 label shuffles, paired 95 % interval (1,000 resamples) for AURC(five-Jev band) - AURC(single Jev); share of intervals excluding 0 should be near 0.05
+   excluded 0 in 10/200 = 0.050 (binomial 95 % range for 0.05: about 0.02 to 0.08)
+
+C. Negative control: the same verdicts (single Jev) with two independent random confidences, 100 draws
+   interval excluded 0 in 6/100
+
+D. Positive controls
+   oracle confidence on the five-Jev panel's verdicts minus single Jev: AURC -0.196 [-0.293, -0.106]
+   oracle curve, five-Jev panel: 1.00/1.00/1.00/1.00/0.71/0.53 at k = 10/25/50/53/75/100
+   planted trust AUROC ~0.70 (sigma 1.35) on the panel's verdicts (acc 0.53): mean trust AUROC 0.697, mean AURC diff vs single -0.012; panel significantly better in 0/40
+   planted trust AUROC ~0.80 (sigma 0.84) on the panel's verdicts (acc 0.53): mean trust AUROC 0.801, mean AURC diff vs single -0.082; panel significantly better in 5/40
+   planted trust AUROC ~0.90 (sigma 0.55) on the panel's verdicts (acc 0.53): mean trust AUROC 0.891, mean AURC diff vs single -0.139; panel significantly better in 37/40
+
+E. Tie averaging vs 4,000 random tie orders (five-Jev band, single Jev, five-Laya band)
+   jev5_R1_band       max |accuracy difference| 0.0075; AURC exact 0.4310 vs random orders 0.4312
+   jev_single         max |accuracy difference| 0.0093; AURC exact 0.3321 vs random orders 0.3322
+   laya5_R1_band      max |accuracy difference| 0.0034; AURC exact 0.5417 vs random orders 0.5417
+   jev5_R1_bandonly   max |accuracy difference| 0.0076; AURC exact 0.4588 vs random orders 0.4580

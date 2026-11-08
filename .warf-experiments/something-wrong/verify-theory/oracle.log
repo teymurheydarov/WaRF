@@ -1,0 +1,7 @@
+claude                                        d 0.950 AUC 0.749
+claude+jev                                    d 0.950 AUC 0.749
+claude+laya                                   d 1.092 AUC 0.780
+J_SKEPTIC+J_ADVOCATE+J_AUDITOR+J_TEST-FOCUSED+J_BOUNDARY d 0.625 AUC 0.671
+claude + 5 more                               d 1.058 AUC 0.773
+claude+jev+laya+log_added                     d 1.146 AUC 0.791
+claude + 11 more                              d 1.415 AUC 0.841

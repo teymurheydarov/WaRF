@@ -1,0 +1,102 @@
+100 commits, 98 with a debate round (50 later fixed, 48 never fixed); B = 4000
+
+Q1 [all 98]  coefficient on the others' Round-1 REJECT votes, 95 % bootstrap over commits
+  naive: p2 ~ K
+      SKEPTIC +0.096 [+0.051,+0.153] n=98 | ADVOCATE +0.027 [+0.005,+0.054] n=98 |  AUDITOR +0.119 [+0.076,+0.161] n=98 | TEST-FOC +0.026 [+0.007,+0.045] n=98 | BOUNDARY +0.053 [+0.014,+0.091] n=98 |   pooled +0.064 [+0.040,+0.089]
+  naive: p2 - p1 ~ K
+      SKEPTIC -0.010 [-0.044,+0.028] n=98 | ADVOCATE -0.038 [-0.064,-0.010] n=98 |  AUDITOR -0.018 [-0.058,+0.020] n=98 | TEST-FOC -0.036 [-0.058,-0.014] n=98 | BOUNDARY -0.031 [-0.072,+0.006] n=98 |   pooled -0.027 [-0.051,-0.004]
+  p2 ~ p1 + K (main)
+      SKEPTIC -0.012 [-0.050,+0.034] n=98 | ADVOCATE -0.009 [-0.041,+0.020] n=98 |  AUDITOR +0.012 [-0.039,+0.060] n=98 | TEST-FOC +0.003 [-0.024,+0.029] n=98 | BOUNDARY +0.014 [-0.039,+0.059] n=98 |   pooled +0.002 [-0.025,+0.026]
+  p2 ~ p1 + p1^2 + own vote + K
+      SKEPTIC -0.030 [-0.072,+0.020] n=98 | ADVOCATE -0.002 [-0.029,+0.024] n=98 |  AUDITOR +0.006 [-0.044,+0.051] n=98 | TEST-FOC +0.004 [-0.025,+0.030] n=98 | BOUNDARY +0.011 [-0.049,+0.054] n=98 |   pooled -0.002 [-0.028,+0.020]
+  logit p2 ~ logit p1 + K
+      SKEPTIC -0.046 [-0.209,+0.151] n=98 | ADVOCATE -0.073 [-0.279,+0.118] n=98 |  AUDITOR +0.075 [-0.167,+0.303] n=98 | TEST-FOC +0.034 [-0.126,+0.184] n=98 | BOUNDARY +0.125 [-0.170,+0.385] n=98 |   pooled +0.023 [-0.115,+0.149]
+  p2 ~ p1 + others' mean readout (per 0.1)
+      SKEPTIC -0.014 [-0.059,+0.030] n=98 | ADVOCATE +0.008 [-0.024,+0.040] n=98 |  AUDITOR -0.026 [-0.086,+0.031] n=98 | TEST-FOC +0.045 [+0.012,+0.077] n=98 | BOUNDARY +0.062 [-0.000,+0.122] n=98 |   pooled +0.015 [-0.005,+0.035]
+
+Q1 [summary read in full]  coefficient on the others' Round-1 REJECT votes, 95 % bootstrap over commits
+  naive: p2 ~ K
+      SKEPTIC +0.071 [+0.025,+0.128] n=69 | ADVOCATE +0.027 [+0.004,+0.055] n=95 |  AUDITOR +0.120 [+0.077,+0.162] n=97 | TEST-FOC -0.015 [-0.040,+0.011] n=44 | BOUNDARY +0.009 [-0.038,+0.053] n=48 |   pooled +0.042 [+0.016,+0.069]
+  naive: p2 - p1 ~ K
+      SKEPTIC -0.026 [-0.062,+0.014] n=69 | ADVOCATE -0.038 [-0.065,-0.010] n=95 |  AUDITOR -0.018 [-0.059,+0.021] n=97 | TEST-FOC -0.067 [-0.099,-0.034] n=44 | BOUNDARY -0.068 [-0.125,-0.019] n=48 |   pooled -0.043 [-0.072,-0.016]
+  p2 ~ p1 + K (main)
+      SKEPTIC -0.016 [-0.058,+0.033] n=69 | ADVOCATE -0.010 [-0.042,+0.021] n=95 |  AUDITOR +0.012 [-0.039,+0.061] n=97 | TEST-FOC -0.019 [-0.055,+0.013] n=44 | BOUNDARY -0.018 [-0.087,+0.035] n=48 |   pooled -0.010 [-0.040,+0.016]
+  p2 ~ p1 + p1^2 + own vote + K
+      SKEPTIC -0.035 [-0.079,+0.020] n=69 | ADVOCATE -0.002 [-0.030,+0.025] n=95 |  AUDITOR +0.007 [-0.043,+0.053] n=97 | TEST-FOC -0.020 [-0.056,+0.013] n=44 | BOUNDARY -0.015 [-0.089,+0.032] n=48 |   pooled -0.013 [-0.042,+0.013]
+  logit p2 ~ logit p1 + K
+      SKEPTIC -0.067 [-0.248,+0.139] n=69 | ADVOCATE -0.072 [-0.283,+0.125] n=95 |  AUDITOR +0.078 [-0.165,+0.311] n=97 | TEST-FOC -0.102 [-0.295,+0.075] n=44 | BOUNDARY -0.057 [-0.360,+0.182] n=48 |   pooled -0.044 [-0.194,+0.088]
+  p2 ~ p1 + others' mean readout (per 0.1)
+      SKEPTIC -0.016 [-0.068,+0.038] n=69 | ADVOCATE +0.008 [-0.023,+0.041] n=95 |  AUDITOR -0.026 [-0.087,+0.031] n=97 | TEST-FOC +0.010 [-0.026,+0.046] n=44 | BOUNDARY +0.011 [-0.066,+0.073] n=48 |   pooled -0.002 [-0.027,+0.019]
+
+  main model p2 = b0 + b1 p1 + c K, all 98: b0, b1, c; residual sd; mean shift p2 - p1
+  SKEPTIC       b0 -0.053  b1 1.012  c -0.0117  resid sd 0.115  corr(p1,p2) 0.720  mean shift -0.051 [-0.074,-0.028]  corr(p1,K) 0.52
+  ADVOCATE      b0 +0.037  b1 0.564  c -0.0094  resid sd 0.085  corr(p1,p2) 0.495  mean shift -0.095 [-0.115,-0.077]  corr(p1,K) 0.63
+  AUDITOR       b0 +0.034  b1 0.781  c +0.0121  resid sd 0.122  corr(p1,p2) 0.681  mean shift -0.040 [-0.065,-0.015]  corr(p1,K) 0.67
+  TEST-FOCUSED  b0 +0.106  b1 0.360  c +0.0034  resid sd 0.092  corr(p1,p2) 0.345  mean shift -0.074 [-0.095,-0.053]  corr(p1,K) 0.67
+  BOUNDARY      b0 +0.116  b1 0.459  c +0.0144  resid sd 0.147  corr(p1,p2) 0.340  mean shift -0.071 [-0.101,-0.041]  corr(p1,K) 0.67
+
+  shuffled control: K permuted across commits (2000 shuffles), main model, all 98
+  SKEPTIC       observed -0.0117; shuffled 95 % range [-0.0379,+0.0421]; permutation p = 0.561
+  ADVOCATE      observed -0.0094; shuffled 95 % range [-0.0184,+0.0186]; permutation p = 0.325
+  AUDITOR       observed +0.0121; shuffled 95 % range [-0.0361,+0.0381]; permutation p = 0.521
+  TEST-FOCUSED  observed +0.0034; shuffled 95 % range [-0.0184,+0.0194]; permutation p = 0.753
+  BOUNDARY      observed +0.0144; shuffled 95 % range [-0.0351,+0.0374]; permutation p = 0.440
+
+  planted control: p2 + delta*K for delta = 0.01, 0.02, 0.05 (main model, all 98, bootstrap B/4)
+  delta 0.01: SKEPTIC -0.002 [-0.039,+0.044] | ADVOCATE +0.001 [-0.031,+0.029] | AUDITOR +0.022 [-0.029,+0.070] | TEST-FOC +0.013 [-0.014,+0.039] | BOUNDARY +0.024 [-0.029,+0.069]
+  delta 0.02: SKEPTIC +0.008 [-0.029,+0.054] | ADVOCATE +0.011 [-0.021,+0.039] | AUDITOR +0.032 [-0.019,+0.080] | TEST-FOC +0.023 [-0.004,+0.049] | BOUNDARY +0.034 [-0.019,+0.079]
+  delta 0.05: SKEPTIC +0.038 [+0.001,+0.084] | ADVOCATE +0.041 [+0.009,+0.069] | AUDITOR +0.062 [+0.011,+0.110] | TEST-FOC +0.053 [+0.026,+0.079] | BOUNDARY +0.064 [+0.011,+0.109]
+
+  negative-control outcomes (never saw the five agents' votes) on the agent's own p1 and K, all 98
+   treatment: K
+  single Laya, sweep question          SKEPTIC +0.024 [-0.004,+0.052] | ADVOCATE +0.022 [+0.004,+0.039] | AUDITOR +0.006 [-0.015,+0.027] | TEST-FOC +0.004 [-0.011,+0.021] | BOUNDARY +0.001 [-0.016,+0.021]
+  single Laya, debate prompt alone     SKEPTIC +0.005 [-0.022,+0.036] | ADVOCATE +0.005 [-0.013,+0.023] | AUDITOR +0.009 [-0.022,+0.037] | TEST-FOC -0.007 [-0.026,+0.011] | BOUNDARY -0.003 [-0.023,+0.017]
+  single Laya, debate, shuffled CLAUDE SKEPTIC -0.008 [-0.039,+0.020] | ADVOCATE +0.013 [-0.004,+0.032] | AUDITOR +0.030 [+0.000,+0.061] | TEST-FOC +0.006 [-0.014,+0.024] | BOUNDARY +0.024 [+0.002,+0.049]
+   treatment: mean readout per 0.1
+  single Laya, sweep question          SKEPTIC +0.060 [+0.037,+0.083] | ADVOCATE +0.043 [+0.023,+0.059] | AUDITOR +0.024 [-0.005,+0.048] | TEST-FOC +0.010 [-0.004,+0.030] | BOUNDARY +0.006 [-0.015,+0.032]
+  single Laya, debate prompt alone     SKEPTIC +0.016 [-0.016,+0.048] | ADVOCATE +0.014 [-0.006,+0.036] | AUDITOR +0.030 [+0.004,+0.056] | TEST-FOC -0.014 [-0.038,+0.007] | BOUNDARY +0.004 [-0.025,+0.037]
+  single Laya, debate, shuffled CLAUDE SKEPTIC +0.006 [-0.026,+0.037] | ADVOCATE +0.016 [-0.003,+0.038] | AUDITOR +0.027 [-0.007,+0.066] | TEST-FOC -0.003 [-0.033,+0.021] | BOUNDARY +0.032 [+0.006,+0.062]
+
+  discontinuity at SKEPTIC's Round-1 threshold (the label it shows the other four flips at p = 0.5)
+   bandwidth 0.10: 52 commits (25 shown APPROVE, 27 REJECT)
+  ADVOCATE      p2 jump -0.018 [-0.098,+0.070] | placebo p1 jump -0.006 [-0.075,+0.057]
+  AUDITOR       p2 jump -0.025 [-0.139,+0.101] | placebo p1 jump -0.040 [-0.119,+0.037]
+  TEST-FOCUSED  p2 jump -0.049 [-0.118,+0.026] | placebo p1 jump -0.013 [-0.061,+0.032]
+  BOUNDARY      p2 jump -0.125 [-0.236,-0.007] | placebo p1 jump -0.021 [-0.070,+0.026]
+   bandwidth 0.15: 73 commits (30 shown APPROVE, 43 REJECT)
+  ADVOCATE      p2 jump -0.019 [-0.089,+0.049] | placebo p1 jump -0.005 [-0.061,+0.050]
+  AUDITOR       p2 jump -0.036 [-0.141,+0.074] | placebo p1 jump -0.007 [-0.079,+0.067]
+  TEST-FOCUSED  p2 jump -0.051 [-0.120,+0.017] | placebo p1 jump +0.008 [-0.030,+0.048]
+  BOUNDARY      p2 jump -0.134 [-0.235,-0.036] | placebo p1 jump -0.006 [-0.040,+0.030]
+
+  TEST-FOCUSED: commits where a hidden label was a REJECT: 0 (too few to separate seen from hidden)
+
+Q2  vote changes Round 1 -> Round 2, toward / away from the git-history label (two-sided sign test)
+  SKEPTIC        22 changes: 12 toward, 10 away, sign test p = 0.832   (REJECT->APPROVE 10/8, APPROVE->REJECT 2/2 toward/away)
+  ADVOCATE        0 changes: 0 toward, 0 away, sign test p = nan   (REJECT->APPROVE 0/0, APPROVE->REJECT 0/0 toward/away)
+  AUDITOR        14 changes: 9 toward, 5 away, sign test p = 0.424   (REJECT->APPROVE 7/2, APPROVE->REJECT 2/3 toward/away)
+  TEST-FOCUSED    0 changes: 0 toward, 0 away, sign test p = nan   (REJECT->APPROVE 0/0, APPROVE->REJECT 0/0 toward/away)
+  BOUNDARY       10 changes: 6 toward, 4 away, sign test p = 0.754   (REJECT->APPROVE 3/2, APPROVE->REJECT 3/2 toward/away)
+  pooled         46 changes: 27 toward, 19 away, sign test p = 0.302
+  pooled, label swap within the matched pairs (keeps the five agents of a commit together): net toward +8, p = 0.498
+  changes fall on 31 of 98 commits
+
+Q3  panel ranking: AUC of the mean of the five p(REJECT), Round 1 vs Round 2
+  mean p of the five (98 debated)              n=98  R1 0.580 ±0.058  R2 0.539 ±0.058  R2-R1 -0.041  pair-bootstrap [-0.144,+0.062]  stratified [-0.145,+0.059]  DeLong p 0.44
+  mean p, all 100 (2 undebated keep Round 1)   n=100  R1 0.557 ±0.058  R2 0.518 ±0.058  R2-R1 -0.039  pair-bootstrap [-0.134,+0.059]  stratified [-0.138,+0.054]  DeLong p 0.44
+  number of REJECT votes (98 debated)          n=98  R1 0.521 ±0.059  R2 0.567 ±0.058  R2-R1 +0.046  pair-bootstrap [-0.054,+0.145]  stratified [-0.059,+0.143]  DeLong p 0.36
+  SKEPTIC p(REJECT) (98 debated)               n=98  R1 0.564 ±0.058  R2 0.573 ±0.058  R2-R1 +0.009  pair-bootstrap [-0.085,+0.094]  stratified [-0.074,+0.089]  DeLong p 0.83
+  ADVOCATE p(REJECT) (98 debated)              n=98  R1 0.581 ±0.058  R2 0.537 ±0.058  R2-R1 -0.044  pair-bootstrap [-0.164,+0.079]  stratified [-0.161,+0.073]  DeLong p 0.47
+  AUDITOR p(REJECT) (98 debated)               n=98  R1 0.573 ±0.058  R2 0.475 ±0.059  R2-R1 -0.098  pair-bootstrap [-0.199,+0.000]  stratified [-0.202,-0.002]  DeLong p 0.05
+  TEST-FOCUSED p(REJECT) (98 debated)          n=98  R1 0.550 ±0.058  R2 0.539 ±0.058  R2-R1 -0.011  pair-bootstrap [-0.135,+0.114]  stratified [-0.147,+0.121]  DeLong p 0.87
+  BOUNDARY p(REJECT) (98 debated)              n=98  R1 0.589 ±0.057  R2 0.594 ±0.057  R2-R1 +0.005  pair-bootstrap [-0.127,+0.127]  stratified [-0.126,+0.139]  DeLong p 0.94
+  Spearman(mean p Round 1, mean p Round 2) = 0.614; Pearson = 0.628
+
+Q4  Round-2 summary cut by Laya's window (state_tokens_dropped > 0), per agent
+  SKEPTIC       cut 29/98 (29.6 %): only the closing instructions 29, an agent's readout lost 0, an agent's vote label lost 0; mean share of summary tokens seen 97.4 %; cut commits later fixed 14/29
+  ADVOCATE      cut  3/98 ( 3.1 %): only the closing instructions 3, an agent's readout lost 0, an agent's vote label lost 0; mean share of summary tokens seen 100.0 %; cut commits later fixed 0/3
+  AUDITOR       cut  1/98 ( 1.0 %): only the closing instructions 1, an agent's readout lost 0, an agent's vote label lost 0; mean share of summary tokens seen 100.0 %; cut commits later fixed 0/1
+  TEST-FOCUSED  cut 54/98 (55.1 %): only the closing instructions 23, an agent's readout lost 31, an agent's vote label lost 11; mean share of summary tokens seen 85.2 %; cut commits later fixed 28/54
+  BOUNDARY      cut 50/98 (51.0 %): only the closing instructions 37, an agent's readout lost 13, an agent's vote label lost 0; mean share of summary tokens seen 90.1 %; cut commits later fixed 26/50
+
+wrote C:\Users\Teymur Heydarov\AppData\Local\Temp\claude\C--workdir-claudeVersuch\d1ef8351-10c6-4faf-a99a-b6a0b77f3199\scratchpad\verify-five\debate-effect\results.json

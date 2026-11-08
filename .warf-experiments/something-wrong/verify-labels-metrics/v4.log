@@ -1,0 +1,4 @@
+gismo6 key items 351 REJECT 175 classes {'plumbing': 68, 'has-code': 97, 'comment-only': 10}
+Claude AUC gismo6 subset of key 0.78
+Claude AUC full key (352) 0.78
+Claude AUC on gismo6 key items NOT in the 100: 251 0.797

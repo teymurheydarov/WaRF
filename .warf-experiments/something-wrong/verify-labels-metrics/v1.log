@@ -1,0 +1,56 @@
+== A. headline AUCs, recomputed with midranks
+n 100 REJECT 50 distinct ids 100 distinct commits 100
+pairs ordered REJECT,APPROVE: True
+claude items 352 key items 352
+label/commit/score mismatches across sessions_one/five/standard/laya-five/key/claude: 0
+labels.jsonl rows found for selection: 100 agree: 100
+labels.jsonl rows found for key (gismo6): 351 of 351 agree: 351
+  Jev one                0.6414 (pairwise 0.6414) distinct 57
+  Jev five R1 mean       0.6276 (pairwise 0.6276) distinct 90
+  Jev five final mean    0.6330 (pairwise 0.6330) distinct 95
+  Jev standard mean      0.6242 (pairwise 0.6242) distinct 87
+  Laya one               0.5860 (pairwise 0.5860) distinct 96
+  Laya five R1           0.5568 (pairwise 0.5568) distinct 98
+  Claude                 0.7446 (pairwise 0.7446) distinct 41
+  patch chars            0.5016 (pairwise 0.5016) distinct 77
+  state tokens           0.4638 (pairwise 0.4638) distinct 86
+Jev one: choice inconsistent with p_reject>0.5: 0
+Jev one: vote-text p(REJECT) differs from stored p_reject by >0.006: 0
+  cannot show post-image a9e798 fatal: path 'extensions/gsFdbb/gsFdbb.h' does not exist in '22e449a8f52060d82a0dd8c24c40ba8b15711d53'
+
+  cannot show post-image fbc378 fatal: path 'src/gsAssembler/gsAdaptiveParametrization_.cpp' does not exist in 'a880e56e3e988de2f6684415f38762462d0a46f7
+
+== B. size features AUC (REJECT positive)
+  added              0.7164   median R 4  median A 1
+  removed            0.4076   median R 0  median A 1
+  added_nonblank     0.7216   median R 4  median A 1
+  added_noncosmetic  0.7558   median R 3  median A 1
+  added_code_true    0.7594   median R 3  median A 1
+  any noncosmetic added (binary) 0.68
+  items with 0 noncosmetic added lines: R 0 A 18
+  items with 0 true-code added lines (block-comment aware): R 3 A 20
+  items adding nothing: 7 labels ['APPROVE', 'APPROVE', 'APPROVE', 'APPROVE', 'APPROVE', 'APPROVE', 'APPROVE']
+  REJECTs with 0 noncosmetic added lines (should be 0 if blame is consistent): 0
+
+== C. Spearman with added lines
+  Claude             rho(added) +0.481  rho(noncosmetic) +0.554
+  Jev one            rho(added) +0.284  rho(noncosmetic) +0.284
+  Jev five R1 mean   rho(added) +0.255  rho(noncosmetic) +0.259
+  Laya one           rho(added) +0.231  rho(noncosmetic) +0.205
+
+== D. trivial APPROVEs (0 noncosmetic added lines)
+  Claude             mean trivialA 0.049 (n 18) otherA 0.181 (n 32) R 0.287
+  Jev one            mean trivialA 0.474 (n 18) otherA 0.456 (n 32) R 0.597
+  Jev five R1 mean   mean trivialA 0.321 (n 18) otherA 0.291 (n 32) R 0.398
+  Laya one           mean trivialA 0.130 (n 18) otherA 0.143 (n 32) R 0.154
+  without trivial APPROVEs: n 82 R 50
+    Claude               0.6456
+    Jev one              0.6525
+    Jev five R1 mean     0.6388
+    Jev five final mean  0.6516
+    Laya one             0.5719
+    added                0.6181
+    added_noncosmetic    0.6184
+  Claude - Jev one: all +0.103 [+0.000,+0.211]  w/o trivial -0.007 [-0.123,+0.105]
+  Claude - Jev five R1 mean: all +0.117 [+0.016,+0.228]  w/o trivial +0.007 [-0.101,+0.118]
+done

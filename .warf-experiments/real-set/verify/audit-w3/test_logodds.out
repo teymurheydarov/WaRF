@@ -1,0 +1,66 @@
+
+=== evidence, pooling and decision ===
+  ok    five REJECTs of one model pool to -0.626 (one vote's worth)
+  ok    -> REJECT [LOW]: 0.627 nats is under the ln 2 margin
+  ok    one REJECT from each of two models sums to -1.253
+  ok    p(REJECT)=0.99 is capped at ω·LLR_REJECT
+  ok    p(REJECT)=0.01 is capped at ω·LLR_APPROVE
+  ok    p(REJECT)=0.6 stays at logit(0.4) inside the cap
+  ok    τ = logit((1 + θ)/2) per domain
+  ok    means +1.0 and -1.2 -> REJECT [LOW]
+  ok    normalised score is 2σ(Λ−τ)−1
+  ok    agreeing models with a clear margin -> MEDIUM
+  ok    a margin under ln 2 -> LOW
+
+=== reading a decision model's probability ===
+  ok    p(REJECT) is read from the decision readout
+  ok    never from a text agent's prose
+  ok    clamped to [0.01, 0.99]
+
+=== calibration ===
+  ok    fitted slope 0.452 ≈ 0.5
+  ok    base rate removed: |evidence| ≤ 0.042 for any p
+  ok    REJECT evidence -1.609 = ln 0.2 from the measured rates
+  ok    the 50 votes of a retired persona are not used
+  ok    9 defective labels: still capped
+  ok    10 of each: calibrated, p(REJECT)=0.9 -> evidence -3.976
+  ok    a missing log leaves every agent uncalibrated
+
+=== run_review ===
+  ok    vote mode: REJECT [HIGH] after 4 votes, as before
+  ok    logodds: all 5 asked, REJECT [LOW]
+  ok    Λ = -0.626
+  ok    the session record carries aggregate, evidence, calibration and p_reject
+  ok    a vote-mode record is unchanged
+  ok    two calibrated models: REJECT [HIGH], Λ = -5.08
+  ok    both votes calibrated from p
+  ok    logodds with debate raises ValueError
+  ok    an unknown mode raises ValueError
+  ok    boundaries unchanged
+
+=== review findings (2026-11-03) ===
+  ok    the model that earned the labels is calibrated
+  ok    another model with the same persona text is not
+  ok    p_reject from the vote field calibrates (0.0 clamped, no crash)
+  ok    TEST-oracle labels are ignored
+  ok    a readout whose probabilities are missing is not read
+  ok    a REJECT whose p says APPROVE falls back to the vote's own step
+  ok    invalid bytes and odd JSON shapes leave the agent uncalibrated
+  ok    +1.0 / -2.5: margin 1.5 but models disagree -> LOW
+  ok    +1.0 / +1.5 -> APPROVE [MEDIUM]
+  ok    SECURITY: an uncalibrated APPROVE at ω 0.5 approves only at LOW
+  ok    SECURITY: an APPROVE worth less than τ = 0.405 does not approve
+  ok    PERFORMANCE: τ = -0.201 tolerates weak REJECT evidence
+  ok    normalised score is measured from τ
+  ok    seats +3, -1, -1 of one model: all asked, Λ = 0.333, APPROVE [LOW]
+  ok    the same seats in another order give the same verdict
+  ok    Laya -1.0 first, then Jev +4.0 (Λ = 3.0 ≥ A): APPROVE [LOW], not HIGH
+  ok    Jev +4.0 first: one calibrated model beyond A stops alone (by design)
+  ok    two models at -1.5 each: REJECT [HIGH]
+  ok    the logodds record carries τ
+  ok    one model, file seat -1.0 and whole-commit seat -1.0: Λ = -2.000, want -2.0
+  ok    a seat's evidence source survives save/load
+  ok    the same two seats with no evidence tag: Λ = -1.000, want -1.0
+  ok    CLI: --aggregate logodds --debate exits 2 with a message
+
+All log-odds checks passed.

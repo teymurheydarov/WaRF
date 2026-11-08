@@ -1,0 +1,105 @@
+===== claude claude.w2.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+**Wrong mapping direction.** The original code takes the mapped quadrature points, which live in the element domain from `domIt`, and pulls them back through the composition map with `invertPoints`. The patch replaces this with a forward evaluation, `cb->composition()->eval(points)`. That is a different map. It only gives the same points when the composition is the identity or its own inverse. For any other composition:
+- the precomputed basis values and geometry are evaluated at the wrong parametric locations;
+- the quadrature weights `quWeights` are still the ones mapped for the original element, with no Jacobian correction for the new points.
+
+So integrals, norms and errors computed with a `gsComposedBasis` will be wrong, and nothing will flag it.
+
+**The failure check is gone.** The old `GISMO_ASSERT` caught failed point inversion (infinite values). Nothing replaces it. If the forward-mapped points fall outside the basis support, evaluation will quietly produce garbage or zeros instead of failing.
+
+**Commented-out code instead of removal.** Five lines of the old implementation stay in as comments, and their tolerance was changed from `1e-4` to `1e-10`. This suggests the change is exploratory or debugging work rather than a finished fix. It also makes the intended behavior unclear.
+
+**No justification or tests.** Nothing in the patch explains why forward evaluation is correct here, and no test shows the results still match for a non-trivial composition.
+
+**Security:** I found no memory-safety or injection issue in this hunk. The problem is a correctness regression in numerical evaluation, but it is a concrete defect, so the patch should not be merged as is.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+The patch swaps a point **inversion** for a **forward evaluation** of the composition map. For any non-identity composition, the integrand is then sampled at the wrong points.
+
+1. **Where the quadrature points start.** `gsComposedBasis` evaluates as `B(c(u))`: `eval_into` first calls `composition()->eval_into(u, coords)` and then evaluates the inner basis at `coords`. Its domain iterator, however, comes from the inner basis. So `QuRule.mapTo(lowerCorner, upperCorner, ...)` produces points `p` in the image of `c`.
+
+2. **Why the old code inverted.** To evaluate the inner basis at `p`, the evaluator must pass the pre-image `c⁻¹(p)` to the composed basis. The basis then computes `B(c(c⁻¹(p))) = B(p)`. That is what `invertPoints(...)` did, starting from the element centre and asserting on failure.
+
+3. **What the new code does.** It replaces the points with `c(p)`. `precompute(patchInd)` then evaluates the composed basis there, which yields `B(c(c(p)))`. The composition is applied twice.
+
+**Concrete failure:** take a composed basis whose composition is a shift `c(u) = u + 0.1` on [0,1].
+- The quadrature point `p = 0.95` becomes `1.05` after the new forward evaluation.
+- The basis then evaluates the inner basis at `1.15`, which is outside the inner basis's support.
+- The element's contribution is therefore wrong, or zero, or an extrapolated value, and both the accumulated `m_value` and `m_elWise` are wrong.
+
+The same holds for any non-trivial warping map: the integral is computed over the doubly composed geometry instead of the intended one.
+
+**Other problems:**
+- The patch removes the only correctness guard on this path, the `GISMO_ASSERT` on failed inversion. Bad points now go undetected.
+- The old code is left commented out, with an unrelated tolerance change in the comment. This reads like an experimental edit, not a deliberate semantic change.
+- The patch makes the evaluator inconsistent with the assembler's handling of composed bases, which uses inversion. Values computed by `gsExprEvaluator` would no longer match the assembled system for the same expression.
+--- ADVOCATE 32e59155d0a3 REJECT
+The patch reverses the direction of the coordinate mapping, which changes what is integrated. The diff gives no evidence that this is intended.
+
+1. **Inverse map replaced with forward map.** For a `gsComposedBasis` (basis `B ∘ C`), the original code took the quadrature points from the element iterator and pulled them back with `C⁻¹` via `invertPoints`. It then evaluated the expression at those preimages. The new code applies `C` forward instead, so it evaluates at `C(x)` where it used to evaluate at `C⁻¹(x)`. These give the same result only if `C` is the identity or its own inverse. Otherwise the same quadrature points now map to different locations, so the value computed by `compute_impl` changes for every composed-basis patch.
+
+2. **The two possible domains don't fit together.** The iterator `domIt` is built from the patch's basis. If its elements lie in the image of `C`, which the old inversion assumes, then applying `C` again maps points twice and produces wrong positions. If the author instead means the elements to lie in `C`'s parameter domain, then the quadrature weights `quWeights` need the Jacobian determinant `det(∇C)` to account for the change of variables. The patch adds no such factor. In both cases the integral is wrong, unless some unstated assumption holds, such as `C` being measure-preserving.
+
+3. **A safety check was removed.** The old code asserted that point inversion did not fail (no infinite coordinates). Nothing replaces that check, so a bad mapping now passes through silently.
+
+4. **Dead code and an untracked change.** The old logic is left behind as commented-out code. The commented copy also has a different tolerance (`1e-10` instead of `1e-4`), which suggests unfinished experimentation rather than a deliberate fix.
+
+If the forward mapping really is intended, for example because composed-basis domain iterators now run over `C`'s parameter domain, the patch needs three things:
+
+- the Jacobian-determinant weight correction,
+- a comment explaining the new convention,
+- removal of the commented-out block.
+
+As submitted, it introduces a demonstrable correctness regression in integral evaluation for composed bases.
+--- AUDITOR 318509b9ab1f APPROVE
+**Security assessment:** The patch introduces no memory-safety, injection, or trust-boundary issue.
+
+- **What changed:** For `gsComposedBasis` patches, quadrature points used to be produced by Newton-type inversion (`invertPoints`, tolerance 1e-4) followed by a `GISMO_ASSERT` check for infinity. They are now produced by a forward `composition()->eval(...)` and swapped into `m_exprdata->points()`.
+- **Removed assertion:** The deleted assert only caught inversion failures, which showed up as `inf`. Forward evaluation of a geometry has no failure mode of that kind, so the check is no longer needed. `GISMO_ASSERT` is also compiled out in release builds, so it was never a runtime security control.
+- **Buffer and dimension safety:** `eval` returns a newly allocated `gsMatrix` with one column per input point. The composition maps the parametric domain to itself, so the row count matches the domain dimension. The `swap` exchanges owned storage without aliasing or out-of-bounds risk. Downstream, `quWeights.rows()` still matches the number of point columns, so the accumulation loop indexes safely.
+- **Concurrency:** `quPoints` is a local inside the OpenMP parallel region, and `m_exprdata` is already per-thread in the existing design. No new shared state or race is introduced.
+- **Resource use:** Replacing an iterative inversion with a direct evaluation removes a possible convergence or performance hazard rather than adding one.
+
+**Non-blocking notes:**
+1. **Commented-out code:** Five lines of dead code are left in place, and they silently change the tolerance from 1e-4 to 1e-10. They should be deleted, with the rationale recorded in the commit message.
+2. **Semantic direction:** Moving from inverse to forward mapping changes which points the expression is evaluated at. This is correct only if the domain iterator walks the pre-composition parameter domain and the quadrature weights or Jacobian factors are handled consistently in the expression. This is a numerical-correctness question for the maintainers and should be backed by a regression test, such as integrating a known function over a composed-basis patch. It is not a security defect.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**The patch makes the integral silently wrong for composed bases, and removes the only check that caught failures there.**
+
+1. **The point mapping is reversed.** The original code inverted the composition. For each quadrature point `x` on the element, it found the parameter `u` with `composition(u) = x`, then replaced `points()` with those `u` values. The new code computes `composition(points())` instead, which is the forward map. These are different points unless the composition is the identity.
+   - The element iterator and quadrature rule are unchanged, so the points are still placed in the same space as before. The original author needed the preimage there, and nothing in the diff explains why the forward image would now be right.
+   - `precompute(patchInd)` then evaluates the basis and geometry at the wrong locations. `compute_impl` returns a finite number that looks plausible but is wrong. Nothing throws and nothing is NaN or Inf.
+
+2. **The quadrature weights are not adjusted.** `QuRule.mapTo` computed `quWeights` for the original points on the element. If the points really are moved through the composition, a correct integral needs the Jacobian determinant of that map in the weights. The weights are left as they are, so even if the forward map were the intended change, every composed-basis integral would be scaled wrongly by the local Jacobian. No error path covers this either.
+
+3. **The failure check is gone.** The removed `GISMO_ASSERT(... infinity ... "Point inversion failed")` was the one loud failure path in this branch. Nothing replaces it. If `composition()->eval` gives points outside the basis's parameter domain, the result is extrapolated or clamped values with no diagnostic.
+
+4. **The old code is left commented out.** That block includes a changed tolerance (`1e-4` became `1e-10`), so it is unclear which behaviour the author intended.
+
+**Testability:** a test would catch this only if it compared a composed-basis integral against a known closed-form value. The code itself never fails loudly, and a non-identity composition gives a wrong but realistic scalar in `m_value` and in `m_elWise`.
+--- BOUNDARY 500973c48f91 REJECT
+**Finding: the patch replaces an inverse map with a forward map.**
+
+The old code treated the quadrature nodes, which are mapped onto `domIt`'s element, as points in the composition's image space. It called `invertPoints` to recover their preimages `u` with `C(u) = x`, then passed those to `precompute`. The new code calls `cb->composition()->eval(points)`, which computes `C(x)` instead of `C⁻¹(x)`.
+
+`gsComposedBasis` evaluates as `B(C(u))`, so `precompute` applies `C` again. Where the old code evaluated `B(x)`, the new code evaluates `B(C(C(x)))`.
+
+**Concrete input and wrong result:**
+- Take a 1-D composed basis on [0,1] with composition `C(u) = u²` and a quadrature node `x = 0.25`.
+- Old: inversion gives `u = 0.5`, so the basis is evaluated at `C(0.5) = 0.25`. This is the intended point.
+- New: the points become `C(0.25) = 0.0625`, so the basis is evaluated at `C(0.0625) ≈ 0.0039`.
+- The integrand is sampled at the wrong location, and the element sum and `m_value` are silently wrong.
+- The only case that survives is the identity composition (`C(u) = u`). For any non-identity map the result is wrong, and nothing in the output signals it.
+
+**Boundary cases that worsen the error:**
+- Near element edges, a non-identity `C` can carry `C(x)` outside the element, or outside the parameter domain, before the second composition.
+- The new code then evaluates basis functions at points the domain iterator never claimed. These are not rejected; they extrapolate or return zeros.
+- The old `GISMO_ASSERT` on failed inversion (`infinity`) was deleted along with the inversion. No guard replaces it.
+
+**Cases I checked that are handled or unreachable:**
+- An empty point matrix: `eval` and `swap` on 0 columns are fine.
+- Non-composed bases: the `dynamic_cast` fails and the path is unchanged.
+- OpenMP element indexing (`c`, `patch_cnt`): unchanged.
+
+**Caveat:** my argument assumes the composed basis's domain iterator walks the underlying basis's (image-space) elements. The original author's use of `invertPoints` with a center-point initial guess strongly implies this. If that assumption were false, the old code would have been wrong instead. In that case the patch would need a justification it doesn't give: it leaves the inversion commented out with a changed tolerance (`1e-10`), which looks like debugging residue rather than a deliberate fix.

@@ -1,0 +1,63 @@
+1. Tie handling (AURC): averaged / optimistic / pessimistic
+   jev_single           0.332 / 0.320 / 0.344
+   jev5_R1_band         0.431 / 0.324 / 0.547
+   jev5_R1_bandonly     0.459 / 0.242 / 0.685
+   jevdef_R1_band       0.421 / 0.301 / 0.555
+   jev5_fin_band        0.418 / 0.309 / 0.538
+   laya_single          0.394 / 0.394 / 0.394
+   laya5_R1_band        0.542 / 0.379 / 0.707
+   jev5_seat_SKEPTIC    0.381 / 0.369 / 0.393
+   claude               0.311 / 0.295 / 0.327
+   worst case for the claim: panel optimistic minus single pessimistic:
+   jev5_R1_band       - jev_single         -0.020
+   jev5_R1_bandonly   - jev_single         -0.101
+   jevdef_R1_band     - jev_single         -0.043
+   jev5_fin_band      - jev_single         -0.035
+   laya5_R1_band      - laya_single        -0.015
+   jev5_R1_band       - jev5_seat_SKEPTIC  -0.069
+
+2. Seat order (uniform weights: any order is a valid WaRF order; the five-run Round-1 votes)
+   Jev: single-agent AURC 0.332; band AURC over all 120 seat orders 0.423 to 0.431
+      last seat BOUNDARY      AURC 0.431 right 53 HIGH 16 trust 0.568  (identical over the 24 orders with this last seat: True)
+      last seat TEST-FOCUSED  AURC 0.429 right 53 HIGH 11 trust 0.571  (identical over the 24 orders with this last seat: True)
+      last seat AUDITOR       AURC 0.429 right 53 HIGH 11 trust 0.571  (identical over the 24 orders with this last seat: True)
+      last seat ADVOCATE      AURC 0.429 right 53 HIGH 11 trust 0.571  (identical over the 24 orders with this last seat: True)
+      last seat SKEPTIC       AURC 0.423 right 53 HIGH 12 trust 0.578  (identical over the 24 orders with this last seat: True)
+   Laya: single-agent AURC 0.394; band AURC over all 120 seat orders 0.542 to 0.542
+      last seat BOUNDARY      AURC 0.542 right 51 HIGH 2 trust 0.449  (identical over the 24 orders with this last seat: True)
+      last seat TEST-FOCUSED  AURC 0.542 right 51 HIGH 2 trust 0.449  (identical over the 24 orders with this last seat: True)
+      last seat AUDITOR       AURC 0.542 right 51 HIGH 2 trust 0.449  (identical over the 24 orders with this last seat: True)
+      last seat ADVOCATE      AURC 0.542 right 51 HIGH 2 trust 0.449  (identical over the 24 orders with this last seat: True)
+      last seat SKEPTIC       AURC 0.542 right 51 HIGH 2 trust 0.449  (identical over the 24 orders with this last seat: True)
+
+3. Vote threshold: every vote recomputed as REJECT if p > t (WaRF votes with t = 0.5, the argmax)
+   Jev t=0.3: panel acc 0.55 AURC 0.414 trust 0.565 | single acc 0.60 AURC 0.376 trust 0.528 | diff +0.038
+   Jev t=0.4: panel acc 0.57 AURC 0.417 trust 0.533 | single acc 0.63 AURC 0.358 trust 0.503 | diff +0.059
+   Jev t=0.5: panel acc 0.53 AURC 0.429 trust 0.573 | single acc 0.59 AURC 0.332 trust 0.601 | diff +0.097
+   Jev t=0.6: panel acc 0.53 AURC 0.418 trust 0.567 | single acc 0.55 AURC 0.321 trust 0.663 | diff +0.097
+   Jev t=0.7: panel acc 0.51 AURC 0.400 trust 0.616 | single acc 0.57 AURC 0.338 trust 0.585 | diff +0.062
+   Laya t=0.3: panel acc 0.54 AURC 0.435 trust 0.553 | single acc 0.51 AURC 0.394 trust 0.567 | diff +0.042
+   Laya t=0.4: panel acc 0.54 AURC 0.526 trust 0.441 | single acc 0.50 AURC 0.394 trust 0.586 | diff +0.132
+   Laya t=0.5: panel acc 0.51 AURC 0.542 trust 0.449 | single acc 0.50 AURC 0.394 trust 0.586 | diff +0.148
+   Laya t=0.6: panel acc 0.50 AURC 0.510 trust 0.509 | single acc 0.50 AURC 0.394 trust 0.586 | diff +0.116
+   Laya t=0.7: panel acc 0.50 AURC 0.500 trust 0.499 | single acc 0.50 AURC 0.394 trust 0.586 | diff +0.106
+
+4. Lambda at the crossing vs after every vote; Round 1 vs final (point AURC)
+   jev5_R1_band             0.431
+   jev5_R1_band_lamcross    0.429
+   jev5_fin_band            0.418
+   laya5_R1_band            0.542
+   laya5_R1_band_lamcross   0.542
+   laya5_fin_band           0.520
+
+5. Excess AURC (AURC minus the oracle AURC at the same accuracy): ranking quality only
+   jev_single           acc 0.59 AURC 0.332 oracle 0.101 excess 0.231 random 0.410
+   jev_rerunA           acc 0.59 AURC 0.322 oracle 0.101 excess 0.221 random 0.410
+   jev_rerunB           acc 0.57 AURC 0.329 oracle 0.112 excess 0.217 random 0.430
+   jev5_R1_band         acc 0.53 AURC 0.431 oracle 0.136 excess 0.295 random 0.470
+   jevdef_R1_band       acc 0.53 AURC 0.421 oracle 0.136 excess 0.285 random 0.470
+   jev5_fin_band        acc 0.56 AURC 0.418 oracle 0.117 excess 0.300 random 0.440
+   jev5_seat_SKEPTIC    acc 0.53 AURC 0.381 oracle 0.136 excess 0.245 random 0.470
+   laya_single          acc 0.50 AURC 0.394 oracle 0.156 excess 0.238 random 0.500
+   laya5_R1_band        acc 0.51 AURC 0.542 oracle 0.149 excess 0.393 random 0.490
+   claude               acc 0.56 AURC 0.311 oracle 0.117 excess 0.193 random 0.440

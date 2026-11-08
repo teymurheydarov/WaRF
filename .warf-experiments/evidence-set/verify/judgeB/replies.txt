@@ -1,0 +1,730 @@
+
+===== c0c88af:gsAABB.h:clean | claude.w0.jsonl | final=REJECT
+--- CLAUDE REJECT persona=30698a20810c
+1. **Move constructor likely recurses forever.** `gsAABB(gsAABB&& other) { operator=(give(other)); }` relies on `give()`. In G+Smo, `give()` returns its argument by value, a legacy of the pre-C++11 swap idiom. Building that returned `gsAABB` temporary calls the `gsAABB` move constructor again, which calls `give(other)` again, and so on. That would mean infinite recursion and a stack overflow on any move, such as when the box is stored in a `std::vector` that reallocates. I'm going from memory of how `give()` is defined, so please check `gsMemory.h`. Either way, the class only holds two Eigen vectors and an integer, so the member-wise defaults (`= default`) would be correct. Writing the copy and move members by hand adds risk and no behaviour.
+
+2. **Single-argument constructor breaks the dynamic-dimension case.** `gsAABB(const point & upp)` calls `first.setZero()` with no size. When `d == -1` (dynamic `gsVector<Z,-1>`), `first` stays empty while `second` has `upp.size()` entries. The box then has corners of different dimensions, and any later comparison or loop over coordinates fails or asserts. It should be `first.setZero(upp.size())`. The default constructor has the same issue for dynamic `d`, though there both corners are empty, so they at least match.
+
+3. **Smaller issues:**
+   - The copy constructor default-constructs the members and then assigns over them, so `level` is briefly uninitialized and the self-assignment check is pointless.
+   - Move assignment has no self-move guard.
+   - The single-argument constructor is not `explicit`, so a bare `gsVector` silently converts to a box.
+   - The header never includes `gsVector`, so it compiles only if something else included it first.
+
+Points 1 and 2 are logic defects, and either one is enough to block the merge.
+
+===== 6c02814:gsTHBSplineBasis.hpp:clean | claude.w0.jsonl | final=REJECT
+--- CLAUDE REJECT persona=30698a20810c
+- **The flag doesn't apply to this basis.** The patch forwards the outer `sameElement` flag into `m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. That flag means "all columns of `u` lie in the same element of *this THB basis*." The callee is a different basis: the 1D component at level `level`. Its knot spans are not THB elements, so forwarding the promise is a contract mismatch.
+
+- **The call is reused across different bases.** `cwb` and the call site serve many active functions. Each can come from a different `level`, and the loop also runs over every component `k` and every point `i`. If the callee honours `sameElement` by reusing previous span or support data instead of recomputing from `tmp`, it would mix up data:
+  - It could return values computed for another level's knot vector or another coordinate direction.
+  - `first = ...firstActive(tmp.value())` is recomputed independently. So `cwb[l].at(ti[k]-first)` would index into results laid out for a different span, giving silently wrong values or out-of-range access.
+
+- **There's no upside.** `tmp` is a single 1×1 point, so the flag can't save any work here. At best the change is a no-op; at worst it is a correctness hazard. The original call, using the default `false`, was the correct and safe choice.
+
+- **The comment edit has the same problem.** It adds `sameElement` to the commented-out `evalAllDersSingle_into` call, which spreads the same mistaken contract into the "has a bug" note.
+
+I don't recall exactly how the B-spline component's `evalAllDers_into` uses `sameElement`, so the bad-data scenario depends on that. But the forwarding is wrong by contract either way, and it buys nothing.
+
+**Recommendation:** revert to `evalAllDers_into(tmp, n, cwb)`.
+
+===== 0696ac5:gsCatmullClark.cpp:clean | claude.w1.jsonl | final=REJECT
+--- CLAUDE REJECT persona=30698a20810c
+The defect I can point to is in the sharp-vertex branch (`2 == sd`), which this refactor copies over unchanged:
+
+```cpp
+auto h1 = mesh.halfedge(v);
+while (!sharp[h1] || mesh.touches_boundary(h1))   // loop 1
+    h1 = mesh.cw_rotated_halfedge(h1);
+Halfedge h2 = h1;
+h1 = mesh.ccw_rotated_halfedge(mesh.halfedge(v));
+while (!sharp[h1] || mesh.is_boundary(h1))        // loop 2
+    h1 = mesh.ccw_rotated_halfedge(h1);
+```
+
+- **The two searches use different exclusion tests.** Loop 1 skips any halfedge whose edge lies on the boundary (`touches_boundary`). Loop 2 skips only halfedges that themselves have no face (`is_boundary`).
+- **It can hang.** If both sharp edges at `v` are boundary edges, which is the usual case when the boundary is flagged sharp, loop 1 rejects every halfedge around `v`. The `while` then never ends.
+- **It can pick the wrong neighbour.** If only one sharp edge is on the boundary, the loops apply different rules. They can select the same neighbour twice, or mix rules. The crease result `(2v + m1 + m2)/4` is then wrong.
+- **Likely fix:** use the same test in both loops, probably `is_boundary`. Also make sure the second search can't land on `h2` again.
+
+Moving this logic into a new public static `apply(gsSurfMesh&)` exposes it to more callers. That makes this the right time to fix it rather than carry it forward.
+
+Secondary concern:
+- **Possible build break.** The patch deletes the file-level typedefs (`Point`, `Halfedge`, etc.), but the body still uses unqualified `Point tmp;` and `Halfedge h2`. That only compiles if `gsCatmullClark` or its base class declares those names. The header isn't in the diff, so I can't confirm it. Either keep the typedefs or write `gsSurfMesh::Point` / `gsSurfMesh::Halfedge`.
+
+I checked the rest of the arithmetic and it is unchanged and correct:
+- edge midpoints `/2`
+- face points as the average of the 4 corner vertices
+- interior edge points `/4`
+- boundary vertex rule `(2v+m1+m2)/4`, which equals `(6v+a+b)/8`
+- interior vertex rule `(n(n−3)v + 4ΣE − ΣF)/n²`
+
+===== bfbe226:gsComposedGeometry.h:clean | claude.w1.jsonl | final=REJECT
+--- CLAUDE REJECT persona=30698a20810c
+The patch discards the active indices that belong to the computed basis values and fetches coefficient rows with those indices without any bounds check.
+
+1. **The active indices can be wrong.** `this->basis().compute(in, tmp)` fills `tmp.actives` along with `tmp.values`, and the two are computed together. The patch then overwrites them:
+   ```cpp
+   this->basis().active_into(in, out.actives);
+   tmp.actives = out.actives;
+   ```
+   The original `gsGeometry::compute` uses `out.actives = tmp.actives`, so values and indices always match. Here they come from a separate `active_into(in, ...)` call. For a composed basis, the actives should come from the composed points (the composition evaluated at `in`), not from `in` itself. If `active_into` isn't overridden the same way as `compute`, the indices will not match the rows of `tmp.eval(p)`, `tmp.deriv(p)` and `tmp.deriv2(p)`. Every value and derivative would then silently use the wrong coefficients.
+
+2. **The coefficient lookup can read out of bounds.** `extractRows(m_coefs, tmp.active(p), coefM)` was replaced with a hand-written loop:
+   ```cpp
+   coefM.row(r) = m_coefs.row(tmp.active(p)(r,0));
+   ```
+   Eigen's `row()` only checks bounds in debug builds. Combined with the first issue, an index that is inconsistent or past the last coefficient row reads out of bounds from `m_coefs` in release builds.
+
+3. **There is also extra work.** The actives are computed twice for every call. The original line `if (flags & NEED_ACTIVE) out.actives = tmp.actives;` was correct and cheaper.
+
+Fix: restore `out.actives = tmp.actives;` and use `extractRows`, or at least assert that each index is below `m_coefs.rows()`. If composed bases really need different actives, fix that inside `gsComposedBasis::compute` instead.
+
+===== 15977e9:gsSquareDomain.h:clean | claude.w2.jsonl | final=REJECT
+--- CLAUDE REJECT persona=30698a20810c
+1. **`targetDim()` returns the wrong value.** It returns `m_domain.domainDim()` instead of `m_domain.targetDim()`, which looks like a copy-paste from `domainDim()`. Every other method uses the real target dimension:
+   - `eval_into` delegates to `m_domain.eval_into`, so it fills `result` with `m_domain.targetDim()` rows.
+   - `updateGeom`, the constructor and the inner loop of `control_deriv_into` all iterate `d` over `m_domain.targetDim()`.
+   - But `control_deriv_into` sizes `result` and reshapes each column using `targetDim()`, i.e. the domain dimension.
+
+   For the hard-coded 2D square the two numbers happen to match, so this is latent. Any `DIM`/geometry where they differ will make `res(m_mapper.index(k,0,d), d)` write out of bounds or misreport the output size to callers. It should be `return m_domain.targetDim();`.
+
+2. **The `DIM` template parameter is unusable for anything but 2.** `m_domain = *gsNurbsCreator<T>::BSplineSquare();` always yields a 2D tensor B-spline, but it is assigned to `gsTensorBSpline<DIM,T>`. Any `DIM != 2` fails to compile.
+
+3. **Missing includes.** The header uses `gsNurbsCreator` and `gsTensorBSpline` but only includes `gsFunction.h` and `gsDofMapper.h`. It compiles only if the user happens to include those first.
+
+4. **Wrong file header.** The doc block says `@file gsMultiBasis.h` / "declaration of MultiBasis class" instead of describing `gsSquareDomain.h`.
+
+5. **Code hygiene.** There are leftover commented-out experiments (extra `uniformRefine` calls, the `i`/`j` index vectors, `gsDebugVar` lines). Also, `controls()` exposes `m_parameters` for writing, but changes do nothing until someone calls `updateGeom()`. That hidden coupling is easy to misuse and is not documented.
+
+Item 1 is a concrete logic defect, so the patch should not be merged as is.
+
+===== 3cf80c7:gsRationalBasis.h:clean | claude.w2.jsonl | final=REJECT
+--- CLAUDE REJECT persona=30698a20810c
+The new `gsRationalBasis<SrcT>::derivSingle_into` declares its source-basis buffers with the wrong scalar type:
+
+```cpp
+gsMatrix<> N, dN;
+m_src->evalSingle_into (i, u,  N);
+m_src->derivSingle_into(i, u, dN);
+```
+
+- `gsMatrix<>` defaults to `real_t`, not the basis scalar `T`.
+- `evalSingle_into` and `derivSingle_into` take `gsMatrix<T>&`. A non-const reference cannot bind to a matrix of a different scalar type.
+- So if `T` is anything other than `real_t` (e.g. `float`, `long double`, or an AD or multiprecision type), this does not compile.
+- If `T` happens to equal `real_t`, the result mixes `T` and `real_t` in `W(0,j)*dN.col(j) - N(0,j)*dW.col(j)`. That only works by coincidence.
+- Every other buffer in the function (`W`, `dW`, `result`) correctly uses `gsMatrix<T>`, so this is an inconsistency, not a deliberate choice.
+
+The math itself is right: R_i' = w_i (N_i' W − N_i W') / W². The shapes also fit: `W` is 1×n, and `dW` and `dN` are Dim×n. But the buffers must be `gsMatrix<T> N, dN;`.
+
+Minor issues, not blocking:
+- `math::pow(W(0,j),2)` is better written as `W(0,j)*W(0,j)`.
+- The function evaluates the full weight function on every call. That is expensive per basis function, but not a defect.
+
+===== 0696ac5:gsCatmullClark.cpp:clean | claude-standard.w0.jsonl | final=APPROVE
+--- SKEPTIC APPROVE persona=49f72d66b0bf
+I compared every statement in the new `gsCatmullClark::apply(gsSurfMesh&)` against the old `subdivide()` body. The patch is a behaviour-preserving refactor: `m_mesh->` becomes `mesh.`, the indentation changes, and `subdivide_impl()` now asserts that `m_mesh` is non-null and forwards to the static `apply`.
+
+**Edge points**
+- The skip condition for edges with both halfedges on the boundary is unchanged.
+- The midpoint `(from + to) / 2` is unchanged.
+- `add_vertex` followed by `insert_vertex(he, v)` is unchanged.
+
+**Face points**
+- The loop still steps two vertices at a time, sums four corner positions and divides by 4.
+- `env` and `fnv` are captured at the same points as before.
+
+**Quad split**
+- Face vertex ids are still `fnv + i++`.
+- The loop still starts from an original vertex (`idx() >= env` causes `++fv`) and calls `quad_split(fit, v, fv.he())`.
+
+**Interior edge points (`env..fnv`)**
+- The sharp check comes first, then the boundary check. The flagged context line, the boundary `continue`, is identical to the original: boundary edge points stay midpoints.
+- The rest is unchanged: the circulator sum, `/ 4`, and the OpenMP pragma with `private(v,tmp)`.
+
+**Original vertices (`0..env`)**
+- `n <= 2` still skips the vertex.
+- The crease rule (`sd == 2`) is unchanged.
+  - The first search still uses `touches_boundary` with `cw_rotated_halfedge`.
+  - The second still uses `is_boundary` with `ccw_rotated_halfedge`. This asymmetry already existed in the old code, so the patch introduces nothing new here.
+  - The weights `*2`, `+h2`, `+h1`, `/4` are unchanged.
+- `sd != 1` still triggers `continue`.
+- The boundary rule is unchanged: `*2`, right and left neighbours, `/4`.
+- The interior rule `(n(n-3)P + 4E - F) / n²` is unchanged.
+
+**Removed file-scope typedefs**
+- The new code still uses `Point` and `Halfedge` unqualified.
+- Inside a member function these are expected to resolve through the class or base (`gsSubdivScheme`) scope.
+- I can't see the header, so this is unverified. If they did not resolve, the result would be a compile error, not silent misbehaviour.
+
+I found no input, mesh state or call sequence where the new code produces a different result from the old code, so there is no demonstrable defect.
+--- ADVOCATE APPROVE persona=32e59155d0a3
+This patch is a mechanical refactor: the body of `subdivide()` moves into a new `apply(gsSurfMesh&)`, `m_mesh->` becomes `mesh.`, and a thin `subdivide_impl()` wrapper is added. I compared the removed and added code line by line and found no semantic change.
+
+- **Edge points:** Midpoints are still inserted only on edges that are not boundary on both sides.
+- **Face points:** Every other vertex of each face is still averaged and divided by 4, giving the centroid of the four original corners.
+- **Quad split:** It still starts from an original vertex (`idx() >= env` skips one) with the same `fnv + i` face vertex.
+- **Edge-point smoothing:** The OpenMP loop is unchanged. Sharp points stay as midpoints, boundary points are skipped, and interior points take the average of their 4 neighbours.
+- **Original-vertex update:**
+  - The corner skip (`n <= 2`) is unchanged.
+  - The sharp crease rule is unchanged, including the original asymmetry where one search uses `touches_boundary` and the other uses `is_boundary`.
+  - The dart and corner `continue` and the boundary 1-2-1 rule are unchanged.
+  - The interior rule is still `(n(n-3)·v + 4E − F) / n²`.
+- **Tooling and reservation:** The OpenMP `private` clauses and the reserve sizes are the same.
+
+The only other changes are re-indentation and removal of the file-scope typedefs (`Point`, `Halfedge`, etc.). The code still refers to `Point` and `Halfedge` without qualification. That compiles as long as the header (not shown) provides these names in the class or namespace, which fits the coordinated header change that `subdivide_impl` and `apply` require anyway. No defect is demonstrable from this diff. The new `GISMO_ASSERT` on `m_mesh` is a small improvement.
+--- AUDITOR APPROVE persona=318509b9ab1f
+**Behavior is unchanged.** I compared each block of the old `subdivide()` with the new `apply(gsSurfMesh&)`:
+
+- **Edge-point insertion:** the condition `!(is_boundary(he) && is_boundary(opposite))`, the midpoint value and `insert_vertex` are identical.
+- **Face points:** the stride-2 iteration over face vertices and `tmp /= 4` are identical.
+- **Quad split:** the face-vertex ids `fnv + i`, the skip of edge vertices when `idx() >= env`, and `quad_split` are identical.
+- **Edge-point finalization (OpenMP loop):** sharp vertices stay midpoints, and boundary vertices are skipped (the highlighted `else if (mesh.is_boundary(v)) continue;` matches the original). Interior edge points still use the 4-neighbour average (A+B+F1+F2)/4, which is the correct Catmull-Clark edge rule.
+- **Original-vertex relocation (OpenMP loop):**
+  - Rigid corners (`n <= 2`) are still skipped.
+  - The sharp rule is unchanged: the `sd == 2` crease average, the `cw`/`ccw` searches and their asymmetric `touches_boundary`/`is_boundary` predicates are the same as before.
+  - The dart fall-through on `sd == 1` is unchanged.
+  - The boundary rule (2V + left + right)/4 is unchanged.
+  - The interior formula `(n(n-3)V + Σ(4E − F)) / n²` is unchanged.
+- **OpenMP clauses** (`default(shared) private(v,tmp)` / `private(v)`) and the data dependencies are the same. Each loop still writes only to vertices in its own index range and reads only positions that the loop does not modify.
+
+**Structural changes:**
+
+- `subdivide()` becomes `subdivide_impl()`, which asserts `m_mesh` is not null and delegates to a reusable `apply(gsSurfMesh&)`. The new assertion is a strict improvement.
+- The namespace-scope typedefs (`Point`, `Vertex`, `Face`, `Halfedge`, `Edge`) are removed, and every `m_mesh->` becomes `mesh.`.
+- The rest is re-indentation.
+
+**One thing to confirm before merging:** the body still uses unqualified `Point` and `Halfedge`. This only compiles if `gsCatmullClark` or its base `gsSubdivScheme` defines these as class-scope typedefs. That is plausible given the new `subdivide_impl` hook, but the header diff is not shown. Some pre-existing oddities are carried over unchanged and are not regressions:
+
+- the hard-coded `/4` for the face and edge averages assumes an all-quad mesh;
+- the `cw`/`ccw` predicate asymmetry;
+- the odd do-while indentation.
+
+I found no logic regression introduced by this patch.
+--- TEST-FOCUSED REJECT persona=939526b1bf45
+The refactor itself is faithful. Moving from `m_mesh->` to `mesh.` in a static `apply` changes no logic. I compared every loop, and the edge-point, face-point, quad-split, crease, boundary and interior rules match the original. But the code it carries has paths whose failure would be silent, and `apply(gsSurfMesh&)` now exposes them through a new entry point.
+
+1. **Non-quad faces give wrong face points with no error.** After edge points are inserted, the face-point loop steps through the face vertices two at a time and always divides by 4 (`tmp /= 4`). This assumes every face started as a quad.
+   - A triangle gives 3 summed points divided by 4.
+   - A pentagon gives 5 summed points divided by 4.
+   - In both cases the result is a plausible point shifted toward or away from the origin.
+   - `quad_split` then runs on the wrong vertex count. Nothing checks the face valence, and no assertion or return value tells the caller. The interior rule `tmp /= 4; // =valence(v)` makes the same assumption.
+
+2. **Index ranges assume no deleted vertices.** The code sets `env = n_vertices()` and `fnv = n_vertices()`, then rebuilds handles with `Vertex(fnv + i)` and loops `for (i = env; i < fnv; ++i)`.
+   - This assumes new vertices take indices `[n_vertices(), ...)` in order.
+   - In this surface-mesh design, `n_vertices()` usually excludes deleted vertices that have not been garbage-collected yet, while `add_vertex` adds at the end of the storage.
+   - On a mesh with pending deletions, the loops would treat original vertices as edge points and the wrong vertices as face centers. The result is a moved or wrongly connected mesh, not an exception.
+   - The static `apply` accepts any caller's mesh without calling `garbage_collection()` or asserting there are no deletions.
+
+3. **The crease search can hang depending on the input.** In the `sd == 2` branch, `while (!sharp[h1] || mesh.touches_boundary(h1))` has no exit if both sharp halfedges touch the boundary. The two searches also use different tests (`touches_boundary` and `is_boundary`), so they can disagree about which sharp neighbors count. Whether this hangs depends on how sharp flags spread through `insert_vertex`. A test cannot control that, and the result is a hang, not a clear failure.
+
+4. **The only new guard disappears in release builds.** `GISMO_ASSERT(nullptr != m_mesh)` is not checked in release builds. A null mesh then becomes undefined behavior instead of a clear error.
+
+Each of these is a path whose failure is a plausible-looking wrong mesh or a hang, not something a caller can assert on.
+--- BOUNDARY APPROVE persona=500973c48f91
+This patch is a pure refactor. It replaces the `m_mesh->` member body of `subdivide()` with a static `apply(gsSurfMesh&)`, and `subdivide_impl()` forwards to it after asserting `m_mesh != nullptr`. I compared old and new line by line: every expression, loop bound, condition and constant is the same, so the patch introduces no new boundary behaviour.
+
+**New boundary added by the patch**
+- **Null mesh:** `subdivide_impl()` asserts `nullptr != m_mesh` before dereferencing. This is handled (a). In release builds where `GISMO_ASSERT` compiles out, the old code dereferenced `m_mesh` unchecked anyway, so nothing gets worse.
+
+**Boundaries inherited unchanged from the original**
+- **Empty mesh** (0 vertices, edges or faces): `reserve(0,0,0)` is fine, every range loop is empty, and `env == fnv == 0`, so both OpenMP loops run zero times. Handled (a).
+- **Edges with both halfedges on the boundary** (isolated edges): these are skipped during edge-point insertion, as before. Handled (a).
+- **Face-point averaging:** stepping by `++vc, ++vc` and dividing by 4 assumes quads, which after edge insertion have 8 vertices. Non-quad input is outside the Catmull-Clark caller contract in this implementation, and the behaviour is unchanged (b).
+- **Edge-point valence:** dividing by a hard-coded 4 is correct because each interior edge point has exactly 2 original-vertex and 2 face-point neighbours after `quad_split`. Handled (a).
+- **Low-valence original vertices:** the `n <= 2` early `continue` guards the `n*(n-3)` and `/(n*n)` terms, so a valence of 0 (isolated vertex) cannot cause division by zero. Handled (a).
+- **Sharp vertex with `sd == 2`:** the first search uses `touches_boundary` and the second uses `is_boundary`. This asymmetry exists verbatim in the original. Both `while` loops could spin forever if no qualifying halfedge exists, but `sd == 2` guarantees two sharp halfedges. Outside the contract (b) and not introduced here.
+- **Boundary vertex rotation:** the `while (!touches_boundary(hh))` loop terminates because `is_boundary(v)` was just checked. Handled (a).
+- **Mixed-signedness loop index:** `int i` against `index_t env/fnv` is the same as before. It would only matter for meshes above `INT_MAX` vertices, which is impractical and unchanged (b).
+
+**Typedefs**
+- The removed file-scope typedefs (`Point`, `Halfedge`) are still used unqualified. This is a compile concern rather than a logic boundary. Because `apply` is a member, class-scope typedefs from `gsSubdivScheme` or the header would resolve them, and the diff gives no evidence of a wrong runtime result.
+
+No boundary falls in category (c), meaning genuinely mishandled with a concrete input producing a wrong result.
+
+===== 15977e9:gsSquareDomain.h:clean | claude-standard.w0.jsonl | final=APPROVE
+--- SKEPTIC APPROVE persona=49f72d66b0bf
+I searched for defects and found nothing I could tie to a concrete failing input.
+
+- **`targetDim()` returns `m_domain.domainDim()`.** This looks like a copy-paste slip. But `BSplineSquare()` always yields a 2D-to-2D tensor B-spline, and the assignment only compiles for `DIM == 2`. So `domainDim() == targetDim()` for every instance that can exist, and the reported dimension is always correct.
+- **Constructor elimination loop.** Every boundary basis index is eliminated in every coordinate component. `m_parameters` is sized to `freeSize()` and filled only through `is_free` / `index(k,0,d)`, which return valid free indices in `[0, freeSize)`. No out-of-range writes are possible.
+- **`updateGeom()`.** It is the exact inverse of the constructor's gather, using the same mapper, `is_free` guard and indices. Boundary control points are left untouched, as intended.
+- **`control_deriv_into()`.**
+  - `result` has `targetDim()*nControls()` rows, and `reshapeCol(p, nControls(), targetDim())` views exactly one column as `nControls x targetDim`. Each entry `res(index(k,0,d), d)` stays inside that view.
+  - The matrix is zeroed first, so cross-component entries are correctly 0.
+  - `evalSingle_into` returns a 1x1 result for one point, so `tmp(0,0)` is valid.
+- **`nControls()` / `controls()`.** These are consistent: `m_parameters.size() == m_mapper.freeSize()`.
+
+Non-behavioural nits:
+- The file header names `gsMultiBasis.h` and describes MultiBasis.
+- The headers for `gsNurbsCreator` and `gsTensorBSpline` are not included directly; they rely on transitive or forward declarations.
+- Stale commented-out code is left in.
+- `eval_into` reflects `controls()` changes only after `updateGeom()`, which is the intended design.
+
+None of these causes incorrect results.
+--- ADVOCATE APPROVE persona=32e59155d0a3
+I found no demonstrable logic defect in this patch.
+
+- **Constructor.** It builds a degree-elevated, once-refined BSpline square. The DofMapper is created over the basis with `targetDim()` components. All boundary DoFs are eliminated in every component, so only interior control points are free. `m_parameters` is filled from exactly the free entries, and `index(k,0,d)` keeps it consistent with the mapper.
+- **`updateGeom()`.** It is the exact inverse of the constructor's gather step. It writes `m_parameters` back into the free coefficient slots and leaves the fixed boundary coefficients alone.
+- **`nControls()`.** It returns `freeSize()`, which matches `m_parameters.size()`.
+- **`control_deriv_into()`.** The result is sized `targetDim()*nControls() × npoints`. Each column is reshaped to `nControls() × targetDim()`. Free DoF `(k,d)` gets basis function k's value at the point, written in row `index(k,0,d)` and column d. That is the correct derivative of the map with respect to each free control. The derivative for direction d is zero in the other components, which `setZero()` handles.
+- **`targetDim()` returning `m_domain.domainDim()`.** This looks suspicious at first. For a square domain map, however, domain and target dimensions are both DIM, so the value is correct. It is also consistent with `result` and `res` being sized from `targetDim()` while the inner loops use `m_domain.targetDim()`.
+- **Construction from `BSplineSquare()`.** The constructor dereferences the returned `unique_ptr` and copies the result into `m_domain`, so there is no leak or dangling pointer.
+
+Non-blocking nits:
+- The file header still says `gsMultiBasis.h` / "MultiBasis class", which looks like a copy-paste leftover.
+- `BSplineSquare()` returns a 2D spline, so this only works for `DIM == 2`. A `static_assert(DIM==2)` would make that explicit.
+- The commented-out code (extra `uniformRefine` calls and the i/j indexing experiment) could be removed.
+- `gsNurbsCreator` and `gsTensorBSpline` come in only indirectly through the includes. Explicit includes would be more robust.
+--- AUDITOR REJECT persona=318509b9ab1f
+The patch has a logic error, missing includes and a template parameter that only works for one value. Each is a reason to request changes.
+
+**Logic issues**
+
+1. **`targetDim()` returns the wrong value.**
+   ```cpp
+   short_t targetDim() const override { return m_domain.domainDim(); }
+   ```
+   It should return `m_domain.targetDim()`. The result is only correct by coincidence for a 2D→2D square, where both values are equal.
+   - The error spreads to other code. `control_deriv_into` uses `targetDim()` to size `result` (`targetDim()*nControls()`) and to reshape each column (`reshapeCol(p, nControls(), targetDim())`).
+   - `updateGeom()` and the constructor loop over `m_domain.targetDim()` instead. So any embedding where the two dimensions differ, such as a surface in 3D, would give mismatched shapes or out-of-range writes.
+   - The class is also inconsistent, mixing `this->targetDim()` and `m_domain.targetDim()` for the same concept.
+
+2. **The `DIM` template parameter only works for `DIM == 2`.** The constructor always assigns `*gsNurbsCreator<T>::BSplineSquare()`, which is a 2D tensor B-spline, to `gsTensorBSpline<DIM,T>`. Any other `DIM` either fails to compile or silently does the wrong thing. Either remove the parameter, restrict it with a `static_assert(DIM==2)`, or build the domain generically for any `DIM`.
+
+3. **`control_deriv_into` repeats work.** `evalSingle_into(k, ...)` is called inside the `d` loop, so basis function `k` is evaluated `targetDim()` times per point. The values are correct, but the evaluation should be moved outside the `d` loop.
+
+**Build and maintenance issues**
+
+4. **Missing includes.** The header uses `gsNurbsCreator` and `gsTensorBSpline` but only includes `gsFunction.h` and `gsDofMapper.h`. It compiles only if the including file has already pulled those in.
+
+5. **Wrong file header.** The doc block says `@file gsMultiBasis.h` and "Provides declaration of MultiBasis class", which was copy-pasted from another file. The class itself has no documentation.
+
+6. **Hard-coded setup and leftover debug code.**
+   - The degree elevation and refinement in the constructor are fixed, and there is no way to pass in a basis or geometry.
+   - Several blocks of commented-out code remain: extra `uniformRefine`, `i`/`j` index vectors, and `gsDebugVar` experiments.
+   - There is a stray `;` after the inline `controls()` bodies.
+
+7. **Easy-to-misuse state.** `controls()` gives write access to `m_parameters`, but `eval_into` reads `m_domain`. If the caller forgets to call `updateGeom()`, evaluation silently uses stale values. This contract should at least be documented. Better, sync automatically or make `updateGeom` part of the controls interface.
+
+**Correct parts**
+
+- Eliminating the boundary DOFs through `allBoundary()` and `eliminateDof` is correct.
+- The free-index mapping is correct.
+- The derivative layout in `control_deriv_into` (`res(freeIdx, d) = N_k(u)`) is correct.
+
+**Required before approval:**
+- Fix `targetDim()` to return `m_domain.targetDim()`.
+- Add the missing includes.
+- Constrain or generalize `DIM`.
+- Correct the file header.
+- Remove the commented-out debug code.
+--- TEST-FOCUSED REJECT persona=939526b1bf45
+1. **Stale geometry after control edits (silent).** The non-const `controls()` returns a mutable reference to `m_parameters`. Nothing propagates changes to `m_domain` unless the caller remembers to call `updateGeom()`. `eval_into`, `support()` and `domain()` all read `m_domain`. So a caller who writes `f.controls()[i] = x; f.eval_into(u, r);` gets the old geometry back. There is no exception and no assert. The values look like a valid square map, just the wrong one. This is especially likely in an optimisation loop, which is what the control/derivative interface exists for. A test catches it only if it happens to check evaluation after mutation without calling `updateGeom()`, and the class gives no hint that this call is required. Fix options:
+   - make the mutable `controls()` sync on access,
+   - drop the mutable `controls()` in favour of a setter that calls `updateGeom()`, or
+   - have `eval_into` read from `m_parameters`.
+
+2. **`targetDim()` returns `m_domain.domainDim()`.** It should return `m_domain.targetDim()`. For `BSplineSquare` both happen to be 2, so no test on this class can see the difference. That is exactly why it is dangerous:
+   - `control_deriv_into` uses `targetDim()` to size `result` (`targetDim()*nControls()`) and to reshape each column.
+   - The inner loop iterates over `m_domain.targetDim()`.
+   - If the two ever differ (a subclass, or a constructor change toward a surface embedded in 3D), the reshape has the wrong column count. `res(..., d)` then writes out of bounds or mis-strides with no diagnostic in release builds.
+   
+   This is a logic error masked by the current data.
+
+3. **`control_deriv_into` cost and correctness coupling.** It calls `evalSingle_into(k, ...)` once per (k, d) pair, so it evaluates each basis function `targetDim` times. That is not wrong on its own. However, the result layout depends entirely on `m_mapper.index(k,0,d)` being a component-interleaved global index below `nControls()`. That is never asserted, so a mapper layout mismatch would write plausible-looking but misplaced derivatives rather than fail.
+
+4. **Build fragility and hygiene.**
+   - The header uses `gsNurbsCreator` and `gsTensorBSpline` without including them. It compiles only if an earlier include pulls them in transitively.
+   - The file banner says `gsMultiBasis.h` / "declaration of MultiBasis class", which is copy-paste.
+   - `DIM` is a template parameter, but the constructor hard-codes the 2D `BSplineSquare`, so any `DIM != 2` either fails to compile or is meaningless.
+
+Items 1 and 2 are each a nameable path whose failure would be silent: plausible but wrong values, or out-of-bounds writes only under a configuration the current tests cannot reach. That meets the rejection bar.
+--- BOUNDARY APPROVE persona=500973c48f91
+I traced each boundary through the patch and found none that is genuinely mishandled.
+
+- **Constructor.** `BSplineSquare()` produces a 2×2 bilinear patch. After `degreeElevate()` and `uniformRefine()` it becomes biquadratic with 4×4 = 16 control points. `allBoundary()` returns 12 of them, and all `targetDim()` components of each are eliminated. That leaves 4 interior points × 2 components = 8 free DOFs. `m_parameters` is resized to `freeSize()`. The fill loop writes only entries where `is_free(k,0,d)` is true, and `index()` for a free DOF lies in `[0, freeSize)`, so every write is in range. Loop bounds use `!=` against `rows()`/`targetDim()` starting at 0, so there is no off-by-one. (a)
+- **Template parameter `DIM`.** `BSplineSquare` returns a 2D tensor B-spline, so `DIM != 2` would fail to compile rather than produce a wrong result. The class is only meaningful for `DIM == 2`. (b)
+- **`targetDim()` returns `m_domain.domainDim()`.** For the square geometry both dimensions are 2, so the value is correct. It is only stylistically odd. (a)
+- **`updateGeom()`.** It writes back only the free coefficients, using the same index mapping as the constructor. Boundary coefficients stay fixed. If `m_parameters` was replaced through the non-const `controls()` with a vector of a different length, that would break the `nControls()` contract, which is the caller's responsibility. (b)
+- **`control_deriv_into` with empty `points` (0 columns).** `result` is resized to `(2·nControls) × 0`, the loop runs zero times, and an empty matrix is returned. (a)
+- **`control_deriv_into` with points on the domain boundary (u = 0 or 1).** `evalSingle_into` handles endpoint-inclusive evaluation for B-splines. Interior basis functions evaluate to 0 there, which is the correct derivative. (a)
+- **`control_deriv_into` indexing.** `result` has `targetDim·nControls` rows. `reshapeCol(p, nControls, targetDim)` maps column `p` into an `nControls × targetDim` view, and `res(index(k,0,d), d)` stays within both dimensions. Zero-initialization ensures entries that are not free stay 0. (a)
+- **`nControls()`.** It returns `size_t` from `freeSize()`, which is a non-negative `index_t`, so no sign issue arises. (a)
+
+Non-blocking notes, none of which produce a wrong result:
+- The file header says `gsMultiBasis.h` / "MultiBasis class".
+- `evalSingle_into` is called redundantly for each `d` with the same `k`.
+- Dead commented-out code is left in.
+- `gsNurbsCreator` and `gsTensorBSpline` headers are not included directly.
+
+===== bfbe226:gsComposedGeometry.h:clean | claude-standard.w0.jsonl | final=APPROVE
+--- SKEPTIC APPROVE persona=49f72d66b0bf
+I found no specific input, state or call sequence that produces incorrect behaviour.
+
+- **Matches the original.** The new `compute` override is the non-`SAME_ELEMENT` branch of `gsGeometry::compute`, copied nearly line for line. This is what the comment says it is.
+- **Buffer sizes are consistent.** `out.values[0..2]` are resized to `numCo × numPt`, `numCo*derS × numPt` and `numCo*der2S × numPt`. The per-point `reshapeCol` calls use exactly these shapes: `(1, numCo)`, `(derS, numCo)` and `(der2S, numCo)`. Each product (`tmp.eval(p)*coefM`, etc.) has those dimensions once `coefM` has `active(p).rows()` rows and `m_coefs.cols()` columns. I found no out-of-bounds write.
+- **Row indices come from the basis.** `coefM` rows are filled from `m_coefs.row(tmp.active(p)(r,0))`. These active indices come from the same basis that defines `m_coefs`, which is the same assumption `gsGeometry::compute` makes.
+- **Actives are always available.** `NEED_ACTIVE` is forced into `flags`, so both `tmp.actives` and `out.actives` are always filled, and `tmp.active(p)` is valid for every point.
+- **The one difference from upstream is redundant, not harmful.** The patch adds `tmp.actives = out.actives;`. Both come from `this->basis()` on the same input `in`. `basis().compute` with `NEED_ACTIVE` fills actives through the basis's own `active_into`, so the two matrices are identical and the assignment changes nothing.
+- **Dropping the `SAME_ELEMENT` fast path is safe.** It only removes an optimization. The per-point path is correct whether or not that flag is set.
+- **The new `using Base::m_coefs;` is fine.** It only exposes an existing protected member and changes no layout or ownership.
+
+I found no new security-relevant surface: no unchecked external input, no ownership change, no lifetime issue.
+--- ADVOCATE APPROVE persona=32e59155d0a3
+I found no clear, demonstrable defect, including on memory safety. The new `compute()` follows the non-`SAME_ELEMENT` branch of `gsGeometry<T>::compute`.
+
+- **Flags:** `flags` always includes `NEED_ACTIVE`, so `tmp` is computed with active indices and `out.actives` is always filled. This matches the base class, which always needs actives to gather coefficients.
+- **Output sizes:** `out.values` is resized to `maxDeriv()+1`. Each requested block is sized `numCo × numPt`, `numCo*derS × numPt` or `numCo*der2S × numPt`. These match the `reshapeCol(p, 1|derS|der2S, numCo)` writes, so the writes cannot overflow.
+- **Coefficient gathering:** `coefM` is resized to `active(p).rows() × m_coefs.cols()` before rows are copied. `tmp.active(p)` is a single column, so `(r,0)` is the correct element. The indices come from `this->basis().active_into`, which is the same basis that owns `m_coefs`. Indexing therefore matches what `extractRows` would do, with the same Eigen bounds checks in debug builds.
+- **Copying actives into `tmp`:** `tmp.actives = out.actives` is defensive. It guarantees that the actives used for gathering match the ones returned to the caller, even if `basis().compute` filled `tmp.actives` differently or not at all. At worst it is redundant.
+- **Matrix products:** `tmp.eval(p)`, `tmp.deriv(p)` and `tmp.deriv2(p)` have `active(p).rows()` rows. Their transposed layout multiplied by `coefM` gives the expected shapes, as in the base implementation.
+- **Member access:** `using Base::m_coefs;` exposes the inherited member needed by the new method and changes nothing else.
+
+Minor, non-blocking notes:
+- The manual loop could be replaced by `extractRows` again (the commented-out line), which would make it clearer that the copy matches upstream.
+- `active_into` is called twice, once inside `basis().compute` and once explicitly. This costs some performance but does not affect correctness.
+--- AUDITOR APPROVE persona=318509b9ab1f
+**Scope.** The patch adds a `compute()` override to `gsComposedGeometry` and exposes `m_coefs` through a `using` declaration. Its own comment says it is copied from `gsGeometry::compute` with the `SAME_ELEMENT` fast path removed. I compared it against that logic.
+
+**Correctness and memory safety**
+- **Buffer sizes are consistent.**
+  - `out.values[0]` is resized to `numCo × numPt`, and each `reshapeCol(p, 1, numCo)` view stays inside that buffer.
+  - The same holds for `values[1]` (`numCo*derS × numPt` with `reshapeCol(p, derS, numCo)`) and `values[2]` (`numCo*der2S`).
+  - Each product has matching dimensions. For example, `tmp.eval(p)` (1 × nActive) times `coefM` (nActive × numCo) gives 1 × numCo, which matches the destination view. The derivative products follow the same pattern.
+- **`coefM` is resized on every iteration** to the active count at that point, so a varying number of active functions per point cannot cause stale or out-of-range writes.
+- **`NEED_ACTIVE` is always set** by `flags = out.flags | NEED_ACTIVE`. This guarantees `tmp.active(p)` is filled before it is used to index rows.
+- **Row indexing into `m_coefs` is unchecked**, as in upstream `gsGeometry`. It relies on the basis/coefficient invariant (`m_coefs.rows() == basis().size()`) that the class hierarchy already enforces. This adds no new trust boundary, and no external input reaches the index.
+- **`noalias()` is valid** because each destination is a view into `out.values` and does not overlap `tmp` or `coefM`.
+
+**Deviations from upstream, all non-blocking**
+1. `tmp.actives = out.actives;` overwrites the actives already produced by `basis().compute(in, tmp)` with the result of `basis().active_into(in, ...)` on the same basis and points. The two should be identical, so this is redundant work rather than a defect. It does mean the evaluated values and the actives come from two separate calls. A brief comment or an assertion that the row counts match would make that invariant explicit.
+2. Dropping the `SAME_ELEMENT` path is documented and safe. It only gives up an optimization, which matters for a composed basis where points can map to different elements after composition.
+3. The `using Base::m_coefs;` declaration is a minimal visibility change limited to the class's own `protected` section.
+
+**Out of scope, pre-existing.** The move assignment calls `Base::operator=(other)` on an rvalue, which performs a copy rather than a move. This is a performance point only, and the patch does not touch it.
+
+**Security assessment.** The patch introduces no new input parsing, allocation driven by untrusted sizes, raw pointer arithmetic, lifetime hazards, or ownership changes. Any memory-safety exposure reduces to invariants that the existing `gsGeometry` implementation already depends on. Nothing here warrants rejection. Optionally, adding a debug-time `GISMO_ASSERT` that `tmp.active(p).rows()` matches the column count of `tmp.eval(p)` would make the implicit invariant explicit.
+--- TEST-FOCUSED REJECT persona=939526b1bf45
+**Main silent path: the `SAME_ELEMENT` flag is still forwarded to the basis.**
+
+The override exists to drop `gsGeometry::compute`'s `SAME_ELEMENT` shortcut, which is wrong for a composed geometry because the composition can map points into different elements. But the code does `flags = out.flags | NEED_ACTIVE` and passes those flags straight to `this->basis().compute(in, tmp)`. If a caller sets `SAME_ELEMENT`, the basis may:
+
+- compute actives only from `in.col(0)`, and
+- shape `tmp.values` around that single element's active set.
+
+The patch then overwrites `tmp.actives` with per-point actives from `active_into(in, out.actives)`. This pairs basis values computed under one active set with coefficient indices taken from another. The output keeps the right shape and finite, plausible numbers, so nothing throws and no size check fires. The geometry values and derivatives are just wrong. The error only appears when the evaluation points straddle element boundaries after composition, which depends on the composition map and the quadrature layout.
+
+The overwrite of `tmp.actives` also hides any mismatch between what `basis().compute` produced and what `active_into` returns, because the internally computed actives are thrown away without comparison. The fix is to strip the flag explicitly, e.g. `const unsigned flags = (out.flags | NEED_ACTIVE) & ~SAME_ELEMENT;`, so the basis is never asked for the single-element shortcut.
+
+**Secondary silent paths:**
+
+1. **Unchecked indexing.** `coefM.row(r) = m_coefs.row(tmp.active(p)(r,0))` has no bounds check. If the basis and `m_coefs` disagree on size, a debug build asserts but a release build reads out of bounds and returns garbage. Whether this fails loudly depends on the build configuration.
+2. **Stale output data.** `out.values.resize(out.maxDeriv()+1)` keeps earlier entries, but only resizes and fills `values[0]`, `values[1]` and `values[2]` when their own flag is set. If `out` is reused, say a `NEED_DERIV`-only call after a `NEED_VALUE` call, `out.values[0]` still holds results for the previous points. Those values look valid. Likewise, if a flag raises `maxDeriv()` to 2 (e.g. a Hessian or Laplacian request) without `NEED_DERIV2`, `values[2]` is left empty or stale instead of failing.
+3. **Constant active count assumed.** `tmp.eval(p)` and `tmp.deriv(p)` assume the same number of active functions at every point, but `coefM` is sized from `tmp.active(p).rows()` for each point separately. If the composed basis yields different active counts at different points, the reshape layout of `tmp.values` no longer matches `coefM`, giving wrong products with no error.
+
+Path 1 alone could pass as an inherited pattern from `gsGeometry`. But the `SAME_ELEMENT` forwarding defeats the stated purpose of this override and produces plausible wrong values that depend on the data, which is enough to reject.
+--- BOUNDARY APPROVE persona=500973c48f91
+I found no boundary that the patch genuinely mishandles. It adds `compute()`, which closely follows the `else` (non-`SAME_ELEMENT`) branch of `gsGeometry::compute`, plus a `using Base::m_coefs;` declaration.
+
+**Boundaries traced:**
+
+1. **`numPt == 0` (empty `in`)**: The output matrices are resized to `(…, 0)` and the loop never runs. Handled correctly (a).
+2. **Size of `out.values` vs. the flags used**: `out.values` gets `out.maxDeriv()+1` entries. The local `flags` only adds `NEED_ACTIVE` to `out.flags`, so no derivative-order bit is set that `out` didn't request. `values[1]` and `values[2]` are only touched when `out` asked for them, so there is no out-of-range access. Handled correctly (a).
+3. **`m_coefs.cols() == 0`**: `numCo = 0` gives zero-size matrices, and every `reshapeCol(p, …, 0)` and product is zero-size. Handled correctly (a).
+4. **A point with no active functions (`tmp.active(p).rows() == 0`)**: `coefM` becomes `0 × numCo`. The products `tmp.eval(p)`, `deriv(p)` and `deriv2(p)` then have zero inner dimension and produce zero-filled results of the right shape. Handled correctly (a).
+5. **Active index past `m_coefs.rows()`**: `m_coefs.row(tmp.active(p)(r,0))` assumes every active index is less than `m_coefs.rows()`. The `gsGeometry` invariant (number of coefficients equals basis size) guarantees this. Unreachable under the contract (b).
+6. **Points outside the parameter domain**: The basis reports the actives for such points itself, so there is no new behaviour here. Unreachable under the contract (b).
+7. **Recomputing `actives` and copying them into `tmp`**: `basis().compute` already filled `tmp.actives` because `NEED_ACTIVE` is set. Recomputing them with `active_into` on the same `in` gives the same matrix, so the overwrite is redundant but consistent. Copying (instead of swapping, as upstream does) leaves `out.actives` populated as expected. Handled correctly (a).
+8. **Derivative sizes `derS` / `der2S`**: These are taken from `tmp`, the same object whose `deriv(p)` and `deriv2(p)` are reshaped. The reshape `(derS, numCo)` matches a `derS × nActive` by `nActive × numCo` product. Handled correctly (a).
+
+The surrounding unchanged context (for example, the move assignment calling `Base::operator=(other)` without `std::move`) is outside this patch. I found no input that yields an incorrect result, so this is an approve.
+
+===== c0c88af:gsAABB.h:clean | claude-standard.w2.jsonl | final=APPROVE
+--- SKEPTIC APPROVE persona=49f72d66b0bf
+I couldn't find an input or call sequence that produces incorrect behaviour.
+
+- **Constructors:**
+  - The three-argument constructor initialises all three members.
+  - The two-argument constructor delegates to it with `level = -1`.
+  - The upper-only constructor zeroes `first`.
+  - The default constructor zeroes both corners.
+  - None leaves a member uninitialised for a fixed dimension `d`.
+- **Copy and move constructors:** Both default-construct the members, then assign from `other`. The member types are a fixed-size `gsVector` and `index_t`, so this is harmless.
+- **Copy assignment:** It guards against self-assignment and copies all three members, including `level`.
+- **Move assignment:** There is no self-check. A self-move would still be safe here: `give` on a fixed-size Eigen vector and an integer returns a value, which is then assigned back, so `a = std::move(a)` leaves the box unchanged.
+- **Alignment:** `EIGEN_MAKE_ALIGNED_OPERATOR_NEW` is correctly wrapped in the `Eigen` → `gsEigen` redefinition that G+Smo uses for its namespaced Eigen copy.
+
+Two things I checked but couldn't turn into a concrete defect:
+
+1. **Dynamic dimension (`d = -1`):** In the upper-only constructor, `first.setZero()` would leave `first` empty while `second` has a size. In this module `d` is always a positive compile-time dimension, so I can't show a real call that hits this.
+2. **Missing `#include`:** The header assumes `gsVector` and `give` are already declared. That matches the convention of other G+Smo internal headers, which are reached through the core includes.
+--- ADVOCATE APPROVE persona=32e59155d0a3
+I found no clear, demonstrable defect in this new header.
+
+- **Constructors are consistent.**
+  - The three-argument constructor initializes all members.
+  - The two-argument constructor delegates to it with `level = -1`, which is valid C++11.
+  - The upper-corner-only constructor zero-fills `first`, so the box starts at the origin.
+  - The default constructor zero-fills both corners and sets `level = -1`.
+- **The copy constructor is safe.** It default-constructs the members and then copies them in `operator=`. That is redundant but correct, and every member, including `level`, gets assigned.
+- **The move constructor does not recurse.** It calls `operator=(give(other))`. In G+Smo, `give` returns an rvalue reference (it wraps `std::move`), so this selects the move assignment operator. G+Smo classes such as `gsMatrix` and `gsBasis` use the same pattern.
+- **Move assignment works without a self-check.** Moving an Eigen-backed `gsVector` into itself is harmless in practice, and so is moving an `index_t`. A `this != &other` guard would only be a style improvement.
+- **The alignment macro is correct.** `EIGEN_MAKE_ALIGNED_OPERATOR_NEW` is applied with the `Eigen` → `gsEigen` macro remap that G+Smo uses elsewhere. This matters because fixed-size `gsVector<Z,d>` members may need aligned allocation.
+- **Missing includes are expected.** The header relies on the G+Smo core headers being included first, which matches the convention of other `gsHSplines` headers.
+
+**Minor, non-blocking nits:**
+- The doc comment says "Struct of for".
+- The `public:` specifiers are redundant in a `struct`.
+--- AUDITOR APPROVE persona=318509b9ab1f
+I found no logic defects in this header. Each part checks out:
+
+- **Constructors:**
+  - The 3-argument constructor initializes all members correctly.
+  - The 2-argument constructor delegates with `level = -1`, which matches the other constructors' sentinel.
+  - The upper-corner-only constructor zeroes the lower corner, which is the expected meaning of a box anchored at the origin.
+  - The default constructor zeroes both corners and sets `level = -1`.
+- **Copy constructor:** It delegates to copy assignment. The `point` members are default-constructed first and then assigned, which is safe for Eigen-based `gsVector`. `level` is uninitialized only until `operator=` runs, which sets it on every path, since `this != &other` always holds during construction.
+- **Move constructor:** `give(other)` produces an rvalue, so the move-assignment overload is chosen. This is correct and does not recurse.
+- **Copy assignment:** It guards against self-assignment, copies all three members and returns `*this`.
+- **Move assignment:** It has no self-check, but self-move-assignment of Eigen vectors and an integer is benign, and this matches common G+Smo practice. All members are transferred.
+- **Alignment:** `EIGEN_MAKE_ALIGNED_OPERATOR_NEW` is correctly wrapped in the `Eigen` to `gsEigen` macro remap that G+Smo uses for its namespaced Eigen. This handles fixed-size vectorizable members.
+- **Namespacing:** `#pragma once` and the `gismo` namespace are correct.
+
+Minor non-blocking observations:
+
+- **Typo:** The doc comment says "Struct of for an".
+- **Dynamic size:** If `d` were dynamic (-1), `setZero()` on a default-constructed vector would leave it empty. In particular, `first` would not match `second`'s size in the single-argument constructor. The intended use has a fixed compile-time `d`, so this does not affect correctness here. `first.setZero(upp.size())` would make it robust.
+- **Includes:** The header has no includes and relies on being included after the core G+Smo headers (`gsVector`, `give`, `index_t`, `short_t`). This is consistent with the library's conventions.
+--- TEST-FOCUSED APPROVE persona=939526b1bf45
+I traced every path in this struct, and each produces state a caller can read back and assert on. I found no defect.
+
+- **Three-argument constructor:** it sets `first`, `second` and `level` directly from its arguments.
+- **Two-argument constructor:** it delegates to the three-argument one with `level = -1`. This matches the explicit initialization it would otherwise have. A wrong default would show up as an observable `level`.
+- **Upper-corner-only and default constructors:** `first` (and `second` in the default case) are zeroed with `setZero()`, and `level` is set to -1. Nothing is left uninitialized, so a test can assert these values.
+- **Copy constructor:** it default-constructs the members, then calls the copy assignment, which assigns all three fields. `level` is uninitialized only until that assignment runs, which always happens because `this != &other` holds during construction. No field is skipped.
+- **Copy assignment:** it has a self-assignment guard, copies all three fields, and returns `*this`.
+- **Move constructor and move assignment:** these move all three fields. On self-move, each `give(x)` hands back the old value before it is assigned to `x`, so the object's state is preserved. The moved-from source is left in an unspecified state, which is the normal contract and not a silent corruption of the destination.
+- **Aligned new:** `EIGEN_MAKE_ALIGNED_OPERATOR_NEW` is wrapped in the `Eigen` → `gsEigen` define/undef. This follows the library's established pattern and leaks no macro outside the struct.
+
+The struct has no branches beyond the self-check, no global state, no swallowed errors, and nothing that depends on timing or the environment. It does not check that `first <= second`. That is a design choice for a plain bounding-box record, not a hidden failure in what the code claims to do. Every behavior here is a deterministic field value a test could check.
+--- BOUNDARY APPROVE persona=500973c48f91
+I found no boundary that produces a wrong result for inputs reachable under the caller's contract.
+
+**Constructors**
+- **Three-argument constructor:** copies both corners and the level. This holds for any `lvl`, including negative values, zero and `INT_MAX`. (a)
+- **`(low, upp)`:** delegates with level `-1`, the "no level" sentinel used throughout. (a)
+- **`(upp)`:** zeroes `first`, giving a box `[0, upp]`. (a) If `d` were `-1`, Eigen's dynamic size, `first` would stay size 0 while `second` has size n, leaving the two corners with different sizes. This is unreachable: HSplines always instantiates `gsAABB` with a fixed compile-time dimension. (b)
+- **Default constructor:** both corners are zero and the level is `-1`, which is a valid degenerate box. (a)
+
+**Copy and move**
+- **Copy constructor:** default-constructs the members, then assigns them. Copying into an uninitialized object is safe for Eigen fixed-size vectors and for `index_t`. (a)
+- **Copy assignment:** it checks for self-assignment, but self-copy is harmless here anyway. (a)
+- **Move assignment, self-move (`a = give(a)`):** there is no self-check.
+  - Fixed-size Eigen vectors move by element copy, so self-move leaves the values unchanged.
+  - A dynamic Eigen matrix would move via swap, and self-swap is also a no-op.
+  - The `index_t` level is simply copied.
+  - So there is no corruption. (a)
+- **Moved-from object:** after a move constructor or move assignment, the source keeps its values, because fixed-size Eigen vectors copy and `level` is a scalar. It stays valid and usable. (a)
+
+**Value ranges**
+- The structure does not check `low <= upp`, so an inverted or empty box can be stored. Ordering and level semantics belong to the callers, as in the existing hierarchical-spline code. No method here does arithmetic on the corners, so there is no overflow or off-by-one path. (b)
+
+**Alignment**
+- `EIGEN_MAKE_ALIGNED_OPERATOR_NEW` is correctly invoked through the `gsEigen` namespace alias. This prevents misaligned heap allocation of the fixed-size vector members. (a)
+
+===== 3cf80c7:gsRationalBasis.h:clean | claude-standard.w2.jsonl | final=APPROVE
+--- SKEPTIC APPROVE persona=49f72d66b0bf
+The new `derivSingle_into` is mathematically correct, and I could not construct an input, state or call sequence that gives a wrong result.
+
+**Formula.** The derivative of a rational basis function R_i = w_i N_i / W is R_i' = w_i (N_i' W − N_i W') / W². The loop computes `m_weights.at(i) * (W(0,j)*dN.col(j) - N(0,j)*dW.col(j)) / W(0,j)^2`, which matches term for term:
+- The sign is right.
+- The weight index is right (`at(i)`, the queried function, not an active-set index).
+- The denominator is squared.
+
+**Shapes.**
+- `evalFunc_into(u, m_weights, W)` with a single-column coefficient matrix gives W as 1 × n.
+- `derivFunc_into` gives dW as Dim × n.
+- `evalSingle_into` gives N as 1 × n.
+- `derivSingle_into` gives dN as Dim × n.
+- `result.resize(Dim, u.cols())` matches the per-column assignment.
+- All indices `(0,j)` and `.col(j)` are in bounds.
+
+**Weight function.** W and W' are computed globally from all weights, not just the local support. The result is still correct, because inactive basis functions are zero at the evaluation points. It does more work than needed but is not wrong.
+
+**Division by zero.** W = 0 is only possible with invalid weights. The existing `deriv_into` and `deriv2_into` make the same assumption, so this introduces no new hazard.
+
+**Rest of the patch.** The other changes are cosmetic and do not change behaviour:
+- the new declaration in the header;
+- a commented-out `deriv2Single_into` declaration;
+- removal of one blank line.
+
+The surrounding `deriv_into` and `deriv2_into` code is unchanged context, and I checked its formulas as well (N'W − N W' scaled by w/W²; the second-derivative and mixed-derivative terms).
+
+**Minor nit (not a demonstrated defect).** `gsMatrix<> N, dN;` uses the default scalar type rather than `gsMatrix<T>`. When T is `real_t`, which is the normal instantiation, this is the same type and behaves identically. With a different scalar type it would fail to compile rather than silently give wrong results. Changing it to `gsMatrix<T>` for consistency is recommended, but it does not cause incorrect runtime behaviour.
+--- ADVOCATE APPROVE persona=32e59155d0a3
+**Formula check.** The new `derivSingle_into` correctly implements the quotient rule for a rational basis function, R_i = w_i·N_i / W:
+
+- `W` comes from `m_src->evalFunc_into(u, m_weights, W)`, giving W = Σ w_k N_k as a 1×n matrix.
+- `dW` comes from `m_src->derivFunc_into(u, m_weights, dW)`, giving W′ as a Dim×n matrix.
+- `N` and `dN` are the source basis value N_i (1×n) and its gradient N_i′ (Dim×n).
+- For each point j, the result is `w_i * (W·dN − N·dW) / W²`, which matches the comment R_i′ = w_i(N_i′W − N_iW′)/W².
+- `result.resize(Dim, u.cols())` matches the single-function derivative layout of Dim rows per evaluation point.
+
+Using `m_weights.at(i)` with the global index `i` is correct, because `evalSingle_into` and `derivSingle_into` are also called with the global index. This produces the same values as the corresponding Dim-row block of the existing `deriv_into`, just evaluated for one function.
+
+**Other changes.** The remaining edits are harmless:
+- the new declaration in the header,
+- a commented-out `deriv2Single_into` stub,
+- removal of one blank line.
+
+None of them changes behavior of `deriv_into` or `deriv2_into`.
+
+**Minor nit (not blocking).** `gsMatrix<> N, dN;` uses the default scalar type (`real_t`) instead of `T`. When T is real_t, which is how the library is normally instantiated, this behaves identically. With a different scalar type it would fail to compile rather than silently give wrong results. Changing it to `gsMatrix<T>` would make it consistent with the surrounding template code. Similarly, `W(0,j)*W(0,j)` could replace `math::pow(W(0,j),2)`, but that is only stylistic.
+
+I found no clear functional defect.
+--- AUDITOR REJECT persona=318509b9ab1f
+**Main defect: wrong scalar type for `N` and `dN`**
+
+- `gsRationalBasis<SrcT>` is generic over the scalar type `T` (`SrcT::Scalar_t`), and every other buffer in the new function uses `gsMatrix<T>`.
+- `N` and `dN` are instead declared as `gsMatrix<>`, which defaults to `real_t`.
+- They are passed to `m_src->evalSingle_into(i, u, N)` and `m_src->derivSingle_into(i, u, dN)`, which take a `gsMatrix<T>&`.
+- For any build where `T` is not `real_t` (float, long double, mpreal, or a different `real_t` configuration), this will not compile. A non-const reference cannot bind to a matrix of a different scalar type.
+- Even if it did compile, the result line would mix `T` and `real_t` in one Eigen expression, which Eigen rejects without explicit casts.
+- The fix is simple: use `gsMatrix<T> N, dN;`. As written, though, the patch breaks the class's genericity.
+
+**What is correct**
+
+- The math matches the stated formula, R_i' = w_i (N_i' W − N_i W') / W².
+- `W` comes from `evalFunc_into` with the weights as coefficients, giving a 1×n matrix.
+- `dW` comes from `derivFunc_into`, giving a Dim×n matrix for a single coefficient column.
+- `N` (1×n) and `dN` (Dim×n) come from the single-function evaluators.
+- `result` is sized Dim×n, which matches the layout `derivSingle_into` uses elsewhere.
+
+**Minor issues (not blocking on their own)**
+
+- `math::pow(W(0,j),2)` is less efficient and less exact than `W(0,j)*W(0,j)`, which the existing `deriv_into` and `deriv2_into` use.
+- There is no `GISMO_ASSERT` that `i` is within `[0, size())` before `m_weights.at(i)`.
+- The function evaluates the whole weight function (all basis functions) to get one basis derivative. This is acceptable but inefficient.
+- The commented-out `deriv2Single_into` declaration and the removed blank line are harmless noise.
+
+The patch should be resubmitted with `gsMatrix<T>` for `N` and `dN`.
+--- TEST-FOCUSED REJECT persona=939526b1bf45
+**Defect: hardcoded scalar type in the new `derivSingle_into`**
+
+```cpp
+gsMatrix<> N, dN;
+m_src->evalSingle_into (i, u,  N);
+m_src->derivSingle_into(i, u, dN);
+```
+
+Every other matrix in this class template uses `gsMatrix<T>`, including `W` and `dW` two lines above. `gsMatrix<>` is `gsMatrix<real_t>`, so the code only works when `T == real_t`.
+
+- `evalSingle_into` and `derivSingle_into` take `gsMatrix<T>&`. For any other instantiation (`float`, `long double`, `mpreal`, or a non-default `real_t` build), the non-const reference cannot bind to a `gsMatrix<real_t>`, so the code fails to compile.
+- The breakage stays hidden until someone instantiates the template with a different scalar type. A test suite built with the default `real_t` will never catch it.
+- The fix is `gsMatrix<T> N, dN;`.
+
+Being loud at compile time does not excuse it. It is an outright defect in a generic template.
+
+**Secondary: a silent numeric failure path**
+
+The result is divided by `math::pow(W(0,j),2)` with no guard. If the weight function evaluates to zero at a point (zero or cancelling weights, or a point where all active weighted basis values vanish), the function returns `inf`/`NaN` columns without raising anything. This mirrors the existing `deriv_into`, so it is not new. Still, the new path adds no assertion and inherits the silent failure.
+
+**Things I checked that are correct**
+
+- **Formula:** `R_i' = w_i (N_i' W − N_i W') / W²` is correct.
+- **Shapes:** `W` is 1×n from `evalFunc_into`, `dW` is Dim×n from `derivFunc_into` with scalar weights, `N` is 1×n and `dN` is Dim×n. All of these agree with `result.resize(Dim, u.cols())`.
+- **Override:** it still works without the `virtual` keyword, because the base declaration is virtual.
+--- BOUNDARY APPROVE persona=500973c48f91
+The new `derivSingle_into` is correct, and no boundary I traced produces a wrong result. One type issue is noted below, but it is not a boundary defect.
+
+**Formula check.** The function computes R_i' = w_i (N_i' W − N_i W') / W². It matches the existing `deriv_into`, which builds `W·N'`, subtracts `N·dW`, then scales by `w/W²`. The shapes line up:
+- `W` from `evalFunc_into(u, m_weights)` is 1×n.
+- `dW` from `derivFunc_into` is Dim×n, since the weights are scalar.
+- `N` is 1×n and `dN` is Dim×n.
+- `result` is resized to Dim×n, and each column is a Dim-vector expression.
+
+**Boundaries traced:**
+- **`u.cols() == 0`:** every source call returns an empty matrix, `result` becomes Dim×0 and the loop is skipped. This is correct (a).
+- **`u.cols() == 1`:** the loop runs once over j = 0 with no off-by-one; it uses `j < u.cols()`. Correct (a).
+- **`i` outside [0, size)**: `m_weights.at(i)` and the source's `evalSingle_into(i, …)` would misbehave. The `*Single_into(i, …)` API in this codebase requires a valid index, and the existing `evalSingle_into` has the same precondition. Unreachable under the contract (b).
+- **`W == 0`, causing division by zero:** rational bases require positive weights, and the source basis is a partition of unity, so W > 0 on the domain. `deriv_into` and `deriv2_into` already divide by `W*W` with the same assumption. Unreachable under the contract (b).
+- **`u` outside the support of basis i:** `N` and `dN` are 0, so `result` is 0, which is the correct derivative of R_i there. Correct (a).
+- **Negative or zero `w_i`:** this violates the rational-basis contract, and the result would still match the formula. (b)
+
+**Other hunks.** The rest of the diff is a header declaration, a commented-out `deriv2Single_into` stub, and removal of one blank line. None of these change behavior.
+
+**Note, not a boundary defect.** `gsMatrix<> N, dN` uses the default scalar type (`real_t`) instead of `T`. If `T != real_t`, the calls to `evalSingle_into` and `derivSingle_into` would fail to compile; they would not compute a wrong value. It is worth changing to `gsMatrix<T>` for genericity, but it does not meet the bar for rejection.
+
+===== 6c02814:gsTHBSplineBasis.hpp:clean | claude-standard.w2.jsonl | final=APPROVE
+--- SKEPTIC APPROVE persona=49f72d66b0bf
+The only functional change passes `sameElement` to the 1-D `component(k).evalAllDers_into(tmp, n, cwb, sameElement)` call. The other edited line is a comment.
+
+- **Single-point input.** `tmp` is a 1×1 matrix, so it holds exactly one evaluation point. The `sameElement` contract ("all points lie in the same element") is trivially true for one point. Whatever the caller passes, the 1-D basis cannot misuse it: it computes the active span and derivatives for that single point either way.
+- **Scope.** The hunk header shows the enclosing `evalAllDers_into(const gsMatrix<T> & u, int n, ...)`. It matches the gsBasis virtual signature, which ends in `bool sameElement`, so the identifier is the function's own parameter. If it were not, the patch would fail to compile rather than misbehave.
+- **Index consistency.** `firstActive(tmp.value())` is computed separately from the same single point. So `cwb[l].at(ti[k]-first)` still indexes the same active-function ordering the 1-D evaluation produced. `cwb` is resized by the callee for each `k`, so nothing stale carries over between components.
+- **Unchanged logic I checked.** The early `break` on a zero index after `j != 0` (padding in `active_into`) was not changed. The `n>-1` value product and the `n>0` gradient product are also unchanged and correct. The latter places the k-th derivative factor and multiplies by the 0-th order factors of every other direction.
+
+I could not construct an input, state, or call sequence where this patch changes the results.
+--- ADVOCATE APPROVE persona=32e59155d0a3
+The patch forwards `sameElement` into the per-direction 1D `evalAllDers_into` call, and makes the matching edit in the commented-out alternative. I found no clear defect.
+
+- **The identifier is in scope.** In G+Smo, `gsBasis::evalAllDers_into` and its overrides take `bool sameElement = false` as their last argument. The THB override shown here has that signature, which the truncated header is consistent with. So this compiles and simply passes the caller's flag along.
+
+- **The semantics are preserved.** `sameElement` promises that all evaluation points lie in a single element. A THB element is a cell at its own level. Each tensor-level basis `m_bases[level]` that contributes an active function there is coarser or equal, so that cell lies inside one element of that basis. The promise still holds for the level basis, and therefore for each 1D component.
+
+- **It is harmless at the call site.** Each call evaluates a single point (`tmp` is 1×1). An "all points share an element" flag cannot change the result for one point. It can only skip redundant work.
+
+- **Nothing else depends on it.** `firstActive(tmp.value())` is still computed directly from the point. The offset `ti[k]-first` into `cwb` therefore does not depend on any span reuse the flag might enable.
+
+- **The rest of the hunk is unchanged context.** That includes the zero-padding `break`, the `m_is_truncated` check, and the value and first-derivative assembly. I see no change in behavior there.
+
+Overall this is a consistent change that does not alter results.
+--- AUDITOR APPROVE persona=318509b9ab1f
+The patch makes two changes inside `gsTHBSplineBasis<d,T>::evalAllDers_into`:
+
+1. **Functional change:** it forwards `sameElement` to the per-direction call: `component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. The hunk header cuts off the signature at `int n,`. This assumes the enclosing function takes a `bool sameElement` parameter, which matches the current G+Smo `gsBasis::evalAllDers_into(u, n, result, bool sameElement)` interface. Passing it down keeps the THB override consistent with the base-class API.
+2. **Comment-only change:** it updates the disabled `evalAllDersSingle_into` line. This has no runtime effect.
+
+**Correctness:**
+- `tmp` is a single 1×1 point, so the inner 1D call evaluates only one point. The `sameElement` hint means "all evaluation points share one element", which is trivially true for one point. It cannot produce a different active set or different values.
+- `firstActive(tmp.value())` is still computed on its own from the same point. So the offset `ti[k]-first` into `cwb` stays correct whatever the flag says.
+- Nothing else changes: indexing, result sizing, the truncated/non-truncated branching and the derivative assembly are all as before.
+
+**Risks noted (not blocking):**
+- The patch only compiles if `sameElement` is in scope, meaning it is a parameter of the enclosing function. The truncated header suggests it is, and the build/CI would catch it if not.
+- Some existing issues remain, such as `unsigned level` shadowing the outer `index_t level`, but this patch does not introduce or worsen them.
+
+The change is low-risk API-consistent parameter forwarding with no observable change in behaviour, so I approve it.
+--- TEST-FOCUSED REJECT persona=939526b1bf45
+The patch forwards the caller's `sameElement` flag into a call where that flag means something different.
+
+- **Contract mismatch.** On the outer `evalAllDers_into(u, n, result, sameElement)`, `sameElement` is a promise about the caller's point set `u`: all its points lie in one element of the hierarchical mesh. The patched line passes this flag to `m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. That call works on a different point set (the single coordinate `u(k,i)` in `tmp`), on a 1D basis at a specific `level`, with its own knot spans. The flag is now a claim about input it was never checked against. For a one-point `tmp` it may be redundant at best. At worst, the level basis or a future version of it may use the flag to skip span lookup or reuse cached data, which is valid only when the original promise holds for that basis.
+
+- **Why a failure would be silent.** If the flag changes anything in the 1D evaluator, the result is a set of plausible-looking derivative values in `cwb`. These pass through `cw[k].at(l) = cwb[l].at(ti[k]-first)`, where `first` comes from a separate `firstActive(tmp.value())` call that ignores `sameElement`. If the two disagree about which span is active, `ti[k]-first` reads the wrong function's value with no assertion and no exception. The products in `result[0]` and `result[1]` are then wrong but finite. A test would catch this only if it happened to call with `sameElement=true` on points where the level-`level` spans differ from what the evaluator assumed. That depends on refinement layout, which a typical test does not control.
+
+- **No benefit.** `tmp` holds exactly one point, so `sameElement` cannot make this call faster. It adds risk and gains nothing; the old call without the flag was correct.
+
+- **Pre-existing fragile code, not introduced here.**
+  - `if (j != 0 && index == 0) break;` treats a real basis function with index 0 as padding.
+  - The inner `unsigned level` shadows `const index_t level`.
+
+  Both are silent-failure patterns, but this patch adds a new one rather than fixing either.
+
+Drop the `sameElement` argument from the inner call, or pass `false`.
+--- BOUNDARY APPROVE persona=500973c48f91
+The patch makes two changes. It edits a commented-out line, which has no runtime effect. It also forwards `sameElement` from the enclosing `evalAllDers_into` to the 1-D call `component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. The diff truncates the outer signature, so I'm assuming `sameElement` is a parameter there.
+
+**Boundary analysis**
+
+- **`sameElement` semantics on the inner call.** The inner call always gets `tmp`, a 1×1 matrix holding one point. A single point trivially lies in one element, so `sameElement = true` cannot violate the callee's precondition. With `false` the behavior is unchanged from before. Category (a).
+- **`tmp` reused across iterations at different `level`s and points.** Each inner call is a separate `const` invocation on possibly different component bases. Nothing in the visible code depends on state carried between calls under `sameElement`. `first` is recomputed independently via `firstActive(tmp.value())`, so the offset `ti[k]-first` into `cwb[l]` stays consistent with that call's evaluation. Category (a).
+- **`n = 0`.** `cwb` has one entry, the `l` loop runs once, and the `n>0` derivative block is skipped. The new argument doesn't change this. Category (a).
+- **`n < 0` and empty `u` / zero active functions.** The loops don't execute, and the new argument is never reached. Categories (a)/(b).
+- **Truncated functions (`level != -1`).** This path is outside the hunk and unaffected.
+
+**Result**
+
+Every boundary falls in category (a) or (b). The only caveat is unverified: the patch assumes `sameElement` exists in the enclosing function's signature. If it didn't, the build would fail rather than produce a wrong runtime result, and the diff gives no evidence of that. I found no input that yields an incorrect value.

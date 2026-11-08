@@ -1,0 +1,25 @@
+== Part 2e: ridge sensitivity of the pair-matched test
+  ridge 0.0: (nothing)                                          + logit Jev    LR  5.33 p 0.021 beta +0.46
+  ridge 0.0: (nothing)                                          + logit Claude LR 19.85 p 0.000 beta +1.12
+  ridge 0.0: log1p added                                        + logit Jev    LR  1.09 p 0.296 beta +0.24
+  ridge 0.0: log1p added                                        + logit Claude LR  9.48 p 0.002 beta +0.92
+  ridge 0.1: (nothing)                                          + logit Jev    LR  5.33 p 0.021 beta +0.46
+  ridge 0.1: (nothing)                                          + logit Claude LR 19.85 p 0.000 beta +1.11
+  ridge 0.1: log1p added                                        + logit Jev    LR  1.09 p 0.296 beta +0.24
+  ridge 0.1: log1p added                                        + logit Claude LR  9.48 p 0.002 beta +0.91
+  ridge 0.1: log1p added+comment-only+deletion-only/deleted     + logit Jev    LR  0.33 p 0.567 beta +0.14
+  ridge 0.1: log1p added+comment-only+deletion-only/deleted     + logit Claude LR  2.77 p 0.096 beta +0.59
+  ridge 0.1: 11 features                                        + logit Jev    LR  0.01 p 0.913 beta +0.07
+  ridge 0.1: 11 features                                        + logit Claude LR  5.80 p 0.016 beta +1.24
+  ridge 1.0: (nothing)                                          + logit Jev    LR  5.32 p 0.021 beta +0.44
+  ridge 1.0: (nothing)                                          + logit Claude LR 19.75 p 0.000 beta +1.02
+  ridge 1.0: log1p added                                        + logit Jev    LR  1.10 p 0.294 beta +0.24
+  ridge 1.0: log1p added                                        + logit Claude LR  9.45 p 0.002 beta +0.84
+  ridge 1.0: log1p added+comment-only+deletion-only/deleted     + logit Jev    LR  0.34 p 0.561 beta +0.15
+  ridge 1.0: log1p added+comment-only+deletion-only/deleted     + logit Claude LR  2.92 p 0.088 beta +0.58
+  ridge 1.0: 11 features                                        + logit Jev    LR  0.08 p 0.777 beta +0.13
+  ridge 1.0: 11 features                                        + logit Claude LR  5.82 p 0.016 beta +0.98
+  pairs where the later-fixed change adds more lines 32, equal 6, fewer 12
+    more added in R: 32 pairs, Jev ranks the later-fixed higher in 22
+    equal: 6 pairs, Jev ranks the later-fixed higher in 3
+    fewer added in R: 12 pairs, Jev ranks the later-fixed higher in 6

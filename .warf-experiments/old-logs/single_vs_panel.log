@@ -1,0 +1,117 @@
+==============================================================================================================
+1. The labelled corpus (.warf/sessions.jsonl): the sessions behind the README's evidence
+==============================================================================================================
+  62 sessions with a developer label (36 APPROVE, 26 REJECT), 2026-06-20 to 2026-08-03; pool sizes 1 agents x4, 2 agents x3, 3 agents x30, 4 agents x3, 5 agents x22
+  Agents are asked heaviest omega first, so the first agent asked is the specification's
+  'single highest-weighted agent'. An agent asked later voted only where the review had not stopped.
+
+  Truth: the label stored with each session (as the README scores it)
+                                           n  right  bal.acc   | WaRF on the same: right  bal.acc  WaRF-only / agent-only right
+  WaRF's decision                         62     35     0.56
+  first agent asked                       62     35     0.56   |            35/62     0.56       7 / 7   sign p 1.00
+  AUDITOR, where it voted                 56     40     0.67   |            32/56     0.56       2 / 10  sign p 0.04
+  ADVOCATE, where it voted                52     35     0.60   |            30/52     0.55       3 / 8   sign p 0.23
+  SKEPTIC, where it voted                 46     22     0.59   |            28/46     0.60      12 / 6   sign p 0.24
+  BOUNDARY, where it voted                28     14     0.51   |            15/28     0.51       2 / 1   sign p 1.00
+  TEST-FOCUSED, where it voted            40     15     0.50   |            21/40     0.51      14 / 8   sign p 0.29
+  always APPROVE                          62     36     0.50
+  WaRF, same votes, uniform weights       62     39     0.63   |            35/62     0.56       0 / 4   sign p 0.12
+
+  Truth: the current label per file (tools/_groundtruth.py)
+                                           n  right  bal.acc   | WaRF on the same: right  bal.acc  WaRF-only / agent-only right
+  WaRF's decision                         62     36     0.58
+  first agent asked                       62     36     0.58   |            36/62     0.58       7 / 7   sign p 1.00
+  AUDITOR, where it voted                 56     39     0.66   |            33/56     0.58       3 / 9   sign p 0.15
+  ADVOCATE, where it voted                52     34     0.59   |            31/52     0.58       4 / 7   sign p 0.55
+  SKEPTIC, where it voted                 46     23     0.59   |            29/46     0.62      12 / 6   sign p 0.24
+  BOUNDARY, where it voted                28     15     0.55   |            16/28     0.56       2 / 1   sign p 1.00
+  TEST-FOCUSED, where it voted            40     16     0.50   |            22/40     0.54      14 / 8   sign p 0.29
+  always APPROVE                          62     35     0.50
+  WaRF, same votes, uniform weights       62     40     0.65   |            36/62     0.58       0 / 4   sign p 0.12
+
+  By WaRF's confidence (stored labels): sessions, WaRF right, first agent asked right
+    HIGH     12     9     9
+    MEDIUM   35    22    19
+    LOW      15     4     7
+
+  Debate sessions (Round 1 = the votes WaRF logged first; truth = current label per file)
+    hooks.py                   truth APPROVE    Round 1 REJECT   final REJECT   changed AUDITOR
+    hooks.py                   truth APPROVE    Round 1 APPROVE  final APPROVE  changed -
+    sessions_pre_auth_strip.py truth REJECT     Round 1 APPROVE  final REJECT   changed AUDITOR,ADVOCATE
+    help.py                    truth REJECT     Round 1 REJECT   final REJECT   changed AUDITOR,ADVOCATE
+    _internal_utils.py         truth APPROVE    Round 1 REJECT   final REJECT   changed AUDITOR,ADVOCATE
+    _internal_utils.py         truth APPROVE    Round 1 REJECT   final REJECT   changed AUDITOR,ADVOCATE
+
+==============================================================================================================
+2. The persona experiment (.warf-experiments/sessions.jsonl): 12 reference files, every agent votes
+==============================================================================================================
+
+  persona_v3: 12 files (5 clean, 7 defective); order SKEPTIC, ADVOCATE, AUDITOR, TEST-FOCUSED, BOUNDARY
+                                           n  right  bal.acc   | WaRF on the same: right  bal.acc  WaRF-only / agent-only right
+  WaRF, uniform weights (README's view)   12     11     0.93
+  WaRF, as run (weights moved)            12     11     0.93   |            11/12     0.93       0 / 0   sign p 1.00
+  unweighted majority of five             12     11     0.93   |            11/12     0.93       0 / 0   sign p 1.00
+  SKEPTIC alone                           12      8     0.63   |            11/12     0.93       3 / 0   sign p 0.25
+  ADVOCATE alone                          12     10     0.86   |            11/12     0.93       1 / 0   sign p 1.00
+  AUDITOR alone                           12     11     0.93   |            11/12     0.93       0 / 0   sign p 1.00
+  TEST-FOCUSED alone                      12     11     0.90   |            11/12     0.93       1 / 1   sign p 1.00
+  BOUNDARY alone                          12      8     0.66   |            11/12     0.93       3 / 0   sign p 0.25
+
+    file                      truth    SKEP  ADVO  AUDI  TEST  BOUN  WaRF (uniform)
+    _internal_utils.py        APPROVE  R     A     A     A     A     APPROVE
+    _types.py                 APPROVE  R     A     A     A     R     APPROVE
+    certs.py                  APPROVE  A     A     A     A     A     APPROVE
+    compat.py                 APPROVE  A     A     A     R     R     APPROVE
+    help.py                   REJECT   A     A     A     R     A     APPROVE  (wrong)
+    status_codes.py           APPROVE  R     A     A     A     A     APPROVE
+    db_query.py               REJECT   R     R     R     R     R     REJECT
+    counter.py                REJECT   R     R     R     R     R     REJECT
+    runner.py                 REJECT   R     R     R     R     R     REJECT
+    string_ops.c              REJECT   R     R     R     R     R     REJECT
+    file_server.py            REJECT   R     R     R     R     R     REJECT
+    node_list.cpp             REJECT   R     A     R     R     A     REJECT
+
+  h2h_auditor5: 12 files (5 clean, 7 defective); order AUDITOR-1, AUDITOR-2, AUDITOR-3, AUDITOR-4, AUDITOR-5
+                                           n  right  bal.acc   | WaRF on the same: right  bal.acc  WaRF-only / agent-only right
+  WaRF, uniform weights (README's view)   12     10     0.83
+  WaRF, as run (weights moved)            12     10     0.83   |            10/12     0.83       0 / 0   sign p 1.00
+  unweighted majority of five             12     10     0.83   |            10/12     0.83       0 / 0   sign p 1.00
+  AUDITOR-1 alone                         12     10     0.83   |            10/12     0.83       1 / 1   sign p 1.00
+  AUDITOR-2 alone                         12     11     0.93   |            10/12     0.83       0 / 1   sign p 1.00
+  AUDITOR-3 alone                         12     10     0.83   |            10/12     0.83       0 / 0   sign p 1.00
+  AUDITOR-4 alone                         12      9     0.73   |            10/12     0.83       1 / 0   sign p 1.00
+  AUDITOR-5 alone                         12      8     0.63   |            10/12     0.83       2 / 0   sign p 0.50
+
+  h2h_skeptic5: 12 files (5 clean, 7 defective); order SKEPTIC-1, SKEPTIC-2, SKEPTIC-3, SKEPTIC-4, SKEPTIC-5
+                                           n  right  bal.acc   | WaRF on the same: right  bal.acc  WaRF-only / agent-only right
+  WaRF, uniform weights (README's view)   12     11     0.90
+  WaRF, as run (weights moved)            12     10     0.80   |            11/12     0.90       1 / 0   sign p 1.00
+  unweighted majority of five             12     11     0.90   |            11/12     0.90       0 / 0   sign p 1.00
+  SKEPTIC-1 alone                         12      9     0.73   |            11/12     0.90       2 / 0   sign p 0.50
+  SKEPTIC-2 alone                         12     11     0.90   |            11/12     0.90       0 / 0   sign p 1.00
+  SKEPTIC-3 alone                         12      9     0.73   |            11/12     0.90       2 / 0   sign p 0.50
+  SKEPTIC-4 alone                         12     10     0.80   |            11/12     0.90       1 / 0   sign p 1.00
+  SKEPTIC-5 alone                         12     10     0.80   |            11/12     0.90       1 / 0   sign p 1.00
+
+==============================================================================================================
+3. WaRF's clone rule (SPECIFICATION 3.1.2): every pair must disagree on >= 15 % of reviews
+==============================================================================================================
+  Two agents of different strictness disagree at least as often as their REJECT rates differ, even if
+  they rank the reviews alike. 'Crossed' counts the disagreements where the laxer agent of the pair
+  rejects and the stricter approves: 0 means one judgement at two thresholds. For scale, the count
+  expected if the agents erred independently given the truth, as the SPRT assumes.
+
+  persona_v3 (Claude Haiku 4.5): 12 reviews; REJECT share ADVOCATE 0.42, AUDITOR 0.50, BOUNDARY 0.58, SKEPTIC 0.75, TEST-FOCUSED 0.67
+    rho min 0.08, mean 0.25; pairs under 0.15: 1 of 10; crossed 5 of 30 disagreements (17%); independent given the truth: 10
+
+  h2h_auditor5 (Claude Haiku 4.5): 12 reviews; REJECT share AUDITOR-1 0.58, AUDITOR-2 0.50, AUDITOR-3 0.58, AUDITOR-4 0.67, AUDITOR-5 0.75
+    rho min 0.08, mean 0.15; pairs under 0.15: 4 of 10; crossed 2 of 18 disagreements (11%); independent given the truth: 12
+
+  h2h_skeptic5 (Claude Haiku 4.5): 12 reviews; REJECT share SKEPTIC-1 0.67, SKEPTIC-2 0.67, SKEPTIC-3 0.67, SKEPTIC-4 0.75, SKEPTIC-5 0.75
+    rho min 0.08, mean 0.15; pairs under 0.15: 4 of 10; crossed 6 of 18 disagreements (33%); independent given the truth: 12
+
+  Jev, five personas, Round 1: 100 reviews; REJECT share ADVOCATE 0.19, AUDITOR 0.49, BOUNDARY 0.13, SKEPTIC 0.21, TEST-FOCUSED 0.47
+    rho min 0.08, mean 0.23; pairs under 0.15: 4 of 10; crossed 14 of 228 disagreements (6%); independent given the truth: 113
+
+  Laya, five personas, Round 1: 100 reviews; REJECT share ADVOCATE 0.03, AUDITOR 0.19, BOUNDARY 0.11, SKEPTIC 0.49, TEST-FOCUSED 0.02
+    rho min 0.01, mean 0.23; pairs under 0.15: 4 of 10; crossed 4 of 228 disagreements (2%); independent given the truth: 37

@@ -1,0 +1,104 @@
+{
+ "n": 100,
+ "later_fixed": 50,
+ "debated": 98,
+ "agents": {
+  "SKEPTIC": {
+   "auc_r1": 0.5414,
+   "se_r1": 0.0577809558505241,
+   "auc_final": 0.551,
+   "se_final": 0.057655505027679896,
+   "mean_p_r1": 0.483273,
+   "reject_r1": 49,
+   "reject_final": 35
+  },
+  "ADVOCATE": {
+   "auc_r1": 0.558,
+   "se_r1": 0.05754749126030234,
+   "auc_final": 0.516,
+   "se_final": 0.057986865138071116,
+   "mean_p_r1": 0.292904,
+   "reject_r1": 3,
+   "reject_final": 3
+  },
+  "AUDITOR": {
+   "auc_r1": 0.5504,
+   "se_r1": 0.0576641136104135,
+   "auc_final": 0.4572,
+   "se_final": 0.0577642920858536,
+   "mean_p_r1": 0.376841,
+   "reject_r1": 19,
+   "reject_final": 15
+  },
+  "TEST-FOCUSED": {
+   "auc_r1": 0.528,
+   "se_r1": 0.05791233585678271,
+   "auc_final": 0.517,
+   "se_final": 0.05798220840943001,
+   "mean_p_r1": 0.291138,
+   "reject_r1": 2,
+   "reject_final": 2
+  },
+  "BOUNDARY": {
+   "auc_r1": 0.5654,
+   "se_r1": 0.057418091281768835,
+   "auc_final": 0.573,
+   "se_final": 0.05726886458107897,
+   "mean_p_r1": 0.367091,
+   "reject_r1": 11,
+   "reject_final": 11
+  }
+ },
+ "panel": {
+  "mean p of the five": {
+   "r1": 0.5568,
+   "final": 0.5178
+  },
+  "number of REJECT votes": {
+   "r1": 0.5,
+   "final": 0.544
+  }
+ },
+ "decision": {
+  "reject": 8,
+  "tp": 4,
+  "fp": 4,
+  "by_confidence": {
+   "APPROVE MEDIUM": 92,
+   "REJECT MEDIUM": 6,
+   "REJECT HIGH": 2
+  }
+ },
+ "references": {
+  "single Laya, sweep question": 0.586,
+  "single Laya, debate (alone)": 0.5092,
+  "single Laya, debate (Claude)": 0.542,
+  "Claude (blinded), p(defect)": 0.7446,
+  "patch characters": 0.5016,
+  "state tokens": 0.4638
+ },
+ "panel_minus_single": {
+  "mean p, Round 1": [
+   -0.029200000000000004,
+   -0.13000000000000006,
+   0.07599999999999996
+  ],
+  "mean p, final": [
+   -0.06819999999999993,
+   -0.20999999999999996,
+   0.06879999999999997
+  ]
+ },
+ "unanimous_r1": 53,
+ "debate": {
+  "auc_r1": 0.58,
+  "auc_r2": 0.539375,
+  "diff": [
+   -0.04062499999999991,
+   -0.1416666666666666,
+   0.06104166666666666
+  ],
+  "toward": 27,
+  "changed": 46
+ }
+}

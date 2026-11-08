@@ -1,0 +1,323 @@
+ID 15977e9:gsSquareDomain.h:clean
+commit 15977e979ed6c472c1e047a048e31d63c124ebd2 file src/gsNurbs/gsSquareDomain.h date 2024-04-15 subj add square domain
+
+=== ONE decision REJECT
+[REJECT] 1. **`targetDim()` returns the wrong value.** It returns `m_domain.domainDim()` instead of `m_domain.targetDim()`, which looks like a copy-paste from `domainDim()`. Every other method uses the real target dimension:
+   - `eval_into` delegates to `m_domain.eval_into`, so it fills `result` with `m_domain.targetDim()` rows.
+   - `updateGeom`, the constructor and the inner loop of `control_deriv_into` all iterate `d` over `m_domain.targetDim()`.
+   - But `control_deriv_into` sizes `result` and reshapes each column using `targetDim()`, i.e. the domain dimension.
+
+   For the hard-coded 2D square the two numbers happen to match, so this is latent. Any `DIM`/geometry where they differ will make `res(m_mapper.index(k,0,d), d)` write out of bounds or misreport the output size to callers. It should be `return m_domain.targetDim();`.
+
+2. **The `DIM` template parameter is unusable for anything but 2.** `m_domain = *gsNurbsCreator<T>::BSplineSquare();` always yields a 2D tensor B-spline, but it is assigned to `gsTensorBSpline<DIM,T>`. Any `DIM != 2` fails to compile.
+
+3. **Missing includes.** The header uses `gsNurbsCreator` and `gsTensorBSpline` but only includes `gsFunction.h` and `gsDofMapper.h`. It compiles only if the user happens to include those first.
+
+4. **Wrong file header.** The doc block says `@file gsMultiBasis.h` / "declaration of MultiBasis class" instead of describing `gsSquareDomain.h`.
+
+5. **Code hygiene.** There are leftover commented-out experiments (extra `uniformRefine` calls, the `i`/`j` index vectors, `gsDebugVar` lines). Also, `controls()` exposes `m_parameters` for writing, but changes do nothing until someone calls `updateGeom()`. That hidden coupling is easy to misuse and is not documented.
+
+Item 1 is a concrete logic defect, so the patch should not be merged as is.
+
+=== FIVE decision APPROVE
+--- SKEPTIC [APPROVE]
+I searched for defects and found nothing I could tie to a concrete failing input.
+
+- **`targetDim()` returns `m_domain.domainDim()`.** This looks like a copy-paste slip. But `BSplineSquare()` always yields a 2D-to-2D tensor B-spline, and the assignment only compiles for `DIM == 2`. So `domainDim() == targetDim()` for every instance that can exist, and the reported dimension is always correct.
+- **Constructor elimination loop.** Every boundary basis index is eliminated in every coordinate component. `m_parameters` is sized to `freeSize()` and filled only through `is_free` / `index(k,0,d)`, which return valid free indices in `[0, freeSize)`. No out-of-range writes are possible.
+- **`updateGeom()`.** It is the exact inverse of the constructor's gather, using the same mapper, `is_free` guard and indices. Boundary control points are left untouched, as intended.
+- **`control_deriv_into()`.**
+  - `result` has `targetDim()*nControls()` rows, and `reshapeCol(p, nControls(), targetDim())` views exactly one column as `nControls x targetDim`. Each entry `res(index(k,0,d), d)` stays inside that view.
+  - The matrix is zeroed first, so cross-component entries are correctly 0.
+  - `evalSingle_into` returns a 1x1 result for one point, so `tmp(0,0)` is valid.
+- **`nControls()` / `controls()`.** These are consistent: `m_parameters.size() == m_mapper.freeSize()`.
+
+Non-behavioural nits:
+- The file header names `gsMultiBasis.h` and describes MultiBasis.
+- The headers for `gsNurbsCreator` and `gsTensorBSpline` are not included directly; they rely on transitive or forward declarations.
+- Stale commented-out code is left in.
+- `eval_into` reflects `controls()` changes only after `updateGeom()`, which is the intended design.
+
+None of these causes incorrect results.
+--- ADVOCATE [APPROVE]
+I found no demonstrable logic defect in this patch.
+
+- **Constructor.** It builds a degree-elevated, once-refined BSpline square. The DofMapper is created over the basis with `targetDim()` components. All boundary DoFs are eliminated in every component, so only interior control points are free. `m_parameters` is filled from exactly the free entries, and `index(k,0,d)` keeps it consistent with the mapper.
+- **`updateGeom()`.** It is the exact inverse of the constructor's gather step. It writes `m_parameters` back into the free coefficient slots and leaves the fixed boundary coefficients alone.
+- **`nControls()`.** It returns `freeSize()`, which matches `m_parameters.size()`.
+- **`control_deriv_into()`.** The result is sized `targetDim()*nControls() × npoints`. Each column is reshaped to `nControls() × targetDim()`. Free DoF `(k,d)` gets basis function k's value at the point, written in row `index(k,0,d)` and column d. That is the correct derivative of the map with respect to each free control. The derivative for direction d is zero in the other components, which `setZero()` handles.
+- **`targetDim()` returning `m_domain.domainDim()`.** This looks suspicious at first. For a square domain map, however, domain and target dimensions are both DIM, so the value is correct. It is also consistent with `result` and `res` being sized from `targetDim()` while the inner loops use `m_domain.targetDim()`.
+- **Construction from `BSplineSquare()`.** The constructor dereferences the returned `unique_ptr` and copies the result into `m_domain`, so there is no leak or dangling pointer.
+
+Non-blocking nits:
+- The file header still says `gsMultiBasis.h` / "MultiBasis class", which looks like a copy-paste leftover.
+- `BSplineSquare()` returns a 2D spline, so this only works for `DIM == 2`. A `static_assert(DIM==2)` would make that explicit.
+- The commented-out code (extra `uniformRefine` calls and the i/j indexing experiment) could be removed.
+- `gsNurbsCreator` and `gsTensorBSpline` come in only indirectly through the includes. Explicit includes would be more robust.
+--- AUDITOR [REJECT]
+The patch has a logic error, missing includes and a template parameter that only works for one value. Each is a reason to request changes.
+
+**Logic issues**
+
+1. **`targetDim()` returns the wrong value.**
+   ```cpp
+   short_t targetDim() const override { return m_domain.domainDim(); }
+   ```
+   It should return `m_domain.targetDim()`. The result is only correct by coincidence for a 2D→2D square, where both values are equal.
+   - The error spreads to other code. `control_deriv_into` uses `targetDim()` to size `result` (`targetDim()*nControls()`) and to reshape each column (`reshapeCol(p, nControls(), targetDim())`).
+   - `updateGeom()` and the constructor loop over `m_domain.targetDim()` instead. So any embedding where the two dimensions differ, such as a surface in 3D, would give mismatched shapes or out-of-range writes.
+   - The class is also inconsistent, mixing `this->targetDim()` and `m_domain.targetDim()` for the same concept.
+
+2. **The `DIM` template parameter only works for `DIM == 2`.** The constructor always assigns `*gsNurbsCreator<T>::BSplineSquare()`, which is a 2D tensor B-spline, to `gsTensorBSpline<DIM,T>`. Any other `DIM` either fails to compile or silently does the wrong thing. Either remove the parameter, restrict it with a `static_assert(DIM==2)`, or build the domain generically for any `DIM`.
+
+3. **`control_deriv_into` repeats work.** `evalSingle_into(k, ...)` is called inside the `d` loop, so basis function `k` is evaluated `targetDim()` times per point. The values are correct, but the evaluation should be moved outside the `d` loop.
+
+**Build and maintenance issues**
+
+4. **Missing includes.** The header uses `gsNurbsCreator` and `gsTensorBSpline` but only includes `gsFunction.h` and `gsDofMapper.h`. It compiles only if the including file has already pulled those in.
+
+5. **Wrong file header.** The doc block says `@file gsMultiBasis.h` and "Provides declaration of MultiBasis class", which was copy-pasted from another file. The class itself has no documentation.
+
+6. **Hard-coded setup and leftover debug code.**
+   - The degree elevation and refinement in the constructor are fixed, and there is no way to pass in a basis or geometry.
+   - Several blocks of commented-out code remain: extra `uniformRefine`, `i`/`j` index vectors, and `gsDebugVar` experiments.
+   - There is a stray `;` after the inline `controls()` bodies.
+
+7. **Easy-to-misuse state.** `controls()` gives write access to `m_parameters`, but `eval_into` reads `m_domain`. If the caller forgets to call `updateGeom()`, evaluation silently uses stale values. This contract should at least be documented. Better, sync automatically or make `updateGeom` part of the controls interface.
+
+**Correct parts**
+
+- Eliminating the boundary DOFs through `allBoundary()` and `eliminateDof` is correct.
+- The free-index mapping is correct.
+- The derivative layout in `control_deriv_into` (`res(freeIdx, d) = N_k(u)`) is correct.
+
+**Required before approval:**
+- Fix `targetDim()` to return `m_domain.targetDim()`.
+- Add the missing includes.
+- Constrain or generalize `DIM`.
+- Correct the file header.
+- Remove the commented-out debug code.
+--- TEST-FOCUSED [REJECT]
+1. **Stale geometry after control edits (silent).** The non-const `controls()` returns a mutable reference to `m_parameters`. Nothing propagates changes to `m_domain` unless the caller remembers to call `updateGeom()`. `eval_into`, `support()` and `domain()` all read `m_domain`. So a caller who writes `f.controls()[i] = x; f.eval_into(u, r);` gets the old geometry back. There is no exception and no assert. The values look like a valid square map, just the wrong one. This is especially likely in an optimisation loop, which is what the control/derivative interface exists for. A test catches it only if it happens to check evaluation after mutation without calling `updateGeom()`, and the class gives no hint that this call is required. Fix options:
+   - make the mutable `controls()` sync on access,
+   - drop the mutable `controls()` in favour of a setter that calls `updateGeom()`, or
+   - have `eval_into` read from `m_parameters`.
+
+2. **`targetDim()` returns `m_domain.domainDim()`.** It should return `m_domain.targetDim()`. For `BSplineSquare` both happen to be 2, so no test on this class can see the difference. That is exactly why it is dangerous:
+   - `control_deriv_into` uses `targetDim()` to size `result` (`targetDim()*nControls()`) and to reshape each column.
+   - The inner loop iterates over `m_domain.targetDim()`.
+   - If the two ever differ (a subclass, or a constructor change toward a surface embedded in 3D), the reshape has the wrong column count. `res(..., d)` then writes out of bounds or mis-strides with no diagnostic in release builds.
+   
+   This is a logic error masked by the current data.
+
+3. **`control_deriv_into` cost and correctness coupling.** It calls `evalSingle_into(k, ...)` once per (k, d) pair, so it evaluates each basis function `targetDim` times. That is not wrong on its own. However, the result layout depends entirely on `m_mapper.index(k,0,d)` being a component-interleaved global index below `nControls()`. That is never asserted, so a mapper layout mismatch would write plausible-looking but misplaced derivatives rather than fail.
+
+4. **Build fragility and hygiene.**
+   - The header uses `gsNurbsCreator` and `gsTensorBSpline` without including them. It compiles only if an earlier include pulls them in transitively.
+   - The file banner says `gsMultiBasis.h` / "declaration of MultiBasis class", which is copy-paste.
+   - `DIM` is a template parameter, but the constructor hard-codes the 2D `BSplineSquare`, so any `DIM != 2` either fails to compile or is meaningless.
+
+Items 1 and 2 are each a nameable path whose failure would be silent: plausible but wrong values, or out-of-bounds writes only under a configuration the current tests cannot reach. That meets the rejection bar.
+--- BOUNDARY [APPROVE]
+I traced each boundary through the patch and found none that is genuinely mishandled.
+
+- **Constructor.** `BSplineSquare()` produces a 2×2 bilinear patch. After `degreeElevate()` and `uniformRefine()` it becomes biquadratic with 4×4 = 16 control points. `allBoundary()` returns 12 of them, and all `targetDim()` components of each are eliminated. That leaves 4 interior points × 2 components = 8 free DOFs. `m_parameters` is resized to `freeSize()`. The fill loop writes only entries where `is_free(k,0,d)` is true, and `index()` for a free DOF lies in `[0, freeSize)`, so every write is in range. Loop bounds use `!=` against `rows()`/`targetDim()` starting at 0, so there is no off-by-one. (a)
+- **Template parameter `DIM`.** `BSplineSquare` returns a 2D tensor B-spline, so `DIM != 2` would fail to compile rather than produce a wrong result. The class is only meaningful for `DIM == 2`. (b)
+- **`targetDim()` returns `m_domain.domainDim()`.** For the square geometry both dimensions are 2, so the value is correct. It is only stylistically odd. (a)
+- **`updateGeom()`.** It writes back only the free coefficients, using the same index mapping as the constructor. Boundary coefficients stay fixed. If `m_parameters` was replaced through the non-const `controls()` with a vector of a different length, that would break the `nControls()` contract, which is the caller's responsibility. (b)
+- **`control_deriv_into` with empty `points` (0 columns).** `result` is resized to `(2·nControls) × 0`, the loop runs zero times, and an empty matrix is returned. (a)
+- **`control_deriv_into` with points on the domain boundary (u = 0 or 1).** `evalSingle_into` handles endpoint-inclusive evaluation for B-splines. Interior basis functions evaluate to 0 there, which is the correct derivative. (a)
+- **`control_deriv_into` indexing.** `result` has `targetDim·nControls` rows. `reshapeCol(p, nControls, targetDim)` maps column `p` into an `nControls × targetDim` view, and `res(index(k,0,d), d)` stays within both dimensions. Zero-initialization ensures entries that are not free stay 0. (a)
+- **`nControls()`.** It returns `size_t` from `freeSize()`, which is a non-negative `index_t`, so no sign issue arises. (a)
+
+Non-blocking notes, none of which produce a wrong result:
+- The file header says `gsMultiBasis.h` / "MultiBasis class".
+- `evalSingle_into` is called redundantly for each `d` with the same `k`.
+- Dead commented-out code is left in.
+- `gsNurbsCreator` and `gsTensorBSpline` headers are not included directly.
+
+=== DIFF
+diff --git a/src/gsNurbs/gsSquareDomain.h b/src/gsNurbs/gsSquareDomain.h
+new file mode 100644
+index 000000000..6ecac926a
+--- /dev/null
++++ b/src/gsNurbs/gsSquareDomain.h
+@@ -0,0 +1,138 @@
++/** @file gsMultiBasis.h
++
++    @brief Provides declaration of MultiBasis class.
++
++    This file is part of the G+Smo library.
++
++    This Source Code Form is subject to the terms of the Mozilla Public
++    License, v. 2.0. If a copy of the MPL was not distributed with this
++    file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++    Author(s): A. Mantzaflaris
++*/
++
++#pragma once
++
++#include <gsCore/gsFunction.h>
++#include <gsCore/gsDofMapper.h>
++
++namespace gismo
++{
++
++template <short_t DIM, class T>
++class gsSquareDomain : public gsFunction<T>
++{
++    using Base = gsFunction<T> ;
++
++public:
++    gsSquareDomain()
++    {
++        m_domain = *gsNurbsCreator<T>::BSplineSquare();
++        m_domain.degreeElevate();
++        m_domain.uniformRefine();
++        // m_domain.uniformRefine();
++        // m_domain.uniformRefine();
++        // Mapper storing control points
++        m_mapper = gsDofMapper(m_domain.basis(),m_domain.targetDim());
++
++
++        gsMatrix<index_t> boundary = m_domain.basis().allBoundary();
++        for (index_t a = 0; a!=boundary.rows(); a++)
++            for (index_t d = 0; d!=m_domain.targetDim(); d++)
++                m_mapper.eliminateDof(boundary(a,0),0,d);
++        m_mapper.finalize();
++
++        m_parameters.resize(m_mapper.freeSize());
++        // std::vector<index_t> i(m_mapper.freeSize());
++        // std::vector<index_t> j(m_mapper.freeSize());
++        for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
++            for (index_t d = 0; d!=m_domain.targetDim(); d++)
++                if (m_mapper.is_free(k,0,d))
++                {
++                    m_parameters[m_mapper.index(k,0,d)] = m_domain.coefs()(k,d);
++                    // i[m_mapper.index(k,0,d)] = k; // i index of free entries
++                    // j[m_mapper.index(k,0,d)] = d; // j index of free entries
++                }
++
++        // This is a way to cast only the free coefficients to a vector, and change an entry of that vector.
++        // However, it cannot be used in ''gsVector<T> & controls() override { return m_parameters; };''
++        //
++        // gsDebugVar(m_domain.coefs()(i,j).diagonal()(0));
++        // m_domain.coefs()(i,j).diagonal()(0) = 0.5;
++        // gsDebugVar(m_domain.coefs()(i,j).diagonal()(0));
++
++    }
++
++    const gsTensorBSpline<DIM,T> & domain() const
++    {
++        return m_domain;
++    }
++
++    gsMatrix<T> support() const override
++    {
++        return m_domain.support();
++    }
++
++    short_t domainDim() const override
++    {
++        return m_domain.domainDim();
++    }
++
++    short_t targetDim() const override
++    {
++        return m_domain.domainDim();
++    }
++
++    void eval_into(const gsMatrix<T> & u, gsMatrix<T> & result) const override
++    {
++        m_domain.eval_into(u,result);
++    }
++
++    void updateGeom()
++    {
++        for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
++            for (index_t d = 0; d!=m_domain.targetDim(); d++)
++            {
++                if (m_mapper.is_free(k,0,d))
++                    m_domain.coefs()(k,d) = m_parameters[m_mapper.index(k,0,d)];
++            }
++    }
++
++    /// Returns the controls of the function
++    const gsVector<T> & controls() const override { return m_parameters; };
++          gsVector<T> & controls()       override { return m_parameters; };
++
++    /// Returns the number of controls of the function
++    size_t nControls() const override
++    {
++        return m_mapper.freeSize();
++    }
++
++    /// Returns the control derivative
++    virtual void control_deriv_into(const gsMatrix<T> & points, gsMatrix<T> & result) const override
++    {
++        gsMatrix<T> tmp;
++
++        result.resize(targetDim()*nControls(),points.cols());
++        result.setZero();
++        for (index_t p = 0; p!=points.cols(); p++)
++        {
++            gsAsMatrix<T> res = result.reshapeCol(p,nControls(),targetDim());
++            for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
++                for (index_t d = 0; d!=m_domain.targetDim(); d++)
++                    if (m_mapper.is_free(k,0,d))
++                    {
++                        m_domain.basis().evalSingle_into(k,points.col(p),tmp); // evaluate basis function k
++                        res(m_mapper.index(k,0,d),d) = tmp(0,0); // tmp is a single value (1 point, 1 basis function)
++                    }
++        }
++    }
++
++protected:
++    gsTensorBSpline<DIM,T> m_domain;
++    gsDofMapper m_mapper;
++    gsVector<T> m_parameters;
++};
++
++} // namespace gismo
++
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    gsMatrix<T> support() const override
+    {
+        return m_domain.support();
+    }
+
+    short_t domainDim() const override
+    {
+        return m_domain.domainDim();
+    }
+
+    short_t targetDim() const override
+    {
+        return m_domain.domainDim();
+    }
+
+    void eval_into(const gsMatrix<T> & u, gsMatrix<T> & result) const override
+    {
+        m_domain.eval_into(u,result);
+    }
+
+    void updateGeom()
+    {
+        for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
+            for (index_t d = 0; d!=m_domain.targetDim(); d++)
+            {
+                if (m_mapper.is_free(k,0,d))
+                    m_domain.coefs()(k,d) = m_parameters[m_mapper.index(k,0,d)];
+            }
+    }
+
+    size_t nControls() const override
+    {
+        return m_mapper.freeSize();
+    }
+

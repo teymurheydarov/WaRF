@@ -1,0 +1,3 @@
+jev5_R1_band - jev5_R1_meanp: AURC +0.092 [+0.009, +0.164] p 0.023; trust -0.053 [-0.121, +0.018] p 0.139
+laya5_R1_band - laya5_R1_meanp: AURC +0.095 [+0.008, +0.168] p 0.038; trust -0.068 [-0.142, +0.005] p 0.062
+jevdef_R1_band - jevdef_R1_meanp: AURC +0.084 [+0.007, +0.156] p 0.036; trust -0.056 [-0.127, +0.013] p 0.119

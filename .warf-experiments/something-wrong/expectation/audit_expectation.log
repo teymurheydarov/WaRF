@@ -1,0 +1,126 @@
+﻿
+  100 commits, 50 later fixed, 50 size-matched pairs; stored scores only
+
+====================================================================================================
+  A. Binormal arithmetic
+====================================================================================================
+
+  reviewer                  AUC  d(AUC)  d(param)  pairs
+  claude                  0.745   0.930     0.950   38.5
+  jev                     0.641   0.512     0.498   31.0
+  jevA                    0.651   0.549     0.527   33.0
+  jevB                    0.633   0.482     0.488   31.5
+  jev5                    0.628   0.460     0.486   30.0
+  jev_SKEPTIC             0.600   0.358     0.400   26.0
+  jev_ADVOCATE            0.640   0.507     0.548   32.0
+  jev_AUDITOR             0.637   0.497     0.463   33.0
+  jev_TEST-FOCUSED        0.618   0.423     0.444   30.0
+  jev_BOUNDARY            0.625   0.451     0.442   30.0
+  laya                    0.586   0.307     0.315   30.0
+  log_added               0.716   0.809     0.754   35.0
+
+  within-label correlation of the five Jev seats (logit p, pooled over labels):
+     1.00   0.90   0.90   0.89   0.92   SKEPTIC
+     0.90   1.00   0.96   0.86   0.88   ADVOCATE
+     0.90   0.96   1.00   0.86   0.89   AUDITOR
+     0.89   0.86   0.86   1.00   0.89   TEST-FOCUSED
+     0.92   0.88   0.89   0.89   1.00   BOUNDARY
+
+  mean within-label r 0.894 (range 0.86 to 0.96); n_eff = 1.092
+  mean seat d' 0.447 (from AUC) / 0.460 (parametric)
+  predicted panel AUC Phi(d sqrt(n_eff)/sqrt2) = 0.629; observed (mean p) 0.628, (mean logit) 0.628
+  five independent Jev-quality seats (r=0): 0.760; infinitely many at r=0.89: Phi(d/sqrt(2r)) = 0.631
+
+  Claude d' 0.930 (from AUC 0.745) / 0.950 parametric
+  mean seat d' (AUC), Claude d' (AUC)          n_eff needed  4.33  -> r needed for 5 seats +0.039   (seats needed at the measured r: impossible)
+  mean seat d' (param), Claude d' (param)      n_eff needed  4.27  -> r needed for 5 seats +0.043   (seats needed at the measured r: impossible)
+  one-question Jev d' (AUC), Claude (AUC)      n_eff needed  3.30  -> r needed for 5 seats +0.129   (seats needed at the measured r: impossible)
+  bootstrap (1000, within label): measured r 0.867 to 0.919; r needed -0.239 to +0.717; share of resamples where measured r <= needed r: 0.014
+
+  Two-member theory (equal-variance binormal): optimal weights give
+  d_comb^2 = d_best^2 + (d_other - r d_best)^2 / (1 - r^2); equal weights give (d1+d2)/sqrt(2(1+r)).
+  pair                           d1     d2      r  oracle AUC  equal-wt AUC  equal beats best if d2 >
+  claude + jev                0.950  0.498   0.53       0.749         0.721               0.710 (has 0.498)
+  claude + jev5               0.950  0.486   0.55       0.749         0.718               0.724 (has 0.486)
+  claude + laya               0.950  0.315  -0.22       0.780         0.763               0.236 (has 0.315)
+  claude + log_added          0.950  0.754   0.30       0.775         0.772               0.583 (has 0.754)
+  jev + log_added             0.498  0.754   0.20       0.722         0.716               0.415 (has 0.498)
+  jev + laya                  0.498  0.315  -0.20       0.678         0.675               0.132 (has 0.315)
+  jev_ADVOCATE + jev_AUDITOR  0.548  0.463   0.96       0.664         0.641               0.538 (has 0.463)
+
+  Many members, oracle weights (in-sample, an UPPER bound; binormal, parametric d'):
+  claude                                                       d 0.950  AUC 0.749
+  claude + jev                                                 d 0.950  AUC 0.749
+  claude + laya                                                d 1.092  AUC 0.780
+  claude + log_added                                           d 1.068  AUC 0.775
+  claude + jev + laya                                          d 1.093  AUC 0.780
+  claude + jev + laya + log_added                              d 1.146  AUC 0.791
+  claude + jev_SKEPTIC + jev_ADVOCATE + jev_AUDITOR + jev_TEST-FOCUSED + jev_BOUNDARY d 1.058  AUC 0.773
+  claude + jev + laya + log_added + comment + del              d 1.214  AUC 0.805
+  claude + 11 more                                             d 1.415  AUC 0.841
+  claude + 13 more                                             d 1.460  AUC 0.849
+  jev_SKEPTIC + jev_ADVOCATE + jev_AUDITOR + jev_TEST-FOCUSED + jev_BOUNDARY d 0.625  AUC 0.671
+  jev + laya + log_added                                       d 0.873  AUC 0.731
+  new + 10 more                                                d 1.233  AUC 0.808
+
+====================================================================================================
+  B. Out of fold: can anything stored beat Claude (raw AUC 0.745, 38.5 of 50 pairs)?
+====================================================================================================
+
+  combination                                           lam  LOPO AUC  pairs     5fold x20      minus Claude [95% pair-boot]  P(>0)
+  claude  [Claude via same CV 0.735]                      1     0.735   38.5   0.735±0.005      -0.010 [-0.016, -0.004]   0.00   vs Claude-OOF +0.000 [+0.000, +0.000]
+  claude  [Claude via same CV 0.736]                     10     0.736   38.5   0.736±0.005      -0.009 [-0.014, -0.003]   0.00   vs Claude-OOF +0.000 [+0.000, +0.000]
+  jev                                                     1     0.628   31.0   0.625±0.009      -0.116 [-0.216, -0.015]   0.01   vs Claude-OOF -0.107 [-0.207, -0.006]
+  jev                                                    10     0.629   31.0   0.626±0.009      -0.116 [-0.215, -0.015]   0.02   vs Claude-OOF -0.107 [-0.207, -0.006]
+  log_added                                               1     0.657   35.0   0.695±0.010      -0.087 [-0.185, +0.023]   0.05   vs Claude-OOF -0.078 [-0.175, +0.031]
+  log_added                                              10     0.658   35.0   0.696±0.010      -0.086 [-0.184, +0.024]   0.06   vs Claude-OOF -0.077 [-0.175, +0.032]
+  claude + jev                                            1     0.726   37.0   0.721±0.010      -0.018 [-0.029, -0.009]   0.00   vs Claude-OOF -0.009 [-0.020, +0.000]
+  claude + jev                                           10     0.724   37.0   0.724±0.007      -0.021 [-0.044, +0.001]   0.03   vs Claude-OOF -0.012 [-0.035, +0.010]
+  claude + jev5                                           1     0.726   38.0   0.723±0.011      -0.018 [-0.025, -0.011]   0.00   vs Claude-OOF -0.009 [-0.016, -0.003]
+  claude + jev5                                          10     0.723   38.0   0.722±0.008      -0.022 [-0.041, -0.004]   0.01   vs Claude-OOF -0.013 [-0.033, +0.005]
+  claude + laya                                           1     0.771   39.0   0.765±0.009      +0.027 [-0.040, +0.088]   0.79   vs Claude-OOF +0.036 [-0.030, +0.097]
+  claude + laya                                          10     0.766   39.0   0.764±0.008      +0.022 [-0.043, +0.081]   0.76   vs Claude-OOF +0.031 [-0.034, +0.090]
+  claude + log_added                                      1     0.750   37.0   0.748±0.009      +0.005 [-0.046, +0.051]   0.58   vs Claude-OOF +0.015 [-0.035, +0.059]
+  claude + log_added                                     10     0.752   37.0   0.752±0.007      +0.008 [-0.045, +0.057]   0.62   vs Claude-OOF +0.017 [-0.037, +0.066]
+  claude + jev + laya                                     1     0.759   37.0   0.756±0.011      +0.014 [-0.052, +0.076]   0.67   vs Claude-OOF +0.024 [-0.043, +0.085]
+  claude + jev + laya                                    10     0.757   37.0   0.753±0.010      +0.013 [-0.050, +0.072]   0.66   vs Claude-OOF +0.021 [-0.042, +0.080]
+  claude + jev + laya + log_added                         1     0.760   36.0   0.754±0.011      +0.015 [-0.053, +0.082]   0.67   vs Claude-OOF +0.025 [-0.044, +0.092]
+  claude + jev + laya + log_added                        10     0.766   37.0   0.758±0.010      +0.022 [-0.049, +0.093]   0.73   vs Claude-OOF +0.031 [-0.040, +0.102]
+  claude + log_added + comment + del                      1     0.746   37.0   0.747±0.012      +0.002 [-0.053, +0.052]   0.54   vs Claude-OOF +0.011 [-0.043, +0.060]
+  claude + log_added + comment + del                     10     0.751   37.0   0.753±0.009      +0.007 [-0.049, +0.059]   0.61   vs Claude-OOF +0.015 [-0.040, +0.067]
+  claude + jev + log_added + comment + del                1     0.732   35.0   0.733±0.012      -0.013 [-0.067, +0.036]   0.30   vs Claude-OOF -0.003 [-0.057, +0.046]
+  claude + jev + log_added + comment + del               10     0.739   34.0   0.741±0.009      -0.005 [-0.059, +0.045]   0.41   vs Claude-OOF +0.003 [-0.051, +0.053]
+  claude + jev + laya + log_added + comment + del         1     0.756   36.0   0.746±0.015      +0.011 [-0.064, +0.086]   0.60   vs Claude-OOF +0.021 [-0.055, +0.097]
+  claude + jev + laya + log_added + comment + del        10     0.759   36.0   0.755±0.011      +0.014 [-0.057, +0.089]   0.65   vs Claude-OOF +0.023 [-0.050, +0.098]
+  claude + 5 Jev seats                                    1     0.711   34.0   0.706±0.015      -0.034 [-0.068, -0.004]   0.01   vs Claude-OOF -0.024 [-0.060, +0.006]
+  claude + 5 Jev seats                                   10     0.716   36.0   0.713±0.009      -0.029 [-0.057, -0.002]   0.02   vs Claude-OOF -0.020 [-0.048, +0.006]
+  claude + laya + 5 Jev seats                             1     0.744   37.0   0.740±0.012      -0.000 [-0.066, +0.063]   0.50   vs Claude-OOF +0.009 [-0.057, +0.073]
+  claude + laya + 5 Jev seats                            10     0.748   35.0   0.742±0.012      +0.003 [-0.063, +0.066]   0.53   vs Claude-OOF +0.012 [-0.055, +0.074]
+  jev + laya                                              1     0.652   31.0   0.652±0.011      -0.093 [-0.207, +0.031]   0.06   vs Claude-OOF -0.083 [-0.198, +0.040]
+  jev + laya                                             10     0.652   32.0   0.652±0.012      -0.092 [-0.204, +0.030]   0.06   vs Claude-OOF -0.083 [-0.197, +0.039]
+  jev + laya + log_added                                  1     0.701   32.0   0.697±0.013      -0.044 [-0.145, +0.067]   0.22   vs Claude-OOF -0.034 [-0.135, +0.076]
+  jev + laya + log_added                                 10     0.704   32.0   0.703±0.011      -0.041 [-0.142, +0.071]   0.23   vs Claude-OOF -0.032 [-0.134, +0.079]
+  jev + log_added                                         1     0.702   34.0   0.697±0.013      -0.043 [-0.131, +0.058]   0.19   vs Claude-OOF -0.033 [-0.122, +0.068]
+  jev + log_added                                        10     0.701   34.0   0.700±0.012      -0.044 [-0.134, +0.056]   0.19   vs Claude-OOF -0.035 [-0.125, +0.064]
+  11 features                                             1     0.702   36.0   0.702±0.016      -0.042 [-0.161, +0.079]   0.27   vs Claude-OOF -0.033 [-0.154, +0.089]
+  11 features                                            10     0.712   37.0   0.711±0.013      -0.033 [-0.156, +0.091]   0.32   vs Claude-OOF -0.024 [-0.147, +0.101]
+  claude + 11 features                                    1     0.753   39.0   0.749±0.012      +0.009 [-0.079, +0.098]   0.59   vs Claude-OOF +0.018 [-0.071, +0.108]
+  claude + 11 features                                   10     0.761   39.0   0.764±0.009      +0.017 [-0.061, +0.102]   0.66   vs Claude-OOF +0.025 [-0.054, +0.111]
+  jev + 11 features                                       1     0.691   35.0   0.693±0.017      -0.054 [-0.167, +0.063]   0.20   vs Claude-OOF -0.044 [-0.158, +0.075]
+  jev + 11 features                                      10     0.709   35.0   0.710±0.011      -0.036 [-0.145, +0.077]   0.27   vs Claude-OOF -0.027 [-0.137, +0.085]
+  claude + jev + laya + 11 features                       1     0.744   39.0   0.741±0.014      -0.001 [-0.094, +0.096]   0.51   vs Claude-OOF +0.009 [-0.087, +0.107]
+  claude + jev + laya + 11 features                      10     0.753   38.0   0.753±0.009      +0.008 [-0.081, +0.109]   0.57   vs Claude-OOF +0.017 [-0.074, +0.116]
+  claude + jev + laya + jevA + jevB + 5 Jev seats + 5 Laya seats + 11 features    1     0.736   37.0   0.731±0.019      -0.009 [-0.112, +0.098]   0.43   vs Claude-OOF +0.001 [-0.102, +0.108]
+  claude + jev + laya + jevA + jevB + 5 Jev seats + 5 Laya seats + 11 features   10     0.739   38.0   0.735±0.014      -0.006 [-0.093, +0.093]   0.45   vs Claude-OOF +0.003 [-0.084, +0.102]
+
+  No fitting at all: equal-weight mean of z-scored members (signs fixed a priori, unsupervised scaling)
+  claude + jev                                                  0.718   37.0                    -0.026 [-0.078, +0.028]   0.16
+  claude + laya                                                 0.773   40.0                    +0.029 [-0.066, +0.128]   0.73
+  claude + log_added                                            0.766   37.0                    +0.021 [-0.042, +0.083]   0.73
+  claude + jev + laya                                           0.768   35.0                    +0.023 [-0.057, +0.104]   0.70
+  claude + jev + laya + log_added                               0.779   37.0                    +0.035 [-0.048, +0.120]   0.79
+  claude + laya + log_added                                     0.782   39.0                    +0.038 [-0.052, +0.135]   0.79
+  claude + five Jev seats                                       0.658   32.0                    -0.087 [-0.168, -0.003]   0.02
+  jev + laya + log_added                                        0.728   36.0                    -0.017 [-0.122, +0.099]   0.39
+
+  best out-of-fold: claude + laya (lam 1) 0.771; 44 fitted variants were tried, so the best one is optimistic.

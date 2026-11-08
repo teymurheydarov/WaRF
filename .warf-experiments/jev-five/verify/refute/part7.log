@@ -1,0 +1,7 @@
+== Part 7: power of the pair-matched 'beyond added lines' test
+  independent planted signal, mean AUC 0.638: detected beyond added lines in 61 % of 300
+  independent planted signal, mean AUC 0.670: detected beyond added lines in 78 % of 300
+  independent planted signal, mean AUC 0.687: detected beyond added lines in 84 % of 300
+  added lines + noise (weight 0.35), mean AUC 0.568, mean rho with added 0.31: 'beyond added lines' p<0.05 in 6 % (nominal 5 %)
+  added lines + noise (weight 0.5), mean AUC 0.589, mean rho with added 0.42: 'beyond added lines' p<0.05 in 5 % (nominal 5 %)
+  for reference: Jev AUC 0.641, rho(Jev, added) 0.28

@@ -1,0 +1,12 @@
+  laya/multilingual; worker 0 of 1: 106 reviews to run (2 done) -> laya.w0.jsonl
+  worker 0: 10/106  2.1 s per review, ~3 min left
+  worker 0: 20/106  2.0 s per review, ~3 min left
+  worker 0: 30/106  2.3 s per review, ~3 min left
+  worker 0: 40/106  2.3 s per review, ~3 min left
+  worker 0: 50/106  2.3 s per review, ~2 min left
+  worker 0: 60/106  2.2 s per review, ~2 min left
+  worker 0: 70/106  2.3 s per review, ~1 min left
+  worker 0: 80/106  2.2 s per review, ~1 min left
+  worker 0: 90/106  2.2 s per review, ~1 min left
+  worker 0: 100/106  2.2 s per review, ~0 min left
+  worker 0 done: 106 reviews in 3.9 min

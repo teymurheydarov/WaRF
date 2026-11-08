@@ -1,0 +1,79 @@
+Recomputed 252 sessions (62 labelled); mismatches: 3
+    ('65fe2156', 'test_ssl.py', 'REJECT', 'MEDIUM', 'recomputed', -1, 'LOW', -0.2085, -0.2085, 'norm', 3.620135074426622e-17, 'SECURITY', True)
+    ('901916a3', 'test_ssl.py', 'APPROVE', 'LOW', 'recomputed', 1, 'LOW', 0.2345, 0.2347, 'norm', 0.21162322934052297, 'SECURITY', True)
+    ('55eb7a3d', 'response.py', 'REJECT', 'LOW', 'recomputed', -1, 'LOW', -0.5742, -0.574, 'norm', -0.057230383624590986, 'LOGIC', False)
+Labelled sessions per date range: 2026-06-20 to 2026-08-03
+
+=== stored labels, all: 62 sessions (36 APPROVE, 26 REJECT); WaRF right 35, first agent right 35
+  selective accuracy at 10/25/50/75/100 % (k = 6.2/15.5/31/46.5/62):
+    band (linear interp.)  0.839/0.774/0.677/0.656/0.565
+    band (k rounded)       0.833/0.750/0.677/0.660/0.565
+  AURC band 0.308 (band only, ties averaged 0.322); |Lambda| 0.323; WaRF random 0.435; first agent random 0.435; first agent ranked by band 0.317
+  trust AUROC band 0.663  (AURC-perm p 0.017, trust-perm p 0.015); band-only 0.674
+    HIGH     12 sessions, WaRF right   9, first agent right   9
+    MEDIUM   35 sessions, WaRF right  22, first agent right  19
+    LOW      15 sessions, WaRF right   4, first agent right   7
+  act on HIGH only: 12/62 (0.19), right 9, wrong 3, acc 0.750 CP [0.428, 0.945]; rest 26/50, Fisher p 0.202; first agent on 12 random: 6.8 right, 5.2 wrong expected, P(>= 9) = 0.131
+  act on HIGH + MEDIUM: 47/62 (0.76), right 31, wrong 16, acc 0.660 CP [0.507, 0.791]; rest 4/15, Fisher p 0.015; first agent on 47 random: 26.5 right, 20.5 wrong expected, P(>= 31) = 0.009
+  seed 13: AURC band [0.175, 0.453]; band - first random -0.128 [-0.246, +0.009] p 0.064; band - WaRF random -0.128 [-0.206, -0.031] p 0.013; |Lambda| - first random -0.112 [-0.228, +0.023]; first-by-band - first random -0.118 [-0.196, -0.014]; acc at HIGH share - first +0.185 [-0.045, +0.427]
+  seed 113: AURC band [0.186, 0.464]; band - first random -0.128 [-0.244, +0.007] p 0.070; band - WaRF random -0.128 [-0.203, -0.035] p 0.009; |Lambda| - first random -0.112 [-0.228, +0.024]; first-by-band - first random -0.118 [-0.199, -0.013]; acc at HIGH share - first +0.185 [-0.042, +0.435]
+  seed 213: AURC band [0.181, 0.468]; band - first random -0.128 [-0.249, +0.010] p 0.069; band - WaRF random -0.128 [-0.206, -0.026] p 0.016; |Lambda| - first random -0.112 [-0.233, +0.031]; first-by-band - first random -0.118 [-0.201, -0.014]; acc at HIGH share - first +0.185 [-0.048, +0.435]
+
+=== current per-file labels, all: 62 sessions (35 APPROVE, 27 REJECT); WaRF right 36, first agent right 36
+  selective accuracy at 10/25/50/75/100 % (k = 6.2/15.5/31/46.5/62):
+    band (linear interp.)  0.839/0.774/0.677/0.677/0.581
+    band (k rounded)       0.833/0.750/0.677/0.681/0.581
+  AURC band 0.299 (band only, ties averaged 0.309); |Lambda| 0.316; WaRF random 0.419; first agent random 0.419; first agent ranked by band 0.308
+  trust AUROC band 0.660  (AURC-perm p 0.021, trust-perm p 0.016); band-only 0.677
+    HIGH     12 sessions, WaRF right   9, first agent right   9
+    MEDIUM   35 sessions, WaRF right  23, first agent right  20
+    LOW      15 sessions, WaRF right   4, first agent right   7
+  act on HIGH only: 12/62 (0.19), right 9, wrong 3, acc 0.750 CP [0.428, 0.945]; rest 27/50, Fisher p 0.214; first agent on 12 random: 7.0 right, 5.0 wrong expected, P(>= 9) = 0.159
+  act on HIGH + MEDIUM: 47/62 (0.76), right 32, wrong 15, acc 0.681 CP [0.529, 0.809]; rest 4/15, Fisher p 0.007; first agent on 47 random: 27.3 right, 19.7 wrong expected, P(>= 32) = 0.006
+  seed 13: AURC band [0.164, 0.446]; band - first random -0.121 [-0.244, +0.018] p 0.087; band - WaRF random -0.121 [-0.197, -0.026] p 0.011; |Lambda| - first random -0.103 [-0.228, +0.035]; first-by-band - first random -0.111 [-0.195, -0.010]; acc at HIGH share - first +0.169 [-0.073, +0.420]
+  seed 113: AURC band [0.176, 0.447]; band - first random -0.121 [-0.240, +0.011] p 0.074; band - WaRF random -0.121 [-0.199, -0.028] p 0.013; |Lambda| - first random -0.103 [-0.223, +0.029]; first-by-band - first random -0.111 [-0.195, -0.010]; acc at HIGH share - first +0.169 [-0.061, +0.419]
+  seed 213: AURC band [0.173, 0.451]; band - first random -0.121 [-0.236, +0.016] p 0.085; band - WaRF random -0.121 [-0.199, -0.021] p 0.016; |Lambda| - first random -0.103 [-0.218, +0.036]; first-by-band - first random -0.111 [-0.193, -0.010]; acc at HIGH share - first +0.169 [-0.067, +0.403]
+
+validation sessions 8: bands Counter({'HIGH': 8}), right 8
+   HIGH  VAL  ..\validation\M-04_path_traversal\file_utils.py                        dec REJECT  stored -1 current -1 debate False first agent SKEPTIC -1
+   HIGH  VAL  validation\M-08_sql_injection\db_query.py                              dec REJECT  stored -1 current -1 debate False first agent AUDITOR -1
+   HIGH  VAL  validation\M-09_race_condition\counter.py                              dec REJECT  stored -1 current -1 debate False first agent ADVOCATE -1
+   HIGH  VAL  validation\M-09_race_condition\counter.py                              dec REJECT  stored -1 current -1 debate False first agent ADVOCATE -1
+   HIGH  VAL  validation\M-10_cmd_injection\runner.py                                dec REJECT  stored -1 current -1 debate False first agent SKEPTIC -1
+   HIGH  VAL  validation\M-11_buffer_overflow\string_ops.c                           dec REJECT  stored -1 current -1 debate False first agent TEST-FOCUSED -1
+   HIGH  VAL  validation\M-12_path_traversal\file_server.py                          dec REJECT  stored -1 current -1 debate False first agent AUDITOR -1
+   HIGH  VAL  validation\M-13_use_after_free\node_list.cpp                           dec REJECT  stored -1 current -1 debate False first agent TEST-FOCUSED -1
+   HIGH  REAL ..\..\test-subjects\requests\src\requests\help.py                      dec REJECT  stored -1 current -1 debate True first agent AUDITOR +1
+   HIGH  REAL ..\..\test-subjects\requests\src\requests\_internal_utils.py           dec REJECT  stored +1 current +1 debate True first agent AUDITOR +1
+   HIGH  REAL 3a46093f8:src/urllib3/connection.py                                    dec REJECT  stored +1 current +1 debate False first agent AUDITOR -1
+   HIGH  REAL 58cc4e753:src/urllib3/connection.py                                    dec REJECT  stored +1 current +1 debate False first agent ADVOCATE -1
+
+=== stored labels, real code only: 54 sessions (36 APPROVE, 18 REJECT); WaRF right 27, first agent right 27
+  selective accuracy at 10/25/50/75/100 % (k = 5.4/13.5/27/40.5/54):
+    band (linear interp.)  0.444/0.481/0.556/0.568/0.500
+    band (k rounded)       0.400/0.500/0.556/0.561/0.500
+  AURC band 0.491 (band only, ties averaged 0.486); |Lambda| 0.507; WaRF random 0.500; first agent random 0.500; first agent ranked by band 0.491
+  trust AUROC band 0.573  (AURC-perm p 0.451, trust-perm p 0.186); band-only 0.593
+    HIGH      4 sessions, WaRF right   1, first agent right   1
+    MEDIUM   35 sessions, WaRF right  22, first agent right  19
+    LOW      15 sessions, WaRF right   4, first agent right   7
+  act on HIGH only: 4/54 (0.07), right 1, wrong 3, acc 0.250 CP [0.006, 0.806]; rest 26/50, Fisher p 0.610; first agent on 4 random: 2.0 right, 2.0 wrong expected, P(>= 1) = 0.945
+  act on HIGH + MEDIUM: 39/54 (0.72), right 23, wrong 16, acc 0.590 CP [0.421, 0.744]; rest 4/15, Fisher p 0.066; first agent on 39 random: 19.5 right, 19.5 wrong expected, P(>= 23) = 0.033
+  seed 13: AURC band [0.298, 0.657]; band - first random -0.009 [-0.197, +0.158] p 0.883; band - WaRF random -0.009 [-0.135, +0.106] p 0.889; |Lambda| - first random +0.007 [-0.172, +0.173]; first-by-band - first random -0.009 [-0.130, +0.118]; acc at HIGH share - first -0.250 [-0.611, +0.444]
+  seed 113: AURC band [0.301, 0.665]; band - first random -0.009 [-0.192, +0.157] p 0.926; band - WaRF random -0.009 [-0.138, +0.103] p 0.871; |Lambda| - first random +0.007 [-0.180, +0.175]; first-by-band - first random -0.009 [-0.135, +0.126]; acc at HIGH share - first -0.250 [-0.593, +0.463]
+  seed 213: AURC band [0.302, 0.662]; band - first random -0.009 [-0.191, +0.154] p 0.924; band - WaRF random -0.009 [-0.144, +0.102] p 0.871; |Lambda| - first random +0.007 [-0.174, +0.175]; first-by-band - first random -0.009 [-0.130, +0.118]; acc at HIGH share - first -0.250 [-0.611, +0.444]
+
+=== current per-file labels, real code only: 54 sessions (35 APPROVE, 19 REJECT); WaRF right 28, first agent right 28
+  selective accuracy at 10/25/50/75/100 % (k = 5.4/13.5/27/40.5/54):
+    band (linear interp.)  0.444/0.481/0.556/0.593/0.519
+    band (k rounded)       0.400/0.500/0.556/0.585/0.519
+  AURC band 0.478 (band only, ties averaged 0.466); |Lambda| 0.497; WaRF random 0.481; first agent random 0.481; first agent ranked by band 0.478
+  trust AUROC band 0.573  (AURC-perm p 0.483, trust-perm p 0.188); band-only 0.601
+    HIGH      4 sessions, WaRF right   1, first agent right   1
+    MEDIUM   35 sessions, WaRF right  23, first agent right  20
+    LOW      15 sessions, WaRF right   4, first agent right   7
+  act on HIGH only: 4/54 (0.07), right 1, wrong 3, acc 0.250 CP [0.006, 0.806]; rest 27/50, Fisher p 0.342; first agent on 4 random: 2.1 right, 1.9 wrong expected, P(>= 1) = 0.953
+  act on HIGH + MEDIUM: 39/54 (0.72), right 24, wrong 15, acc 0.615 CP [0.446, 0.766]; rest 4/15, Fisher p 0.033; first agent on 39 random: 20.2 right, 18.8 wrong expected, P(>= 24) = 0.022
+  seed 13: AURC band [0.284, 0.653]; band - first random -0.003 [-0.187, +0.161] p 0.921; band - WaRF random -0.003 [-0.135, +0.113] p 0.948; |Lambda| - first random +0.015 [-0.173, +0.182]; first-by-band - first random -0.003 [-0.127, +0.131]; acc at HIGH share - first -0.269 [-0.629, +0.389]
+  seed 113: AURC band [0.296, 0.660]; band - first random -0.003 [-0.186, +0.168] p 0.988; band - WaRF random -0.003 [-0.134, +0.117] p 0.979; |Lambda| - first random +0.015 [-0.163, +0.189]; first-by-band - first random -0.003 [-0.130, +0.131]; acc at HIGH share - first -0.269 [-0.630, +0.388]
+  seed 213: AURC band [0.294, 0.649]; band - first random -0.003 [-0.183, +0.165] p 0.973; band - WaRF random -0.003 [-0.136, +0.110] p 0.907; |Lambda| - first random +0.015 [-0.167, +0.184]; first-by-band - first random -0.003 [-0.121, +0.123]; acc at HIGH share - first -0.269 [-0.630, +0.305]

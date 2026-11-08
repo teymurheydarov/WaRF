@@ -1,0 +1,53 @@
+== (1) WaRF verdict REJECT count per group  |  mean ranking score per group
+  group                    n       claude-one  claude-standard          jev-one     jev-standard
+  R code-blamed           13       8 (0.62)        3 (0.29)        9 (0.62)        6 (0.46)    old p_claude mean 0.265
+  R plumbing              31      17 (0.55)        4 (0.27)       19 (0.61)        8 (0.41)    old p_claude mean 0.328
+  R comment                6       1 (0.17)        2 (0.23)        2 (0.46)        1 (0.27)    old p_claude mean 0.120
+  A other                 32      13 (0.41)        2 (0.18)       14 (0.46)        5 (0.30)    old p_claude mean 0.181
+  A t18 (unblameable)     18       8 (0.44)        4 (0.27)        8 (0.47)        4 (0.33)    old p_claude mean 0.049
+
+== AUC (ranking score) / balanced accuracy (verdict), positives vs negatives
+  code-blamed R vs A other  (P 13, N 32)
+    AUC claude-one 0.605  claude-standard 0.639  jev-one 0.661  jev-standard 0.698  old p_claude 0.667  old laya 0.625
+    BA  claude-one 0.605  claude-standard 0.584  jev-one 0.627  jev-standard 0.653
+  code-blamed R vs all A  (P 13, N 50)
+    AUC claude-one 0.598  claude-standard 0.616  jev-one 0.657  jev-standard 0.683  old p_claude 0.775  old laya 0.645
+    BA  claude-one 0.598  claude-standard 0.555  jev-one 0.626  jev-standard 0.641
+  plumbing R vs A other  (P 31, N 32)
+    AUC claude-one 0.571  claude-standard 0.602  jev-one 0.663  jev-standard 0.652  old p_claude 0.701  old laya 0.519
+    BA  claude-one 0.571  claude-standard 0.533  jev-one 0.588  jev-standard 0.551
+  all R vs A other (=without 18)  (P 50, N 32)
+    AUC claude-one 0.557  claude-standard 0.601  jev-one 0.642  jev-standard 0.638  old p_claude 0.646  old laya 0.572
+    BA  claude-one 0.557  claude-standard 0.559  jev-one 0.581  jev-standard 0.572
+  all R vs A t18  (P 50, N 18)
+    AUC claude-one 0.538  claude-standard 0.543  jev-one 0.630  jev-standard 0.606  old p_claude 0.921  old laya 0.611
+    BA  claude-one 0.538  claude-standard 0.479  jev-one 0.578  jev-standard 0.539
+  A other vs A t18 (should be 0.5 if t18 irrelevant)  (P 32, N 18)
+    AUC claude-one 0.481  claude-standard 0.446  jev-one 0.497  jev-standard 0.483  old p_claude 0.905  old laya 0.539
+    BA  claude-one 0.481  claude-standard 0.420  jev-one 0.497  jev-standard 0.467
+
+== (3) new claude-one verdict vs old p_claude (selection.jsonl)
+  R code-blamed          old p_claude median 0.23, >=0.5:  1/13; new REJECT  8/13
+  R plumbing             old p_claude median 0.30, >=0.5:  5/31; new REJECT 17/31
+  R comment              old p_claude median 0.09, >=0.5:  0/6; new REJECT  1/6
+  A other                old p_claude median 0.18, >=0.5:  0/32; new REJECT 13/32
+  A t18 (unblameable)    old p_claude median 0.04, >=0.5:  0/18; new REJECT  8/18
+  old (p_claude>=0.5) vs new verdict agree on 59/100; old REJECTs 6, new 47
+  AUC of old p_claude for predicting the new verdict: 0.764
+  old p_claude           AUC all 0.745  vs A other 0.646  vs A t18 0.921
+  new claude-one         AUC all 0.550  vs A other 0.557  vs A t18 0.538
+  new claude-std share   AUC all 0.580  vs A other 0.601  vs A t18 0.543
+  jev-one                AUC all 0.637  vs A other 0.642  vs A t18 0.630
+  decomposition: AUC_all = (32*AUC_vs_other + 18*AUC_vs_t18)/50
+
+  disagreements (old>=0.5 vs new REJECT) by group:
+  R code-blamed          old R/new A 0 []
+                         old A/new R 7 [('616e66', 0.23), ('4b41ad', 0.42), ('c2f1b9', 0.2), ('46d7d2', 0.22), ('c79f8b', 0.3), ('88cb75', 0.1), ('d9b330', 0.24)]
+  R plumbing             old R/new A 0 []
+                         old A/new R 12 [('e001c7', 0.2), ('da06b6', 0.18), ('5f8ecf', 0.45), ('b4f8a3', 0.3), ('b89217', 0.34), ('cc497b', 0.35), ('6c5281', 0.27), ('6017c0', 0.46), ('7db77f', 0.12), ('6d18ae', 0.48), ('a314c7', 0.15), ('f38d3a', 0.48)]
+  R comment              old R/new A 0 []
+                         old A/new R 1 [('b1f90f', 0.33)]
+  A other                old R/new A 0 []
+                         old A/new R 13 [('84518c', 0.27), ('27cdc5', 0.27), ('027f2b', 0.16), ('11a514', 0.3), ('8a1b96', 0.38), ('ad25c5', 0.26), ('99e575', 0.22), ('009fa8', 0.28), ('89ee48', 0.31), ('299349', 0.2), ('35633f', 0.23), ('ec1698', 0.32), ('4cc013', 0.12)]
+  A t18 (unblameable)    old R/new A 0 []
+                         old A/new R 8 [('a9e798', 0.03), ('252d7a', 0.14), ('fbc378', 0.04), ('e604d8', 0.12), ('7a3676', 0.07), ('20a5fe', 0.04), ('d311b7', 0.08), ('556f50', 0.03)]

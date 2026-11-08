@@ -1,0 +1,6 @@
+  claude_cli/claude-opus-5-5; worker 1 of 4: 25 reviews to run (2 done) -> claude-standard.w1.jsonl
+  worker 1: 10/25  47.2 s per review, ~12 min left
+  worker 1: 20/25  48.9 s per review, ~4 min left
+  2a29aa6:gsMultiPatch.hpp:planted: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  5853a6f:gsExprEvaluator.h:planted: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 1 done: 23 reviews in 18.9 min

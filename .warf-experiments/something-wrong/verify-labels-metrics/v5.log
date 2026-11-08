@@ -1,0 +1,6 @@
+Jev     raw 0.6414  rounded+clamped 0.6414  distinct raw 57 rounded 57
+Laya    raw 0.5860  rounded+clamped 0.5842  distinct raw 96 rounded 26
+Claude  raw 0.7446  rounded+clamped 0.7446  distinct raw 41 rounded 41
+Jev     OOF AUC 0.6292  mean per-fold AUC 0.6360  fits (a,b) [(0.105, 0.301), (0.05, 0.398), (0.047, 0.272), (0.067, 0.439), (0.071, 0.282)]
+Laya    OOF AUC 0.5788  mean per-fold AUC 0.5760  fits (a,b) [(-0.811, 0.462), (-0.67, 0.377), (-1.038, 0.581), (-0.783, 0.444), (-0.557, 0.315)]
+Claude  OOF AUC 0.7374  mean per-fold AUC 0.7490  fits (a,b) [(-1.093, 0.685), (-1.254, 0.791), (-1.152, 0.706), (-1.186, 0.734), (-1.355, 0.886)]

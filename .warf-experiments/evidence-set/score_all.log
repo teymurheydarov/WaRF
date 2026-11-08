@@ -1,0 +1,46 @@
+50 of 50 bases reviewed by all four arms
+
+== labels as given ==
+  arm                       BA      planted caught  clean rejected (of them real/debatable/false/unclassed)
+  one Claude                0.740   49/50           25 (16/4/5/0)
+  one Claude, strict bar    0.840   49/50           15 (11/3/1/0)
+  same question x5          0.700   49/50           29 (16/4/5/4)
+  WaRF five personas        0.800   49/50           19 (15/3/1/0)
+  WaRF five personas - one Claude: +0.060 [+0.020, +0.110]  only first 6, only second 0, McNemar p 0.031
+  one Claude, strict bar - one Claude: +0.100 [+0.050, +0.160]  only first 10, only second 0, McNemar p 0.002
+  same question x5 - one Claude: -0.040 [-0.080, -0.010]  only first 0, only second 4, McNemar p 0.125
+  WaRF five personas - one Claude, strict bar: -0.040 [-0.090, +0.000]  only first 1, only second 5, McNemar p 0.219
+  WaRF five personas - same question x5: +0.100 [+0.050, +0.160]  only first 10, only second 0, McNemar p 0.002
+
+== real ==
+  arm                       BA      planted caught  clean rejected (of them real/debatable/false/unclassed)
+  one Claude                0.860   49/50           25 (16/4/5/0)
+  one Claude, strict bar    0.896   49/50           15 (11/3/1/0)
+  same question x5          0.801   49/50           29 (16/4/5/4)
+  WaRF five personas        0.926   49/50           19 (15/3/1/0)
+  WaRF five personas - one Claude: +0.066 [+0.008, +0.129]  only first 5, only second 1, McNemar p 0.219
+  one Claude, strict bar - one Claude: +0.036 [-0.027, +0.107]  only first 5, only second 5, McNemar p 1.000
+  same question x5 - one Claude: -0.059 [-0.118, -0.014]  only first 0, only second 4, McNemar p 0.125
+  WaRF five personas - one Claude, strict bar: +0.030 [-0.020, +0.081]  only first 5, only second 1, McNemar p 0.219
+  WaRF five personas - same question x5: +0.125 [+0.052, +0.203]  only first 9, only second 1, McNemar p 0.021
+
+== real + debatable ==
+  arm                       BA      planted caught  clean rejected (of them real/debatable/false/unclassed)
+  one Claude                0.910   49/50           25 (16/4/5/0)
+  one Claude, strict bar    0.933   49/50           15 (11/3/1/0)
+  same question x5          0.843   49/50           29 (16/4/5/4)
+  WaRF five personas        0.962   49/50           19 (15/3/1/0)
+  WaRF five personas - one Claude: +0.052 [-0.007, +0.122]  only first 4, only second 2, McNemar p 0.688
+  one Claude, strict bar - one Claude: +0.024 [-0.042, +0.095]  only first 4, only second 6, McNemar p 0.754
+  same question x5 - one Claude: -0.067 [-0.135, -0.016]  only first 0, only second 4, McNemar p 0.125
+  WaRF five personas - one Claude, strict bar: +0.029 [+0.000, +0.062]  only first 5, only second 1, McNemar p 0.219
+  WaRF five personas - same question x5: +0.119 [+0.042, +0.202]  only first 8, only second 2, McNemar p 0.109
+
+== clean items rejected by a new arm but never classed ==
+  one Claude, strict bar: []
+  same question x5: ['1050623:gsFitting.h', 'a60880c:gsWriteParaview.hpp', 'cd9af47:gsHTensorBasis.hpp', 'fbcf2aa:gsHElementMarker.hpp']
+
+== does the same question asked again give the same answer? ==
+  x5 seats unanimous on 90 of 100 items; first x5 seat equals one Claude's vote on 96 of 100
+  (kind, seats asked, REJECT votes): ('clean', 4, 1): 1, ('clean', 4, 4): 21, ('clean', 5, 0): 19, ('clean', 5, 2): 1, ('clean', 5, 3): 5, ('clean', 5, 4): 3, ('planted', 4, 4): 49, ('planted', 5, 0): 1
+  calls: one Claude 100, one Claude, strict bar 100, same question x5 429, WaRF five personas 436

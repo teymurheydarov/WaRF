@@ -1,0 +1,10 @@
+set 15 Claude            R vs trivial A AUC 0.950   mean other A 0.175
+set 15 Jev one           R vs trivial A AUC 0.716   mean other A 0.496
+set 15 Jev five R1 mean  R vs trivial A AUC 0.705   mean other A 0.329
+set 15 Laya one          R vs trivial A AUC 0.607   mean other A 0.141
+set 15 added             R vs trivial A AUC 0.912   mean other A 6.114
+set 18 Claude            R vs trivial A AUC 0.921   mean other A 0.181
+set 18 Jev one           R vs trivial A AUC 0.622   mean other A 0.456
+set 18 Jev five R1 mean  R vs trivial A AUC 0.608   mean other A 0.291
+set 18 Laya one          R vs trivial A AUC 0.611   mean other A 0.143
+set 18 added             R vs trivial A AUC 0.891   mean other A 6.531

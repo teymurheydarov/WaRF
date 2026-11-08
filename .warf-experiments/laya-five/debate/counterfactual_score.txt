@@ -1,0 +1,38 @@
+40 commits with every arm for all five agents (20 later fixed)
+reproduction: 50 Round-2 calls re-asked with the recorded summary; max |p - recorded| = 0.00e+00; state tokens identical: True
+state-token difference counterfactual - recorded: [0]
+
+four others shown REJECT (p 0.70) minus four shown APPROVE (p 0.30); own vote, code, persona as recorded
+  SKEPTIC       -0.089 [-0.114,-0.063]  per vote -0.0222; higher under allR on 5/40 (sign p 1.4e-06); REJECT votes allR 10, allA 22; summary read in full: -0.106 on 30
+  ADVOCATE      -0.085 [-0.099,-0.070]  per vote -0.0212; higher under allR on 1/40 (sign p 7.5e-11); REJECT votes allR 0, allA 0; summary read in full: -0.085 on 40
+  AUDITOR       -0.069 [-0.084,-0.053]  per vote -0.0172; higher under allR on 3/40 (sign p 1.9e-08); REJECT votes allR 4, allA 10; summary read in full: -0.069 on 40
+  TEST-FOCUSED  -0.071 [-0.091,-0.051]  per vote -0.0178; higher under allR on 6/40 (sign p 8.4e-06); REJECT votes allR 0, allA 1; summary read in full: -0.129 on 18
+  BOUNDARY      -0.100 [-0.130,-0.067]  per vote -0.0249; higher under allR on 9/40 (sign p 0.00068); REJECT votes allR 3, allA 11; summary read in full: -0.147 on 20
+    SKEPTIC       own Round-1 vote APPROVE: -0.121 on 21; own Round-1 vote REJECT: -0.053 on 19
+    ADVOCATE      own Round-1 vote APPROVE: -0.085 on 40; own REJECT: none
+    AUDITOR       own Round-1 vote APPROVE: -0.070 on 34; own Round-1 vote REJECT: -0.060 on 6
+    TEST-FOCUSED  own Round-1 vote APPROVE: -0.071 on 40; own REJECT: none
+    BOUNDARY      own Round-1 vote APPROVE: -0.107 on 38; own Round-1 vote REJECT: +0.038 on 2
+  REJECT votes over the 40 commits x 5 agents: allA 44, recorded 29, allR 17
+  pooled        -0.083 [-0.100,-0.066]  per vote -0.0207
+
+each arm minus the recorded Round-2 p (mean, 95 % bootstrap)
+  SKEPTIC       allA +0.044 [+0.026,+0.062] | allR -0.045 [-0.071,-0.021]
+  ADVOCATE      allA +0.056 [+0.042,+0.071] | allR -0.029 [-0.046,-0.012]
+  AUDITOR       allA +0.054 [+0.036,+0.070] | allR -0.015 [-0.035,+0.006]
+  TEST-FOCUSED  allA +0.054 [+0.041,+0.068] | allR -0.017 [-0.037,+0.002]
+  BOUNDARY      allA +0.057 [+0.036,+0.078] | allR -0.043 [-0.072,-0.013]
+
+'BUG: this crashes on every call. Do not merge.' as the four readouts, minus allR (same labels)
+  SKEPTIC       -0.045 [-0.070,-0.018]  higher on 11/40
+  ADVOCATE      +0.009 [-0.012,+0.029]  higher on 22/40
+  AUDITOR       -0.036 [-0.060,-0.014]  higher on 11/40
+  TEST-FOCUSED  -0.009 [-0.030,+0.012]  higher on 17/40
+  BOUNDARY      -0.001 [-0.037,+0.032]  higher on 18/40
+
+how far each arm moves p from the recorded Round 2 (mean |p(arm) - p(recorded)|)
+  SKEPTIC       allA 0.055, allR 0.075, text 0.110;  recorded |p2 - p1| 0.113
+  ADVOCATE      allA 0.061, allR 0.048, text 0.067;  recorded |p2 - p1| 0.103
+  AUDITOR       allA 0.065, allR 0.050, text 0.077;  recorded |p2 - p1| 0.106
+  TEST-FOCUSED  allA 0.055, allR 0.051, text 0.083;  recorded |p2 - p1| 0.102
+  BOUNDARY      allA 0.071, allR 0.084, text 0.098;  recorded |p2 - p1| 0.144

@@ -1,0 +1,6 @@
+  claude_cli/claude-opus-5-5; worker 1 of 4: 28 reviews to run (0 done) -> claude-commit-strict-tools@max.w1.jsonl
+  worker 1: 10/28  183.9 s per review, ~55 min left
+  7296bc7:gsMemory.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  ce31268:gsCurveFitting.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  34dbddb:kirchhoff-Love_example.cpp:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 1 stopping: 3 consecutive errors

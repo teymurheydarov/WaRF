@@ -1,0 +1,85 @@
+== alignment
+n 100 distinct ids 100 distinct commits 100 REJECT 50
+rows alternate REJECT,APPROVE: True
+claude p in selection == claude_review_result: True | key labels agree: True
+claude batches among the 100: [1, 2, 3, 4, 5, 6, 7, 8] counts {1: 17, 2: 11, 3: 14, 4: 12, 5: 13, 6: 11, 7: 15, 8: 7}
+  one     n=100 missing/mislabelled/wrong artifact=0 extra=0 planted=0
+  five    n=100 missing/mislabelled/wrong artifact=0 extra=0 planted=0
+  rerunA  n=100 missing/mislabelled/wrong artifact=0 extra=0 planted=0
+  rerunB  n=100 missing/mislabelled/wrong artifact=0 extra=0 planted=0
+  laya5   n=100 missing/mislabelled/wrong artifact=0 extra=0 planted=0
+  features: missing/mislabelled 0
+   inconsistent 009fa8 AUDITOR 0.5 -1 p(APPROVE)=0.50  p(REJECT)=0.50  confide
+  five: round1 p vs vote reasoning/vote inconsistencies: 1
+  five: votes per session min/max 5 5
+
+== AUCs (d' from AUC / parametric on logits), pairs won
+  claude           AUC 0.745  d'(AUC) 0.930  d'(param) 0.950  pairs 38.5
+  jev              AUC 0.641  d'(AUC) 0.512  d'(param) 0.498  pairs 31.0
+  jevA             AUC 0.651  d'(AUC) 0.549  d'(param) 0.527  pairs 33.0
+  jevB             AUC 0.633  d'(AUC) 0.482  d'(param) 0.488  pairs 31.5
+  jev5             AUC 0.628  d'(AUC) 0.460  d'(param) 0.486  pairs 30.0
+  jev5_meanlogit   AUC 0.628  d'(AUC) 0.463  d'(param) 0.478  pairs 30.0
+  J_SKEPTIC        AUC 0.600  d'(AUC) 0.358  d'(param) 0.400  pairs 26.0
+  J_ADVOCATE       AUC 0.640  d'(AUC) 0.507  d'(param) 0.548  pairs 32.0
+  J_AUDITOR        AUC 0.637  d'(AUC) 0.497  d'(param) 0.463  pairs 33.0
+  J_TEST-FOCUSED   AUC 0.618  d'(AUC) 0.423  d'(param) 0.444  pairs 30.0
+  J_BOUNDARY       AUC 0.625  d'(AUC) 0.451  d'(param) 0.442  pairs 30.0
+  laya             AUC 0.586  d'(AUC) 0.307  d'(param) 0.315  pairs 30.0
+  log_added        AUC 0.716  d'(AUC) 0.809  d'(param) 0.754  pairs 35.0
+  distinct values: claude 41  jev 57  ties in claude AUC pairs: 57
+
+== within-label correlation of five Jev seats (Pearson on logits | Spearman)
+   1.00|1.00 0.90|0.89 0.90|0.90 0.89|0.92 0.92|0.90 SKEPTIC
+   0.90|0.89 1.00|1.00 0.96|0.96 0.86|0.85 0.88|0.86 ADVOCATE
+   0.90|0.90 0.96|0.96 1.00|1.00 0.86|0.86 0.89|0.86 AUDITOR
+   0.89|0.92 0.86|0.85 0.86|0.86 1.00|1.00 0.89|0.90 TEST-FOCUSED
+   0.92|0.90 0.88|0.86 0.89|0.86 0.89|0.90 1.00|1.00 BOUNDARY
+  mean r 0.894 (range 0.86..0.96), Spearman mean 0.890; n_eff 1.092
+  mean seat d' 0.447 (param 0.460); predicted panel AUC 0.629; observed mean p 0.628, mean logit 0.628
+  5 independent seats 0.760; infinite at r 0.631
+  normalised_score None: 16
+  no debate: 16
+  WaRF five-seat -Lambda AUC 0.585, after debate 0.587, -normalised_score 0.586; vote count AUC 0.585
+  one-Jev -Lambda AUC 0.590
+
+== Claude target
+  seat d'(AUC)     n_eff needed 4.33 -> r needed +0.039
+  seat d'(param)   n_eff needed 4.27 -> r needed +0.043
+  one-Jev d'(AUC)  n_eff needed 3.30 -> r needed +0.129
+  bootstrap r: 2.5% 0.865 97.5% 0.919
+  Claude - jev5 AUC +0.117 [+0.024, +0.206]
+
+== two-member theory
+  claude+jev             d1 0.950 d2 0.498 r +0.53 (spearman +0.51) oracle 0.749 equal 0.721 need d2>0.710
+  claude+jev5_meanlogit  d1 0.950 d2 0.478 r +0.56 (spearman +0.54) oracle 0.749 equal 0.716 need d2>0.726
+  claude+laya            d1 0.950 d2 0.315 r -0.22 (spearman -0.23) oracle 0.780 equal 0.763 need d2>0.236
+  claude+log_added       d1 0.950 d2 0.754 r +0.30 (spearman +0.36) oracle 0.775 equal 0.772 need d2>0.583
+  jev+laya            d1 0.498 d2 0.315 r -0.20 (spearman -0.23) oracle 0.678 equal 0.675 need d2>0.132
+  J_ADVOCATE+J_AUDITOR       d1 0.548 d2 0.463 r +0.96 (spearman +0.96) oracle 0.664 equal 0.641 need d2>0.538
+
+== equal-weight z averages (no fitting) vs Claude
+  claude+jev                                              0.718  -0.026 [-0.081, +0.025] P>0 0.15
+  claude+laya                                             0.773  +0.029 [-0.066, +0.129] P>0 0.73
+  claude+log_added                                        0.766  +0.021 [-0.042, +0.084] P>0 0.76
+  claude+laya+log_added                                   0.782  +0.038 [-0.059, +0.135] P>0 0.78
+  claude+jev+laya+log_added                               0.779  +0.035 [-0.051, +0.119] P>0 0.79
+  claude+J_SKEPTIC+J_ADVOCATE+J_AUDITOR+J_TEST-FOCUSED+J_BOUNDARY 0.658  -0.087 [-0.173, -0.004] P>0 0.02
+  jev+laya                                                0.678  -0.066 [-0.186, +0.056] P>0 0.15
+
+== LOPO ridge logistic (lam on standardized coefs)
+  lam 1: Claude through LOPO 0.735 (raw 0.745); within-pair wins 38.5 vs raw 38.5
+   claude+jev                                              0.726 vs raw -0.018 [-0.030,-0.009]  vs LOPO-Claude -0.009 [-0.020,+0.000] P>0 0.03
+   claude+jev5_meanlogit                                   0.727 vs raw -0.017 [-0.024,-0.011]  vs LOPO-Claude -0.008 [-0.014,-0.002] P>0 0.00
+   claude+laya                                             0.771 vs raw +0.027 [-0.039,+0.088]  vs LOPO-Claude +0.036 [-0.030,+0.097] P>0 0.87
+   claude+log_added                                        0.750 vs raw +0.005 [-0.046,+0.050]  vs LOPO-Claude +0.015 [-0.035,+0.059] P>0 0.74
+   claude+J_SKEPTIC+J_ADVOCATE+J_AUDITOR+J_TEST-FOCUSED+J_BOUNDARY 0.711 vs raw -0.034 [-0.068,-0.002]  vs LOPO-Claude -0.024 [-0.058,+0.007] P>0 0.07
+  lam 10: Claude through LOPO 0.736 (raw 0.745); within-pair wins 38.5 vs raw 38.5
+   claude+jev                                              0.724 vs raw -0.021 [-0.045,+0.001]  vs LOPO-Claude -0.012 [-0.036,+0.009] P>0 0.13
+   claude+jev5_meanlogit                                   0.725 vs raw -0.020 [-0.039,-0.002]  vs LOPO-Claude -0.011 [-0.032,+0.007] P>0 0.12
+   claude+laya                                             0.766 vs raw +0.021 [-0.042,+0.080]  vs LOPO-Claude +0.030 [-0.034,+0.089] P>0 0.83
+   claude+log_added                                        0.752 vs raw +0.008 [-0.046,+0.057]  vs LOPO-Claude +0.017 [-0.036,+0.065] P>0 0.75
+   claude+J_SKEPTIC+J_ADVOCATE+J_AUDITOR+J_TEST-FOCUSED+J_BOUNDARY 0.716 vs raw -0.029 [-0.057,-0.003]  vs LOPO-Claude -0.020 [-0.049,+0.006] P>0 0.06
+
+== LOPO-Claude bias check: identical-rank check False | pairs whose order flipped: 0
+  LOPO AUC of pure-noise feature, 20 draws: mean 0.470 min 0.150 max 0.597

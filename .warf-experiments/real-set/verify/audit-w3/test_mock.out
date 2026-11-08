@@ -1,0 +1,27 @@
+=== WaRF Dry Run: M-01 [LOGIC] ===
+
+  [SKEPTIC] omega=0.500  -> REJECT
+    L=-0.626
+  [ADVOCATE] omega=0.500  -> REJECT
+    L=-1.253
+  [AUDITOR] omega=0.500  -> REJECT
+    L=-1.879
+
+  Pool exhausted  L=-1.879  normalised=-1.000  theta=0.0
+  DECISION  : REJECT
+  CONFIDENCE: MEDIUM
+  L (SPRT)  : -1.879
+
+Oracle update (DEVELOPER, x*=REJECT):
+  SKEPTIC: OK  alpha=2.00  beta=1.00  omega=0.667
+  ADVOCATE: OK  alpha=2.00  beta=1.00  omega=0.667
+  AUDITOR: OK  alpha=2.00  beta=1.00  omega=0.667
+  Saved -> C:\workdir\warf\WaRF\.warf\profiles\test_mock.json
+
+Agent          alpha    beta    omega
+--------------------------------------
+SKEPTIC         2.00    1.00    0.667
+ADVOCATE        2.00    1.00    0.667
+AUDITOR         2.00    1.00    0.667
+TEST-FOCUSED    1.00    1.00    0.500
+BOUNDARY        1.00    1.00    0.500

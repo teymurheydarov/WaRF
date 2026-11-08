@@ -1,0 +1,9 @@
+  claude_cli/claude-opus-5-5; worker 1 of 2: 65 reviews to run (1 done) -> claude-commit-strict-tools@low.w1.jsonl
+  worker 1: 10/65  13.7 s per review, ~13 min left
+  worker 1: 20/65  14.0 s per review, ~10 min left
+  worker 1: 30/65  14.1 s per review, ~8 min left
+  worker 1: 40/65  14.2 s per review, ~6 min left
+  c1895d2:gsBenchmark.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  bb2767a:gsWriteParaview.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  2a371e4:gsBoundaryConditions.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 1 stopping: 3 consecutive errors

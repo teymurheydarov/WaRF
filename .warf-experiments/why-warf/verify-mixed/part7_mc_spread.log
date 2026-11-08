@@ -1,0 +1,18 @@
+== routing (raw votes, route 'shadow'): spread over 5 seeds of 200 random orders x 6 profile orders
+  seed 17: BA mean 0.548; shares JEV 0.668, LAYA 0.042, CLAUDE 0.290
+  seed 1: BA mean 0.544; shares JEV 0.630, LAYA 0.041, CLAUDE 0.328
+  seed 2: BA mean 0.547; shares JEV 0.649, LAYA 0.041, CLAUDE 0.311
+  seed 3: BA mean 0.546; shares JEV 0.642, LAYA 0.040, CLAUDE 0.318
+  seed 4: BA mean 0.547; shares JEV 0.650, LAYA 0.040, CLAUDE 0.310
+
+== early stopping with learned omega, 200 random orders x 6 profile orders
+  votes                HIGH verdicts per run mean 0.00 (max 0); decisions differing from the no-boundary run: 0 in 1200 runs
+  raw log-odds         HIGH verdicts per run mean 20.68 (max 37); decisions differing from the no-boundary run: 693 in 1200 runs
+  calibrated log-odds  HIGH verdicts per run mean 0.93 (max 1); decisions differing from the no-boundary run: 45 in 1200 runs
+
+== synthetic control (e): share of draws with calibrated log-odds AUC above the best member, 5 seeds x 500
+  seed 2026: mean +0.0230, > 0 in 83%; best judged on calibrated p: mean +0.0328, > 0 in 92%; synthetic seat left uncalibrated: mean +0.0266, > 0 in 91%
+  seed 1: mean +0.0233, > 0 in 83%; best judged on calibrated p: mean +0.0331, > 0 in 93%; synthetic seat left uncalibrated: mean +0.0269, > 0 in 90%
+  seed 2: mean +0.0234, > 0 in 80%; best judged on calibrated p: mean +0.0332, > 0 in 89%; synthetic seat left uncalibrated: mean +0.0267, > 0 in 89%
+  seed 3: mean +0.0251, > 0 in 84%; best judged on calibrated p: mean +0.0349, > 0 in 92%; synthetic seat left uncalibrated: mean +0.0286, > 0 in 90%
+  seed 4: mean +0.0250, > 0 in 82%; best judged on calibrated p: mean +0.0347, > 0 in 90%; synthetic seat left uncalibrated: mean +0.0279, > 0 in 89%

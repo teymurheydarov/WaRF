@@ -1,0 +1,11 @@
+  claude_cli/claude-opus-5-5; arm claude-one, worker 1 of 2: 49 reviews to run (2 done) -> claude-one.w1.jsonl
+  worker 1: 5/49  12 s per review, ~9 min left
+  worker 1: 10/49  15 s per review, ~10 min left
+  worker 1: 15/49  15 s per review, ~8 min left
+  worker 1: 20/49  13 s per review, ~7 min left
+  worker 1: 25/49  13 s per review, ~5 min left
+  worker 1: 30/49  13 s per review, ~4 min left
+  worker 1: 35/49  13 s per review, ~3 min left
+  worker 1: 40/49  13 s per review, ~2 min left
+  worker 1: 45/49  13 s per review, ~1 min left
+  worker 1 done: 49 reviews in 10.3 min

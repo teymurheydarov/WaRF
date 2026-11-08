@@ -1,0 +1,36 @@
+  10/120 originals, 60 s
+  20/120 originals, 118 s
+  30/120 originals, 169 s
+  40/120 originals, 209 s
+  50/120 originals, 250 s
+  60/120 originals, 295 s
+  70/120 originals, 346 s
+  80/120 originals, 378 s
+  90/120 originals, 419 s
+  100/120 originals, 478 s
+  110/120 originals, 529 s
+  120/120 originals, 583 s
+
+  tiny hand-made pairs (p(REJECT) correct -> buggy):
+    add          0.062 -> 0.061
+    sum loop     0.145 -> 0.141
+    null guard   0.103 -> 0.135
+    free         0.103 -> 0.083
+    mean         0.174 -> 0.100
+  junk states:
+    empty patch                  p(REJECT) 0.190
+    lorem ipsum                  p(REJECT) 0.030
+    random characters            p(REJECT) 0.895
+    the question as the patch    p(REJECT) 0.209
+  rebuild errors: 0
+
+  re-asked 120 original states: rebuilt length equal to stored 120, token count equal 120, max |p_rebuilt - p_stored| 0.0000
+
+  planted bug                             n  p before  p after  mean diff   rose  now >0.5  sign test p
+  flip + / -                              1     0.173    0.175    +0.0021   100%         0            1
+  flip comparison                         5     0.126    0.127    +0.0007    60%         0            1
+  flip true/false or && / ||              2     0.098    0.095    -0.0030     0%         0          0.5
+  insert BUG / do-not-merge comment      94     0.158    0.288    +0.1303    95%        10      5.9e-21
+  insert null dereference                94     0.158    0.155    -0.0028    46%         0         0.47
+
+  583 s in all

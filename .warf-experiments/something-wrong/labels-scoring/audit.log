@@ -1,0 +1,129 @@
+selection: 100 rows, 50 REJECT, distinct commits 100, distinct ids 100
+pair order REJECT,APPROVE at rows 2k,2k+1: True
+labels.jsonl agrees with selection label for 100/100; mismatches []
+sessions_one jev.label disagrees with selection: 0; key.json label disagrees: 0; key p_laya == p_single_laya: 100/100; claude p == p_claude: 100/100
+
+== headline AUCs recomputed (later fixed = positive, ties half), 95% bootstrap within label
+  Jev one question         AUC 0.641 [0.526, 0.741]  RESULTS.md 0.641  distinct values 57
+  Jev five mean p R1       AUC 0.628 [0.513, 0.727]  RESULTS.md 0.628  distinct values 90
+  Jev five mean p final    AUC 0.633 [0.517, 0.730]  RESULTS.md 0.633  distinct values 95
+  Jev standard mean p      AUC 0.624 [0.509, 0.723]  RESULTS.md 0.624  distinct values 87
+  Laya one (sweep)         AUC 0.586 [0.476, 0.701]  RESULTS.md 0.586  distinct values 96
+  Laya five mean p R1      AUC 0.557 [0.442, 0.667]  RESULTS.md 0.557  distinct values 98
+  Claude blinded           AUC 0.745 [0.647, 0.831]  RESULTS.md 0.745  distinct values 41
+  added lines              AUC 0.716 [0.613, 0.804]  RESULTS.md 0.716  distinct values 25
+  removed lines            AUC 0.408 [0.302, 0.513]  RESULTS.md -  distinct values 10
+  patch chars              AUC 0.502 [0.391, 0.617]  RESULTS.md 0.502  distinct values 77
+  state tokens             AUC 0.464 [0.355, 0.580]  RESULTS.md -  distinct values 86
+
+== label-determining artefacts
+  added == 0: R 0  A 7
+  comment-only: R 0  A 8
+  trivial (no added line or comment-only): R 0  A 15
+  new file: R 12  A 6
+  blamed_lines of REJECTs: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 6, 6, 7, 10, 10]
+  REJECTs with blamed lines >= added lines: 16/50
+
+  reviewer AUC: all 100 | R vs the trivial A only | without trivial items (n R/A) | within pairs both non-trivial
+  Jev one question         0.641 | 0.716 | 0.609 [0.489,0.731] (50/35) | pairs won 20.0/35
+  Jev five mean p R1       0.628 | 0.705 | 0.594 [0.470,0.714] (50/35) | pairs won 18.0/35
+  Claude blinded           0.745 | 0.950 | 0.657 [0.540,0.765] (50/35) | pairs won 24.5/35
+  Laya one (sweep)         0.586 | 0.607 | 0.577 [0.442,0.702] (50/35) | pairs won 22.0/35
+  added lines              0.716 | 0.912 | 0.633 [0.515,0.744] (50/35) | pairs won 21.0/35
+  patch chars              0.502 | 0.471 | 0.515 [0.388,0.643] (50/35) | pairs won 19.0/35
+
+  added lines among non-trivial items: AUC 0.633
+
+  Spearman with log added lines (all 100): Jev one question +0.28, Jev five mean p R1 +0.26, Claude blinded +0.48, Laya one (sweep) +0.23
+
+  mean score on the 15 trivial APPROVEs vs non-trivial APPROVEs vs REJECTs:
+  Jev one question         trivial A 0.385  other A 0.496  R 0.597
+  Jev five mean p R1       trivial A 0.239  other A 0.329  R 0.398
+  Claude blinded           trivial A 0.037  other A 0.175  R 0.287
+  Laya one (sweep)         trivial A 0.130  other A 0.141  R 0.154
+
+  rank-average of added lines and reviewer (AUC), and best by within-added-bin ordering:
+  added + Jev one question     rank mean AUC 0.715; lexicographic (added, then reviewer) AUC 0.726
+  added + Jev five mean p R1   rank mean AUC 0.708; lexicographic (added, then reviewer) AUC 0.724
+  added + Claude blinded       rank mean AUC 0.777; lexicographic (added, then reviewer) AUC 0.734
+  added + Laya one (sweep)     rank mean AUC 0.696; lexicographic (added, then reviewer) AUC 0.737
+  added lines alone 0.716; trivial flag alone 0.650
+
+== the fixes behind the 50 REJECT labels
+      0.0 d  defect  same-author False blamed   1 added   4 fixes 1  d05ce2  FIX: cyclic dependency in header-only mode
+      0.0 d  defect  same-author False blamed  10 added  24 fixes 1  60f802  fix
+      0.0 d  defect  same-author True  blamed   1 added   1 fixes 1  03e58b  repair expression for older c++
+      0.0 d  defect  same-author True  blamed   1 added   2 fixes 1  5f8ecf  fix extern
+      0.0 d  defect  same-author True  blamed   1 added   2 fixes 1  cc497b  fix extern 2
+      0.0 d  defect  same-author True  blamed   1 added  23 fixes 1  b89217  wrong place for that
+      0.0 d  defect  same-author True  blamed   3 added   3 fixes 1  2a162c  fix extern
+      0.0 d  defect  same-author True  blamed   3 added  32 fixes 1  ebcf2a  fix
+      0.0 d  defect  same-author True  blamed   6 added   7 fixes 2  f38d3a  ms fix
+      0.1 d  defect  same-author False blamed   2 added   6 fixes 1  6d18ae  fix small mistakes
+      0.1 d  defect  same-author True  blamed   1 added   4 fixes 1  6017c0  temp fix
+      0.2 d  defect  same-author True  blamed   1 added   2 fixes 1  c79f8b  fix
+      0.6 d  defect  same-author True  blamed   1 added   1 fixes 1  d9b330  ms fix 1
+      0.7 d  defect  same-author True  blamed   1 added   2 fixes 1  88cb75  pardiso fix
+      0.9 d  build   same-author True  blamed   3 added  27 fixes 1  616e66  fix compilation
+      1.1 d  defect  same-author False blamed   1 added   4 fixes 1  482f99  FIX: cyclic dependency in header-only mode
+      1.1 d  defect  same-author True  blamed   1 added   1 fixes 1  fad955  small fixes with GISMO_HAS_OPENMPxy
+      2.0 d  build   same-author True  blamed   1 added  21 fixes 1  6c5281  fix inclusion
+      2.4 d  build   same-author False blamed   1 added   3 fixes 1  7cac17  fix for windows where interface is a reserved word commit missing chan
+      2.4 d  defect  same-author False blamed   2 added   2 fixes 1  7db77f  fix argument of free functions (#70)
+      3.1 d  build   same-author False blamed   2 added  30 fixes 2  920dfd  Fix for Windows (please take care to add GISMO_EXPORT to non-templated
+      4.5 d  defect  same-author False blamed   1 added  36 fixes 1  b1f90f  fix
+      5.8 d  build   same-author False blamed   1 added   1 fixes 1  7d18e0  fix circular inclusion
+     16.1 d  defect  same-author True  blamed   7 added  11 fixes 3  16af02  small fix
+     20.8 d  defect  same-author False blamed   1 added  44 fixes 1  46d7d2  Fixed bug in CoDiPack extension (#201)
+     28.8 d  defect  same-author True  blamed   1 added   1 fixes 1  ff66f7  Fixed andrea´s gluing data which now works well
+     36.0 d  build   same-author True  blamed   3 added  10 fixes 3  2140a8  fix linker error
+     58.9 d  defect  same-author True  blamed   1 added  13 fixes 1  4b41ad  add elision for sparsematrix, small fixes and cleanup template tools
+     67.4 d  defect  same-author True  blamed   1 added  16 fixes 1  e001c7  trilinos fixes
+     81.8 d  defect  same-author False blamed   2 added  12 fixes 1  451246  fixes for gsMemory.h
+     82.0 d  defect  same-author True  blamed   2 added   6 fixes 1  39f2ad  small fix in gsHBSpline
+     89.1 d  defect  same-author True  blamed   4 added   4 fixes 1  c2f1b9  add elision for sparsematrix, small fixes and cleanup template tools
+     93.1 d  defect  same-author True  blamed   1 added   2 fixes 1  d983e9  Few fixes related to file I/O, fix sparse vector iterator
+    177.6 d  defect  same-author False blamed   1 added   1 fixes 1  c518a5  Fixed bug in including FDBB library.
+    186.9 d  defect  same-author True  blamed   1 added   1 fixes 1  da06b6  fix refine_withTransfer and HDomainBoundaryIterator
+    187.0 d  build   same-author False blamed   1 added   3 fixes 2  a3d51f  fix include for header-only compilation
+    299.3 d  defect  same-author False blamed   3 added   3 fixes 1  bb047a  use _MSVC_LANG and fixes for VC
+    333.4 d  build   same-author True  blamed   1 added   1 fixes 1  ebe5b3  build and fix multipatch solver
+    353.0 d  defect  same-author False blamed   1 added   1 fixes 1  c1b11a  fix inclusions
+    391.2 d  defect  same-author True  blamed   1 added   7 fixes 1  19767a  small fix
+    397.9 d  defect  same-author True  blamed  10 added  45 fixes 1  ee60aa  small fixes to gsUniversal extension
+    425.7 d  test    same-author False blamed   2 added  19 fixes 1  b2330f  attempted fix of tests
+    637.5 d  defect  same-author False blamed   1 added   1 fixes 1  0c0789  fixes
+    936.9 d  defect  same-author False blamed   1 added   4 fixes 1  515d5f  [DO NOT MERGE YET] Fix for gsUnum extension (#395)
+   1152.3 d  defect  same-author False blamed   6 added  21 fixes 1  5201b9   Fix handling of inclusions in multiGrid (#426)
+   1503.3 d  defect  same-author True  blamed   1 added   1 fixes 1  09b5b3  fix gsConstantFunction
+   1899.2 d  defect  same-author False blamed   1 added  11 fixes 1  7f37bf  Bugfix: a forgotten swap of parameters from issue #290 (#355)
+   1903.1 d  build   same-author False blamed   1 added  23 fixes 1  b4f8a3  fix compilation, moved gsOpenMp to the gsParallel folder
+   2299.8 d  build   same-author False blamed   1 added   1 fixes 1  a314c7  fix circular inclusion
+   2905.4 d  defect  same-author False blamed   1 added  13 fixes 1  894df0  implemented parameter correction using Parasolid; also some minor impr
+  first fix within 1 day: 15/50, within 7 days 23, within 30 26, >180 16
+  same author as the fix: 27/50; kinds: build 10, defect 39, test 1
+  later history (days): APPROVE min 195.2 median 2070.8; REJECT min 3.9 median 3531.6; REJECTs with < 180 days later history: 2
+
+  AUC against all 50 APPROVEs, REJECTs split by first-fix delay (<=7 d: 23, >7 d: 27):
+    Jev one question         <=7d  0.696
+    Jev one question         >7d   0.595
+    Jev five mean p R1       <=7d  0.695
+    Jev five mean p R1       >7d   0.570
+    Claude blinded           <=7d  0.859
+    Claude blinded           >7d   0.647
+    Laya one (sweep)         <=7d  0.531
+    Laya one (sweep)         >7d   0.633
+    added lines              <=7d  0.729
+    added lines              >7d   0.706
+
+== label-noise ceiling: AUC of a perfect detector of true defects, given label noise
+   q = share of REJECT labels that are not real defects, r = share of APPROVE labels that hide one
+   q 0.20: r 0.0: 0.900  r 0.1: 0.850  r 0.2: 0.800  r 0.3: 0.750
+   q 0.34: r 0.0: 0.830  r 0.1: 0.780  r 0.2: 0.730  r 0.3: 0.680
+   q 0.45: r 0.0: 0.775  r 0.1: 0.725  r 0.2: 0.675  r 0.3: 0.625
+   q 0.60: r 0.0: 0.700  r 0.1: 0.650  r 0.2: 0.600  r 0.3: 0.550
+
+== replay.py clamp(round(p, 2)) effect on single-seat AUCs (no calibration)
+  Jev one question         raw 0.641 (57 values)  rounded 0.641 (57 values)
+  Laya one (sweep)         raw 0.586 (96 values)  rounded 0.584 (26 values)
+  Claude blinded           raw 0.745 (41 values)  rounded 0.745 (41 values)

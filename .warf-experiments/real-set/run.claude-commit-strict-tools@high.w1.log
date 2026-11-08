@@ -1,0 +1,7 @@
+  claude_cli/claude-opus-5-5; worker 1 of 3: 44 reviews to run (0 done) -> claude-commit-strict-tools@high.w1.jsonl
+  worker 1: 10/44  29.6 s per review, ~17 min left
+  worker 1: 20/44  24.3 s per review, ~10 min left
+  e53eaa2:gsWeightMapper_.cpp:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  e44d418:gsIetiMapper.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  55d9864:gsPyBind11.cpp:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 1 stopping: 3 consecutive errors

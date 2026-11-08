@@ -1,0 +1,8 @@
+  claude_cli/claude-opus-5-5; worker 0 of 3: 44 reviews to run (1 done) -> claude-commit-strict.w0.jsonl
+  worker 0: 10/44  13.2 s per review, ~7 min left
+  worker 0: 20/44  12.5 s per review, ~5 min left
+  worker 0: 30/44  13.2 s per review, ~3 min left
+  138f4a7:grad_expr.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  6c33a77:gsMultiPatch_.cpp:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  cea32c6:gsFreeformSubdivision.cpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

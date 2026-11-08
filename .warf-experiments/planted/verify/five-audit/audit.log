@@ -1,0 +1,107 @@
+records: claude 108, claude-standard 108; ids == items: True, True
+errors.jsonl present: False
+hand-class sets equal rescore.py: yes
+
+== (1) all: 54 bases ==
+  one  BA 0.8241  caught 52/54  passed 37/54  seed4 2000 [xs[49], xs[1949]] = [0.7500, 0.8889]  20000-resample 2.5/97.5 % = [0.7500, 0.8889]
+  five BA 0.8611  caught 51/54  passed 42/54  seed4 2000 [xs[49], xs[1949]] = [0.7963, 0.9259]  20000-resample 2.5/97.5 % = [0.7963, 0.9259]
+  five-one +0.0370  seed4 [+0.0000, +0.0833]  20000 [-0.0000, +0.0833]  share of resamples with d<=0: 0.060, d<0: 0.030
+  only five right 5 ['d6c93de:gsFileManager.cpp:clean', '893626d:test_spectra.cpp:clean', '838db33:gsKnotDomainIterator.h:clean', '9790e5a:gsFileManager.cpp:clean', '9e5b11e:gsBSplineBasis.h:clean']
+  only one right 1 ['be9bf4b:Householder.h:planted']
+  McNemar exact two-sided p = 0.2188
+
+== (1) cleaned: 35 bases ==
+  one  BA 0.9286  caught 35/35  passed 30/35  seed4 2000 [xs[49], xs[1949]] = [0.8714, 0.9714]  20000-resample 2.5/97.5 % = [0.8714, 0.9857]
+  five BA 0.9571  caught 35/35  passed 32/35  seed4 2000 [xs[49], xs[1949]] = [0.9143, 1.0000]  20000-resample 2.5/97.5 % = [0.9000, 1.0000]
+  five-one +0.0286  seed4 [+0.0000, +0.0714]  20000 [+0.0000, +0.0714]  share of resamples with d<=0: 0.132, d<0: 0.000
+  only five right 2 ['d6c93de:gsFileManager.cpp:clean', '838db33:gsKnotDomainIterator.h:clean']
+  only one right 0 []
+  McNemar exact two-sided p = 0.5000
+
+== (1) Claude alone's clean REJECTs and the five-Claude verdict ==
+  #3   APPROVE MEDIUM AAARA  d6c93de:gsFileManager.cpp
+  #5   REJECT  HIGH   RRRR  5f4e141:gsUtils.h
+  #7   APPROVE MEDIUM ARARA  893626d:test_spectra.cpp
+  #8   REJECT  MEDIUM ARRRR  1c89c40:ActiveLevelCommandImplementation.cpp
+  #9   REJECT  HIGH   RRRR  0064799:gsBiharmonicAssembler.hpp
+  #18  REJECT  HIGH   RRRR  bdbd602:gsMatrixCrossApproximation.h
+  #26  REJECT  HIGH   RRRR  42f88b6:gsVisitorHelmholtz.h
+  #30  REJECT  MEDIUM ARRRR  5cf8a87:gsGradientMethod.hpp
+  #31  REJECT  MEDIUM RAARR  f00bb12:gsConjugateGradient.cpp
+  #35  REJECT  MEDIUM ARRRA  d3c723f:gsSurface.hpp
+  #36  REJECT  HIGH   RRRR  47c2bbc:gsHBSplineBasis.hpp
+  #39  REJECT  HIGH   RRRR  419e389:gsMatrixCrossApproximation_2.hpp
+  #47  REJECT  HIGH   RRRR  77338a8:gsReadFile.h
+  #48  APPROVE MEDIUM AARRA  838db33:gsKnotDomainIterator.h
+  #52  APPROVE MEDIUM ARARA  9790e5a:gsFileManager.cpp
+  #53  REJECT  HIGH   RRRR  8d2794b:gsAsMatrix.h
+  #54  APPROVE MEDIUM AAAAA  9e5b11e:gsBSplineBasis.h
+
+== (2) claude-standard record audit ==
+  profile: names ['SKEPTIC', 'ADVOCATE', 'AUDITOR', 'TEST-FOCUSED', 'BOUNDARY'], uniform alpha=beta=1, no provider/model override, persona hashes recomputed OK
+  SPRT: A=2.8904 B=-2.2513; 0.5*LLR approve +0.4904 reject -0.6264; RRRR -> -2.5055, RRR -> -1.8791, AAAAA -> +2.4521
+  domains: {'LOGIC': 104, 'SECURITY': 4}
+  replay matches decision/confidence/lambda/fired/normalised/length: 108/108
+  calls checked: 481; first line exactly APPROVE/REJECT: 481
+  problems: 0
+  claude-alone records with a problem (model, agent, first line, vote, sent_chars): 0 []
+  records with <5 votes that are not RRRR early stops (would reveal a skipped/timed-out seat): []
+
+== (3) discordant items: 6 ==
+  d6c93de:gsFileManager.cpp:clean truth=clean one=REJECT five=APPROVE votes=SA AA AA TR BA 
+  893626d:test_spectra.cpp:clean truth=clean one=REJECT five=APPROVE votes=SA AR AA TR BA 
+  be9bf4b:Householder.h:planted truth=planted one=REJECT five=APPROVE votes=SA AA AA TR BA 
+  838db33:gsKnotDomainIterator.h:clean truth=clean one=REJECT five=APPROVE votes=SA AA AR TR BA 
+  9790e5a:gsFileManager.cpp:clean truth=clean one=REJECT five=APPROVE votes=SA AR AA TR BA 
+  9e5b11e:gsBSplineBasis.h:clean truth=clean one=REJECT five=APPROVE votes=SA AA AA TA BA 
+
+== (4) how far the five behave like independent samples ==
+  ('clean', 4, 4): 8
+  ('clean', 5, 0): 20
+  ('clean', 5, 1): 18
+  ('clean', 5, 2): 4
+  ('clean', 5, 3): 2
+  ('clean', 5, 4): 2
+  ('planted', 4, 4): 51
+  ('planted', 5, 1): 2
+  ('planted', 5, 2): 1
+  per-seat REJECT clean / planted: SKEPTIC 9/54 / 51/54; ADVOCATE 13/54 / 51/54; AUDITOR 14/54 / 51/54; TEST-FOCUSED 33/54 / 54/54; BOUNDARY 3/46 / 1/3
+  Claude alone REJECT clean 17/54, planted 52/54
+  agreement of each seat with Claude alone's answer on the same item (observed vs independent given stratum rates):
+    SKEPTIC      clean    n=54 agree 0.852 (indep. 0.623, kappa +0.61); one R & seat R 9, one R & seat A 8, one A & seat R 0
+    SKEPTIC      planted  n=54 agree 0.981 (indep. 0.912, kappa +0.79); one R & seat R 51, one R & seat A 1, one A & seat R 0
+    ADVOCATE     clean    n=54 agree 0.926 (indep. 0.596, kappa +0.82); one R & seat R 13, one R & seat A 4, one A & seat R 0
+    ADVOCATE     planted  n=54 agree 0.981 (indep. 0.912, kappa +0.79); one R & seat R 51, one R & seat A 1, one A & seat R 0
+    AUDITOR      clean    n=54 agree 0.870 (indep. 0.589, kappa +0.68); one R & seat R 12, one R & seat A 5, one A & seat R 2
+    AUDITOR      planted  n=54 agree 0.981 (indep. 0.912, kappa +0.79); one R & seat R 51, one R & seat A 1, one A & seat R 0
+    TEST-FOCUSED clean    n=54 agree 0.667 (indep. 0.459, kappa +0.38); one R & seat R 16, one R & seat A 1, one A & seat R 17
+    TEST-FOCUSED planted  n=54 agree 0.963 (indep. 0.963, kappa +0.00); one R & seat R 52, one R & seat A 0, one A & seat R 2
+    BOUNDARY     clean    n=46 agree 0.870 (indep. 0.765, kappa +0.45); one R & seat R 3, one R & seat A 6, one A & seat R 0
+    BOUNDARY     planted  n= 3 agree 0.333 (indep. 0.556, kappa -0.50); one R & seat R 0, one R & seat A 1, one A & seat R 1
+  clean: four always-asked seats, REJECT count 0..4 observed [20, 18, 5, 3, 8], independent [9.8, 24.0, 15.8, 4.0, 0.3]
+    Fleiss kappa +0.411 (pooled REJECT rate 0.319); effective independent votes among 4 = 4/(1+3*rho) = 1.79 with rho = kappa
+    SKEPTIC-ADVOCATE: agree 0.889, indep 0.673, kappa +0.66
+    SKEPTIC-AUDITOR: agree 0.870, indep 0.660, kappa +0.62
+    SKEPTIC-TEST-FOCUSED: agree 0.556, indep 0.426, kappa +0.23
+    ADVOCATE-AUDITOR: agree 0.907, indep 0.625, kappa +0.75
+    ADVOCATE-TEST-FOCUSED: agree 0.630, indep 0.442, kappa +0.34
+    AUDITOR-TEST-FOCUSED: agree 0.611, indep 0.447, kappa +0.30
+  planted: four always-asked seats, REJECT count 0..4 observed [0, 3, 0, 0, 51], independent [0.0, 0.0, 0.5, 8.0, 45.5]
+    Fleiss kappa +0.652 (pooled REJECT rate 0.958); effective independent votes among 4 = 4/(1+3*rho) = 1.35 with rho = kappa
+    SKEPTIC-ADVOCATE: agree 1.000, indep 0.895, kappa +1.00
+    SKEPTIC-AUDITOR: agree 1.000, indep 0.895, kappa +1.00
+    SKEPTIC-TEST-FOCUSED: agree 0.944, indep 0.944, kappa +0.00
+    ADVOCATE-AUDITOR: agree 1.000, indep 0.895, kappa +1.00
+    ADVOCATE-TEST-FOCUSED: agree 0.944, indep 0.944, kappa +0.00
+    AUDITOR-TEST-FOCUSED: agree 0.944, indep 0.944, kappa +0.00
+  clean: Claude alone error 0.315; majority of 5 iid such votes would err 0.183; panel errs 0.222
+  planted: Claude alone error 0.037; majority of 5 iid such votes would err 0.000; panel errs 0.056
+  panel verdict equals Claude alone on 102/108
+  unanimous panels (all votes cast agree): 79/108
+  total Claude calls in claude-standard: 481
+
+  each always-asked seat scored alone (BA over 54 bases; discordance vs Claude alone):
+    SKEPTIC       BA 0.8889  caught 51/54  passed 45/54  only seat right 8, only one right 1, McNemar p 0.0391
+    ADVOCATE      BA 0.8519  caught 51/54  passed 41/54  only seat right 4, only one right 1, McNemar p 0.3750
+    AUDITOR       BA 0.8426  caught 51/54  passed 40/54  only seat right 5, only one right 3, McNemar p 0.7266
+    TEST-FOCUSED  BA 0.6944  caught 54/54  passed 21/54  only seat right 3, only one right 17, McNemar p 0.0026

@@ -1,0 +1,123 @@
+===== claude claude.w0.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+The per-patch `.vtu` file is written to the wrong location: the code opens `std::ofstream file(fnBase_nopath + ".vtu")`.
+
+- `fnBase_nopath` is the bare file name with the directory removed by `gsFileManager::getFilename`. So the stream opens the file relative to the current working directory, not the directory given in `filename`.
+- `collection.addPart(fnBase_nopath + ".vtu")` records the part relative to the `.pvd` file's own directory. This relative-path convention is right for the collection, but it only works if the part file actually sits in that directory.
+- The existing code in the same file handles this correctly. `writeSingleGeometry`, `writeSingleCurve` and the `_cnet`/`_mesh` writers all receive the full `fnBase`/`fileName`, which includes the path. Only the `addPart` call uses the `_nopath` variant.
+- The new function is also inconsistent with itself. Its `ctrlNet` branch writes the control net via the full-path `fileName`, while the Bezier `.vtu` goes to the CWD.
+
+**Result:** whenever `filename` contains a directory (e.g. `"out/result"`), the `.pvd` and `_cnet` files land in `out/`, but `result_0.vtu` etc. land in the CWD. The collection then references files that don't exist next to it, so ParaView fails to load them. It works only by accident when the CWD equals the output directory.
+
+**Fix:** open the stream with the full path: `std::ofstream file(fnBase + ".vtu");`. Keep `fnBase_nopath` only for `addPart`.
+
+**Minor:** the loop compares a signed `index_t` against `nPatches()`, which may cause a sign-compare warning depending on the type. It also assumes `BezierVTK` returns exactly one entry per patch and never checks that.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+**Defect: the `.vtu` file is written to the wrong directory.** The patch writes each patch file with:
+
+```cpp
+std::ofstream file(fnBase_nopath + ".vtu");
+```
+
+`fnBase_nopath` is `gsFileManager::getFilename(fnBase)`, which strips the directory part. Every other writer in this file uses the full-path `fnBase` to create the file and uses `fnBase_nopath` only for the collection entry. Examples are `writeSingleGeometry(*Geo[i], fnBase, ...)` and, in this same function, `writeSingleControlNet(..., fnBase + "_cnet")`.
+
+**Concrete failing case:** call `gsWriteParaviewBezier(mp, "out/result", false)` from a working directory `cwd`.
+- `gsParaviewCollection("out/result")` saves `out/result.pvd`.
+- The collection entry is `result_0.vtu`, which ParaView resolves relative to the `.pvd` as `out/result_0.vtu`.
+- The file is actually created at `cwd/result_0.vtu`.
+
+The result is a broken collection: ParaView cannot find the referenced part. The working directory also gets stray files. It can even overwrite unrelated files with the same name.
+
+With `ctrlNet = true` the problem is easier to see. The `_cnet.vtp` files are written correctly into `out/`, but the `.vtu` files are not.
+
+**Fix:** use `std::ofstream file(fnBase + ".vtu");`.
+
+**Minor note:** the function uses a hard-coded `"_"` where the sibling function uses `pDelim`. That is an inconsistency rather than a demonstrated defect.
+--- ADVOCATE 32e59155d0a3 REJECT
+The `.vtu` file is written to the wrong location whenever `filename` contains a directory.
+
+```cpp
+fnBase = filename + "_" + util::to_string(patch);
+fnBase_nopath = gsFileManager::getFilename(fnBase);
+
+std::ofstream file(fnBase_nopath + ".vtu");   // <-- path stripped
+...
+collection.addPart(fnBase_nopath + ".vtu");
+```
+
+Elsewhere in this file, and in the control-net branch of this same function, the convention is:
+- **Write** the file using the full path (`fnBase`, `fileName`). For example, `writeSingleGeometry(*Geo[i], fnBase, npts)` and `writeSingleControlNet(..., fileName)`.
+- **Register** it in the `.pvd` collection using the bare name (`*_nopath`), because the collection references parts relative to the `.pvd` file's own directory.
+
+This function breaks that convention for the main per-patch output. It opens `fnBase_nopath + ".vtu"`, so the Bezier `.vtu` is written to the current working directory, not next to the `.pvd`.
+
+Take `filename = "out/result"` as an example:
+- `out/result.pvd` is created in `out/`.
+- `out/result_0_cnet.vtp` is written to `out/`.
+- `result_0.vtu` is written to the CWD.
+- The collection references `result_0.vtu` relative to `out/`, so ParaView cannot find the main geometry.
+
+The only case that works is when `filename` has no directory part. The function's own `ctrlNet` branch writes with the full path, which suggests this is an error rather than a deliberate choice.
+
+**Fix:** `std::ofstream file(fnBase + ".vtu");`
+
+**Minor, non-blocking:**
+- The function uses the literal `"_"` where the sibling functions use `pDelim`.
+- `index_t patch` is compared against `nPatches()`, which may give a signed/unsigned comparison warning depending on the return type.
+--- AUDITOR 318509b9ab1f REJECT
+**Main defect: the `.vtu` file is written to the wrong location.**
+
+The patch writes each patch file with:
+```cpp
+std::ofstream file(fnBase_nopath + ".vtu");
+```
+`fnBase_nopath` comes from `gsFileManager::getFilename(fnBase)`, which removes the directory part. So the file is written to the process's current working directory, not to the directory given in `filename`.
+
+Everything else in the function uses the full path:
+- `gsParaviewCollection collection(filename)` writes the `.pvd` to the directory in `filename`.
+- `collection.addPart(fnBase_nopath + ".vtu")` records the part relative to that `.pvd`.
+- The control net branch writes with the full path (`writeSingleControlNet(..., fnBase + "_cnet")`), as does the existing `gsWriteParaview` function above it.
+
+**Effect:** If `filename` includes a directory (e.g. `"out/result"`), the `.pvd` and `_cnet.vtp` files go to `out/`, but the `.vtu` files go to the CWD. The collection then points to `.vtu` files that are not next to it, so ParaView fails to load them or shows missing parts. Nothing reports an error. It only works when `filename` has no directory or the CWD happens to match.
+
+**Fix:** `std::ofstream file(fnBase + ".vtu");`. Keep `fnBase_nopath` only for `collection.addPart`.
+
+**Secondary issues:**
+- The code never checks that `fileContents.size() == mPatch.nPatches()` before indexing `fileContents[patch]`, so a mismatch would read out of bounds.
+- The code never checks that the `ofstream` opened successfully, so write failures are silently ignored.
+- The separator is a hard-coded `"_"`, while the sibling `gsWriteParaview` uses `pDelim`. This is inconsistent, though not necessarily wrong.
+
+Because of the path bug, the function writes a collection that references files in the wrong place whenever the output path has a directory, so it cannot be approved as is.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**Defect: the `.vtu` file is written to the wrong directory.**
+
+```cpp
+fnBase = filename + "_" + util::to_string(patch);
+fnBase_nopath = gsFileManager::getFilename(fnBase);
+std::ofstream file(fnBase_nopath + ".vtu");   // path stripped
+```
+
+The established convention, used by the sibling `gsWriteParaview` above and by the control-net branch in this same function, is:
+- Write to `fnBase`, which keeps the full path.
+- Register `fnBase_nopath` in the collection, as a name relative to the `.pvd`.
+
+Here the Bezier patch file is opened with the path stripped, so it lands in the process's current working directory. Meanwhile:
+- `collection.save()` writes the `.pvd` into the directory given in `filename`.
+- The `_cnet.vtp` files go there too, because they use `fnBase`.
+
+Whenever `filename` contains a directory, such as `"out/result"`:
+- The `.pvd` references `result_0.vtu`, but that file is not next to the `.pvd`.
+- The `.vtu` files end up scattered in the CWD.
+- They can overwrite unrelated files with the same name there.
+
+The fix is `std::ofstream file(fnBase + ".vtu");`.
+
+**Why this is silent rather than loud:**
+- The function returns `void` and throws nothing on this path. A caller has nothing to assert on.
+- The bug only shows up when `filename` includes a directory component and the CWD differs from that directory. A test that writes to a bare filename in the CWD passes. The outcome depends on the test runner's working directory, which is environment-dependent.
+- The `std::ofstream` is never checked (`is_open()` / `fail()`). If the target can't be opened, nothing is written and the part is still added to the collection. That is a second silent failure path.
+
+**Unchecked index:**
+- `fileContents[patch]` is indexed with no check that `BezierVTK(mPatch).size() == mPatch.nPatches()`.
+- If they differ, this is undefined behaviour rather than a loud error.

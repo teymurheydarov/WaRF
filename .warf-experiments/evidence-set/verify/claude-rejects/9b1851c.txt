@@ -1,0 +1,146 @@
+===== claude claude.w2.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+The new `gsSimpleMobiusDomain::deriv_into` returns wrong values.
+
+- **The correct derivative.** The map is f(u) = (α−1)u / D, where D = (2α−1)u − α. By the quotient rule:
+  f'(u) = [(α−1)D − (α−1)u(2α−1)] / D² = (α−1)(−α) / D² = α(1−α) / D²
+- **What the patch computes.** `den_u` is already D² (`pow(..., 2)`), and the code then divides by `den_u*den_u`. So the result is u(u−1)/D⁴. That has three faults:
+  - The numerator is u(u−1). It should be α(1−α), which is constant in u.
+  - The denominator is D⁴ instead of D².
+  - The sign is wrong. On (0,1), u(u−1) is negative while α(1−α) is positive, so the computed Jacobian flips the orientation.
+- **The same faults apply to `result(3,k)` with `vv`/`m_alpha[1]`.**
+
+Before this patch the function raised `GISMO_ERROR("TODO")` and stopped. Now it silently returns an incorrect Jacobian, which will corrupt any assembly or Newton step that uses it. That is worse than the explicit error.
+
+Minor issues:
+- `result.setZero()` is followed by redundant `result(1,k) = 0; result(2,k) = 0;` lines.
+- The code uses unqualified `pow` instead of `math::pow`.
+- The loop hardcodes rows 0/1, although the class is templated on `DIM`.
+- The debug lines are commented out rather than removed.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+The new `gsSimpleMobiusDomain::deriv_into` returns the wrong derivative.
+
+**What the derivative should be.** For each coordinate, `eval_into` computes
+f(u) = (a−1)·u / D, where D = (2a−1)·u − a.
+
+By the quotient rule:
+f'(u) = (a−1)·[D − (2a−1)·u] / D² = (a−1)·(−a) / D² = **a(1−a) / D²**
+
+**What the patch computes.**
+- `den_u = pow(D, 2)`, which is D².
+- `result(0,k) = uu*(uu-1)/(den_u*den_u)`, which is **u(u−1) / D⁴**.
+
+Both parts are wrong. The numerator should be a(1−a), not u(u−1). The denominator should be D², but squaring `den_u` again gives D⁴. The same errors apply to `result(3,k)` for v.
+
+**Concrete failing input.** Take α = (0.5, 0.5). Then D = −0.5 and f(u) = u, the identity map. The correct Jacobian is the identity at every point.
+- At u = (0.5, 0.5), the patch returns diagonal entries 0.5·(−0.5) / 0.0625 = **−4** instead of 1.
+- At u = (0, 0), it returns **0** instead of 1, so the Jacobian is singular at a corner where the map is a diffeomorphism.
+
+Before this change the function raised `GISMO_ERROR("TODO")`. After it, the function silently returns wrong values. Anything that uses this Jacobian, such as Newton inversion, quadrature weights or optimization, would get incorrect results without any error being raised.
+
+The other edits (a fuller assert message and commenting out the `gsDebugVar` lines) are harmless. As an aside, the existing denominator asserts use `.any()` where they should use `.all()`, but this patch does not change them.
+--- ADVOCATE 32e59155d0a3 REJECT
+The new `deriv_into` in `gsSimpleMobiusDomain` computes the wrong derivative. It has two independent errors.
+
+**Derivation.** For each direction, the map is f(u) = (a−1)·u / D, where D = (2a−1)·u − a. By the quotient rule:
+
+f'(u) = [(a−1)·D − (a−1)·u·(2a−1)] / D²
+      = (a−1)·[(2a−1)u − a − (2a−1)u] / D²
+      = a(1−a) / D²
+
+**What the patch computes.** It sets `den_u = pow(D, 2)`, then divides by `den_u*den_u`. That gives u(u−1) / D⁴.
+
+1. **Wrong numerator.** It uses u(u−1) where it should use a(1−a). The derivative's numerator depends on the parameter α, not on the evaluation point.
+2. **Wrong power.** The denominator is effectively raised to the 4th power instead of squared, because D is squared once in `pow` and again in `den_u*den_u`.
+
+**Concrete check.** With a = 0.5, D = −0.5, so f(u) = u is the identity and f'(u) = 1 everywhere.
+- Correct formula: 0.25 / 0.25 = 1.
+- Patch at u = 0.5: (0.5·(−0.5)) / 0.0625 = **−4**.
+- Patch at u = 0 and u = 1: 0.
+
+The Jacobian is therefore wrong, and even has the wrong sign over the whole interior of the domain. This would silently corrupt any assembly, Newton iteration, or mapping that relies on this derivative. Replacing the previous `GISMO_ERROR("TODO")` with incorrect values is worse than the explicit error.
+
+**Fix.** Per point k and direction d:
+
+```cpp
+T D = (2*m_alpha[d] - 1)*u(d,k) - m_alpha[d];
+J_dd = m_alpha[d]*(1 - m_alpha[d]) / (D*D);
+```
+
+Put this in rows 0 and 3, and keep the off-diagonal rows 1 and 2 at zero. This could also be vectorized like `eval_into`. It would also help to add the same `0<alpha<1` assert that `eval_into` has.
+
+**Other changes in the patch** are fine: the more informative assert messages and commenting out the `gsDebugVar` calls.
+--- AUDITOR 318509b9ab1f REJECT
+The new `deriv_into` for `gsSimpleMobiusDomain` computes the wrong derivative. Replacing `GISMO_ERROR("TODO")` with incorrect math is worse than the original: callers used to get a loud failure, and now they get silently wrong values.
+
+**Correct derivative.** The map from `eval_into` is, per component:
+
+  f(u) = (a−1)·u / D,  where D = (2a−1)·u − a
+
+Applying the quotient rule:
+
+  f′(u) = [(a−1)·D − (a−1)·u·(2a−1)] / D²
+     = (a−1)·(−a) / D²
+     = a·(1−a) / D²
+
+**What the patch computes:**
+
+```
+den_u = pow(D, 2);                       // D²
+result(0,k) = uu*(uu-1)/(den_u*den_u);  // u(u−1) / D⁴
+```
+
+This has three errors:
+1. **Wrong numerator.** It uses u·(u−1) instead of a·(1−a), so it depends on the evaluation point rather than the parameter.
+2. **Wrong power in the denominator.** `den_u` is already D², so squaring it again gives D⁴.
+3. **Wrong sign.** For u in (0,1), u·(u−1) is negative, but the true derivative a(1−a)/D² is positive whenever 0<a<1. The map is monotonically increasing, so a negative Jacobian is plainly wrong.
+
+**Sanity check at a = 0.5.** Here D = −0.5 and f(u) = u, so f′ = 1 everywhere. The correct formula gives 0.25/0.25 = 1. The patch gives u(u−1)/0.0625 = 16·u(u−1), which is −4 at u = 0.5. Since the map is the identity at a = 0.5, any unit test would catch this immediately.
+
+The same errors apply to `result(3,k)` with `vv` and `m_alpha[1]`. The off-diagonal zeros are correct, because each component depends only on its own coordinate.
+
+**Minor or pre-existing issues (not the reason for rejection):**
+- The more detailed assert messages and the commented-out `gsDebugVar` lines are harmless improvements. Commented-out debug code would be better deleted outright.
+- The `result.setZero()` call is now redundant with the explicit zero assignments.
+- `pow` on a generic `T` should use `math::pow` (or `D*D`) for portability across G+Smo scalar types.
+- `deriv_into` does not assert 0<α<1, unlike `eval_into`.
+- In the surrounding `gsMobiusDomain` code, outside this change: the zero-denominator asserts use `.any()` where `.all()` is intended. Also, `deriv_into` builds `alpha` from `u.row(1)` and `beta` from `u.row(0)`, which is inconsistent with `eval_into`. These deserve follow-up.
+
+**Required fix:**
+```cpp
+T Du = (2*m_alpha[0]-1)*uu - m_alpha[0];
+T Dv = (2*m_alpha[1]-1)*vv - m_alpha[1];
+result(0,k) = m_alpha[0]*(1-m_alpha[0]) / (Du*Du);
+result(3,k) = m_alpha[1]*(1-m_alpha[1]) / (Dv*Dv);
+```
+
+Please also add a finite-difference test of `deriv_into` against `eval_into`.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**The new `gsSimpleMobiusDomain::deriv_into` is mathematically wrong, and it fails silently.**
+
+The map in `eval_into` is, per direction:
+
+f(u) = (a − 1)·u / D,  where D = 2au − u − a
+
+Differentiating:
+
+f′(u) = [(a − 1)·D − (a − 1)·u·(2a − 1)] / D²
+  = (a − 1)·(2au − u − a − 2au + u) / D²
+  = a(1 − a) / D²
+
+The patch computes something different:
+- `den_u = pow(D, 2)` is already D², and the code then divides by `den_u*den_u`. So the denominator is D⁴, not D².
+- The numerator is `uu*(uu-1)`, which should be `m_alpha[0]*(1-m_alpha[0])`. It has the wrong dependence and the wrong sign: u(u−1) ≤ 0 on [0,1], while the true derivative is strictly positive for 0 < a < 1.
+- At u = 0 and u = 1 it returns 0. The true values are (1−a)/a and a/(1−a), which are nonzero.
+- The same errors apply to `result(3,k)` with `m_alpha[1]` and `vv`.
+
+**Why this is silent:** Before this patch, the function raised `GISMO_ERROR("TODO")`, which was loud. Now it returns finite numbers with no exception. A Jacobian is consumed by Newton iterations, quadrature weights and pull-backs, so a wrong one shows up as slow convergence or slightly wrong integrals, not as a crash. Only a dedicated finite-difference check against `eval_into` would catch it. The patch replaces a loud failure with a silent, plausible-looking wrong value.
+
+**Minor issue:** `pow` is unqualified. It may not resolve correctly for non-builtin `T`; use `math::pow` or plain multiplication.
+
+**Not introduced by this patch, but seen while tracing `gsMobiusDomain::eval_into`:**
+- The zero-denominator guards use `.any()`, so they pass unless every entry is zero. A single zero denominator divides through silently. These should be `.all()`.
+- `deriv_into` builds `alpha` from `u.row(1)` and `beta` from `u.row(0)`, but `eval_into` uses `u.row(0)` and `u.row(1)`. The derivative is therefore inconsistent with the evaluation.
+
+The assertion-message and commented-out debug changes are harmless.

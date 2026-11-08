@@ -1,0 +1,33 @@
+== Part 0: reported AUCs, recomputed (Hanley SE / DeLong SE)
+  jev0         0.641  Hanley ±0.055  DeLong ±0.056
+  five_r1      0.628  Hanley ±0.056  DeLong ±0.056
+  five_final   0.633  Hanley ±0.056  DeLong ±0.056
+  laya1        0.586  Hanley ±0.057  DeLong ±0.058
+  laya5_r1     0.557  Hanley ±0.058  DeLong ±0.058
+  laya5_final  0.518  Hanley ±0.058  DeLong ±0.059
+  claude       0.745  Hanley ±0.049  DeLong ±0.049
+  patch_chars  0.502  Hanley ±0.058  DeLong ±0.059
+
+== Part 1: three full runs of the one-question JEV agent
+  models reported: ['typesafe/jev-1.14-20261014']
+  run dates: original 2026-11-02T13:41:37, A 2026-11-02T13:54:41, B 2026-11-02T13:55:33
+  jev0   AUC 0.641 ± 0.056  (z 2.55, one-sided p 0.0054); pairs won 31.0/50; distinct p 57; REJECT choices 53
+  jevA   AUC 0.651 ± 0.055  (z 2.74, one-sided p 0.0031); pairs won 33.0/50; distinct p 57; REJECT choices 52
+  jevB   AUC 0.633 ± 0.056  (z 2.38, one-sided p 0.0086); pairs won 31.5/50; distinct p 66; REJECT choices 53
+  jev3   AUC 0.646 ± 0.055  (z 2.64, one-sided p 0.0042); pairs won 31.0/50; distinct p 87; REJECT choices 52
+  jev0 vs jevA: Pearson 0.994, Spearman 0.994, identical 9/100, mean |diff| 0.0241, max 0.110, choice flips 1
+      AUC difference -0.0096 ± 0.0066
+  jev0 vs jevB: Pearson 0.992, Spearman 0.991, identical 19/100, mean |diff| 0.0243, max 0.120, choice flips 4
+      AUC difference +0.0080 ± 0.0087
+  jevA vs jevB: Pearson 0.991, Spearman 0.991, identical 18/100, mean |diff| 0.0250, max 0.150, choice flips 3
+      AUC difference +0.0176 ± 0.0083
+  within-commit SD of p across runs: mean 0.0195; between-commit SD of the mean 0.2780
+  AUC of a random single draw per commit (2000 mixes): mean 0.643, SD 0.0044, 2.5-97.5 % [0.634, 0.651]
+  repeat_one (20 commits): identical to original 2, identical to A 4
+  mean of all answers (4 on the first 20): AUC 0.647
+  jev0: pairs where the later-fixed scores higher 31, lower 19, tied 0; sign test two-sided p 0.119
+      within-pair label swap permutation: one-sided p 0.0127 (AUC 0.641)
+      free label shuffle permutation: one-sided p 0.0095
+  jev3: pairs where the later-fixed scores higher 31, lower 19, tied 0; sign test two-sided p 0.119
+      within-pair label swap permutation: one-sided p 0.0110 (AUC 0.646)
+      free label shuffle permutation: one-sided p 0.0072

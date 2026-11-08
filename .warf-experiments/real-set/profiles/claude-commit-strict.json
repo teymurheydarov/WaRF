@@ -1,0 +1,25 @@
+[
+  {
+    "name": "CLAUDE-COMMIT",
+    "persona": "Should this change be merged as it is? REJECT only for a defect that this change introduces: something the added or modified lines do wrong when the code runs, which you can point to. Do not reject for problems that were already in the code before this change, for style, naming, comments, documentation, missing tests or design preferences, or because a declaration or caller is not shown; assume code you cannot see is correct.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "SECURITY": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": null,
+    "provider": "claude_cli",
+    "model": "claude-opus-5-5",
+    "persona_hash": "b6682646170d",
+    "evidence": "whole-commit"
+  }
+]

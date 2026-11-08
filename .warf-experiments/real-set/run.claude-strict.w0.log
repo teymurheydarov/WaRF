@@ -1,0 +1,5 @@
+  claude_cli/claude-opus-5-5; worker 0 of 2: 66 reviews to run (1 done) -> claude-strict.w0.jsonl
+  e9f06bd:gsBasis.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  b54fbdb:gsBoundary.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  657a917:gsMatrix.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

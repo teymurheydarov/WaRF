@@ -1,0 +1,10 @@
+{"id": "2a29aa6:gsMultiPatch.hpp:planted", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:34.542569+00:00"}
+{"id": "5853a6f:gsExprEvaluator.h:planted", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:36.764695+00:00"}
+{"id": "a86cf94:gsSquareDomain.h:clean", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:37.093687+00:00"}
+{"id": "2f8cd81:gsBSpline.hpp:planted", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:37.436016+00:00"}
+{"id": "db3aca7:gsXmlUtils.hpp:clean", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:39.339228+00:00"}
+{"id": "8058d91:gsHDomain.h:planted", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:39.824327+00:00"}
+{"id": "bfbe226:gsComposedGeometry.h:clean", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:42.440860+00:00"}
+{"id": "6fc3f69:gsMultiBasis.hpp:clean", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:45.288242+00:00"}
+{"id": "387b42a:gsBSpline.hpp:clean", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:47.962110+00:00"}
+{"id": "486fe11:gsComposedBasis.hpp:clean", "arm": "claude-standard", "error": "RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): ", "at": "2026-11-04T16:55:50.503063+00:00"}

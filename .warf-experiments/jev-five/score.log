@@ -1,0 +1,83 @@
+
+  100 commits, 50 later fixed (the five-Laya selection)
+  Jev answered as typesafe/jev-1.14-20261014; 57 distinct p(REJECT) values; REJECT votes 53 of 100
+
+                                                AUC  pairs won (of 50)
+  Jev, one question                    0.641 ±0.055           31.0
+  Jev SKEPTIC, Round 1                 0.600 ±0.057           26.0
+  Jev ADVOCATE, Round 1                0.640 ±0.055           32.0
+  Jev AUDITOR, Round 1                 0.637 ±0.055           33.0
+  Jev TEST-FOCUSED, Round 1            0.618 ±0.056           30.0
+  Jev BOUNDARY, Round 1                0.625 ±0.056           30.0
+  Jev panel, mean p, Round 1           0.628 ±0.056           30.0
+  Jev panel, mean p, final             0.633 ±0.056           31.0
+  Jev panel, REJECT votes, final       0.587 ±0.057           29.0
+  Jev standard panel, mean p of agents asked   0.624 ±0.056           31.0
+  Jev standard panel, WaRF's Lambda    0.586 ±0.057           28.0
+  Jev standard panel, WaRF's decision   0.530 ±0.058           26.5
+  Laya, one question (sweep)           0.586 ±0.057           30.0
+  Laya panel, mean p, Round 1          0.557 ±0.058           28.0
+  Laya panel, mean p, final            0.518 ±0.058           28.0
+  Claude, blinded                      0.745 ±0.049           38.5
+  patch characters                     0.502 ±0.058           24.0
+
+  paired differences, same commits (95 % interval, resampling commits within each label)
+  Jev, one question  minus  Laya, one question (sweep)                   +0.055 [-0.115, +0.229]
+  Jev panel, mean p, Round 1  minus  Laya panel, mean p, Round 1         +0.071 [-0.097, +0.236]
+  Jev panel, mean p, final  minus  Laya panel, mean p, final             +0.115 [-0.053, +0.280]
+  Jev panel, mean p, Round 1  minus  Jev, one question                   -0.014 [-0.048, +0.020]
+  Jev panel, mean p, final  minus  Jev panel, mean p, Round 1            +0.005 [-0.020, +0.032]
+  Claude, blinded  minus  Jev, one question                              +0.103 [-0.001, +0.204]
+  Jev standard panel, mean p of agents asked  minus  Jev, one question   -0.017 [-0.052, +0.017]
+  Jev standard panel, mean p of agents asked  minus  Jev panel, mean p, Round 1 -0.003 [-0.014, +0.007]
+  Jev standard panel, mean p of agents asked  minus  Laya, one question (sweep) +0.038 [-0.136, +0.208]
+  Claude, blinded  minus  Jev standard panel, mean p of agents asked     +0.120 [+0.017, +0.219]
+
+  WaRF's decision, Jev, one question: REJECT on 53 of 100 (31 later fixed, 22 never fixed); balanced accuracy 0.590
+    by confidence: APPROVE MEDIUM: 47, REJECT MEDIUM: 53
+
+  WaRF's decision, Jev panel: REJECT on 22 of 100 (14 later fixed, 8 never fixed); balanced accuracy 0.560
+    by confidence: APPROVE MEDIUM: 78, REJECT HIGH: 17, REJECT MEDIUM: 5
+
+  WaRF's decision, Jev standard panel: REJECT on 21 of 100 (12 later fixed, 9 never fixed); balanced accuracy 0.530
+    by confidence: APPROVE MEDIUM: 79, REJECT HIGH: 17, REJECT MEDIUM: 4
+
+  shuffled labels: Jev one question, AUC 0.502 over 400 shuffles
+  correlation of scores across the 100 commits:
+                                  Jev, one que  Jev panel, m  Laya, one qu  Laya panel,   Claude, blin
+  Jev, one question                       1.00          0.94         -0.15         -0.14          0.52
+  Jev panel, mean p, Round 1              0.94          1.00         -0.15         -0.13          0.54
+  Laya, one question (sweep)             -0.15         -0.15          1.00          0.61         -0.11
+  Laya panel, mean p, Round 1            -0.14         -0.13          0.61          1.00         -0.09
+  Claude, blinded                         0.52          0.54         -0.11         -0.09          1.00
+
+  Jev debate, 84 debated commits (16 stopped by the SPRT in Round 1):
+    AUC of the mean p 0.648 -> 0.654 (+0.006 [-0.031, +0.042])
+    SKEPTIC        changed   4 votes (2 toward the label), mean p shift -0.021
+    ADVOCATE       changed   1 votes (1 toward the label), mean p shift -0.056
+    AUDITOR        changed   1 votes (1 toward the label), mean p shift +0.004
+    TEST-FOCUSED   changed   3 votes (1 toward the label), mean p shift -0.036
+    BOUNDARY       changed   2 votes (2 toward the label), mean p shift +0.027
+    all agents: 7 of 11 changed votes toward the label, sign test p = 0.55
+    SKEPTIC        REJECT votes Round 1 21, mean p 0.302
+    ADVOCATE       REJECT votes Round 1 19, mean p 0.295
+    AUDITOR        REJECT votes Round 1 49, mean p 0.472
+    TEST-FOCUSED   REJECT votes Round 1 47, mean p 0.486
+    BOUNDARY       REJECT votes Round 1 13, mean p 0.193
+
+  control, Jev one: one line planted after the first added line of the never-fixed changes (Round 1)
+    null dereference  p(REJECT) 0.450 -> 0.983; rose in 43, fell in 0, same in 0 of 43; sign test p = 2.3e-13
+    BUG comment       p(REJECT) 0.450 -> 0.985; rose in 43, fell in 0, same in 0 of 43; sign test p = 2.3e-13
+
+  control, Jev five: one line planted after the first added line of the never-fixed changes (Round 1)
+    null dereference  p(REJECT) 0.291 -> 0.928; rose in 43, fell in 0, same in 0 of 43; sign test p = 2.3e-13
+    BUG comment       p(REJECT) 0.291 -> 0.889; rose in 43, fell in 0, same in 0 of 43; sign test p = 2.3e-13
+    null dereference  SKEPTIC 0.25->0.87, ADVOCATE 0.24->0.94, AUDITOR 0.39->0.99, TEST-FOCUSED 0.42->0.96, BOUNDARY 0.15->0.89
+    BUG comment       SKEPTIC 0.25->0.73, ADVOCATE 0.24->0.89, AUDITOR 0.39->0.99, TEST-FOCUSED 0.42->0.97, BOUNDARY 0.15->0.86
+
+  repeat: 2 of 20 answers identical when asked again; mean |difference| 0.026; votes flipped 1
+
+  Jev standard panel (WaRF's default profile and review: no debate, early stopping on): agents asked per review 4: 17, 5: 83; models ['jev/jev-latest']
+    first agent asked: ['SKEPTIC']; debate rounds: 0
+
+  OpenRouter cost of all recorded Jev requests: $0.0799

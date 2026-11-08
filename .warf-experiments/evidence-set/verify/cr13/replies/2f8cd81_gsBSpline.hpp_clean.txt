@@ -1,0 +1,471 @@
+ID 2f8cd81:gsBSpline.hpp:clean
+commit 2f8cd81379f389c17c182aae88ca123db43662f0 file src/gsNurbs/gsBSpline.hpp date 2024-03-30 subj gsBSpline::intersect: The gsBSpline class now features intersect, enabling it to calculate intersections between two B-spline curves in arbitrary dimension
+
+=== ONE decision REJECT
+[REJECT] 1. **Division by zero in `pseudoCurvature()`.** `len` is the distance between the first and last control points. For any closed curve, such as a circle or a closed loop, those points coincide, so `len == 0`. The function then returns `total / 0`, which is `inf` or `NaN` with no guard. `intersect` relies on `getPotentialIntersectionRanges`, which uses curvature estimates to decide when to stop subdividing. A `NaN` or `inf` there can wrongly prune real intersections or cause unbounded subdivision.
+
+2. **Out-of-bounds read in `pseudoCurvature()`.** If `m_coefs.rows() == 0`, `coefsSize - 1` is `-1`, so `m_coefs.row(-1)` reads outside the matrix. There is no `GISMO_ASSERT` or early return. A curve read from untrusted XML through the `gsXml<gsBSpline<T>>::get` path shown in the context could reach this.
+
+3. **`std::max(1e-10, tolerance)` breaks for non-`double` `T`.** `1e-10` is a `double`, so for `T = float` or `long double`, `std::max` cannot deduce one type and the code fails to compile. The class is templated on `T` and G+Smo instantiates other real types, so this breaks those builds. It should be `std::max((T)1e-10, tolerance)`.
+
+4. **Unchecked convergence in `intersect`.** The result of `obj.compute(uv, tolerance)` is only checked against the distance threshold. Nothing checks that `uv` stayed inside each segment's domain. If the solver drifts, `crv1.eval(uv.row(0))` evaluates outside the segment's parameter range, and the reported parameters are also local to the sub-segment rather than the original curve.
+
+5. **Same-object aliasing in `toBezier`** (context code). `currentSegment.splitAt(*iter, leftPart, currentSegment, tolerance)` passes `currentSegment` as both the object being split and the `right` output. `splitAt` writes `left` first and then calls `segmentFromTo` on `*this` while assigning into `right`, which is the same object. This works only because of the order of operations inside `splitAt`, so it is fragile.
+
+Items 1–3 are concrete defects in the added code, so the patch should not be merged as is.
+
+=== FIVE decision REJECT
+--- SKEPTIC [APPROVE]
+I could not construct an input or call sequence that produces incorrect behaviour from the added code. The cases I checked:
+
+**`pseudoCurvature()`**
+- **Closed curve** (first and last control points coincide): `len == 0`, so it returns `+inf`. That is consistent with what the function measures, the ratio of polygon length to chord length used as a flatness test. A closed curve is maximally non-flat, so `inf` gives the right decision in any `> tolerance` check.
+- **Constant or one-coefficient curve**: `0/0` gives NaN. NaN fails every `>` comparison, so a flatness test treats the curve as flat, which is correct for a point.
+- **Empty `m_coefs`** (`row(-1)`): a constructed `gsBSpline` always has at least one coefficient, so I cannot reach this through the class's own invariants.
+
+**`intersect()`**
+- Calling `segmentFromTo` without forwarding `tolerance` falls back to the default snapping tolerance. I found no input where this changes the result. The hull ranges come from the curves' own parameter ranges, so they lie inside the domain.
+- `uv.row(0)` / `uv.row(1)` on a `2×1` matrix give `1×1` blocks, which is the right shape for single-parameter `eval`.
+- Newton could converge slightly outside a segment's domain, and adjacent hulls could report the same intersection twice. Both are plausible quality concerns, but I cannot show either occurs without the internals of `getPotentialIntersectionRanges` and `gsCurveCurveDistanceSystem`. That is suspicion, not a demonstrated defect.
+- `std::max(1e-10, tolerance)` only compiles when `T = double`. It is safe in the default `real_t = double` build. With a `float` or `long double` `real_t` it would fail to compile rather than misbehave at runtime. `math::max(T(1e-10), tolerance)` would be more portable, but this is not a runtime bug.
+
+**Unchanged context** (`segmentFromTo`, `toBezier`, `insertKnot`, `splitAt`) is not modified by this hunk, and I found no change to its behaviour.
+
+Nothing here is a memory-safety or out-of-bounds access I can trigger, or a wrong result for a valid curve.
+--- ADVOCATE [APPROVE]
+I found no clear, demonstrable defect in the added code. The new `intersect` and `pseudoCurvature` functions match the existing G+Smo implementations, and the surrounding context is unchanged library code.
+
+**`intersect(other, tolerance)`**
+- It gets candidate parameter ranges from `getPotentialIntersectionRanges`, which pairs overlapping bounding boxes.
+- For each pair, it extracts the sub-curves with `segmentFromTo` using each range's min and max.
+- It starts a distance-minimization solve from the midpoints of the two sub-domains. Midpoints are a reasonable initial guess.
+- It accepts a result when the remaining distance is below `max(1e-10, tolerance)`, so the threshold never drops to zero.
+- The reported point is the average of the two curve evaluations, which is a sensible symmetric choice.
+- `uv` is fully set before `compute` is called, so nothing is read uninitialized. `uv.row(0)` and `uv.row(1)` are valid 1×1 parameter blocks for `eval`.
+
+**`pseudoCurvature()`**
+- It computes the ratio of control-polygon length to the straight-line distance between the end control points. This is the intended measure of how far the curve deviates from a straight line.
+- Indexing stays in bounds: the loop runs `ipt` from 0 to `coefsSize-2` and reads `ipt+1`.
+- A B-spline always has at least one coefficient, so `row(0)` and `row(coefsSize-1)` are valid.
+
+**Non-blocking robustness notes**
+- For a closed curve or a single control point, `len` is 0. The function then returns `inf` or `NaN` rather than crashing. That behavior is consistent with upstream. If callers might pass closed curves, consider documenting it or adding a guard.
+- `std::max(1e-10, tolerance)` mixes a `double` literal with `T`. This compiles for `T = double` but fails to deduce a type for `float` or `long double`. `std::max<T>(T(1e-10), tolerance)` would be more generic. This is a portability issue, not a correctness defect for the default instantiation.
+- `intersect` may report the same intersection more than once if bounding-box pairs overlap. Removing duplicates is left to the caller, which is a design choice rather than a bug.
+
+**Security**
+The patch does no external input parsing, unchecked buffer handling, or resource management. It is purely numerical geometry code with no attack-relevant surface.
+--- AUDITOR [REJECT]
+The patch adds two public methods, `intersect()` and `pseudoCurvature()`. Neither validates its inputs, and `pseudoCurvature()` can read memory out of bounds.
+
+**1. Out-of-bounds read in `pseudoCurvature()` (blocking)**
+```cpp
+int coefsSize = m_coefs.rows();
+T len = (m_coefs.row(0)-m_coefs.row(coefsSize-1)).norm();
+```
+- If the curve has no control points (a default-constructed `gsBSpline`, or one loaded from malformed XML), `coefsSize` is 0. The code then accesses `m_coefs.row(0)` and `m_coefs.row(-1)`.
+- Eigen only checks indices when assertions are enabled. In release builds (`NDEBUG`) this is an unchecked out-of-bounds read, which is undefined behavior.
+- There is no `GISMO_ASSERT` or `GISMO_ENSURE` guarding it. Other code in this file guards its preconditions, for example `splitAt` and `isOn`.
+
+**2. Division by zero in `pseudoCurvature()`**
+- If the first and last control points coincide, `len` is 0. This happens for any closed curve, such as a circle or periodic spline, and for a single-point curve.
+- The function then returns `inf` or `NaN` with no check or documented behavior.
+- A caller using this value for thresholds or subdivision decisions could loop forever or make wrong decisions.
+
+**3. Integer narrowing**
+- `m_coefs.rows()` returns `index_t`, which may be 64-bit, but the result is stored in an `int`.
+- The loop uses `ipt != coefsSize - 1`. If `coefsSize` is ever 0 or negative after truncation, the `!=` condition never terminates correctly and the loop walks past the buffer.
+- The codebase convention is `index_t`, and `<` is the safer loop condition.
+
+**4. `intersect()` trusts its inputs**
+- The ranges from `getPotentialIntersectionRanges` go straight into `segmentFromTo`. Its iterator arithmetic (`itStart-p`, `itEnd+1`) depends on the ranges lying inside the knot vector.
+- Nothing checks that the ranges are non-degenerate or within each curve's domain.
+- `std::max(1e-10, tolerance)` mixes `double` with the template type `T`. It will not compile for non-double `T`, and the codebase helper is `math::max`.
+- The Newton result `uv` is never checked to lie inside the segment domains before `eval`, so it can report points outside the curves.
+
+**Required changes before approval:**
+- In `pseudoCurvature()`, add `GISMO_ENSURE(m_coefs.rows() >= 2, ...)` and handle or document the `len == 0` case.
+- Use `index_t` with a `<` loop condition.
+- In `intersect()`, validate the hull ranges against each curve's domain, use `math::max`, and clamp or verify `uv` before evaluating.
+--- TEST-FOCUSED [REJECT]
+1. **Division by zero in `pseudoCurvature()` returns a plausible-looking value instead of failing.**
+   - `len` is the distance between the first and last control points. For any closed curve (a circle or a closed loop), `m_coefs.row(0) == m_coefs.row(coefsSize-1)`, so `len == 0`.
+   - With non-zero `total`, the function returns `+inf` without asserting or warning. If all control points coincide (a degenerate curve), it returns `NaN`.
+   - A caller using this as a flatness or subdivision heuristic, such as `if (pc < threshold)`, gets the wrong branch with no error.
+   - Closed curves are a normal input for B-splines, so this is not an edge case.
+   - Nothing guards `coefsSize == 0` either. `m_coefs.row(-1)` is out-of-bounds access, which is undefined behaviour in release builds, where Eigen asserts are compiled out.
+
+2. **`std::max(1e-10, tolerance)` breaks for any `T` other than `double`.**
+   - The first argument is a `double` literal and the second is `T`. For `T = float`, or `long double` and multiprecision types, which G+Smo supports, template argument deduction fails.
+   - That is a compile error in those instantiations. It is an outright defect, even though it is loud.
+
+3. **Intersections are dropped silently in `intersect()`.**
+   - Each candidate hull pair gets a single local solve, started from the midpoint of both segments.
+   - If `obj.compute` fails to converge or lands in a local minimum, `distance >= tol` and the candidate is discarded with no diagnostic.
+   - The caller receives a shorter vector that looks like a valid answer ("fewer intersections"). No error path tells it that convergence failed.
+   - Adjacent or overlapping hull pairs can also produce duplicate results for one intersection. Nothing deduplicates them, which again yields a plausible but wrong result count.
+   - `segmentFromTo` is also called without forwarding `tolerance`, so the caller's tolerance is ignored when extracting segments.
+
+Paths 1 and 3 both produce plausible wrong values rather than loud failures, and path 2 is a real defect.
+--- BOUNDARY [REJECT]
+The genuine problem is in `pseudoCurvature()`. It divides by `len`, the straight-line distance between the first and last control points, and nothing guards against `len == 0`. Two ordinary inputs reach that case.
+
+**Closed curves**
+- **Input:** a closed (clamped, non-periodic) B-spline whose first and last control points coincide, for example `(0,0), (1,0), (1,1), (0,1), (0,0)`.
+- **What happens:** `len` is 0 and `total` is 4.
+- **Result:** the function returns `+inf`.
+- Closed loops are routine B-spline geometry, so callers can expect to hit this. An infinite ratio will distort any comparison, ranking or threshold built on it.
+
+**Degenerate curves**
+- **Input:** a degree-0 curve with a single coefficient (`coefsSize == 1`), or any curve whose control points all coincide.
+- **What happens:** the loop never adds anything because `ipt != 0` is false straight away, so `total = 0`, and `len = 0`.
+- **Result:** the function returns `0/0 = NaN`.
+- A NaN does not fail loudly. It silently makes every later `<` or `>` comparison false.
+
+**Empty coefficients**
+- With `coefsSize == 0`, `row(-1)` would read out of bounds.
+- A valid `gsBSpline` always has at least p+1 ≥ 1 coefficients, so this case is unreachable under the class contract.
+
+**Other boundaries I checked**
+- **`toBezier`:** with a single knot span, the loop range `ubegin()+1` to `uend()-1` is empty, so it returns `{*this}`. That is correct.
+- **`intersect`:**
+  - Empty `hulls` gives an empty result. That is correct.
+  - Distance exactly equal to the threshold is rejected, which is a reasonable choice.
+  - `uv` is used after `compute` refines it in place, so the parameter values in the result are consistent.
+  - `std::max(1e-10, tolerance)` will not compile when `T` is `float`, because `double` and `float` conflict. That is a build failure, not a runtime boundary bug, so I don't count it as the finding.
+
+**Suggested fix:** guard the divisor. For example, return `std::numeric_limits<T>::infinity()` or 1 by a documented convention when `len` is below a small epsilon and `total` is too. Otherwise, document that the function is undefined for closed or degenerate curves and assert on it.
+
+=== DIFF
+diff --git a/src/gsNurbs/gsBSpline.hpp b/src/gsNurbs/gsBSpline.hpp
+index e697a6eb4..77bc4e9a3 100644
+--- a/src/gsNurbs/gsBSpline.hpp
++++ b/src/gsNurbs/gsBSpline.hpp
+@@ -119,60 +119,98 @@ gsBSpline<T> gsBSpline<T>::segmentFromTo(T u0, T u1, T tolerance) const
+   // Prepare control points for new geometry
+   gsMatrix<T> coefRes = coefs.block(nL, 0, nL2-nL, tDim);
+ 
+   // Prepare new knot vector
+   typename KnotVectorType::iterator itStart = knots.iFind(u0);
+   typename KnotVectorType::iterator itEnd = knots.iFind(u1) + (isEnd ? p + 1 : 0);
+   typename KnotVectorType::knotContainer matRes(itStart-p, itEnd+1);
+   KnotVectorType knotsRes(give(matRes), p);
+ 
+   return gsBSpline<T>(Basis(give(knotsRes)), give(coefRes));
+ }
+ 
+ template<class T>
+ std::vector<gsBSpline<T>> gsBSpline<T>::toBezier(T tolerance) const {
+   std::vector<gsBSpline<T>> bezierSegments;
+   const size_t numSegments = this->knots(0).size() - 1; // Assuming this is valid
+   bezierSegments.reserve(numSegments);
+ 
+   gsBSpline<T> currentSegment(*this);
+   gsBSpline<T> leftPart;
+ 
+   for (auto iter = this->knots().ubegin() + 1; iter != this->knots().uend() - 1; ++iter) {
+     currentSegment.splitAt(*iter, leftPart, currentSegment, tolerance);
+     bezierSegments.push_back(std::move(leftPart));
+   }
+ 
+   bezierSegments.push_back(std::move(currentSegment)); // Add the last segment
+   return bezierSegments;
+ }
+ 
++template<class T>
++std::vector<internal::gsCurveIntersectionResult<T>> gsBSpline<T>::intersect(const gsBSpline<T>& other,
++                                                    T tolerance) const {
++  std::vector<internal::gsBoundingBoxPair<T>> hulls = internal::getPotentialIntersectionRanges<T>(*this, other);
++
++  std::vector<internal::gsCurveIntersectionResult<T>> results;
++  for (const auto &hull : hulls) {
++    gsBSpline<T> crv1 = this->segmentFromTo(hull.b1.getRange().getMin(), hull.b1.getRange().getMax());
++    gsBSpline<T> crv2 = other.segmentFromTo(hull.b2.getRange().getMin(), hull.b2.getRange().getMax());
++
++    internal::gsCurveCurveDistanceSystem<T> obj(crv1, crv2);
++    gsMatrix<T, 2, 1> uv;
++    uv(0, 0) = 0.5 * (crv1.domainStart() + crv1.domainEnd());
++    uv(1, 0) = 0.5 * (crv2.domainStart() + crv2.domainEnd());
++    T distance = obj.compute(uv, tolerance);
++
++    if (distance < std::max(1e-10, tolerance)) {
++      internal::gsCurveIntersectionResult<T> result(uv(0), uv(1), 0.5 * (crv1.eval(uv.row(0)) + crv2.eval(uv.row(1))));
++      results.push_back(result);
++    }
++  }
++
++  return results;
++}
++
++template<class T>
++T gsBSpline<T>::pseudoCurvature() const {
++  int coefsSize = m_coefs.rows();
++
++  T len = (m_coefs.row(0)-m_coefs.row(coefsSize-1)).norm();
++  T total = 0.0;
++  for (int ipt = 0; ipt != coefsSize - 1; ++ipt) {
++    T dist = (m_coefs.row(ipt) - m_coefs.row(ipt + 1)).norm();
++    total += dist;
++  }
++  return total / len;
++}
++
+ template<class T>
+ void gsBSpline<T>::insertKnot( T knot, index_t dir, index_t i)
+ {
+     GISMO_UNUSED(dir);
+     if (i==0) return;
+     //if ( i==1)
+     //single knot insertion: Boehm's algorithm
+     //else
+     //knot with multiplicity:   Oslo algorithm
+     if( this->basis().isPeriodic() )
+     {
+         int borderKnotMult = this->basis().borderKnotMult();
+         KnotVectorType & knots = this->knots();
+         unsigned deg = this->basis().degree();
+ 
+         GISMO_ASSERT( knot != knots[deg] && knot != knots[knots.size() - deg - 1],
+                       "You are trying to increase the multiplicity of the p+1st knot but the code is not ready for that.\n");
+ 
+         // If we would be inserting to "passive" regions, we
+         // rather insert the knot into the mirrored part.
+         // Adjustment of the mirrored knots is then desirable.
+         if( knot < knots[deg - borderKnotMult + 1] )
+         {
+             knot += this->basis()._activeLength();
+         }
+         else if( knot > knots[knots.size() - deg + borderKnotMult - 2] )
+         {
+             knot -= this->basis()._activeLength();
+         }
+         // If necessary, we update the mirrored part of the knot vector.
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+  gsBSpline<T> currentSegment(*this);
+  gsBSpline<T> leftPart;
+
+  for (auto iter = this->knots().ubegin() + 1; iter != this->knots().uend() - 1; ++iter) {
+    currentSegment.splitAt(*iter, leftPart, currentSegment, tolerance);
+    bezierSegments.push_back(std::move(leftPart));
+  }
+
+    internal::gsCurveCurveDistanceSystem<T> obj(crv1, crv2);
+    gsMatrix<T, 2, 1> uv;
+    uv(0, 0) = 0.5 * (crv1.domainStart() + crv1.domainEnd());
+    uv(1, 0) = 0.5 * (crv2.domainStart() + crv2.domainEnd());
+    T distance = obj.compute(uv, tolerance);
+
+    if (distance < std::max(1e-10, tolerance)) {
+      internal::gsCurveIntersectionResult<T> result(uv(0), uv(1), 0.5 * (crv1.eval(uv.row(0)) + crv2.eval(uv.row(1))));
+      results.push_back(result);
+    }
+
+      internal::gsCurveIntersectionResult<T> result(uv(0), uv(1), 0.5 * (crv1.eval(uv.row(0)) + crv2.eval(uv.row(1))));
+      results.push_back(result);
+    }
+  }
+
+  return results;
+}
+
+template<class T>
+T gsBSpline<T>::pseudoCurvature() const {
+  int coefsSize = m_coefs.rows();
+
+  T len = (m_coefs.row(0)-m_coefs.row(coefsSize-1)).norm();
+  T total = 0.0;
+  for (int ipt = 0; ipt != coefsSize - 1; ++ipt) {
+    T dist = (m_coefs.row(ipt) - m_coefs.row(ipt + 1)).norm();
+    total += dist;
+  }
+  return total / len;
+}
+
+template<class T>
+void gsBSpline<T>::insertKnot( T knot, index_t dir, index_t i)
+{
+    GISMO_UNUSED(dir);
+    if (i==0) return;
+    //if ( i==1)
+    //single knot insertion: Boehm's algorithm
+    //else
+    //knot with multiplicity:   Oslo algorithm
+    if( this->basis().isPeriodic() )
+    {
+        int borderKnotMult = this->basis().borderKnotMult();
+        KnotVectorType & knots = this->knots();
+        unsigned deg = this->basis().degree();
+
+        GISMO_ASSERT( knot != knots[deg] && knot != knots[knots.size() - deg - 1],
+                      "You are trying to increase the multiplicity of the p+1st knot but the code is not ready for that.\n");
+
+        // If we would be inserting to "passive" regions, we
+        // rather insert the knot into the mirrored part.
+        // Adjustment of the mirrored knots is then desirable.
+        if( knot < knots[deg - borderKnotMult + 1] )
+        {
+            knot += this->basis()._activeLength();
+        }
+        else if( knot > knots[knots.size() - deg + borderKnotMult - 2] )
+        {
+            knot -= this->basis()._activeLength();
+        }
+        // If necessary, we update the mirrored part of the knot vector.
+        if((knot < knots[2*deg + 1 - borderKnotMult]) || (knot >= knots[knots.size() - 2*deg - 2 + borderKnotMult]))
+            this->basis().enforceOuterKnotsPeriodic();
+
+        // We copy some of the control points to pretend for a while
+        // that the basis is not periodic.
+
+        //gsMatrix<T> trueCoefs = this->basis().perCoefs( this->coefs() );
+        gsBoehm( this->basis().knots(), this->coefs(), knot, i );
+        //this->coefs() = trueCoefs;
+        //this->coefs().conservativeResize( this->basis().size(), this->coefs().cols() );
+    }
+    else // non-periodic
+        gsBoehm( this->basis().knots(), this->coefs() , knot, i);
+}
+
+template<class T>
+void gsBSpline<T>::insertKnot( T knot, index_t i)
+{
+    insertKnot(knot,0,i);
+}
+
+template<class T>
+void gsBSpline<T>::splitAt(T u0, gsBSpline<T>& left,  gsBSpline<T>& right, T tolerance) const
+{
+  GISMO_ASSERT(domainStart()-tolerance < u0 && u0 < domainEnd()+tolerance,
+               "splitting point "<< u0 <<" not in the knot vector");
+
+  left  = segmentFromTo(this->domainStart(), u0, tolerance);
+  right = segmentFromTo(u0, this->domainEnd(), tolerance);
+}
+
+template<class T>    
+bool gsBSpline<T>::isOn(gsMatrix<T> const &u, T tol) const
+{
+    GISMO_ASSERT( u.cols() == 1, "Expecting single point.");
+    gsBSplineSolver<T> slv;
+    gsMatrix<T> e;
+    
+    for ( index_t k = 0; k != u.rows(); ++k)
+    {        
+        std::vector<T> roots;
+        slv.allRoots(*this, roots, k, u(k,0) ) ;
+
+        if( roots.size()!=0 )
+        {
+            gsAsMatrix<T> xx(roots); 
+            this->eval_into( xx, e ); 
+            
+            //if( math::abs( e(!k,0)-u(!k,0) ) < tol )
+            for(index_t j=0; j!=e.cols(); j++)
+                if( ( e.col(j)-u ).norm() < tol )
+                    return true;
+        }
+    }
+    return false;
+}
+
+template<class T>    
+bool gsBSpline<T>::isPatchCorner(gsMatrix<T> const &v, T tol) const
+{
+    return (( v - m_coefs.row(0)       ).squaredNorm() < tol ||
+            ( v - m_coefs.bottomRows(1)).squaredNorm() < tol );
+}
+
+template<class T>    
+void gsBSpline<T>::findCorner(const gsMatrix<T> & v, 
+                                             gsVector<index_t,1> & curr,
+                                             T tol)
+{
+    if ((v - m_coefs.row(0)).squaredNorm() < tol)
+        curr[0] = 0;
+    else if ((v - m_coefs.bottomRows(1)).squaredNorm() < tol)
+        curr[0] = m_coefs.rows()-1;
+    else
+    {
+        curr[0] = m_coefs.rows(); // invalidate result
+        gsWarn<<"Point "<< v <<" is not an corner of the patch. (Call isPatchCorner() first!).\n";
+    }
+}
+
+
+template<class T>    
+void gsBSpline<T>::setOriginCorner(gsMatrix<T> const &v)
+{
+    if ((v - m_coefs.row(0)).squaredNorm() < (T)(1e-3))
+        return;
+    else if ((v - m_coefs.bottomRows(1)).squaredNorm() < (T)(1e-3))
+        this->reverse();
+    else
+        gsWarn<<"Point "<< v <<" is not an endpoint of the curve.\n";
+}
+
+template<class T>    
+void gsBSpline<T>::setFurthestCorner(gsMatrix<T> const &v)
+{
+    if ((v - m_coefs.bottomRows(1)).squaredNorm() < (T)(1e-3))
+        return;
+    else if ((v - m_coefs.row(0)).squaredNorm() < (T)(1e-3))
+        this->reverse();
+    else
+        gsWarn<<"Point "<< v <<" is not an endpoint of the curve.\n";
+}
+
+template <class T>
+void gsBSpline<T>::swapDirections(const unsigned i, const unsigned j)
+{
+    GISMO_UNUSED(i);
+    GISMO_UNUSED(j);
+    GISMO_ASSERT( static_cast<int>(i) == 0 && static_cast<int>(j) == 0,
+                  "Invalid basis components "<<i<<" and "<<j<<" requested" );
+}
+
+
+template<class T>
+void gsBSpline<T>::degreeElevate(short_t const i, short_t const dir)
+{
+    GISMO_UNUSED(dir);
+    GISMO_ASSERT( (dir == -1) || (dir == 0),
+                  "Invalid basis component "<< dir <<" requested for degree elevation" );
+    
+    bspline::degreeElevateBSpline(this->basis(), this->m_coefs, i);
+}
+
+namespace internal
+{
+
+/// Get a BSpline from XML data
+template<class T>
+class gsXml< gsBSpline<T> >
+{
+private:
+    gsXml() { }
+public:
+    GSXML_COMMON_FUNCTIONS(gsBSpline<T>);
+    static std::string tag () { return "Geometry"; }
+    static std::string type () { return "BSpline"; }
+
+    static gsBSpline<T> * get (gsXmlNode * node)
+    {
+        return getGeometryFromXml< gsBSpline<T> >(node);
+    }
+
+    static gsXmlNode * put (const gsBSpline<T> & obj,
+                            gsXmlTree & data )
+    {
+        return putGeometryToXml< gsBSpline<T> >(obj,data);
+    }
+};
+
+
+}// namespace internal
+
+} // namespace gismo
+

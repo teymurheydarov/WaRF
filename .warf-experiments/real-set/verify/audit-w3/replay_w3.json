@@ -1,0 +1,3488 @@
+{
+"42f88b6:gsVisitorGradGrad.h:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"3939220:gsTHBSplineBasis.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"99b2161:gsBoundaryConditions.h:defective": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"a17350b:gsBasis.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"090f874:gsTensorBSpline.hpp:defective": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"9b85bea:gsTrimSurface.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"44fe50d:gsBoxTopology.h:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"a4d2374:gsHTensorBasis.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"840cdfa:gsHBSpline.h:defective": {
+"decision": "REJECT",
+"lam": -0.33647223662121317,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"fac47e8:gsMatrix.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"1dc79db:gsTHBSplineBasis.hpp:defective": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"220eca8:gsVolumeBlock.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"0104462:gsFunction.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"e9f06bd:gsBasis.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"b654d88:gsPiecewiseFunction.h:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"b54fbdb:gsBoundary.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"cb54e9d:gsSmoother.cpp:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"657a917:gsMatrix.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4aab81c:gsCompactKnotVector.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f518d8f:gsSortedVector.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4030af7:gsFunctionSet.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"1288e1a:gsBoehm_.cpp:clean": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"330f307:gsKnotVector.hpp:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"79096cb:gsKnotVector.h:clean": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"717697d:gsTensorNurbs.h:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"e9bc4fc:gsTensorBSpline.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"be071ba:gsPointGrid.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"30f14c9:gsVector.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"ec3c452:gsGridIterator.h:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"9e10b21:gsMath.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"87f74c2:gsNorms_.cpp:defective": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f598dfa:gsAssembler.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"b351585:gsNorm.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"4ba5f2c:gsMatrix.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"37899c9:gsVisitorBiharmonic.h:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"6666703:gsKnotVector.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"607477e:gsEigenAddons.h:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"134b4e8:gsSparseSystem.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c421685:gsMpiComm.h:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"825f3f0:gsMemory.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"43d4274:gsAssembler.hpp:defective": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"6b89774:gsIterativeSolver.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"6bb81e9:gsUtils.cpp:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"2a7b94b:gismo.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"9366184:gsTensorBasis.hpp:defective": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"7924470:gsOptionList.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"419e2f1:gsSparseSystem.h:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"60b7fa3:gsBasis.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f5c66ad:gsVisitorDg.h:defective": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"cb3d0b4:gsIterativeSolver.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c75d957:gsLanczosMatrix.h:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"17dd67d:gsPatchGenerator.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"a68c232:gsVisitorCDR.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"4743852:gsBasis.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"18cd1e3:gsBoxTopology.cpp:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"fbbc87e:gsDofMapper.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"af3171e:gsExpressions.h:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"93db8f9:gsJITCompiler.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"cb2a24d:gsG1Mapper.h:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"7b9d7de:gsBasis.hpp:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c909edc:gsAssembler.h:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"2538e1a:gsGeometry.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"9d1136e:gsLinPLapAssembler.h:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"6bc3c46:gsMultiBasis.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f7ea620:gsHTensorBasis.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"ec3d317:gsQuadRule.h:clean": {
+"decision": "REJECT",
+"lam": -1.01160091167848,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"2871374:gsTriMeshToSolid.hpp:defective": {
+"decision": "REJECT",
+"lam": -0.757060506303598,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"3ced7df:gsMath.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"24dfb28:gsAdaptiveRefUtils.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"69a0857:gsAssembler.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"96c1195:gsExprAssembler.h:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"90be00a:gsPde.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"e05b6b0:gsG1System.h:defective": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"e53eaa2:gsWeightMapper_.cpp:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"d729485:gsScaledDirichletPrec.hpp:defective": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"7c4698b:gsRemapInterface.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"e44d418:gsIetiMapper.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4da8593:gsExprAssembler.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"b0cd373:gsSysInfo.cpp:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"55d9864:gsPyBind11.cpp:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f46c458:gsOptionList.cpp:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"ab6e57f:gsFileData.hpp:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"73f5cb9:gsFileData.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"b32ddaa:gsDofMapper.cpp:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"ef8e659:gsOpenMP.h:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"79f3785:gsNurbsCreator.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c1895d2:gsBenchmark.h:defective": {
+"decision": "REJECT",
+"lam": -0.8803587226480918,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.327277705584417,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"26a9fe5:gsMesh.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"bb2767a:gsWriteParaview.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"eb23fba:gsMultiGrid.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"2a371e4:gsBoundaryConditions.hpp:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"655c2f4:gsDofMapper.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"8690d1e:gsMultiPatch.hpp:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"f9d6b06:gsMultiPatch_.cpp:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4d810d7:gsExpressions.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"f1ddb14:gsHBoxContainer.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"e2ef56b:gsCPPInterface.h:defective": {
+"decision": "REJECT",
+"lam": -4.343805421853684,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.3978952727983707,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"fa51062:gsWeightMapper.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"be4426c:gsBoundaryConditions.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"4affa99:gsBoundary.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"bdb91a5:gsExpressions.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"da8ecd6:gsBasis.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"8096363:gsExprEvaluator.h:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c0d775e:gsSparseSolver.h:clean": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"fcd9e3c:gsParaviewDataSet.h:defective": {
+"decision": "REJECT",
+"lam": -0.8552660300363804,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"653aa04:gsAdaptiveMeshing.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"640ac27:gsParaviewDataSet.h:defective": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"ed02c62:gsOptionList.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c270deb:gsHTensorBasis.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"a14570f:gsFitting.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"c74cda8:gsRationalBasis.h:defective": {
+"decision": "REJECT",
+"lam": -2.374905754573672,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.374905754573672,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"dda93df:gsSurfaceReparameterization.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f6eede5:gsTHBSplineBasis.hpp:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"268423a:gsExprAssembler.h:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"319444f:gsHDomainIterator.h:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"be6b13e:gsSurfMesh.h:clean": {
+"decision": "APPROVE",
+"lam": 2.5257286443082556,
+"votes": [
+[
+"CLAUDE",
+1,
+1.252762968495368,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2729656758128876,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"7eccbe3:gsAdaptiveParametrization.hpp:defective": {
+"decision": "REJECT",
+"lam": -0.9734491457141037,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.70805020110221,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4386a0d:gsProperty.h:clean": {
+"decision": "APPROVE",
+"lam": 3.3832596809754882,
+"votes": [
+[
+"CLAUDE",
+1,
+1.7346010553881064,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6486586255873816,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"138f4a7:grad_expr.h:defective": {
+"decision": "REJECT",
+"lam": -0.757060506303598,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"accfbe9:gsExprAssembler.h:clean": {
+"decision": "APPROVE",
+"lam": 2.6200393237794968,
+"votes": [
+[
+"CLAUDE",
+1,
+1.2729656758128876,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"52308ea:gsExpressions.h:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"6c33a77:gsMultiPatch_.cpp:clean": {
+"decision": "REJECT",
+"lam": -0.757060506303598,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.3470736479666094,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"6d1d6fb:gsKnotVector_.cpp:defective": {
+"decision": "REJECT",
+"lam": -4.232365860119476,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.1041341542702074,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.128231705849268,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"05e9cec:gsKnotVector_.cpp:clean": {
+"decision": "APPROVE",
+"lam": 2.995732273553991,
+"votes": [
+[
+"CLAUDE",
+1,
+1.3862943611198906,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"cea32c6:gsFreeformSubdivision.cpp:defective": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+},
+"83a4260:gsHElementHelper.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4f443cc:gsKroneckerMatrix.h:defective": {
+"decision": "REJECT",
+"lam": -0.33647223662121317,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9459101490553135,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.6094379124341003,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"4d7cbdf:gsSurfMesh.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"f104284:gsBoehm_.cpp:defective": {
+"decision": "REJECT",
+"lam": -0.8803587226480918,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.327277705584417,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"a3ecf67:gsUtils.h:clean": {
+"decision": "APPROVE",
+"lam": 2.7396872860453927,
+"votes": [
+[
+"CLAUDE",
+1,
+1.4469189829363254,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+1,
+1.2927683031090673,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"36bd8d7:gsAsG1Domain.hpp:defective": {
+"decision": "REJECT",
+"lam": -4.02594675174646,
+"votes": [
+[
+"CLAUDE",
+-1,
+-1.9218125974762528,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+],
+[
+"CLAUDE-COMMIT",
+-1,
+-2.1041341542702074,
+"rates",
+"whole-commit",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE",
+"CLAUDE-COMMIT"
+]
+},
+"0d921f0:gsExprEvaluator.h:clean": {
+"decision": "REJECT",
+"lam": -2.4423470353692043,
+"votes": [
+[
+"CLAUDE",
+-1,
+-2.4423470353692043,
+"rates",
+"",
+"claude_cli",
+"claude-opus-5-5"
+]
+],
+"served": [
+"CLAUDE"
+]
+}
+}

@@ -1,0 +1,36 @@
+Claude items 352
+selection 100 unique 100 REJECT 50 commits unique 100
+selection label == key label: True commit/file == key: True
+selection p_claude == result: 100
+captured states == Claude item: 100 of 100
+one: rows 100 ids==sel True labels ok True R1 req 100 len-equal 100; chars 274..1986 tokens 468..985
+  one: tokens = 418 + 0.282*chars, r=0.9494
+  largest neg residuals (truncation would show here): [(-112, 1717, 790), (-75, 1477, 760), (-69, 1449, 758)]
+  five longest states (chars, tokens): [(1717, 790), (1749, 856), (1758, 893), (1759, 906), (1986, 958)]  chars/token on top: [4.62, 4.0, 3.7, 3.61, 3.68]
+five: rows 100 ids==sel True labels ok True R1 req 500 len-equal 500; chars 274..1986 tokens 494..1153
+  R2 extra chars 1013..1022, tokens max 1515
+standard: rows 100 ids==sel True labels ok True R1 req 483 len-equal 483; chars 274..1986 tokens 494..1153
+AUC Claude 0.7446  Jev one 0.6414
+Jev one distinct p values: [0.03, 0.07, 0.08, 0.09, 0.1, 0.12, 0.13, 0.15, 0.16, 0.18, 0.2, 0.21, 0.28, 0.29, 0.3, 0.31, 0.32, 0.33, 0.34, 0.37, 0.38, 0.39, 0.4, 0.43, 0.45, 0.46, 0.5, 0.51, 0.52, 0.54, 0.55, 0.59, 0.61, 0.64, 0.66, 0.67, 0.68, 0.71, 0.72, 0.73, 0.74, 0.75, 0.79, 0.82, 0.83, 0.85, 0.86, 0.87, 0.88, 0.89, 0.92, 0.93, 0.94, 0.95, 0.96, 0.97, 0.99]
+AUC added lines (from Claude item text) 0.7164
+AUC Claude on all 352 0.7804
+REJECT: items with fix-ish word anywhere 0/50; in added lines 0/50
+APPROVE: items with fix-ish word anywhere 2/50; in added lines 0/50
+sha prefix (7) in own item: 0  any selected sha prefix in any item: 0
+AUC int(id) 0.552  position 0.466  batch 0.534
+AUC p_claude vs p_laya on 352 (key-reading would tie p to p_laya? check corr): 0.473
+p_claude REJECT: 0.03..0.86 mean 0.287
+p_claude APPROVE: 0.02..0.38 mean 0.134
+history-like reasons: 10
+   515d5f [REJECT] p=0.36: Bare <posit> include path fragile; universal library later reorganized headers.
+   e001c7 [REJECT] p=0.2: Trivial stub constructor; likely rewritten during development rather than fixed.
+   cc497b [REJECT] p=0.35: Re-enables exported explicit instantiation previously reverted; visibility/dll fragility.
+   4b41ad [REJECT] p=0.42: Closing comment says namespace internal instead of util; lines likely rewritten later.
+   8a1b96 [APPROVE] p=0.38: Toggles EXPORT macro and explicit instantiations; experimental switch likely reverted later.
+   7d18e0 [REJECT] p=0.28: Re-enables previously disabled gsWriteParaview include; circular-include risk.
+   f38d3a [REJECT] p=0.48: Adds export attribute to GCC instantiations; attribute warnings, likely reverted.
+   35633f [APPROVE] p=0.23: Clone macro swap during uPtr clone refactor; macro churn likely.
+   a3d51f [REJECT] p=0.48: Adds gsWriteParaview include, later disabled; likely circular include problem.
+   451246 [REJECT] p=0.42: Config-macro shared_ptr selection with NOT_FOUND hack and leftover //*/; churned area.
+Claude AUC without them: 0.7207 n=90
+Claude AUC with them neutralised to median 0.14500000000000002: 0.7060

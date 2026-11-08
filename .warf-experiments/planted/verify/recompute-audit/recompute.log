@@ -1,0 +1,43 @@
+54 bases with all six answers (108 items); answers per seat: claude 108, jev 108, laya 108
+
+== all: 54 bases, 108 items ==
+Verdict: balanced accuracy [95 %, bootstrap over bases], planted caught, clean passed, pairs fully right
+  Claude alone                                     0.824 [0.773, 0.879]   52/54   37/54   36/54
+  Mixed panel, log-odds (calibrated out of fold)   0.852 [0.803, 0.903]   50/54   42/54   39/54
+  Mixed panel, log-odds (cold start)               0.852 [0.803, 0.906]   52/54   40/54   39/54
+    member: Jev alone                              0.648 [0.600, 0.694]   54/54   16/54   16/54
+    member: Laya alone                             0.500 [0.500, 0.500]   0/54   54/54   0/54
+Ranking: AUC
+  Claude alone (vote)                              0.824
+  Mixed panel, -Lambda (calibrated)                0.878
+  Mixed panel, -Lambda (cold start)                0.877
+    member: Jev p(REJECT)                          0.811
+    member: Laya p(REJECT)                         0.499
+Panel minus Claude alone, balanced accuracy, paired over bases [95 %]; items only one gets right
+  Mixed panel, log-odds (calibrated out of fold): +0.028 [+0.000, +0.059]   only panel 5, only Claude 2
+  Mixed panel, log-odds (cold start): +0.028 [+0.000, +0.047]   only panel 3, only Claude 0
+
+== without boundary swaps: 44 bases, 88 items ==
+Verdict: balanced accuracy [95 %, bootstrap over bases], planted caught, clean passed, pairs fully right
+  Claude alone                                     0.841 [0.788, 0.893]   44/44   30/44   30/44
+  Mixed panel, log-odds (calibrated out of fold)   0.875 [0.827, 0.926]   43/44   34/44   33/44
+  Mixed panel, log-odds (cold start)               0.875 [0.827, 0.926]   44/44   33/44   33/44
+    member: Jev alone                              0.659 [0.606, 0.712]   44/44   14/44   14/44
+    member: Laya alone                             0.500 [0.500, 0.500]   0/44   44/44   0/44
+Ranking: AUC
+  Claude alone (vote)                              0.841
+  Mixed panel, -Lambda (calibrated)                0.901
+  Mixed panel, -Lambda (cold start)                0.892
+    member: Jev p(REJECT)                          0.847
+    member: Laya p(REJECT)                         0.503
+Panel minus Claude alone, balanced accuracy, paired over bases [95 %]; items only one gets right
+  Mixed panel, log-odds (calibrated out of fold): +0.034 [+0.000, +0.071]   only panel 4, only Claude 1
+  Mixed panel, log-odds (cold start): +0.034 [+0.000, +0.058]   only panel 3, only Claude 0
+
+== The calibrated panel ==
+  right per confidence band: HIGH 47/52, LOW 14/20, MEDIUM 31/36
+  seats asked: 1 0, 2 52, 3 56
+  calibration used: CLAUDE ['rates']; JEV ['platt']; LAYA ['platt']
+  verdict differs from Claude alone on 7 of 108 items
+
+Jev cost $0.0046; Laya truncated: 0 of 108

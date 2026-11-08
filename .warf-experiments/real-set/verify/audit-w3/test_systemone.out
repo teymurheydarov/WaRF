@@ -1,0 +1,35 @@
+
+=== provider: jev ===
+  ok    jev without TYPESAFE_API_KEY is refused
+  ok    POST /v1/systemone
+  ok    Authorization: Bearer <key>
+  ok    model and state sent as given
+  ok    one choice question
+  ok    the persona is the instructions
+  ok    the criteria are APPROVE / REJECT
+  ok    vote parses as REJECT: 'REJECT'
+  ok    readout as reasoning: p(APPROVE)=0.12  p(REJECT)=0.88  confidence=0.76  [jev-1.13.0: decision model, no reasoning]
+  ok    usage recorded
+  ok    APPROVE parses as +1
+  ok    HTTP 429 is retried after a back-off
+  ok    HTTP 401 -> http://127.0.0.1:52374 rejected the API key (HTTP 401): {"error": "inval
+  ok    HTTP 400 -> http://127.0.0.1:52374: the input exceeds the model's context (HTTP 400:
+  ok    HTTP 422 -> http://127.0.0.1:52374 rejected the request as malformed (HTTP 422): {"e
+  ok    an answer outside APPROVE/REJECT is refused
+
+=== registry: jev / laya ===
+  ok    both registered: ('claude_cli', 'anthropic', 'openai_compat', 'jev', 'ollama', 'laya')
+  ok    default models: jev-latest, multilingual
+  ok    the laya alias builds a decision provider
+  ok    laya: no Authorization header without a key, multilingual checkpoint
+  ok    warf providers lists both backends
+
+=== run_review on a five-agent jev panel ===
+  ok    REJECT [HIGH]  L=-2.506
+  ok    SPRT fired after 4 of 5 votes (uniform ω=0.5)
+  ok    no reply-format instruction in a decision model's state
+  ok    the state carries the domain and the code
+  ok    votes attributed to jev / jev-latest
+  ok    votes carry the readout as their reasoning
+
+all checks passed

@@ -1,0 +1,309 @@
+ID 06377a8:gsSurfMesh.cpp:clean
+commit 06377a8ae91186684438ff324ed708b7162a3d57 file src/gsMesh2/gsSurfMesh.cpp date 2025-11-17 subj add asSpline function
+
+=== ONE decision REJECT
+[REJECT] 1. **Boundary vertices are not excluded.** `asSpline` accepts a patch whenever `valence(v) == 4`, but it never checks `is_boundary(v)`.
+   - A boundary vertex with 4 neighbours has only 3 incident faces, so its 1-ring is not a regular grid.
+   - In the even-degree branch this vertex is the patch centre. In the odd-degree branch it can be a corner of the face.
+   - `asPatch` then walks the grid with `backward_halfedge`, `forward_halfedge`, `next_halfedge(next_halfedge(opposite_halfedge(h)))` and the last-row `opposite`/`prev` chain. Near such a vertex this crosses boundary halfedges, which have no face.
+   - The result is an invalid halfedge or wrong control points, and nothing asserts or reports it. The face loop has the same gap, and it also never checks that the faces are quads.
+
+2. **`asPatch` keeps mutable `static` state inside a `const` member function.** `kv`, `bs` and `coefs` are function-level statics that are overwritten on every call.
+   - The function cannot safely be called from more than one thread.
+   - The result depends on hidden shared state that persists between calls.
+   - The saving is negligible, since `makeGeometry` copies `coefs` and clones the basis anyway.
+
+3. **Interface consistency.** The diff only touches the `.cpp` file.
+   - It adds a new member `gsSurfMesh::asPatch(Halfedge, int) const`, which will not compile unless the header already declares it.
+   - It removes the definitions of `asOddSpline` and `asEvenSpline`, which are presumably still declared in the header. Any existing caller would then fail at link time.
+
+The core indexing is correct: the row/column counts give `(deg+1)^2` coefficients, the `deg/2` corner shift works for both parities, and the row advance via `ccw_rotated_halfedge(prev_halfedge(h))` is right. The missing boundary and regularity validation, however, makes the even-branch and face-branch logic produce wrong patches on ordinary meshes with boundaries.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+The control-point counting is correct: `deg` rows of `deg+1` points plus a last row of `deg+1` gives `(deg+1)^2`. The even-by-vertex / odd-by-face split is also correct. The defect is that the regularity test in `asSpline` does not cover everything `asPatch` walks over, so `asPatch` reads geometry it was never checked against.
+
+**1. Boundary vertices are not excluded.**
+Valence 4 does not imply an interior vertex. The concave corner of an L-shaped quad mesh has 4 edges but only 3 faces.
+- **Degree 2 (even branch):** that vertex passes `4==n`, so `asPatch(halfedge(v), 2)` is called. In a halfedge mesh, `halfedge(v)` for a boundary vertex is the boundary halfedge. `backward_halfedge`, `next_halfedge(next_halfedge(opposite_halfedge(h)))`, `forward_halfedge` and `ccw_rotated_halfedge(prev_halfedge(h))` then step through the missing face. This either reads invalid handles or follows the boundary loop, so the coefficients are wrong or the access is out of range.
+- **Degree 3 (odd branch):** the same thing happens. A face touching that corner, with all four corners at valence 4, is accepted, and the 4×4 stencil needs the face that does not exist.
+- **Fix:** no `is_boundary(v)` check (or a check of the stencil's vertices) is made in either branch.
+
+**2. The regularity check is too weak for `deg >= 4`.**
+`asPatch` walks `deg/2` rings out from the start vertex or face. Every interior vertex of the `(deg+1)×(deg+1)` stencil must be regular for the "straight line" traversal to be valid.
+- **Even branch:** only the centre vertex is checked. With `deg=4`, a valence-4 vertex next to a valence-3 or valence-5 vertex is accepted. `forward_halfedge` and `backward_halfedge` across that irregular vertex do not follow a grid line, so the 5×5 control net is wrong. The traversal may also wrap onto points it already used.
+- **Odd branch:** only the face's own 4 corners are checked. That is enough for `deg=3`, but for `deg=5` the 6×6 stencil's interior 4×4 vertices are unchecked.
+
+**Smaller issues**
+- **Static locals:** `kv`, `bs` and `coefs` are function-level statics inside a `const` member. Two threads calling `asSpline` or `asPatch` on any meshes would race on them.
+- **Uninitialised `n`:** in the odd branch, `n` is never set if a face has no vertices. This is not reachable in a valid mesh.
+
+Issue 1 is a concrete failing input: an L-shaped quad mesh with `deg=2` or `deg=3`. Issue 2 is a concrete wrong result: any mesh with an extraordinary vertex one ring from a regular vertex, with `deg=4`.
+--- ADVOCATE [APPROVE]
+I found no clear, demonstrable defect. The refactor into `asPatch` plus a parity-based `asSpline` looks consistent with the intent. I could not verify the custom traversal helpers or the header changes from this diff.
+
+**Dispatch in `asSpline`**
+- **Even degree:** builds a patch around each valence-4 vertex. This is correct, since a degree-2 B-spline patch on a regular quad mesh needs the vertex's 3×3 one-ring.
+- **Odd degree:** builds a patch for each face whose vertices all have valence 4. This is correct, since a bicubic patch needs the face's 4×4 one-ring.
+- **Valence loop:** the `break` on `n != 4` leaves `n` set to the failing valence. The following `if (4==n)` therefore holds only when every vertex was regular.
+- **`if`/`else` parsing:** `if (...) for (...) {...} else for (...) {...}` parses correctly. The braced `for` is a single statement, so the `else` binds to the `if`.
+
+**Coefficient count in `asPatch`**
+- The main loop runs `deg` times and writes `2 + (deg-1) = deg+1` rows each time, giving `deg*(deg+1)` rows.
+- The "last row" block writes another `deg+1` rows.
+- The total is `(deg+1)^2`, which matches `coefs.resize((deg+1)*(deg+1), 3)`. There is no overrun or underfill.
+
+**Knot vector**
+- `initUniform(0,1,0,1,1,deg)` uses end multiplicity 1, which is less than `deg+1`. As I recall the G+Smo implementation, this adds uniform ghost knots, producing an unclamped uniform knot vector with `deg+1` basis functions per direction.
+- That is the correct basis for turning a regular subdivision control net into a B-spline patch.
+- `makeGeometry(coefs)` then matches a `(deg+1)²` tensor basis with `(deg+1)²` coefficients.
+
+**Traversal**
+- `h` is passed by value, so changing it locally is safe.
+- The pre-shift by `deg/2` steps centers the stencil on the vertex or face.
+- The last row uses a different expression from `forward_halfedge`. This is plausibly deliberate, because the final row lies on the far side of the rotated halfedge, and the expression is symmetric with the other rows.
+
+**Removed code**
+- The deleted `asOddSpline` and `asEvenSpline` were stubs.
+- `asEvenSpline` also had an incorrect assertion (`deg%2==1` with the message "Expecting even degree"), so removing it is an improvement.
+
+**Minor notes (not blocking)**
+- The `static` locals in a `const` member make `asPatch` non-reentrant and not thread-safe. This is a performance choice, not a logic error.
+- The header must declare `asPatch` and drop the removed methods. That change isn't shown here, but it would be caught at compile time.
+--- AUDITOR [REJECT]
+1. **Insufficient regularity check for degree ≥ 4.** `asPatch` builds a (deg+1)×(deg+1) control net. It first walks `deg/2` steps outward, so it reaches beyond the immediate one-ring for deg ≥ 4. But `asSpline` only checks:
+   - the valence of the center vertex (even degree), or
+   - the valence of the face's own vertices (odd degree).
+
+   For deg=2 or deg=3 that is enough. For deg=4 or deg=5, the net reaches extraordinary vertices or faces that were never checked. The patch then silently gets wrong coefficients, or the halfedge walk wraps incorrectly around non-quad regions.
+
+2. **No boundary handling.** A boundary vertex can have valence 4 while having only three faces (or an otherwise irregular neighbourhood). The traversal uses:
+   - `opposite_halfedge` → `prev_halfedge` and `next_halfedge(next_halfedge(opposite_halfedge(h)))`;
+   - `ccw_rotated_halfedge`;
+   - the reversed-orientation walk in the last row.
+
+   On boundary halfedges these follow the boundary loop instead of a quad face. The result is garbage control points with no assertion or check. Neither `asPatch` nor `asSpline` calls `is_boundary`.
+
+3. **Static locals in a const member function.** `kv`, `bs` and `coefs` are function-level statics that every call modifies. This makes `asPatch` non-reentrant and unsafe across threads, even though it is declared `const`. It also keeps buffers alive for the whole program. Plain locals would cost almost nothing here.
+
+4. **Header and API consistency not shown.** The patch removes `asOddSpline` and `asEvenSpline`, and adds the member `gsSurfMesh::asPatch(Halfedge, int) const`. No matching header change is included. As submitted, the out-of-class definition of an undeclared member will not compile, and any external callers of the removed functions break.
+
+5. **Lost argument validation.** The old `GISMO_ASSERT` degree checks were removed and not replaced. In particular, deg ≤ 0 is not rejected: `initUniform` and `asPatch` will produce a degenerate basis or index out of range.
+
+6. **Minor issue.** In the odd branch, `n` is only set inside the inner loop. If a face had no vertices (a degenerate or deleted face before garbage collection), the following `if (4==n)` reads a stale or uninitialized value.
+
+Points 1 and 2 are correctness bugs that produce wrong geometry without any error, and point 4 means the patch likely doesn't compile as submitted. Before it is approved, the patch needs:
+- a regularity check that matches the full control-net footprint;
+- boundary checks;
+- non-static locals;
+- the header update.
+--- TEST-FOCUSED [REJECT]
+1. **Shared static state in a `const` method.** `asPatch` keeps `kv`, `bs` and `coefs` as function-local `static` objects and rebuilds them on every call. Two threads calling `asPatch` or `asSpline`, even on different mesh objects, would write to the same `coefs` buffer and basis at once. That produces corrupted control points or a crash depending on how the threads interleave. A test cannot reliably reproduce that interleaving. These should be ordinary local variables, since there is no reason to share them between calls.
+
+2. **No boundary check, so boundary patches come out silently wrong.**
+   - **Even degree:** the code only checks `valence(v) == 4`.
+   - **Odd degree:** the code only checks that every vertex of the face has valence 4.
+   - **Why that is not enough:** neither branch checks `is_boundary`. A boundary vertex can still have valence 4, for example where three quads meet at the boundary.
+   - **What happens:** the halfedge walk then follows boundary halfedges, which have no face. It runs off the regular grid and reads positions from unrelated or invalid vertices.
+   - **Result:** the patch has a plausible-looking but wrong control net, or reads an invalid handle into `vpoint_`. Nothing asserts and nothing throws, so the caller gets a geometry object that looks valid but is wrong.
+
+3. **Possibly uninitialized `n` (minor).** In the odd branch, `n` is only assigned inside the vertex loop. If a face somehow had no vertices, `if (4==n)` would read an uninitialized value. This is unlikely in a valid mesh.
+
+4. **Assertion removed.** The old code had `GISMO_ASSERT` checks. The new `asPatch` does not validate `deg` (for example `deg <= 0`) or check that `h` is a valid halfedge. Bad input now produces a wrong result instead of a loud assertion failure.
+
+Item 1 by itself is a failure that only shows up under thread timing a test cannot control. Item 2 is a silent wrong-value path for a mesh shape that occurs in practice.
+--- BOUNDARY [REJECT]
+The coefficient count itself is correct. Each of the `deg` rows writes 2 + (deg−1) = deg+1 points, and the last row writes another deg+1, giving (deg+1)² in total. The even/odd mapping is also right: even degree gives an odd-sized net centred on a vertex, and odd degree gives an even-sized net centred on a face. The problems are in which vertices and faces get accepted for patch extraction.
+
+**Genuinely mishandled (c):**
+
+1. **Boundary vertex with valence 4 (even `deg`).**
+   - The even branch accepts any vertex with `valence(v) == 4`. It never checks `is_boundary(v)`.
+   - In a quad mesh, the reentrant corner of an L-shaped region has 3 incident faces and 4 incident edges, so it passes the filter.
+   - `halfedge(v)` for a boundary vertex is the outgoing boundary halfedge. The walks (`backward_halfedge`, `next_halfedge(next_halfedge(opposite_halfedge(h)))`, `ccw_rotated_halfedge(prev_halfedge(h))`) then step across the hole.
+   - Input: an open L-shaped quad grid with `asSpline(2)`.
+   - Wrong result: an extra patch is added to the multipatch. Its 3×3 net assumes a fourth quadrant that does not exist, so its control points are taken from along the boundary loop. There is no assertion and no skip.
+   - The odd branch has the same missing `is_boundary` check for faces whose four vertices are all valence 4.
+
+2. **Regularity is checked only at the centre, but the net grows with `deg`.**
+   - For `deg = 4`, the 5×5 net spans the 2-ring of `v`. The code only requires `valence(v) == 4`.
+   - Input: a valence-4 vertex adjacent to a valence-3 or valence-5 vertex, with `asSpline(4)`.
+   - Wrong result: the `forward_halfedge` and rotation walks assume a regular grid. When they reach the extraordinary neighbour, they pick points that are not a tensor-product grid, producing a twisted or incorrect patch.
+   - The same applies to odd `deg >= 5`, where only the central face's 4 vertices are checked but the net spans more rings.
+
+3. **`deg = 0`.**
+   - The old `GISMO_ASSERT` was removed, and `asSpline(0)` takes the even branch.
+   - `coefs` is resized to 1×3. The loops run zero times, but the "last row" block unconditionally writes `coefs.row(0)` and `coefs.row(1)`.
+   - Result: an out-of-bounds write (an Eigen assert in debug builds, undefined behaviour in release).
+   - Nothing in the public `asSpline(int)` signature prevents this call.
+
+**Secondary concerns (not the basis for rejection):**
+
+- The `static` `kv`, `bs` and `coefs` inside a `const` member make `asPatch` non-reentrant and not thread-safe.
+- In the odd branch, `n` is uninitialised if a face has no vertices. This is unreachable for a valid mesh, so it falls under (b).
+
+**Fix:**
+
+- Skip boundary vertices and faces.
+- Validate regularity over the full ⌈deg/2⌉-ring, not just the centre.
+- Restore a `deg >= 1` assertion.
+
+=== DIFF
+diff --git a/src/gsMesh2/gsSurfMesh.cpp b/src/gsMesh2/gsSurfMesh.cpp
+index a13a6fa52..f18070d51 100644
+--- a/src/gsMesh2/gsSurfMesh.cpp
++++ b/src/gsMesh2/gsSurfMesh.cpp
+@@ -1721,95 +1721,130 @@ garbage_collection()
+     // remove handle maps
+     remove_vertex_property(vmap);
+     remove_halfedge_property(hmap);
+     remove_face_property(fmap);
+ 
+ 
+     // finally resize arrays
+     vprops_.resize(nV); vprops_.free_memory();
+     hprops_.resize(nH); hprops_.free_memory();
+     eprops_.resize(nE); eprops_.free_memory();
+     fprops_.resize(nF); fprops_.free_memory();
+ 
+     deleted_vertices_ = deleted_edges_ = deleted_faces_ = 0;
+     garbage_ = false;
+ }
+ 
+ // Returns true if there is a sharp halfedge emenating from vertex \a v
+ inline bool gsSurfMesh::has_flag(Vertex v,
+                                  const gsSurfMesh::Halfedge_property<bool> & hflag)
+ {
+     /*//count hflags
+       int c = 0;
+       for (auto hh : halfedges(v))
+       c +=  hflag[hh];
+     //*/
+     for (auto hh : halfedges(v))
+         if (hflag[hh]) return true;
+     return false;
+ }
+ 
+-gsMultiPatch<> gsSurfMesh::asOddSpline(int deg) const
++gsGeometry<>::uPtr gsSurfMesh::asPatch(gsSurfMesh::Halfedge h, int deg) const
+ {
+-    GISMO_ASSERT(deg%2==1, "Expecting odd degree.");
+-    gsMultiPatch<> res;
++    static gsKnotVector<> kv;
++    kv.initUniform(0, 1, 0, 1, 1, deg);
++    static gsTensorBSplineBasis<2> bs;
++    bs = { kv,kv };
++    static gsMatrix<> coefs;
++    coefs.resize( (deg+1)*(deg+1), 3);
+ 
+-    
+-    return res;
++    Halfedge hh;
++    index_t c = 0;
++
++    for (index_t i = 0; i<(deg/2); ++i)
++    {
++        h = backward_halfedge(h);
++        h = next_halfedge(next_halfedge(opposite_halfedge(h)));
++    }
++
++    for (int j = 0; j<deg; ++j)
++    {
++        coefs.row(c++) = vpoint_[from_vertex(h)];
++        coefs.row(c++) = vpoint_[  to_vertex(h)];
++        hh = h;
++        for (int i = 1; i<deg; ++i)
++        {
++            hh = forward_halfedge(hh);
++            coefs.row(c++) = vpoint_[to_vertex(hh)];
++        }
++        h = ccw_rotated_halfedge((prev_halfedge(h)));
++    }
++    //last row
++    coefs.row(c++) = vpoint_[from_vertex(h)];
++    coefs.row(c++) = vpoint_[  to_vertex(h)];
++    hh = h;
++    for (int i = 1; i<deg; ++i)
++    {
++        hh = opposite_halfedge( prev_halfedge( opposite_halfedge(
++             prev_halfedge( opposite_halfedge(hh) ))));
++        coefs.row(c++) = vpoint_[to_vertex(hh)];
++    }
++    return bs.makeGeometry(coefs);
+ }
+ 
+-gsMultiPatch<> gsSurfMesh::asEvenSpline(int deg) const
++gsMultiPatch<> gsSurfMesh::asSpline(int deg) const
+ {
+-    GISMO_ASSERT(deg%2==1, "Expecting even degree.");
+     gsMultiPatch<> res;
+-    const std::vector<gsSurfMesh::Point> & pt = pointsVec();
+-    gsMatrix<> coefs( (deg+1)*(deg+1),3);
+-    int r = deg/2;
+     int n;
+-    for (auto v : vertices())
+-    {
+-        n = valence(v);
+-        if (4==n)
++
++    if ( 0 == deg%2 )
++        for (auto v : vertices())
+         {
+-            
++            n = valence(v);
++            if (4==n)
++                res.addPatch( asPatch(halfedge(v), deg) );
++        }
++    else // 1 == deg%2
++        for (auto f : faces())
++        {
++            for ( auto v : vertices(f) )
++            {
++                n = valence(v);
++                if ( n!=4 ) break;
++            }
++            if (4==n)
++                res.addPatch( asPatch(halfedge(f), deg) );
+         }
+-    }
+-
+ 
+     return res;
+ }
+ 
+-gsMultiPatch<> gsSurfMesh::asSpline(int deg) const
+-{
+-    return (deg%2==0) ? asEvenSpline(deg) : asOddSpline(deg);
+-}
+-    
+ void gsSurfMesh::cc_subdivide()
+ {
+     gsSurfMesh::Vertex v;
+     gsSurfMesh::Halfedge he;
+ 
+     // reserve vertices, edges, faces
+     reserve( n_vertices()+n_edges()+n_faces(),
+              2*n_edges(), 4*n_faces() );
+ 
+     const bool do_sharp = hprops_.has("h:sharp");
+     Halfedge_property<bool> sharp;
+     if (do_sharp)
+         sharp = get_halfedge_property<bool>("h:sharp");
+ 
+     index_t env = n_vertices(); // edge vertices start here
+ 
+     // loop over all edges, add edge points
+     Point tmp;
+     for (auto eit : edges())
+     {
+         he  = halfedge(eit,0);
+         if ( !(is_boundary(he) && is_boundary(opposite_halfedge(he))) )
+         {
+             tmp = (vpoint_[from_vertex(he)]+vpoint_[to_vertex(he)]) / 2;
+             v   = add_vertex(tmp);// edge points initialized as midpoints
+             insert_vertex(he,v);
+         }
+     }
+ 
+     index_t fnv = n_vertices(); // face vertices start here
+

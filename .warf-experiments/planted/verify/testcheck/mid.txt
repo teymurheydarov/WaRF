@@ -1,0 +1,1217 @@
+### 1 dbb991d:gsUtils.h op=false domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.37/1.00  Laya 0.08/0.08
+  ORIG: +    if (needle.size() > haystack.size()) return false;
+  MUT : +    if (needle.size() > haystack.size()) return true;
+    |      while ( it2!=needle.end() )
+    |      {
+    |          if ( it1 == haystack.end() || *it1 != *it2) return false;
+    |          it1++; it2++;
+    |      }
+    |      return true;
+    |  }
+    |  
+    | +/// \brief Checks if a string \a haystack ends with the string \a needle
+    | +/// \ingroup Utils
+    | +inline bool ends_with( const std::string & haystack, const std::string & needle )
+    | +{
+    | +    if (needle.size() > haystack.size()) return true;
+    | +    //std::transform(haystack.begin(), value.end(), tmp.begin(), ::tolower); 
+    | +    return std::equal(needle.rbegin(), needle.rend(), haystack.rbegin());
+    | +}
+    | +
+    |  #if __cplusplus > 199711L || (defined(_MSC_VER) && _MSC_VER >= 1600)
+    |  using std::iota;
+    |  using std::stod;
+### 2 a24ec23:gsHBSpline.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.14/0.97  Laya 0.10/0.10
+  ORIG: +    util::conditional<d==1, gsConstantFunction<T>, gsHBSpline<static_cast<short_t>(d-1),T>
+  MUT : +    util::conditional<d!=1, gsConstantFunction<T>, gsHBSpline<static_cast<short_t>(d-1),T>
+    |      typedef typename gsGeoTraits<d,T>::GeometryBase Base;
+    |  
+    |      typedef gsHBSplineBasis<d,T> Basis;
+    |  
+    |      /// Shared pointer for gsHBSpline
+    |      typedef memory::shared_ptr< gsHBSpline > Ptr;
+    |  
+    |      /// Unique pointer for gsHBSpline
+    |      typedef memory::unique_ptr< gsHBSpline > uPtr;
+    |  
+    |      typedef typename
+    | -    util::conditional<d==1, gsConstantFunction<T>, gsHBSpline<d-1,T>
+    | +    util::conditional<d!=1, gsConstantFunction<T>, gsHBSpline<static_cast<short_t>(d-1),T>
+    |                        >::type BoundaryGeometryType;
+    |  
+    |      typedef typename gsHBSplineBasis<d,T>::BoundaryBasisType BoundaryBasisType;
+    |  
+    |  public:
+    |  
+    |      /// Default empty constructor
+### 3 d6c93de:gsFileManager.cpp op=and domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.70/0.84  Laya 0.07/0.07
+  ORIG: +            || ( p1[i] == '/' && p2[i] == '\\' )
+  MUT : +            || ( p1[i] == '/' || p2[i] == '\\' )
+    | +
+    | +bool gsFileManager::pathEqual( const std::string& p1, const std::string& p2 )
+    | +{
+    | +    const size_t sz = p1.size();
+    | +
+    | +    if (sz != p2.size())
+    | +        return false;
+    | +
+    | +    for (size_t i=0; i<sz; ++i)
+    | +    {
+    | +        if (!(
+    | +            p1[i] == p2[i]
+    | +            || ( p1[i] == '/' || p2[i] == '\\' )
+    | +            || ( p1[i] == '\\' && p2[i] == '/' )
+    | +        )) return false;
+    | +
+    | +    }
+    | +    return true;
+    | +
+    | +}
+### 4 4dc0868:gsCurve.h op=ge domain=SECURITY  Claude clean/planted=A/R  Jev pR clean/planted=0.61/0.97  Laya 0.12/0.12
+  ORIG: +        GISMO_ASSERT( this->m_coefs.size() >= 1,
+  MUT : +        GISMO_ASSERT( this->m_coefs.size() > 1,
+    |      /// @{
+    |  
+    |      /// Default empty constructor
+    |      gsCurve() : gsGeometry<T>() { }
+    |  
+    |      /// Constructor which copies the given coefficient matrix \a
+    |      /// coefs.
+    |      gsCurve(const gsBasis<T> & basis, gsMatrix<T> coefs ) :
+    |      gsGeometry<T>(basis, give(coefs))
+    | -    { 
+    | -        GISMO_ASSERT( coefs.cols() >= 1, 
+    | +    {
+    | +        GISMO_ASSERT( this->m_coefs.size() > 1,
+    |          "Coefficient matrix cannot be empty.\n");
+    |      }
+    |  
+    |      /// @}
+    |  
+    |      virtual gsCurve * clone() const = 0;
+    |  
+### 5 5f4e141:gsUtils.h op=ne domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.58/0.99  Laya 0.08/0.08
+  ORIG: +    while((pos = str.find(oldStr, pos)) != std::string::npos)
+  MUT : +    while((pos = str.find(oldStr, pos)) == std::string::npos)
+    | +    return convert.str();
+    | +#endif
+    | +}
+    | +
+    | +/// \brief Replaces appeareances of \a oldStr with \a newStr inside the
+    | +/// string \a str
+    | +/// \ingroup Utils
+    | +inline void string_replace(std::string& str, 
+    | +                           const std::string& oldStr, 
+    | +                           const std::string& newStr)
+    | +{
+    | +    size_t pos = 0;
+    | +    while((pos = str.find(oldStr, pos)) == std::string::npos)
+    | +    {
+    | +        str.replace(pos, oldStr.length(), newStr);
+    | +        pos += newStr.length();
+    | +    }
+    | +}
+    | +
+    | +
+### 6 1da9936:gsG1AuxiliaryPatch.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.15/0.75  Laya 0.07/0.07
+  ORIG: +        axisOrientation = ( axisOrientation == 0 ? 1 : 0 );
+  MUT : +        axisOrientation = ( axisOrientation != 0 ? 1 : 0 );
+    |  
+    |      gsMultiPatch<> & getG1Basis(){
+    |          return G1repBasis;
+    |      }
+    |  
+    |      void checkRotation(){
+    |          if(rotationNum == 4)
+    |              rotationNum = 0;
+    |      }
+    |  
+    |      void checkOrientation(){
+    | -        axisOrientation == 0 ? axisOrientation=1 : axisOrientation=0;
+    | +        axisOrientation = ( axisOrientation != 0 ? 1 : 0 );
+    |      }
+    |  
+    |  protected:
+    |  
+    |      gsMultiPatch<> auxPatch;
+    |      gsMultiPatch<> G1repBasis;
+    |  
+### 7 893626d:test_spectra.cpp op=plus domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.54/0.60  Laya 0.13/0.13
+  ORIG: +    A = (A + A.transpose()) * 0.5;
+  MUT : +    A = (A - A.transpose()) * 0.5;
+    | +    Author(s):
+    | +*/
+    | +
+    | +#include <gismo.h>
+    | +#include <gsSpectra/gsSpectra.h>
+    | +
+    | +using namespace gismo;
+    | +
+    | +int main(int argc, char *argv[])
+    | +{
+    | +    gsMatrix<real_t> A(10,10);
+    | +    A.setRandom();
+    | +    A = (A - A.transpose()) * 0.5;
+    | +    
+    | +    gsSpectraSymSolver<gsMatrix<>,Spectra::SMALLEST_ALGE> minev(A, 5, 10);
+    | +    minev.compute();
+    | +    gsInfo << "Eigenvalues:" << minev.eigenvalues().transpose() <<"\n";
+    | +    return EXIT_SUCCESS;
+    | +
+    | +}//main
+### 8 1c89c40:ActiveLevelCommandImplementation.cpp op=and domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.75/0.82  Laya 0.07/0.07
+  ORIG: +    else if (gr == CRhinoGet::option && gi.OptionIndex() == nOptAll)
+  MUT : +    else if (gr == CRhinoGet::option || gi.OptionIndex() == nOptAll)
+    | +#ifdef RHINO_V6_READY
+    | +    callingCommand.Settings().GetInteger(L"thbActiveLevel", level, -1, -1, INT_MAX);
+    | +#endif
+    | +    CRhinoGetInteger gi;
+    | +    gi.SetCommandPrompt(L"Set active level");
+    | +    int nOptAll = gi.AddCommandOption(RHCMDOPTNAME(L"All"));
+    | +
+    | +    CRhinoGet::result gr = gi.GetInteger();
+    | +    if (gr == CRhinoGet::number)
+    | +    {
+    | +        level = (int)gi.Number();
+    | +    }
+    | +    else if (gr == CRhinoGet::option || gi.OptionIndex() == nOptAll)
+    | +    {
+    | +        level = -1;
+    | +    }
+    | +    else
+    | +    {
+    | +        return CRhinoCommand::success;
+    | +    }
+### 9 0064799:gsBiharmonicAssembler.hpp op=eq domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.76/0.86  Laya 0.12/0.12
+  ORIG: +    if ( m_options.getInt("InterfaceStrategy") == iFace::dg )
+  MUT : +    if ( m_options.getInt("InterfaceStrategy") != iFace::dg )
+    | +
+    | +    // Assemble volume integrals
+    | +    Base::template push<bhVisitor >();
+    | +
+    | +    // Neumann conditions of first kind
+    | +    Base::template push<gsVisitorNeumann<T> >(
+    | +        m_ppde.bcFirstKind().neumannSides() );
+    | +
+    | +    // Neumann conditions of second kind
+    | +    Base::template push<gsVisitorNeumannBiharmonic<T> >(
+    | +        m_ppde.bcSecondKind().neumannSides() );
+    | +
+    | +    if ( m_options.getInt("InterfaceStrategy") != iFace::dg )
+    | +        gsWarn <<"DG option ignored.\n";
+    | +
+    | +    /*
+    | +    // If requested, force Dirichlet boundary conditions by Nitsche's method
+    | +    this->template push<gsVisitorNitscheBiharmonic<T> >(
+    | +    m_ppde.bcSecondKind().dirichletSides() );
+    | +    */
+### 10 bd66be6:SparseFuzzy.h op=le domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.73/0.83  Laya 0.29/0.35
+  ORIG: +  return (actualA - actualB).squaredNorm() <= prec * prec * numext::mini(actualA.squaredNorm(), actualB.squaredNorm());
+  MUT : +  return (actualA - actualB).squaredNorm() < prec * prec * numext::mini(actualA.squaredNorm(), actualB.squaredNorm());
+    | +
+    | +namespace Eigen {
+    | +  
+    | +template<typename Derived>
+    | +template<typename OtherDerived>
+    | +bool SparseMatrixBase<Derived>::isApprox(const SparseMatrixBase<OtherDerived>& other, const RealScalar &prec) const
+    | +{
+    | +  const typename internal::nested_eval<Derived,2,PlainObject>::type actualA(derived());
+    | +  typename internal::conditional<bool(IsRowMajor)==bool(OtherDerived::IsRowMajor),
+    | +    const typename internal::nested_eval<OtherDerived,2,PlainObject>::type,
+    | +    const PlainObject>::type actualB(other.derived());
+    | +
+    | +  return (actualA - actualB).squaredNorm() < prec * prec * numext::mini(actualA.squaredNorm(), actualB.squaredNorm());
+    | +}
+    | +
+    | +} // end namespace Eigen
+    | +
+    | +#endif // EIGEN_SPARSE_FUZZY_H
+### 11 07bb349:gsCurve.hpp op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.51/0.51  Laya 0.17/0.17
+  ORIG: +    return ( c == 1 ? 0 : this->coefsSize()-1);
+  MUT : +    return ( c != 1 ? 0 : this->coefsSize()-1);
+    |          this->eval_into(paramSamples.col(i), cp);
+    |          //v1 = msh.addVertex( cp(0,0), cp(1,0), zzero ? T(0) : cp(2,0) );
+    |          v1 = msh.addVertex( cp );
+    |          msh.addEdge(v0, v1);
+    |          v0 = v1;
+    |      }
+    |  }
+    |  
+    | +template<class T>
+    | +unsigned gsCurve<T>::functionAtCorner(boxCorner const & c) const
+    | +{
+    | +    GISMO_ASSERT(c<boxCorner(3),"Invalid endpoint of curve.");
+    | +    return ( c != 1 ? 0 : this->coefsSize()-1);
+    | +}
+    | +
+    |  template<class T> 
+    |  gsGeometryEvaluator<T> *
+    |  gsCurve<T>::evaluator(unsigned flags) const
+    |  {
+    |      switch ( this->coDim() )
+### 12 ae7d987:gsKnotVector.hpp op=plus_eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.88/0.96  Laya 0.14/0.14
+  ORIG: +    my->p += i;
+  MUT : +    my->p -= i;
+    |  }
+    |  
+    |  template <class T>
+    |  void gsKnotVector<T>::degreeDecrease(int const & i)
+    |  {
+    |      trim(i);
+    |      my->p -= i;
+    |  }
+    |  
+    | +template <class T>
+    | +void gsKnotVector<T>::degreeIncrease(int const & i)
+    | +{
+    | +    my->p -= i;
+    | +    increaseMultFirst(i);
+    | +    increaseMultLast (i);
+    | +}
+    | +
+    |  template <class T>
+    |  void gsKnotVector<T>::increaseMultiplicity(int const & i)
+    |  {
+### 13 f63bdb3:Meta.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.37/0.99  Laya 0.06/0.06
+  ORIG: +    enum { value = ( sizeof(test(ms_from, 0))==sizeof(yes) ? 1 : 0) };
+  MUT : +    enum { value = ( sizeof(test(ms_from, 0))!=sizeof(yes) ? 1 : 0) };
+    |      template <typename T> any_conversion(T&);
+    |    };
+    |    struct yes {int a[1];};
+    |    struct no  {int a[2];};
+    |  
+    |    static yes test(const To&, int);
+    |    static no  test(any_conversion, ...);
+    |  
+    |  public:
+    |    static From ms_from;
+    | -  enum { value = sizeof(test(ms_from, 0))==sizeof(yes) };
+    | +    //G+Smo
+    | +    enum { value = ( sizeof(test(ms_from, 0))!=sizeof(yes) ? 1 : 0) };
+    |  };
+    |  
+    |  template<typename From, typename To>
+    |  struct is_convertible
+    |  {
+    |    enum { value = is_convertible_impl<typename remove_all<From>::type,
+    |                                       typename remove_all<To  >::type>::value };
+### 14 ea88279:Scaling.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.58/0.87  Laya 0.14/0.14
+  ORIG: +   Transform<Scalar,Dim,(int(Mode)==int(Isometry)?Affine:Mode)> res = t;
+  MUT : +   Transform<Scalar,Dim,(int(Mode)!=int(Isometry)?Affine:Mode)> res = t;
+    |    /** Concatenates a uniform scaling and a translation */
+    |    template<int Dim>
+    |    inline Transform<Scalar,Dim,Affine> operator* (const Translation<Scalar,Dim>& t) const;
+    |  
+    |    /** Concatenates a uniform scaling and an affine transformation */
+    |    template<int Dim, int Mode, int Options>
+    |    inline Transform<Scalar,Dim,(int(Mode)==int(Isometry)?Affine:Mode)> operator* (const Transform<Scalar,Dim, Mode, Options>& t) const
+    |    {
+    | -    Transform<Scalar,Dim,(int(Mode)==int(Isometry)?Affine:Mode)> res = t;
+    | -    res.prescale(factor());
+    | -    return res;
+    | -  }
+    | +   Transform<Scalar,Dim,(int(Mode)!=int(Isometry)?Affine:Mode)> res = t;
+    | +   res.prescale(factor());
+    | +   return res;
+    | +}
+    |  
+    |    /** Concatenates a uniform scaling and a linear transformation matrix */
+    |    // TODO returns an expression
+    |    template<typename Derived>
+### 15 7328da6:gsBasis.hpp op=gt domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.96/0.95  Laya 0.11/0.11
+  ORIG: +    if ( i > p )
+  MUT : +    if ( i >= p )
+    |  void gsBasis<T>::degreeIncrease(int const & i, int dir)
+    |  { GISMO_NO_IMPLEMENTATION }
+    |  
+    |  template<class T>
+    |  void gsBasis<T>::degreeDecrease(int const & i, int dir)
+    |  { GISMO_NO_IMPLEMENTATION }
+    |  
+    |  template<class T>
+    |  void gsBasis<T>::setDegree(int const& i)
+    | -{ GISMO_NO_IMPLEMENTATION }
+    | +{ 
+    | +    const int p = maxDegree();
+    | +    if ( i >= p )
+    | +    {
+    | +        degreeElevate(i-p); 
+    | +    }
+    | +    else if  ( i < p )
+    | +    {
+    | +        degreeReduce(p-i); 
+    | +    }
+### 16 4ed7de2:CompositeTestReporter.cpp op=dec domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.58/1.00  Laya 0.15/0.16
+  ORIG: +			--m_reporterCount;
+  MUT : +			++m_reporterCount;
+    | +
+    | +	m_reporters[m_reporterCount++] = reporter;
+    | +	return true;
+    | +}
+    | +
+    | +bool CompositeTestReporter::RemoveReporter(TestReporter* reporter)
+    | +{
+    | +    for (int index = 0; index < m_reporterCount; ++index)
+    | +    {
+    | +        if (m_reporters[index] == reporter)
+    | +        {
+    | +            m_reporters[index] = m_reporters[m_reporterCount - 1];
+    | +			++m_reporterCount;
+    | +			return true;
+    | +        }
+    | +    }
+    | +
+    | +    return false;
+    | +}
+    | +
+### 17 18af693:gsTHBSplineBasis.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.09/0.93  Laya 0.09/0.09
+  ORIG: +    util::conditional<d==1, gsConstantBasis<T>, gsTHBSplineBasis<d-1,T>
+  MUT : +    util::conditional<d!=1, gsConstantBasis<T>, gsTHBSplineBasis<d-1,T>
+    |      
+    |      typedef typename gsHTensorBasis<d,T>::CMatrix CMatrix;
+    |  
+    |      typedef typename gsHTensorBasis<d,T>::cmatIterator cmatIterator;
+    |      
+    |      typedef typename gsHTensorBasis<d,T>::tensorBasis tensorBasis;
+    |      
+    |      typedef memory::shared_ptr< gsTHBSplineBasis > Ptr;
+    |  
+    |      typedef typename
+    | -    conditional<d==1, gsConstantBasis<T>, gsTHBSplineBasis<d-1,T>
+    | -                >::type BoundaryBasisType;
+    | +    util::conditional<d!=1, gsConstantBasis<T>, gsTHBSplineBasis<d-1,T>
+    | +                      >::type BoundaryBasisType;
+    |  
+    |      using gsHTensorBasis<d, T>::flatTensorIndexOf;
+    |  
+    |      // polygon lines in parameter domain
+    |      // the stucture is [levels [ line [ segments [ x y z w ] ] ] ],
+    |      // where x y z w describes segment from (x, y) to (z, w)
+### 18 bdbd602:gsMatrixCrossApproximation.h op=gt domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.50/0.57  Laya 0.10/0.09
+  ORIG: +	return (math::abs(max) > 1e-15);
+  MUT : +	return (math::abs(max) >= 1e-15);
+    |  	    {
+    |  		T curr = math::abs(m_mat(i,j));
+    |  		if(curr > max)
+    |  		{
+    |  		    max = curr;
+    |  		    i_res = i;
+    |  		    j_res = j;
+    |  		}
+    |  	    }
+    |  	}
+    |  
+    | -	return (math::abs(max) > 1e-8);
+    | +	return (math::abs(max) >= 1e-15);
+    |      }
+    |  
+    |  protected: // elements
+    |  
+    |      gsMatrix<T> m_mat;
+    |  
+    |      index_t m_ik;
+### 19 ba986b3:gsGMRes.cpp op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.73/0.95  Laya 0.17/0.17
+  ORIG: +    if (rhsNorm2 == 0)
+  MUT : +    if (rhsNorm2 != 0)
+    |      xInit = x0;
+    |      m_mat.apply(x0,tmp);
+    |      tmp = m_rhs - tmp;
+    |      precond.apply(tmp, residual);
+    |      beta = residual.norm(); // This is  ||r||
+    |      v.push_back(residual/beta);
+    |      g.setZero(2,1);
+    |      g(0,0) = beta;
+    |      Omega = gsMatrix<>::Identity(2, 2);
+    |      Omega_prew = gsMatrix<>::Identity(2, 2);
+    |  
+    |      rhsNorm2 = rhs.squaredNorm(); // This is ||r||²
+    | +    if (rhsNorm2 != 0)
+    | +        rhsNorm2 = 1.0;
+    |      residualNorm2 = 0;
+    |      threshold = m_tol*m_tol*rhsNorm2;
+    |      m_numIter = 0;
+    |  }
+    |  
+    |  void gsGMRes::solve(const VectorType& rhs, VectorType& x, const gsLinearOperator& precond)
+### 20 250536b:gsUtils.h op=or domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.28/0.99  Laya 0.10/0.09
+  ORIG: +        if ( it1 == haystack.end() || *it1 != *it2) return false;
+  MUT : +        if ( it1 == haystack.end() && *it1 != *it2) return false;
+    |      convert << value;
+    |      return convert.str();
+    |  }
+    |  
+    | +/// \brief Checks if a string \a haystack begins with the string \a needle
+    | +/// \ingroup Utils
+    | +inline bool starts_with( const std::string & haystack, const std::string & needle )
+    | +{
+    | +    std::string::const_iterator it1 = haystack.begin();
+    | +    std::string::const_iterator it2 = needle.begin();
+    | +    while ( it2!=needle.end() )
+    | +    {
+    | +        if ( it1 == haystack.end() && *it1 != *it2) return false;
+    | +        it1++; it2++;
+    | +    }
+    | +    return true;
+    | +}
+    | +
+    |  #if __cplusplus > 199711L || (defined(_MSC_VER) && _MSC_VER >= 1600)
+    |  using std::to_string;
+### 21 329996e:inflate.c op=or domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.85/0.99  Laya 0.23/0.22
+  ORIG: +    if (strm == Z_NULL || strm->state == Z_NULL)
+  MUT : +    if (strm == Z_NULL && strm->state == Z_NULL)
+    |  #else
+    |      state->sane = 1;
+    |      return Z_DATA_ERROR;
+    |  #endif
+    |  }
+    |  
+    |  long ZEXPORT inflateMark(strm)
+    |  z_streamp strm;
+    |  {
+    |      struct inflate_state FAR *state;
+    |  
+    | -    if (strm == Z_NULL || strm->state == Z_NULL) return -1L << 16;
+    | +    if (strm == Z_NULL && strm->state == Z_NULL)
+    | +        // G+Smo: bit shifts of negative integers is
+    | +        //undefined, so cast first to ensure a good result.
+    | +        //return -1L << 16;
+    | +        return (long)(((unsigned long)0 - 1) << 16);
+    |      state = (struct inflate_state FAR *)strm->state;
+    | -    return ((long)(state->back) << 16) +
+    | +    return (long)(((unsigned long)((long)state->back)) << 16) +
+### 22 be9bf4b:Householder.h op=le domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.66/0.75  Laya 0.15/0.15
+  ORIG: +  if(tailSqNorm <= tol && numext::abs2(numext::imag(c0))<=tol)
+  MUT : +  if(tailSqNorm < tol && numext::abs2(numext::imag(c0))<=tol)
+    |  {
+    |    using std::sqrt;
+    |    using numext::conj;
+    |    
+    |    EIGEN_STATIC_ASSERT_VECTOR_ONLY(EssentialPart)
+    |    VectorBlock<const Derived, EssentialPart::SizeAtCompileTime> tail(derived(), 1, size()-1);
+    |    
+    |    RealScalar tailSqNorm = size()==1 ? RealScalar(0) : tail.squaredNorm();
+    |    Scalar c0 = coeff(0);
+    | +  const RealScalar tol = (std::numeric_limits<RealScalar>::min)();
+    |  
+    | -  if(tailSqNorm == RealScalar(0) && numext::imag(c0)==RealScalar(0))
+    | +  if(tailSqNorm < tol && numext::abs2(numext::imag(c0))<=tol)
+    |    {
+    |      tau = RealScalar(0);
+    |      beta = numext::real(c0);
+    |      essential.setZero();
+    |    }
+    |    else
+    |    {
+### 23 ec4288c:main.cpp op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.46/1.00  Laya 0.22/0.22
+  ORIG: +    GISMO_ASSERT( a*b == 6, "This is an error, 2*3 should be 6.");
+  MUT : +    GISMO_ASSERT( a*b != 6, "This is an error, 2*3 should be 6.");
+    | +
+    | +using namespace gismo;
+    | +
+    | +//int main(int argc, char* argv[])
+    | +int main()
+    | +{
+    | +    gsInfo <<  "Hello G+Smo.\n";
+    | +
+    | +    real_t a = 2.0; // a real number, ie. double
+    | +
+    | +    index_t b = 3; // an integer, ie. int
+    | +
+    | +    GISMO_ASSERT( a*b != 6, "This is an error, 2*3 should be 6.");
+    | +
+    | +    return 0;
+    | +}
+### 24 b1f3f8a:gsMultiPatch.hpp op=inc domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.58/0.95  Laya 0.13/0.13
+  ORIG: +    for ( const_iterator it = m_patches.begin(); it != m_patches.end(); ++it )
+  MUT : +    for ( const_iterator it = m_patches.begin(); it != m_patches.end(); --it )
+    |  #include <gsCore/gsDofMapper.h>
+    |  #include <gsCore/gsAffineFunction.h>
+    |  
+    |  #include <gsUtils/gsCombinatorics.h>
+    |  
+    |  namespace gismo
+    |  {
+    |  
+    | +template<class T>
+    | +gsMultiPatch<T> gsMultiPatch<T>::coord(const index_t c) const
+    | +{
+    | +    gsMultiPatch<T> result;
+    | +    for ( const_iterator it = m_patches.begin(); it != m_patches.end(); --it )
+    | +    {
+    | +        result.addPatch( (*it)->coord(c) );
+    | +    }
+    | +    return result;
+    | +}
+    | +
+    |  template<class T>
+### 25 58a6b86:gsAffineFunction.hpp op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.11/1.00  Laya 0.09/0.09
+  ORIG: +        const T ratio = size1(i)==0 ? T(1) : size2(dir(i))/size1(i);
+  MUT : +        const T ratio = size1(i)!=0 ? T(1) : size2(dir(i))/size1(i);
+    |      #define low1 box1.col(0)
+    |      #define upp1 box1.col(1)
+    |      #define low2 box2.col(0)
+    |      #define upp2 box2.col(1)
+    |  
+    |      const gsVector<T> size1= upp1 - low1;
+    |      const gsVector<T> size2= upp2 - low2;
+    |      m_mat.setZero(dim,dim);
+    |      m_trans.resize(dim);
+    |      for (index_t i=0; i<dim; ++i)
+    |      {
+    | -        const T ratio = size1(i)==0 ? 1 : size2(dir(i))/size1(i);
+    | +        const T ratio = size1(i)!=0 ? T(1) : size2(dir(i))/size1(i);
+    |          m_mat(dir(i),i) = o(i) ? ratio : -ratio;
+    |          m_trans(dir(i)) = o(i) ? low2(dir(i)) : upp2(dir(i));
+    |      }
+    |      m_trans-=m_mat*low1;
+    |  
+    |      #undef low1
+    |      #undef upp1
+### 26 42f88b6:gsVisitorHelmholtz.h op=lt domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=1.00/1.00  Laya 0.29/0.29
+  ORIG: +        for (index_t k = 0; k < quNodes.cols(); ++k) // loop over quadrature nodes
+  MUT : +        for (index_t k = 0; k <= quNodes.cols(); ++k) // loop over quadrature nodes
+    | +    /// Constructor with the right hand side function of the poisson equation
+    | +    gsVisitorHelmholtz(const gsFunction<T> & rhs) : gsVisitorPoisson<T> (rhs)
+    | +    { }
+    | +
+    | +    inline void assemble(gsDomainIterator<T>    & element,// UPDATE 
+    | +                         gsGeometryEvaluator<T> & geoEval,
+    | +                         const index_t k, T weight       )
+    | +    {
+    | +        const typename gsMatrix<T>::Block bVals  = basisData.topRows(numActive);
+    | +        const typename gsMatrix<T>::Block bGrads =
+    | +            basisData.bottomRows( numActive * element.dim() );
+    | +
+    | +        for (index_t k = 0; k <= quNodes.cols(); ++k) // loop over quadrature nodes
+    | +        {
+    | +            // Multiply weight by the geometry measure
+    | +            const T weight = quWeights[k] * geoEval.measure(k);
+    | +            
+    | +            // Compute physical gradients at k as a Dim x NumActive matrix
+    | +            geoEval.transformGradients(k, bGrads, physGrad);
+    | +            
+### 27 6ce1f31:gsGradientMethod.hpp op=minus domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.76/0.79  Laya 0.15/0.15
+  ORIG: +    m_res = rhs - m_tmp;
+  MUT : +    m_res = rhs + m_tmp;
+    | +
+    | +namespace gismo
+    | +{
+    | +
+    | +template<class T>
+    | +bool gsGradientMethod<T>::initIteration( const typename gsGradientMethod<T>::VectorType& rhs,
+    | +                                            typename gsGradientMethod<T>::VectorType& x )
+    | +{
+    | +    if (Base::initIteration(rhs,x))
+    | +        return true;
+    | +
+    | +    m_mat->apply(x,m_tmp);
+    | +    m_res = rhs + m_tmp;
+    | +
+    | +    m_error = m_res.norm() / m_rhs_norm;
+    | +    return m_error < m_tol;
+    | +
+    | +}
+    | +
+    | +template<class T>
+### 28 139a65a:ReshapedHelper.h op=or domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.63/0.68  Laya 0.08/0.08
+  ORIG: +    value = (TotalSize==Dynamic || other_size==Dynamic) ? Dynamic : TotalSize / other_size };
+  MUT : +    value = (TotalSize==Dynamic && other_size==Dynamic) ? Dynamic : TotalSize / other_size };
+    | +  enum { value = get_fixed_value<SizeType>::value };
+    | +};
+    | +
+    | +template<typename SizeType>
+    | +Index get_runtime_reshape_size(SizeType size, Index /*other*/, Index /*total*/) {
+    | +  return internal::get_runtime_value(size);
+    | +}
+    | +
+    | +template<typename OtherSize, int TotalSize>
+    | +struct get_compiletime_reshape_size<AutoSize_t,OtherSize,TotalSize> {
+    | +  enum {
+    | +    other_size = get_fixed_value<OtherSize>::value,
+    | +    value = (TotalSize==Dynamic && other_size==Dynamic) ? Dynamic : TotalSize / other_size };
+    | +};
+    | +
+    | +inline Index get_runtime_reshape_size(AutoSize_t /*size*/, Index other, Index total) {
+    | +  return total/other;
+    | +}
+    | +
+    | +template<int Flags, int Order>
+### 29 9803f50:gsTHBSplineBasis.hpp op=and domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.22/0.88  Laya 0.13/0.13
+  ORIG: +    GISMO_ASSERT(dir_fixed>=0 && static_cast<unsigned>(dir_fixed)<d,"cannot fix a dir greater than dim or smaller than 0");
+  MUT : +    GISMO_ASSERT(dir_fixed>=0 || static_cast<unsigned>(dir_fixed)<d,"cannot fix a dir greater than dim or smaller than 0");
+    |  
+    |  #include <gsIO/gsXml.h>
+    |  #include <gsIO/gsXmlGenericUtils.hpp>
+    |  
+    |  namespace gismo
+    |  {
+    |  
+    |  template<unsigned d, class T>
+    |  typename gsTHBSplineBasis<d,T>::BoundaryBasisType * gsTHBSplineBasis<d,T>::basisSlice(index_t dir_fixed,T par ) const
+    |  {
+    |      GISMO_ASSERT(d-1>=0,"d must be greater or equal than 1");
+    | -    GISMO_ASSERT(dir_fixed<d,"cannot fix a dir greater than dim");
+    | +    GISMO_ASSERT(dir_fixed>=0 || static_cast<unsigned>(dir_fixed)<d,"cannot fix a dir greater than dim or smaller than 0");
+    |      const boxSide side(dir_fixed,0);
+    |      const typename gsTensorBSplineBasis<d,T, gsCompactKnotVector<T> >::BoundaryBasisType * bBSplineBasis =
+    |              this->m_bases[0]->boundaryBasis(side);
+    |      typename gsTHBSplineBasis<d,T>::BoundaryBasisType* bBasis =
+    |              new typename gsTHBSplineBasis<d,T>::BoundaryBasisType(*bBSplineBasis);//,this->m_tree.getMaxInsLevel()+1);
+    |  
+    |      if(d!=1)
+### 30 5cf8a87:gsGradientMethod.hpp op=minus_eq domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.98/0.99  Laya 0.06/0.06
+  ORIG: +    m_res -= step_size * m_tmp;
+  MUT : +    m_res += step_size * m_tmp;
+    |      m_precond->apply(m_res,m_update);
+    |      m_mat->apply(m_update,m_tmp);
+    | -    x += m_damping * m_update;
+    | -    m_res -= m_damping * m_tmp;
+    | +
+    | +    T step_size;
+    | +    if (m_adapt_step_size)
+    | +        step_size = m_tmp.col(0).dot(m_res.col(0)) / m_tmp.col(0).dot(m_tmp.col(0));
+    | +    else
+    | +        step_size = m_step_size;
+    | +
+    | +    x += step_size * m_update;
+    | +    m_res += step_size * m_tmp;
+    |      m_error = m_res.norm() / m_rhs_norm;
+    |      return m_error < m_tol;
+    |  }
+    |  
+    |  
+    |  } // end namespace gismo
+### 31 f00bb12:gsConjugateGradient.cpp op=lt domain=LOGIC  Claude clean/planted=R/A  Jev pR clean/planted=0.92/0.92  Laya 0.04/0.04
+  ORIG: +    if(residualNorm2 < threshold)
+  MUT : +    if(residualNorm2 <= threshold)
+    | +}
+    | +
+    | +
+    | +bool gsConjugateGradient::step( gsConjugateGradient::VectorType& x, const gsLinearOperator& precond )
+    | +{
+    | +    m_mat.apply(p,tmp); //apply system matrix
+    | +
+    | +    real_t alpha = absNew / p.col(0).dot(tmp.col(0));   // the amount we travel on dir
+    | +    x += alpha * p;                       // update solution
+    | +    residual -= alpha * tmp;              // update residual
+    | +
+    | +    residualNorm2 = residual.squaredNorm();
+    | +    if(residualNorm2 <= threshold)
+    | +        return true;
+    | +
+    | +    precond.apply(residual, z);          // approximately solve for "A z = residual"
+    | +
+    | +    real_t absOld = absNew;
+    | +
+    | +    absNew = Eigen::numext::real(residual.col(0).dot(z.col(0)));     // update the absolute value of r
+### 32 b411853:gsParaviewCollection.h op=plus domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.49/1.00  Laya 0.17/0.17
+  ORIG: +        pc.addPart(base + ext);
+  MUT : +        pc.addPart(base - ext);
+    |      gsParaviewCollection pc(fn);
+    | +    // Use only the filename (no directory) so the DataSet path in the .pvd
+    | +    // is relative to the .pvd file itself, not to the working directory.
+    | +    const std::string base = gsFileManager::getFilename(fn);
+    |      if ( n > 0)
+    |      {
+    |          for (int i=0; i<n ; i++)
+    | -            pc.addPart(fn + std::to_string(i) + ext);
+    | +            pc.addPart(base + std::to_string(i) + ext);
+    |      }
+    |      else
+    | -        pc.addPart(fn + ext);
+    | +        pc.addPart(base - ext);
+    |  
+    |      pc.save();
+    |  }
+    |  
+    |  
+    |  } // end namespace gismo
+### 33 d8d33cb:gsGMRes.cpp op=lt domain=LOGIC  Claude clean/planted=A/A  Jev pR clean/planted=0.87/0.86  Laya 0.11/0.10
+  ORIG: +    if(m_error < m_tol)
+  MUT : +    if(m_error <= m_tol)
+    |  
+    |  bool gsGMRes::initIteration( const VectorType& rhs, VectorType& x )
+    |  {
+    |      if (Base::initIteration(rhs,x))
+    |          return true;
+    |      
+    |      m_mat->apply(x,tmp);
+    |      tmp = rhs - tmp;
+    |      m_precond->apply(tmp, residual);
+    |      beta = residual.norm(); // This is  ||r||
+    | +
+    | +    m_error = beta/m_rhs_norm;
+    | +    if(m_error <= m_tol)
+    | +        return true;
+    | +
+    |      v.push_back(residual/beta);
+    |      g.setZero(2,1);
+    |      g(0,0) = beta;
+    |      Omega = gsMatrix<real_t>::Identity(2, 2);
+    |      Omega_prev = gsMatrix<real_t>::Identity(2, 2);
+### 34 f813acf:gsAABB.h op=ge domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.53/0.63  Laya 0.12/0.12
+  ORIG: +    { return (k1.array() >= k2.array()).any(); }
+  MUT : +    { return (k1.array() > k2.array()).any(); }
+    |      gsAABB<d,Z>& operator= ( gsAABB<d,Z>&& other )
+    |      {
+    |          first  = give(other.first);
+    |          second = give(other.second);
+    |          level  = give(other.level);
+    |          return *this;
+    |      }
+    |  
+    | +    bool isDegenerate() const
+    | +    { return (first.array() >= second.array()).any(); }
+    | +
+    | +    static bool isDegenerate(point const & k1, point const & k2)
+    | +    { return (k1.array() > k2.array()).any(); }
+    | +
+    |  public:
+    |  
+    |      point first;
+    |      point second;
+    |  
+    |      /// Level in which the box lives
+### 35 d3c723f:gsSurface.hpp op=inc domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.29/0.71  Laya 0.12/0.12
+  ORIG: +    for(; pIter; ++pIter)
+  MUT : +    for(; pIter; --pIter)
+    |  namespace gismo
+    |  {
+    |  
+    | -
+    |  template<class T> 
+    |  void gsSurface<T>::toMesh(gsMesh<T> & msh, int npoints) const
+    |  {   
+    |      const gsMatrix<T> param     = this->parameterRange();
+    |      gsMatrix<T> cp;
+    | -    gsUniformGridIterator<T,2> pIter(param, npoints);
+    | -    for(; pIter; ++pIter )
+    | +    gsGridIterator<T,2> pIter(param, npoints);
+    | +    for(; pIter; --pIter)
+    |      {
+    |          this->eval_into( *pIter, cp);
+    |          msh.addVertex( cp );
+    |      }
+    |  
+    |      const gsVector<unsigned,2> & np = pIter.numPoints();
+    |      for(unsigned j = 0; j + 1 != np[1]; j++)
+### 36 47c2bbc:gsHBSplineBasis.hpp op=eq domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.97/0.92  Laya 0.14/0.14
+  ORIG: +    GISMO_ASSERT(d==1, "Wrong dimension");
+  MUT : +    GISMO_ASSERT(d!=1, "Wrong dimension");
+    |  #pragma once 
+    |  
+    |  #include <gsIO/gsXml.h>
+    |  #include <gsIO/gsXmlGenericUtils.hpp>
+    |  
+    |  namespace gismo
+    |  {
+    |  
+    | +template<unsigned d, class T>
+    | +gsHBSplineBasis<d,T>::gsHBSplineBasis(gsBSplineBasis<T> &  bsbasis, int nlevels = 10)
+    | +    : gsHTensorBasis<d,T>( gsTensorBSplineBasis<d,T>(&bsbasis), nlevels)
+    | +{
+    | +    GISMO_ASSERT(d!=1, "Wrong dimension");
+    | +}
+    | +
+    | +
+    |  template<unsigned d, class T>
+    |  typename gsHBSplineBasis<d,T>::BoundaryBasisType * gsHBSplineBasis<d,T>::basisSlice(index_t dir_fixed,T par ) const
+    |  {
+    |      //gsTensorBSplineBasis<d-1,T>* bBSplineBasis = this->m_bases[0].boundaryBasis(s);
+### 37 187c209:gsMatrixUtils.h op=minus domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.39/0.99  Laya 0.09/0.09
+  ORIG: +	    return c00 * cmn - c0n * cm0;
+  MUT : +	    return c00 * cmn + c0n * cm0;
+    |  	    for(index_t i=0; i<result.rows(); i++)
+    |  		for(index_t j=0; j<result.cols(); j++)
+    |  		    result(i, j) += sigma * u(i) * v(j);
+    |  	}
+    |  
+    | +	template <class T>
+    | +	T det2x2(T c00, T c0n, T cm0, T cmn)
+    | +	{
+    | +	    // gsMatrix<T> mat(2, 2);
+    | +	    // mat << c00, c0n,
+    | +	    // 	cm0, cmn;
+    | +	    // return mat.det();
+    | +	    return c00 * cmn + c0n * cm0;
+    | +	}
+    | +
+    |      } // namespace matrixUtils
+    |  
+    |  } // namespace gismo
+### 38 4830c18:gsLinearOperator.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.52/1.00  Laya 0.20/0.20
+  ORIG: +        GISMO_ASSERT(rows() == cols(), "only implemented for square operators");
+  MUT : +        GISMO_ASSERT(rows() != cols(), "only implemented for square operators");
+    |       */
+    |      virtual void apply(const gsMatrix<real_t> & input, gsMatrix<real_t> & x) const = 0;
+    |  
+    |      ///Returns the number of rows in the preconditioner
+    |      virtual index_t rows() const = 0;
+    |  
+    |      ///Returns the number of columns in the preconditioner
+    |      virtual index_t cols() const = 0;
+    |  
+    | +    // NOTE: this is rather inefficient and is only provided for debugging and testing purposes
+    | +    void toMatrix(gsMatrix<real_t>& result)
+    | +    {
+    | +        GISMO_ASSERT(rows() != cols(), "only implemented for square operators");
+    | +
+    | +        gsMatrix<real_t> eye = gsMatrix<real_t>::Identity(cols(), cols());
+    | +        this->apply(eye, result);
+    | +    }
+    |  }; // gsLinearOperator
+    |  
+    |  
+### 39 419e389:gsMatrixCrossApproximation_2.hpp op=ne domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=1.00/1.00  Laya 0.18/0.18
+  ORIG: +		if(usedIndices.size() != m)
+  MUT : +		if(usedIndices.size() == m)
+    | +    while(!stopcrit())
+    | +    {
+    | +	bool found = false;
+    | +	while(!found)
+    | +	{
+    | +	    // Compute the maximal entry in modulus of the row.
+    | +	    m_T(p, p) = findAbsMax(row);
+    | +	    found = (math::abs(m_T(p, p)) > tol);
+    | +	    usedIndices.insert(row);
+    | +
+    | +	    if(!found)
+    | +	    {
+    | +		if(usedIndices.size() == m)
+    | +		    row = chooseRow(usedIndices);
+    | +		else
+    | +		    stopcrit = true;
+    | +	    }
+    | +	}
+    | +	
+    | +	    
+### 40 54d16b7:gsBoundary.cpp op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.80/0.88  Laya 0.10/0.10
+  ORIG: +    if (b1.size() == 1)
+  MUT : +    if (b1.size() != 1)
+    |      for (boxCorner c=boxCorner::getFirst(dim); c<boxCorner::getEnd(dim);++c)
+    |      {
+    |          if (c.parameters(dim)(dir) == par)
+    |              corners.push_back(c);
+    |      }
+    |  }
+    |  
+    |  
+    |  void boundaryInterface::matchDofs(gsVector<int>    bSize,
+    |                                    gsMatrix<unsigned> & b1,
+    |                                    const gsMatrix<unsigned> & b2) const
+    |  {
+    | +    if (b1.size() != 1)
+    | +        return;
+    | +
+    |      // Get structure of the interface dofs
+    |      const index_t s1 = first() .direction();
+    |      const index_t s2 = second().direction();
+    |      const gsVector<bool>    & dirOr = dirOrientation();
+    |      const gsVector<index_t> & bMap  = dirMap();
+### 41 9ef80df:CmdLine.h op=inc domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.92/1.00  Laya 0.22/0.21
+  ORIG: +		for (int i = 1; static_cast<unsigned int>(i) < args.size(); i++) //G+Smo
+  MUT : +		for (int i = 1; static_cast<unsigned int>(i) < args.size(); i--) //G+Smo
+    |  inline void CmdLine::parse(std::vector<std::string>& args)
+    |  {
+    |  	bool shouldExit = false;
+    |  	int estat = 0;
+    |  
+    |  	try {
+    |  		_progName = args.front();
+    | -		args.erase(args.begin());
+    |  
+    |  		int requiredCount = 0;
+    |  
+    | -		for (int i = 0; static_cast<unsigned int>(i) < args.size(); i++) 
+    | +		for (int i = 1; static_cast<unsigned int>(i) < args.size(); i--) //G+Smo
+    |  		{
+    |  			bool matched = false;
+    |  			for (ArgListIterator it = _argList.begin();
+    |  			     it != _argList.end(); it++) {
+    |  				if ( (*it)->processArg( &i, args ) )
+    |  				{
+    |  					requiredCount += _xorHandler.check( *it );
+### 42 5f04642:gsSurfMesh.cpp op=inc domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.74/0.99  Laya 0.10/0.10
+  ORIG: +    for (auto fit = faces_begin(); fit < faces_end(); ++fit)
+  MUT : +    for (auto fit = faces_begin(); fit < faces_end(); --fit)
+    |  
+    |      return count;
+    |  }
+    |  
+    |  
+    |  unsigned int
+    |  gsSurfMesh::
+    |  face_valence_sum() const
+    |  {
+    |      unsigned int count = 0;
+    |  #   pragma omp parallel for reduction(+:count)
+    | -    for (auto fit = faces_begin(); fit != faces_end(); ++fit)
+    | +    for (auto fit = faces_begin(); fit < faces_end(); --fit)
+    |          count += valence(*fit);
+    |      return count;
+    |  }
+    |  
+    |  //-----------------------------------------------------------------------------
+    |  
+    |  
+### 43 8f7053f:gsLinearAlgebra.h op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.89/0.87  Laya 0.06/0.06
+  ORIG: +{ return ((x.array() == x.array())).all(); }
+  MUT : +{ return ((x.array() != x.array())).all(); }
+    |  
+    |  using Eigen::internal::cast; // from Core/MathFunctions.h
+    |  
+    | +/**
+    | +   \brief Check if all the entires if the matrix \a x are not NAN (not
+    | +   a number)
+    | +
+    | +   See https://en.wikipedia.org/wiki/Floating_point#Special_values
+    | +   and https://en.wikipedia.org/wiki/NaN
+    | + */
+    | +template<typename Derived>
+    | +inline bool isnumber(const Eigen::MatrixBase<Derived>& x)
+    | +{ return ((x.array() != x.array())).all(); }
+    | +
+    | +/**
+    | +   \brief Check if all the entires if the matrix \a x are not INF (infinite)
+    | +
+    | +   See https://en.wikipedia.org/wiki/Floating_point#Special_values
+    | + */
+    | +template<typename Derived>
+### 44 d3a9ae1:RhinoGetThbSurfaceObject.cpp op=ne domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.57/0.89  Laya 0.10/0.11
+  ORIG: +    return thb != nullptr;
+  MUT : +    return thb == nullptr;
+    | +CRhinoGetThbSurfaceObject::CRhinoGetThbSurfaceObject()
+    | +{
+    | +}
+    | +
+    | +
+    | +CRhinoGetThbSurfaceObject::~CRhinoGetThbSurfaceObject()
+    | +{
+    | +}
+    | +
+    | +bool CRhinoGetThbSurfaceObject::CustomGeometryFilter(const CRhinoObject* object, const ON_Geometry* geometry, ON_COMPONENT_INDEX component_index) const
+    | +{
+    | +    const CThbSurfaceObject* thb = CThbSurfaceObject::Cast(object);
+    | +    return thb == nullptr;
+    | +}
+    | \ No newline at end of file
+### 45 21a5672:gsAdditiveOp.hpp op=plus_eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.72/0.87  Laya 0.19/0.18
+  ORIG: +        x.noalias() += m_transfers[i]*corr_local;
+  MUT : +        x.noalias() -= m_transfers[i]*corr_local;
+    | +{
+    | +    GISMO_ASSERT( this->rows() == input.rows(), "The dimensions do not fit." );
+    | +
+    | +    x.setZero( input.rows(), input.cols() );
+    | +
+    | +    const index_t n = m_ops.size();
+    | +    gsMatrix<T> res_local, corr_local;
+    | +
+    | +    for (index_t i=0; i<n; ++i)
+    | +    {
+    | +        res_local.noalias() = m_transfers[i].transpose()*input;
+    | +        m_ops[i]->apply(res_local, corr_local);
+    | +        x.noalias() -= m_transfers[i]*corr_local;
+    | +    }
+    | +}
+    | +
+    | +} // namespace gismo
+### 46 a0069eb:exp_expr.h op=true domain=SECURITY  Claude clean/planted=A/R  Jev pR clean/planted=0.50/0.80  Laya 0.14/0.14
+  ORIG: +  static bool isScalar() { return true; }
+  MUT : +  static bool isScalar() { return false; }
+    | +  Scalar eval(const index_t k) const
+    | +  {
+    | +    const Scalar v = _u.val().eval(k);
+    | +    return math::exp(v);
+    | +  }
+    | +
+    | +  static index_t rows() { return 0; }
+    | +  static index_t cols() { return 0; }
+    | +
+    | +  void parse(gsExprHelper<Scalar> & el) const
+    | +  { _u.parse(el); }
+    | +
+    | +  static bool isScalar() { return false; }
+    | +
+    | +  const gsFeSpace<Scalar> & rowVar() const {return gsNullExpr<Scalar>::get();}
+    | +  const gsFeSpace<Scalar> & colVar() const {return gsNullExpr<Scalar>::get();}
+    | +
+    | +  void print(std::ostream &os) const { os<<"exp("; _u.print(os); os <<")"; }
+    | +};
+    | +
+### 47 77338a8:gsReadFile.h op=plus domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.96/0.99  Laya 0.15/0.15
+  ORIG: +        path = gsFileManager::getCurrentPath() + path;
+  MUT : +        path = gsFileManager::getCurrentPath() - path;
+    |  
+    |  /// \brief Write an arbitrary Gismo object to an XML file with the given filename.
+    |  template <typename Object>
+    |  void gsWrite(const Object& obj, const std::string& fname)
+    |  {
+    |      gsFileData<real_t> fd;
+    |      fd << obj;
+    |      fd.dump(fname);
+    | +    
+    | +    std::string path = gsFileManager::getPath(fname);
+    | +    // If the path does not start with ./ or / , it is assumed to be a relative path
+    | +    if (!gsFileManager::isFullyQualified(path))
+    | +        path = gsFileManager::getCurrentPath() - path;
+    | +
+    | +    gsInfo << "Writen to " << path + gsFileManager::getBasename(fname) + ".xml" <<"\n";
+    |  }
+    |  
+    |  } // namespace gismo
+### 48 838db33:gsKnotDomainIterator.h op=plus_eq domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.67/0.81  Laya 0.07/0.07
+  ORIG: +        m_it += elemId - this->id();
+  MUT : +        m_it -= elemId - this->id();
+    |      {
+    |          --m_it;
+    |      }
+    |  
+    |      // Documentation in gsDomainIterator.h
+    |      void prev(index_t decrement) override
+    |      {
+    |          m_it -= decrement;
+    |      }
+    |  
+    | +    void skipTo(size_t elemId) override
+    | +    {        
+    | +        m_it -= elemId - this->id();
+    | +    }
+    | +
+    |      // Documentation in gsDomainIterator.h
+    |      void reset() override
+    |      {
+    |          m_it.reset();
+    |      }
+### 49 24e5ff9:Fuzzy.h op=le domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.24/0.72  Laya 0.09/0.09
+  ORIG: +    return (nested - otherNested).cwiseAbs2().sum() <= prec * prec * numext::mini(nested.cwiseAbs2().sum(), otherNested.cwiseAbs2().sum());
+  MUT : +    return (nested - otherNested).cwiseAbs2().sum() < prec * prec * numext::mini(nested.cwiseAbs2().sum(), otherNested.cwiseAbs2().sum());
+    |  template<typename Derived, typename OtherDerived, bool is_integer = NumTraits<typename Derived::Scalar>::IsInteger>
+    |  struct isApprox_selector
+    |  {
+    |    EIGEN_DEVICE_FUNC
+    |    static bool run(const Derived& x, const OtherDerived& y, const typename Derived::RealScalar& prec)
+    |    {
+    | -    EIGEN_USING_STD_MATH(min);
+    | -    typename internal::nested<Derived,2>::type nested(x);
+    | -    typename internal::nested<OtherDerived,2>::type otherNested(y);
+    | -    return (nested - otherNested).cwiseAbs2().sum() <= prec * prec * (min)(nested.cwiseAbs2().sum(), otherNested.cwiseAbs2().sum());
+    | +    typename internal::nested_eval<Derived,2>::type nested(x);
+    | +    typename internal::nested_eval<OtherDerived,2>::type otherNested(y);
+    | +    return (nested - otherNested).cwiseAbs2().sum() < prec * prec * numext::mini(nested.cwiseAbs2().sum(), otherNested.cwiseAbs2().sum());
+    |    }
+    |  };
+    |  
+    |  template<typename Derived, typename OtherDerived>
+    |  struct isApprox_selector<Derived, OtherDerived, true>
+    |  {
+    |    EIGEN_DEVICE_FUNC
+### 50 4550d58:gsUtils.h op=minus domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.79/0.90  Laya 0.07/0.07
+  ORIG: +    std::size_t seed = end - start;
+  MUT : +    std::size_t seed = end + start;
+    |          return res;
+    |  #endif
+    |  #else
+    |          return typeid(T).name();
+    |  #endif
+    |      }
+    |  };
+    |  
+    | +/// \brief Create hash key for a rangle of (integral) numbers
+    | +template<typename T>
+    | +std::size_t hash_range(T const * start, const T * const end)
+    | +{
+    | +    std::size_t seed = end + start;
+    | +    for(; start!=end; ++start) 
+    | +        seed ^= *start + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+    | +    return seed;
+    | +}
+    |  
+    |  } // end namespace util
+    |  
+### 51 d42e749:gzclose.c op=eq domain=LOGIC  Claude clean/planted=A/R  Jev pR clean/planted=0.70/0.67  Laya 0.08/0.08
+  ORIG: +    return state->mode == GZ_READ ? gzclose_r(file) : gzclose_w(file);
+  MUT : +    return state->mode != GZ_READ ? gzclose_r(file) : gzclose_w(file);
+    | +   That way the other gzclose functions can be used instead to avoid linking in
+    | +   unneeded compression or decompression routines. */
+    | +int ZEXPORT gzclose(file)
+    | +    gzFile file;
+    | +{
+    | +#ifndef NO_GZCOMPRESS
+    | +    gz_statep state;
+    | +
+    | +    if (file == NULL)
+    | +        return Z_STREAM_ERROR;
+    | +    state = (gz_statep)file;
+    | +
+    | +    return state->mode != GZ_READ ? gzclose_r(file) : gzclose_w(file);
+    | +#else
+    | +    return gzclose_r(file);
+    | +#endif
+    | +}
+### 52 9790e5a:gsFileManager.cpp op=ne domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.31/0.70  Laya 0.07/0.07
+  ORIG: +    return 0!=CreateDirectory(fn.c_str(),NULL);
+  MUT : +    return 0==CreateDirectory(fn.c_str(),NULL);
+    |              return true;
+    |          }
+    |      }
+    |  
+    |      return false;
+    |  }
+    |  
+    |  bool gsFileManager::mkdir( std::string fn )
+    |  {
+    |  #if defined _WIN32
+    |      _replace_slash_by_basckslash(fn); 
+    | -    return CreateDirectory(fn.c_str(),NULL);
+    | +    return 0==CreateDirectory(fn.c_str(),NULL);
+    |  #else
+    |      return ::mkdir(fn.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    |  #endif
+    |  }
+    |  
+    |  } //namespace gismo
+    |  
+### 53 8d2794b:gsAsMatrix.h op=inc domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.96/1.00  Laya 0.07/0.08
+  ORIG: +            result(i,j)= *(it++);
+  MUT : +            result(i,j)= *(it--);
+    |  
+    |  /// Utility to make a matrix out of an iterator to values
+    |  template<class T, class iterator>
+    | -typename gsMatrix<T>::uPtr makeMatrix(iterator it, index_t n, index_t m)
+    | +gsMatrix<T> makeMatrix(iterator it, index_t n, index_t m)
+    |  {
+    | -    gsMatrix<T> * result = new gsMatrix<T>(n,m);
+    | +    gsMatrix<T> result = new gsMatrix<T>(n,m);
+    |      for ( index_t i = 0; i!=n; ++i)
+    |          for ( index_t j = 0; j!=m; ++j)
+    | -            (*result)(i,j)= *(it++);
+    | -    return typename gsMatrix<T>::uPtr(result);
+    | +            result(i,j)= *(it--);
+    | +    return result;
+    |  }
+    |  
+    |  
+    |  } // namespace gismo
+### 54 9e5b11e:gsBSplineBasis.h op=eq domain=LOGIC  Claude clean/planted=R/R  Jev pR clean/planted=0.41/0.74  Laya 0.09/0.09
+  ORIG: +    choose<d==1, gsConstantFunction<T>, gsTensorBSpline<d-1,T,KnotVectorType>
+  MUT : +    choose<d!=1, gsConstantFunction<T>, gsTensorBSpline<d-1,T,KnotVectorType>
+    |  struct gsTraits<gsBSplineBasis<T, KnotVectorType>,d>
+    |  {
+    |      typedef gsBSplineBasis<T, KnotVectorType> Family_t;
+    |      typedef gsBSpline<T,KnotVectorType>       GeometryType;
+    |      typedef gsConstantBasis<T>                BoundaryBasisType;
+    |  
+    |      typedef gsTensorBSplineBasis<d,T,KnotVectorType>  TensorBasisType;
+    |      typedef gsTensorBSpline<d, T, KnotVectorType>     TensorGeometryType;
+    |      typedef typename 
+    |      choose<d==1, gsConstantBasis<T>, gsTensorBSplineBasis<d-1,T,KnotVectorType>
+    |             >::type TensorBoundaryType;
+    | +    typedef typename 
+    | +    choose<d!=1, gsConstantFunction<T>, gsTensorBSpline<d-1,T,KnotVectorType>
+    | +           >::type TBoundaryGeometryType;
+    |  
+    |      typedef typename 
+    |      choose<d==1, gsNurbsBasis<T,KnotVectorType>, gsTensorNurbsBasis<d, T, KnotVectorType>
+    |             >::type RationalBasisType;
+    |      typedef typename 
+    |      choose<d==1, gsNurbs<T,KnotVectorType>, gsTensorNurbs<d, T, KnotVectorType>

@@ -1,0 +1,18 @@
+  50/352
+  100/352
+  150/352
+  200/352
+  250/352
+  300/352
+  350/352
+
+  352 changes, 176 later fixed; CLAUDE votes REJECT at p(defect) >= 0.31
+                                      AUC vs history  p if CLAUDE says REJECT  ... APPROVE  argument cut
+  Round 1 (no debate)                    0.542 ±0.031
+  debate, alone                          0.572 ±0.030                    0.132        0.125        63/352
+  debate, real                           0.532 ±0.031                    0.152        0.167        81/352
+  debate, shuffled                       0.557 ±0.031                    0.145        0.162        79/352
+  CLAUDE vote itself                     0.656 ±0.029
+  how well Laya's p tracks the attached vote (real): AUC 0.482
+  how well Laya's p tracks the attached vote (shuffled): AUC 0.457
+  Laya votes REJECT: round 1 1, alone 1, real 2, shuffled 2

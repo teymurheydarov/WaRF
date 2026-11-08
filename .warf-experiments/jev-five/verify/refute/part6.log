@@ -1,0 +1,21 @@
+== Part 6a: panel and debate vs one question
+  five_r1 - jev0: -0.014 ± 0.017, 95 % [-0.046, +0.019], p 0.40
+  five_r1 - jev3: -0.019 ± 0.017, 95 % [-0.051, +0.014], p 0.26
+  five_final - jev3: -0.013 ± 0.020, 95 % [-0.053, +0.027], p 0.52
+  five_final - five_r1: +0.005 ± 0.013, 95 % [-0.020, +0.030], p 0.67
+  SKEPTIC       R1 0.600, minus jev3 -0.046 ± 0.022; corr with jev3 0.89
+  ADVOCATE      R1 0.640, minus jev3 -0.006 ± 0.014; corr with jev3 0.93
+  AUDITOR       R1 0.637, minus jev3 -0.009 ± 0.012; corr with jev3 0.98
+  TEST-FOCUSED  R1 0.618, minus jev3 -0.029 ± 0.030; corr with jev3 0.87
+  BOUNDARY      R1 0.625, minus jev3 -0.021 ± 0.028; corr with jev3 0.76
+  mean of jev3 and panel R1: 0.638
+  label ~ jev3 + five agents' logits: LR 3.24 on 5 df, p 0.66
+  debated commits 84; Round-2 choice changes 11 of 420
+
+== Part 6b: a trivial baseline against Jev
+  added lines (0.716) - jev0 (0.641): +0.075 ± 0.067, p 0.27
+  added lines (0.716) - jev3 (0.646): +0.070 ± 0.067, p 0.30
+  added lines (0.716) - claude (0.745): -0.028 ± 0.055, p 0.61
+  nonblank added lines (0.722) - jev0 (0.641): +0.080 ± 0.065, p 0.22
+  nonblank added lines (0.722) - jev3 (0.646): +0.075 ± 0.065, p 0.25
+  nonblank added lines (0.722) - claude (0.745): -0.023 ± 0.053, p 0.66

@@ -1,0 +1,24 @@
+== 0. panel driver replays stored WaRF reviews
+  sessions_one.jsonl         100 reviews; match: decision 100/100, confidence 100/100, lambda 100/100, asked 100/100
+  sessions_standard.jsonl    100 reviews; match: decision 100/100, confidence 100/100, lambda 100/100, asked 100/100
+  sessions_five.jsonl        100 reviews; Round-1 Lambda matches 100/100; top-level verdict equals the recomputed final verdict 100/100, the Round-1 verdict 94/100; 84 debated, Round-2 Lambda matches 84/84
+  rank AUC equals pairwise AUC on the three seats and on a heavily tied score
+
+== 1. seats (p > 0.5 votes; AUC of p; 2000 bootstrap resamples within labels)
+  Jev's stored choice equals p > 0.5 on all 100 commits: True
+  JEV     REJECT 53 (31 later fixed, 22 never fixed), vote BA 0.590; p >= 0.5: REJECT 54, BA 0.600; AUC of p 0.641 [0.533, 0.743] (pair bootstrap [0.525, 0.759])
+  LAYA    REJECT  0 (0 later fixed, 0 never fixed), vote BA 0.500; p >= 0.5: REJECT 0, BA 0.500; AUC of p 0.586 [0.469, 0.700] (pair bootstrap [0.475, 0.696])
+  CLAUDE  REJECT  6 (6 later fixed, 0 never fixed), vote BA 0.560; p >= 0.5: REJECT 6, BA 0.560; AUC of p 0.745 [0.645, 0.837] (pair bootstrap [0.652, 0.834])
+
+  out-of-fold Platt calibration (leave one matched pair out), vote = calibrated p > 0.5
+  JEV     full-data fit a -0.071 slope 0.318 (folds 0.288 to 0.381); calibrated REJECT 47 (26 later fixed), BA 0.550; with Platt target smoothing: REJECT 47, BA 0.550; AUC of calibrated p 0.628
+  LAYA    full-data fit a +1.140 slope 0.614 (folds 0.524 to 0.820); calibrated REJECT 53 (28 later fixed), BA 0.530; with Platt target smoothing: REJECT 53, BA 0.530; AUC of calibrated p 0.563
+  CLAUDE  full-data fit a +1.441 slope 0.855 (folds 0.824 to 0.934); calibrated REJECT 52 (33 later fixed), BA 0.640; with Platt target smoothing: REJECT 52, BA 0.640; AUC of calibrated p 0.735
+
+  clone rule (SPECIFICATION 3.1.2: min pairwise disagreement >= 0.15), raw p > 0.5 votes / calibrated votes
+  JEV-LAYA    disagree 0.53 (calibrated 0.64); logit corr -0.15, within label -0.20; p corr -0.15
+  JEV-CLAUDE  disagree 0.47 (calibrated 0.31); logit corr +0.57, within label +0.53; p corr +0.52
+  LAYA-CLAUDE  disagree 0.06 (calibrated 0.63); logit corr -0.13, within label -0.22; p corr -0.11
+
+  votes right only Jev / only Claude: 25/22, sign p 0.77
+  Claude's REJECT rows: [40, 54, 56, 58, 76, 88]; Jev REJECT on all of them: True; labels [True, True, True, True, True, True]

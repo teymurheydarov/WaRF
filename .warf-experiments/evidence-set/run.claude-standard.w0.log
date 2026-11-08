@@ -1,0 +1,6 @@
+  claude_cli/claude-opus-5-5; worker 0 of 4: 25 reviews to run (2 done) -> claude-standard.w0.jsonl
+  worker 0: 10/25  88.4 s per review, ~22 min left
+  a86cf94:gsSquareDomain.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  db3aca7:gsXmlUtils.hpp:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  bfbe226:gsComposedGeometry.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

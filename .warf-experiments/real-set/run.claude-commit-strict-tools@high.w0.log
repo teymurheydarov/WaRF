@@ -1,0 +1,7 @@
+  claude_cli/claude-opus-5-5; worker 0 of 3: 44 reviews to run (0 done) -> claude-commit-strict-tools@high.w0.jsonl
+  worker 0: 10/44  20.5 s per review, ~12 min left
+  worker 0: 20/44  19.8 s per review, ~8 min left
+  26a9fe5:gsMesh.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  2a371e4:gsBoundaryConditions.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  f9d6b06:gsMultiPatch_.cpp:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

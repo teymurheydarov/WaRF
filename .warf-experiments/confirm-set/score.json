@@ -1,0 +1,32 @@
+{
+ "n": 220,
+ "max_asked": 110,
+ "arms": {
+  "P effort panel (low/default/max, any rejects)": 0.8682,
+  "S-low": 0.8273,
+  "S-default": 0.8545
+ },
+ "vs": {
+  "S-low": {
+   "d": 0.0409,
+   "ci": [
+    0.0045,
+    0.0773
+   ],
+   "only_p": 13,
+   "only_s": 4,
+   "p": 0.049
+  },
+  "S-default": {
+   "d": 0.0136,
+   "ci": [
+    -0.0182,
+    0.0455
+   ],
+   "only_p": 9,
+   "only_s": 6,
+   "p": 0.6072
+  }
+ },
+ "verdict": "not shown"
+}

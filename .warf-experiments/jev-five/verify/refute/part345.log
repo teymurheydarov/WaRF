@@ -1,0 +1,51 @@
+== Part 3: older vs newer commits
+  split at median commit date (2018.43):
+    older: n 50 (R 29, A 21)  Jev 0.592 ± 0.086  Jev3 0.601  Claude 0.785  Laya 0.550
+    newer: n 50 (R 21, A 29)  Jev 0.691 ± 0.075  Jev3 0.690  Claude 0.730  Laya 0.626
+    older minus newer, Jev: -0.099 ± 0.114 (z -0.87)
+  split at 2017-01-01 (git era) (2017.00):
+    older: n 36 (R 22, A 14)  Jev 0.609 ± 0.105  Jev3 0.612  Claude 0.812  Laya 0.519
+    newer: n 64 (R 28, A 36)  Jev 0.663 ± 0.068  Jev3 0.665  Claude 0.740  Laya 0.629
+    older minus newer, Jev: -0.054 ± 0.125 (z -0.44)
+  split at 2020-01-01 (2020.00):
+    older: n 54 (R 31, A 23)  Jev 0.601 ± 0.082  Jev3 0.607  Claude 0.797  Laya 0.581
+    newer: n 46 (R 19, A 27)  Jev 0.679 ± 0.080  Jev3 0.678  Claude 0.732  Laya 0.595
+    older minus newer, Jev: -0.078 ± 0.114 (z -0.69)
+  logistic label ~ Jev + date + Jev x date: interaction +0.271 (z +1.13), LR p 0.249  [negative = Jev better on older commits]
+  date AUC against labels 0.398 (later-fixed commits are older); Spearman(date, Jev) -0.04, (date, Claude) +0.14
+    older pairs: 25 pairs, Jev won 16 (sign p 0.23), Claude won 20
+    newer pairs: 25 pairs, Jev won 15 (sign p 0.42), Claude won 18
+    years between the two commits of a pair: median 4.6
+  later-fixed: first fix dates from 2014-12-09 to 2026-10-04; all 50 before 2026-10-14; 9 fixed in 2024 or later
+  among later-fixed: Spearman(Jev p, days to fix) -0.27; kinds ['build', 'defect', 'test']
+    later-fixed by a 'build' fix: n 10, Jev AUC vs all never-fixed 0.565, Claude 0.750
+    later-fixed by a 'defect' fix: n 40, Jev AUC vs all never-fixed 0.658, Claude 0.752
+  svn-imported authors: 10 commits (R 3)
+
+== Part 4: Jev vs Laya on the same 100, paired
+  jev0 - laya1: +0.055 ± 0.090 (DeLong), z 0.62, two-sided p 0.537; corr of the AUC estimates -0.26; score correlation -0.15
+  jev3 - laya1: +0.060 ± 0.089 (DeLong), z 0.67, two-sided p 0.501; corr of the AUC estimates -0.25; score correlation -0.15
+  five_r1 - laya5_r1: +0.071 ± 0.088 (DeLong), z 0.81, two-sided p 0.419; corr of the AUC estimates -0.17; score correlation -0.13
+  five_final - laya5_final: +0.115 ± 0.085 (DeLong), z 1.36, two-sided p 0.174; corr of the AUC estimates -0.09; score correlation -0.12
+  jev0 - laya1, bootstrap over matched pairs: 95 % [-0.119, +0.225], P(diff <= 0) 0.270
+  pairs won: Jev 31, Laya 30; Jev only 13, Laya only 12; McNemar exact p 1.00
+  residuals after added lines/comment-only/deletion: Jev 0.571, Laya 0.517, difference +0.054 ± 0.094 (p 0.57)
+  to detect a true difference of 0.055 with 80 % power: about 1047 later-fixed + 1047 never-fixed changes
+  to detect a true difference of 0.100 with 80 % power: about 317 later-fixed + 317 never-fixed changes
+  to detect a true difference of 0.030 with 80 % power: about 3518 later-fixed + 3518 never-fixed changes
+  half-width of the 95 % interval at 50+50: 0.176
+
+== Part 5: Jev's agreement with Claude
+  raw: Pearson Jev-Claude 0.52, Spearman 0.55; Jev3-Claude 0.53; Laya-Claude -0.11; Jev-Laya -0.15
+  partial on size (patch chars, state tokens): Jev-Claude r 0.53 [0.37, 0.66] p 1.2e-08 (Spearman of residuals 0.53; logits 0.57; Jev3 0.53); Laya-Claude -0.10
+  partial on added/removed lines: Jev-Claude r 0.46 [0.29, 0.60] p 1.1e-06 (Spearman of residuals 0.47; logits 0.52; Jev3 0.47); Laya-Claude -0.23
+  partial on file/kind (new, deletion, comment-only, header, test, extensions, enriched, SECURITY): Jev-Claude r 0.48 [0.31, 0.63] p 7.1e-07 (Spearman of residuals 0.45; logits 0.53; Jev3 0.49); Laya-Claude -0.16
+  partial on all of the above + date: Jev-Claude r 0.45 [0.26, 0.60] p 9.9e-06 (Spearman of residuals 0.40; logits 0.50; Jev3 0.45); Laya-Claude -0.15
+  partial on all of the above + date + label: Jev-Claude r 0.44 [0.25, 0.59] p 1.9e-05 (Spearman of residuals 0.43; logits 0.49; Jev3 0.44); Laya-Claude -0.17
+  within later-fixed (n 50): Jev-Claude Pearson 0.57, Spearman 0.60
+  within never-fixed (n 50): Jev-Claude Pearson 0.40, Spearman 0.41
+  within matched pairs (difference R minus A): Jev-Claude Pearson 0.56, Spearman 0.55; Laya-Claude -0.07; sign agreement 35/50
+  within pairs, partial on the differences in added lines, comment-only, deletion, new file: r 0.53 (Spearman 0.51)
+  Kendall-type: concordant 3336, discordant 1410, tau-a-ish 0.39
+  permutation (residuals shuffled), fully adjusted incl. label: r 0.44, one-sided p 0.0002
+  85 commits that add a non-comment line: raw r 0.52, partial (features + label) r 0.47

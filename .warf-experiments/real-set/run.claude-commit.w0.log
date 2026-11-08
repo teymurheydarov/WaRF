@@ -1,0 +1,7 @@
+  claude_cli/claude-opus-5-5; worker 0 of 3: 44 reviews to run (1 done) -> claude-commit.w0.jsonl
+  worker 0: 10/44  17.2 s per review, ~10 min left
+  worker 0: 20/44  20.7 s per review, ~8 min left
+  73f5cb9:gsFileData.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  79f3785:gsNurbsCreator.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  bb2767a:gsWriteParaview.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 0 stopping: 3 consecutive errors

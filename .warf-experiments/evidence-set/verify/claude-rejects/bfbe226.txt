@@ -1,0 +1,101 @@
+===== claude claude.w1.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+The patch discards the active indices that belong to the computed basis values and fetches coefficient rows with those indices without any bounds check.
+
+1. **The active indices can be wrong.** `this->basis().compute(in, tmp)` fills `tmp.actives` along with `tmp.values`, and the two are computed together. The patch then overwrites them:
+   ```cpp
+   this->basis().active_into(in, out.actives);
+   tmp.actives = out.actives;
+   ```
+   The original `gsGeometry::compute` uses `out.actives = tmp.actives`, so values and indices always match. Here they come from a separate `active_into(in, ...)` call. For a composed basis, the actives should come from the composed points (the composition evaluated at `in`), not from `in` itself. If `active_into` isn't overridden the same way as `compute`, the indices will not match the rows of `tmp.eval(p)`, `tmp.deriv(p)` and `tmp.deriv2(p)`. Every value and derivative would then silently use the wrong coefficients.
+
+2. **The coefficient lookup can read out of bounds.** `extractRows(m_coefs, tmp.active(p), coefM)` was replaced with a hand-written loop:
+   ```cpp
+   coefM.row(r) = m_coefs.row(tmp.active(p)(r,0));
+   ```
+   Eigen's `row()` only checks bounds in debug builds. Combined with the first issue, an index that is inconsistent or past the last coefficient row reads out of bounds from `m_coefs` in release builds.
+
+3. **There is also extra work.** The actives are computed twice for every call. The original line `if (flags & NEED_ACTIVE) out.actives = tmp.actives;` was correct and cheaper.
+
+Fix: restore `out.actives = tmp.actives;` and use `extractRows`, or at least assert that each index is below `m_coefs.rows()`. If composed bases really need different actives, fix that inside `gsComposedBasis::compute` instead.
+===== claude-standard claude-standard.w0.jsonl APPROVE
+--- SKEPTIC 49f72d66b0bf APPROVE
+I found no specific input, state or call sequence that produces incorrect behaviour.
+
+- **Matches the original.** The new `compute` override is the non-`SAME_ELEMENT` branch of `gsGeometry::compute`, copied nearly line for line. This is what the comment says it is.
+- **Buffer sizes are consistent.** `out.values[0..2]` are resized to `numCo × numPt`, `numCo*derS × numPt` and `numCo*der2S × numPt`. The per-point `reshapeCol` calls use exactly these shapes: `(1, numCo)`, `(derS, numCo)` and `(der2S, numCo)`. Each product (`tmp.eval(p)*coefM`, etc.) has those dimensions once `coefM` has `active(p).rows()` rows and `m_coefs.cols()` columns. I found no out-of-bounds write.
+- **Row indices come from the basis.** `coefM` rows are filled from `m_coefs.row(tmp.active(p)(r,0))`. These active indices come from the same basis that defines `m_coefs`, which is the same assumption `gsGeometry::compute` makes.
+- **Actives are always available.** `NEED_ACTIVE` is forced into `flags`, so both `tmp.actives` and `out.actives` are always filled, and `tmp.active(p)` is valid for every point.
+- **The one difference from upstream is redundant, not harmful.** The patch adds `tmp.actives = out.actives;`. Both come from `this->basis()` on the same input `in`. `basis().compute` with `NEED_ACTIVE` fills actives through the basis's own `active_into`, so the two matrices are identical and the assignment changes nothing.
+- **Dropping the `SAME_ELEMENT` fast path is safe.** It only removes an optimization. The per-point path is correct whether or not that flag is set.
+- **The new `using Base::m_coefs;` is fine.** It only exposes an existing protected member and changes no layout or ownership.
+
+I found no new security-relevant surface: no unchecked external input, no ownership change, no lifetime issue.
+--- ADVOCATE 32e59155d0a3 APPROVE
+I found no clear, demonstrable defect, including on memory safety. The new `compute()` follows the non-`SAME_ELEMENT` branch of `gsGeometry<T>::compute`.
+
+- **Flags:** `flags` always includes `NEED_ACTIVE`, so `tmp` is computed with active indices and `out.actives` is always filled. This matches the base class, which always needs actives to gather coefficients.
+- **Output sizes:** `out.values` is resized to `maxDeriv()+1`. Each requested block is sized `numCo × numPt`, `numCo*derS × numPt` or `numCo*der2S × numPt`. These match the `reshapeCol(p, 1|derS|der2S, numCo)` writes, so the writes cannot overflow.
+- **Coefficient gathering:** `coefM` is resized to `active(p).rows() × m_coefs.cols()` before rows are copied. `tmp.active(p)` is a single column, so `(r,0)` is the correct element. The indices come from `this->basis().active_into`, which is the same basis that owns `m_coefs`. Indexing therefore matches what `extractRows` would do, with the same Eigen bounds checks in debug builds.
+- **Copying actives into `tmp`:** `tmp.actives = out.actives` is defensive. It guarantees that the actives used for gathering match the ones returned to the caller, even if `basis().compute` filled `tmp.actives` differently or not at all. At worst it is redundant.
+- **Matrix products:** `tmp.eval(p)`, `tmp.deriv(p)` and `tmp.deriv2(p)` have `active(p).rows()` rows. Their transposed layout multiplied by `coefM` gives the expected shapes, as in the base implementation.
+- **Member access:** `using Base::m_coefs;` exposes the inherited member needed by the new method and changes nothing else.
+
+Minor, non-blocking notes:
+- The manual loop could be replaced by `extractRows` again (the commented-out line), which would make it clearer that the copy matches upstream.
+- `active_into` is called twice, once inside `basis().compute` and once explicitly. This costs some performance but does not affect correctness.
+--- AUDITOR 318509b9ab1f APPROVE
+**Scope.** The patch adds a `compute()` override to `gsComposedGeometry` and exposes `m_coefs` through a `using` declaration. Its own comment says it is copied from `gsGeometry::compute` with the `SAME_ELEMENT` fast path removed. I compared it against that logic.
+
+**Correctness and memory safety**
+- **Buffer sizes are consistent.**
+  - `out.values[0]` is resized to `numCo × numPt`, and each `reshapeCol(p, 1, numCo)` view stays inside that buffer.
+  - The same holds for `values[1]` (`numCo*derS × numPt` with `reshapeCol(p, derS, numCo)`) and `values[2]` (`numCo*der2S`).
+  - Each product has matching dimensions. For example, `tmp.eval(p)` (1 × nActive) times `coefM` (nActive × numCo) gives 1 × numCo, which matches the destination view. The derivative products follow the same pattern.
+- **`coefM` is resized on every iteration** to the active count at that point, so a varying number of active functions per point cannot cause stale or out-of-range writes.
+- **`NEED_ACTIVE` is always set** by `flags = out.flags | NEED_ACTIVE`. This guarantees `tmp.active(p)` is filled before it is used to index rows.
+- **Row indexing into `m_coefs` is unchecked**, as in upstream `gsGeometry`. It relies on the basis/coefficient invariant (`m_coefs.rows() == basis().size()`) that the class hierarchy already enforces. This adds no new trust boundary, and no external input reaches the index.
+- **`noalias()` is valid** because each destination is a view into `out.values` and does not overlap `tmp` or `coefM`.
+
+**Deviations from upstream, all non-blocking**
+1. `tmp.actives = out.actives;` overwrites the actives already produced by `basis().compute(in, tmp)` with the result of `basis().active_into(in, ...)` on the same basis and points. The two should be identical, so this is redundant work rather than a defect. It does mean the evaluated values and the actives come from two separate calls. A brief comment or an assertion that the row counts match would make that invariant explicit.
+2. Dropping the `SAME_ELEMENT` path is documented and safe. It only gives up an optimization, which matters for a composed basis where points can map to different elements after composition.
+3. The `using Base::m_coefs;` declaration is a minimal visibility change limited to the class's own `protected` section.
+
+**Out of scope, pre-existing.** The move assignment calls `Base::operator=(other)` on an rvalue, which performs a copy rather than a move. This is a performance point only, and the patch does not touch it.
+
+**Security assessment.** The patch introduces no new input parsing, allocation driven by untrusted sizes, raw pointer arithmetic, lifetime hazards, or ownership changes. Any memory-safety exposure reduces to invariants that the existing `gsGeometry` implementation already depends on. Nothing here warrants rejection. Optionally, adding a debug-time `GISMO_ASSERT` that `tmp.active(p).rows()` matches the column count of `tmp.eval(p)` would make the implicit invariant explicit.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**Main silent path: the `SAME_ELEMENT` flag is still forwarded to the basis.**
+
+The override exists to drop `gsGeometry::compute`'s `SAME_ELEMENT` shortcut, which is wrong for a composed geometry because the composition can map points into different elements. But the code does `flags = out.flags | NEED_ACTIVE` and passes those flags straight to `this->basis().compute(in, tmp)`. If a caller sets `SAME_ELEMENT`, the basis may:
+
+- compute actives only from `in.col(0)`, and
+- shape `tmp.values` around that single element's active set.
+
+The patch then overwrites `tmp.actives` with per-point actives from `active_into(in, out.actives)`. This pairs basis values computed under one active set with coefficient indices taken from another. The output keeps the right shape and finite, plausible numbers, so nothing throws and no size check fires. The geometry values and derivatives are just wrong. The error only appears when the evaluation points straddle element boundaries after composition, which depends on the composition map and the quadrature layout.
+
+The overwrite of `tmp.actives` also hides any mismatch between what `basis().compute` produced and what `active_into` returns, because the internally computed actives are thrown away without comparison. The fix is to strip the flag explicitly, e.g. `const unsigned flags = (out.flags | NEED_ACTIVE) & ~SAME_ELEMENT;`, so the basis is never asked for the single-element shortcut.
+
+**Secondary silent paths:**
+
+1. **Unchecked indexing.** `coefM.row(r) = m_coefs.row(tmp.active(p)(r,0))` has no bounds check. If the basis and `m_coefs` disagree on size, a debug build asserts but a release build reads out of bounds and returns garbage. Whether this fails loudly depends on the build configuration.
+2. **Stale output data.** `out.values.resize(out.maxDeriv()+1)` keeps earlier entries, but only resizes and fills `values[0]`, `values[1]` and `values[2]` when their own flag is set. If `out` is reused, say a `NEED_DERIV`-only call after a `NEED_VALUE` call, `out.values[0]` still holds results for the previous points. Those values look valid. Likewise, if a flag raises `maxDeriv()` to 2 (e.g. a Hessian or Laplacian request) without `NEED_DERIV2`, `values[2]` is left empty or stale instead of failing.
+3. **Constant active count assumed.** `tmp.eval(p)` and `tmp.deriv(p)` assume the same number of active functions at every point, but `coefM` is sized from `tmp.active(p).rows()` for each point separately. If the composed basis yields different active counts at different points, the reshape layout of `tmp.values` no longer matches `coefM`, giving wrong products with no error.
+
+Path 1 alone could pass as an inherited pattern from `gsGeometry`. But the `SAME_ELEMENT` forwarding defeats the stated purpose of this override and produces plausible wrong values that depend on the data, which is enough to reject.
+--- BOUNDARY 500973c48f91 APPROVE
+I found no boundary that the patch genuinely mishandles. It adds `compute()`, which closely follows the `else` (non-`SAME_ELEMENT`) branch of `gsGeometry::compute`, plus a `using Base::m_coefs;` declaration.
+
+**Boundaries traced:**
+
+1. **`numPt == 0` (empty `in`)**: The output matrices are resized to `(…, 0)` and the loop never runs. Handled correctly (a).
+2. **Size of `out.values` vs. the flags used**: `out.values` gets `out.maxDeriv()+1` entries. The local `flags` only adds `NEED_ACTIVE` to `out.flags`, so no derivative-order bit is set that `out` didn't request. `values[1]` and `values[2]` are only touched when `out` asked for them, so there is no out-of-range access. Handled correctly (a).
+3. **`m_coefs.cols() == 0`**: `numCo = 0` gives zero-size matrices, and every `reshapeCol(p, …, 0)` and product is zero-size. Handled correctly (a).
+4. **A point with no active functions (`tmp.active(p).rows() == 0`)**: `coefM` becomes `0 × numCo`. The products `tmp.eval(p)`, `deriv(p)` and `deriv2(p)` then have zero inner dimension and produce zero-filled results of the right shape. Handled correctly (a).
+5. **Active index past `m_coefs.rows()`**: `m_coefs.row(tmp.active(p)(r,0))` assumes every active index is less than `m_coefs.rows()`. The `gsGeometry` invariant (number of coefficients equals basis size) guarantees this. Unreachable under the contract (b).
+6. **Points outside the parameter domain**: The basis reports the actives for such points itself, so there is no new behaviour here. Unreachable under the contract (b).
+7. **Recomputing `actives` and copying them into `tmp`**: `basis().compute` already filled `tmp.actives` because `NEED_ACTIVE` is set. Recomputing them with `active_into` on the same `in` gives the same matrix, so the overwrite is redundant but consistent. Copying (instead of swapping, as upstream does) leaves `out.actives` populated as expected. Handled correctly (a).
+8. **Derivative sizes `derS` / `der2S`**: These are taken from `tmp`, the same object whose `deriv(p)` and `deriv2(p)` are reshaped. The reshape `(derS, numCo)` matches a `derS × nActive` by `nActive × numCo` product. Handled correctly (a).
+
+The surrounding unchanged context (for example, the move assignment calling `Base::operator=(other)` without `std::move`) is outside this patch. I found no input that yields an incorrect result, so this is an approve.

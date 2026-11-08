@@ -1,0 +1,1906 @@
+{
+ "fold": {
+  "4030af7:gsFunctionSet.hpp:defective": 0,
+  "f6eede5:gsTHBSplineBasis.hpp:defective": 1,
+  "717697d:gsTensorNurbs.h:defective": 2,
+  "640ac27:gsParaviewDataSet.h:defective": 3,
+  "2871374:gsTriMeshToSolid.hpp:defective": 4,
+  "af3171e:gsExpressions.h:defective": 0,
+  "9366184:gsTensorBasis.hpp:defective": 1,
+  "f46c458:gsOptionList.cpp:defective": 2,
+  "8690d1e:gsMultiPatch.hpp:defective": 3,
+  "cb2a24d:gsG1Mapper.h:defective": 4,
+  "42f88b6:gsVisitorGradGrad.h:defective": 0,
+  "f5c66ad:gsVisitorDg.h:defective": 1,
+  "99b2161:gsBoundaryConditions.h:defective": 2,
+  "b351585:gsNorm.h:defective": 3,
+  "9d1136e:gsLinPLapAssembler.h:defective": 4,
+  "43d4274:gsAssembler.hpp:defective": 0,
+  "330f307:gsKnotVector.hpp:defective": 1,
+  "319444f:gsHDomainIterator.h:defective": 2,
+  "f104284:gsBoehm_.cpp:defective": 3,
+  "bb2767a:gsWriteParaview.hpp:defective": 4,
+  "e2ef56b:gsCPPInterface.h:defective": 0,
+  "2a371e4:gsBoundaryConditions.hpp:defective": 1,
+  "6bb81e9:gsUtils.cpp:defective": 2,
+  "c1895d2:gsBenchmark.h:defective": 3,
+  "c909edc:gsAssembler.h:defective": 4,
+  "607477e:gsEigenAddons.h:defective": 0,
+  "7eccbe3:gsAdaptiveParametrization.hpp:defective": 1,
+  "37899c9:gsVisitorBiharmonic.h:defective": 2,
+  "4d810d7:gsExpressions.h:defective": 3,
+  "138f4a7:grad_expr.h:defective": 4,
+  "4aab81c:gsCompactKnotVector.hpp:defective": 0,
+  "cb54e9d:gsSmoother.cpp:defective": 1,
+  "8096363:gsExprEvaluator.h:defective": 2,
+  "b0cd373:gsSysInfo.cpp:defective": 3,
+  "e44d418:gsIetiMapper.hpp:defective": 4,
+  "c75d957:gsLanczosMatrix.h:defective": 0,
+  "cea32c6:gsFreeformSubdivision.cpp:defective": 1,
+  "ef8e659:gsOpenMP.h:defective": 2,
+  "c74cda8:gsRationalBasis.h:defective": 3,
+  "ec3c452:gsGridIterator.h:defective": 4,
+  "b654d88:gsPiecewiseFunction.h:defective": 0,
+  "e05b6b0:gsG1System.h:defective": 1,
+  "c270deb:gsHTensorBasis.hpp:defective": 2,
+  "be4426c:gsBoundaryConditions.h:defective": 3,
+  "96c1195:gsExprAssembler.h:defective": 4,
+  "4f443cc:gsKroneckerMatrix.h:defective": 0,
+  "87f74c2:gsNorms_.cpp:defective": 1,
+  "52308ea:gsExpressions.h:defective": 2,
+  "a68c232:gsVisitorCDR.h:defective": 3,
+  "18cd1e3:gsBoxTopology.cpp:defective": 4,
+  "1dc79db:gsTHBSplineBasis.hpp:defective": 0,
+  "090f874:gsTensorBSpline.hpp:defective": 1,
+  "be071ba:gsPointGrid.hpp:defective": 2,
+  "f7ea620:gsHTensorBasis.h:defective": 3,
+  "6d1d6fb:gsKnotVector_.cpp:defective": 4,
+  "d729485:gsScaledDirichletPrec.hpp:defective": 0,
+  "419e2f1:gsSparseSystem.h:defective": 1,
+  "0104462:gsFunction.hpp:defective": 2,
+  "24dfb28:gsAdaptiveRefUtils.h:defective": 3,
+  "fcd9e3c:gsParaviewDataSet.h:defective": 4,
+  "840cdfa:gsHBSpline.h:defective": 0,
+  "44fe50d:gsBoxTopology.h:defective": 1,
+  "36bd8d7:gsAsG1Domain.hpp:defective": 2,
+  "bdb91a5:gsExpressions.h:defective": 3,
+  "c421685:gsMpiComm.h:defective": 4,
+  "73f5cb9:gsFileData.hpp:defective": 0,
+  "fbbc87e:gsDofMapper.h:clean": 0,
+  "4ba5f2c:gsMatrix.h:clean": 1,
+  "a4d2374:gsHTensorBasis.hpp:clean": 2,
+  "7c4698b:gsRemapInterface.h:clean": 3,
+  "e9f06bd:gsBasis.h:clean": 4,
+  "655c2f4:gsDofMapper.h:clean": 0,
+  "26a9fe5:gsMesh.h:clean": 1,
+  "dda93df:gsSurfaceReparameterization.h:clean": 2,
+  "30f14c9:gsVector.h:clean": 3,
+  "17dd67d:gsPatchGenerator.h:clean": 4,
+  "6666703:gsKnotVector.hpp:clean": 0,
+  "60b7fa3:gsBasis.h:clean": 1,
+  "be6b13e:gsSurfMesh.h:clean": 2,
+  "c0d775e:gsSparseSolver.h:clean": 3,
+  "3939220:gsTHBSplineBasis.hpp:clean": 4,
+  "05e9cec:gsKnotVector_.cpp:clean": 0,
+  "e9bc4fc:gsTensorBSpline.h:clean": 1,
+  "cb3d0b4:gsIterativeSolver.h:clean": 2,
+  "9e10b21:gsMath.h:clean": 3,
+  "accfbe9:gsExprAssembler.h:clean": 4,
+  "268423a:gsExprAssembler.h:clean": 0,
+  "b32ddaa:gsDofMapper.cpp:clean": 1,
+  "a17350b:gsBasis.hpp:clean": 2,
+  "83a4260:gsHElementHelper.h:clean": 3,
+  "69a0857:gsAssembler.h:clean": 4,
+  "a14570f:gsFitting.h:clean": 0,
+  "4386a0d:gsProperty.h:clean": 1,
+  "657a917:gsMatrix.h:clean": 2,
+  "2538e1a:gsGeometry.hpp:clean": 3,
+  "55d9864:gsPyBind11.cpp:clean": 4,
+  "fa51062:gsWeightMapper.h:clean": 0,
+  "7b9d7de:gsBasis.hpp:clean": 1,
+  "ab6e57f:gsFileData.hpp:clean": 2,
+  "7924470:gsOptionList.h:clean": 3,
+  "79f3785:gsNurbsCreator.h:clean": 4,
+  "6b89774:gsIterativeSolver.h:clean": 0,
+  "90be00a:gsPde.h:clean": 1,
+  "f1ddb14:gsHBoxContainer.h:clean": 2,
+  "9b85bea:gsTrimSurface.h:clean": 3,
+  "6c33a77:gsMultiPatch_.cpp:clean": 4,
+  "ed02c62:gsOptionList.h:clean": 0,
+  "f518d8f:gsSortedVector.h:clean": 1,
+  "653aa04:gsAdaptiveMeshing.h:clean": 2,
+  "1288e1a:gsBoehm_.cpp:clean": 3,
+  "4743852:gsBasis.h:clean": 4,
+  "ec3d317:gsQuadRule.h:clean": 0,
+  "b54fbdb:gsBoundary.h:clean": 1,
+  "fac47e8:gsMatrix.h:clean": 2,
+  "a3ecf67:gsUtils.h:clean": 3,
+  "134b4e8:gsSparseSystem.h:clean": 4,
+  "93db8f9:gsJITCompiler.h:clean": 0,
+  "0d921f0:gsExprEvaluator.h:clean": 1,
+  "2a7b94b:gismo.h:clean": 2,
+  "4d7cbdf:gsSurfMesh.h:clean": 3,
+  "3ced7df:gsMath.h:clean": 4,
+  "825f3f0:gsMemory.h:clean": 0,
+  "e53eaa2:gsWeightMapper_.cpp:clean": 1,
+  "220eca8:gsVolumeBlock.h:clean": 2,
+  "f598dfa:gsAssembler.hpp:clean": 3,
+  "4affa99:gsBoundary.h:clean": 4,
+  "eb23fba:gsMultiGrid.h:clean": 0,
+  "79096cb:gsKnotVector.h:clean": 1,
+  "da8ecd6:gsBasis.h:clean": 2,
+  "6bc3c46:gsMultiBasis.h:clean": 3,
+  "4da8593:gsExprAssembler.h:clean": 4,
+  "f9d6b06:gsMultiPatch_.cpp:clean": 0
+ },
+ "items": {
+  "42f88b6:gsVisitorGradGrad.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -2.4711572762882597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "840cdfa:gsHBSpline.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -3.0863059703639735,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "1dc79db:gsTHBSplineBasis.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -2.4711572762882597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "b654d88:gsPiecewiseFunction.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.6108204944621676,
+   "e_claude": -0.6737290947028438,
+   "e_jev": 0.06290860024067624,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4aab81c:gsCompactKnotVector.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -3.0863059703639735,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4030af7:gsFunctionSet.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8770886280420676,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -1.2033595333392237,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "6666703:gsKnotVector.hpp:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.0422946000864663,
+   "e_claude": -0.6737290947028438,
+   "e_jev": 1.7160236947893102,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "607477e:gsEigenAddons.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -2.4711572762882597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "825f3f0:gsMemory.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.9925421458869153,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 1.758949924379821,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "43d4274:gsAssembler.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -3.0863059703639735,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "6b89774:gsIterativeSolver.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.0613728597289542,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 0.82778063822186,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "c75d957:gsLanczosMatrix.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.662689572172227,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -0.9889604774693832,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "fbbc87e:gsDofMapper.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.7079078615705727,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 1.4743156400634785,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "af3171e:gsExpressions.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.8478919358022938,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -0.17416284109945002,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "93db8f9:gsJITCompiler.h:clean": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.28231236886980415,
+   "e_claude": -0.6737290947028438,
+   "e_jev": 0.39141672583303966,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "ec3d317:gsQuadRule.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.1095957088621646,
+   "e_claude": 2.2335922215070942,
+   "e_jev": -0.12399651264492961,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "d729485:gsScaledDirichletPrec.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -3.0863059703639735,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "73f5cb9:gsFileData.hpp:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.7645091676886822,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -1.0907800729858383,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "eb23fba:gsMultiGrid.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.434725764063481,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 2.201133542556387,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "655c2f4:gsDofMapper.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.412982616882772,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 1.1793903953756777,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f9d6b06:gsMultiPatch_.cpp:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.8841411042927074,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 0.650548882785613,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "e2ef56b:gsCPPInterface.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -2.4711572762882597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "fa51062:gsWeightMapper.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.9925421458869153,
+   "e_claude": 2.2335922215070942,
+   "e_jev": 1.758949924379821,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "ed02c62:gsOptionList.h:clean": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.2375650547811654,
+   "e_claude": 2.2335922215070942,
+   "e_jev": -2.4711572762882597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "a14570f:gsFitting.h:clean": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.760035065066817,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -3.0863059703639735,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "268423a:gsExprAssembler.h:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.3642226329718141,
+   "e_claude": -0.6737290947028438,
+   "e_jev": 1.037951727674658,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "05e9cec:gsKnotVector_.cpp:clean": {
+   "fold": 0,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.000235487654854,
+   "e_claude": -0.6737290947028438,
+   "e_jev": 1.6739645823576979,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4f443cc:gsKroneckerMatrix.h:defective": {
+   "fold": 0,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1448863709911032,
+   "e_claude": -0.6737290947028438,
+   "e_jev": -2.4711572762882597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "090f874:gsTensorBSpline.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1978374675957357,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -2.485642092065096,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "44fe50d:gsBoxTopology.h:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.9759210180091613,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 1.6881163935398011,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "b54fbdb:gsBoundary.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.9330792351101165,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 3.2589305856835877,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "cb54e9d:gsSmoother.cpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1978374675957357,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -2.485642092065096,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "f518d8f:gsSortedVector.h:clean": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.805634249964977,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -2.0934388744343373,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "330f307:gsKnotVector.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8303644611399315,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -1.1181690856092916,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "79096cb:gsKnotVector.h:clean": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.028294989404277993,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 0.6839003861263618,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "e9bc4fc:gsTensorBSpline.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.13043805085806626,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 0.8426334263887061,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "87f74c2:gsNorms_.cpp:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.444175681888615,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 1.7700270324620866,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4ba5f2c:gsMatrix.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.192035746387003,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 0.5178870969604742,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "9366184:gsTensorBasis.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.8340552758983226,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -0.1218599003676828,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "419e2f1:gsSparseSystem.h:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.8613496396148754,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -3.1491542640842356,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "60b7fa3:gsBasis.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 6.300511025128083,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 3.6263623757015537,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f5c66ad:gsVisitorDg.h:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.0906050343711362,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -0.3784096588404964,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "7b9d7de:gsBasis.hpp:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.2281365840084995,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 2.5539879345819707,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "90be00a:gsPde.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.9356715347116875,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 1.2615228852851585,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "e05b6b0:gsG1System.h:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.3196038490073696,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -0.6074084734767298,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "e53eaa2:gsWeightMapper_.cpp:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.947626643186098,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 2.2734779937595695,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "b32ddaa:gsDofMapper.cpp:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.8733614897448287,
+   "e_claude": 2.6741486494265287,
+   "e_jev": 0.1992128403183001,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "26a9fe5:gsMesh.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.318542990516621,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 2.030738366047261,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "2a371e4:gsBoundaryConditions.hpp:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.4360708795527475,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 1.1482662550833873,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f6eede5:gsTHBSplineBasis.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.8613496396148754,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -3.1491542640842356,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "7eccbe3:gsAdaptiveParametrization.hpp:defective": {
+   "fold": 1,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.1978374675957357,
+   "e_claude": -0.7121953755306398,
+   "e_jev": -2.485642092065096,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "4386a0d:gsProperty.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.787234843409104,
+   "e_claude": 2.6741486494265287,
+   "e_jev": -0.8869138060174246,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "cea32c6:gsFreeformSubdivision.cpp:defective": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.4738130143024417,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 1.1860083898330815,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "0d921f0:gsExprEvaluator.h:clean": {
+   "fold": 1,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.1419343071750487,
+   "e_claude": -0.7121953755306398,
+   "e_jev": 1.8541296827056886,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "99b2161:gsBoundaryConditions.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.0470879399131494,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -0.3147200461999229,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "a17350b:gsBasis.hpp:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.8905448380358862,
+   "e_claude": 2.302585092994046,
+   "e_jev": 0.5879597450418405,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "a4d2374:gsHTensorBasis.hpp:clean": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.793360089392432,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -0.06099219567920544,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "fac47e8:gsMatrix.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.533885091758633,
+   "e_claude": 2.302585092994046,
+   "e_jev": 1.231299998764587,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "220eca8:gsVolumeBlock.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6107700741037814,
+   "e_claude": 2.302585092994046,
+   "e_jev": 0.30818498110973536,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "0104462:gsFunction.hpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.875890831255399,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -2.1435229375421723,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "657a917:gsMatrix.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.344588347656569,
+   "e_claude": 2.302585092994046,
+   "e_jev": 2.0420032546625233,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "717697d:gsTensorNurbs.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.1246208076852,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -1.3922529139719733,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "be071ba:gsPointGrid.hpp:defective": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.7362988129885188,
+   "e_claude": -0.7323678937132265,
+   "e_jev": 1.4686667067017454,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "37899c9:gsVisitorBiharmonic.h:defective": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.24203294104640494,
+   "e_claude": -0.7323678937132265,
+   "e_jev": 0.9744008347596315,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "6bb81e9:gsUtils.cpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.2971446982495956,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -0.564776804536369,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "2a7b94b:gismo.h:clean": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.793360089392432,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -0.06099219567920544,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "cb3d0b4:gsIterativeSolver.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.719271879080229,
+   "e_claude": 2.302585092994046,
+   "e_jev": 0.41668678608618326,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f46c458:gsOptionList.cpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.7264636782293064,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -0.9940957845160798,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "ab6e57f:gsFileData.hpp:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.667307883798088,
+   "e_claude": 2.302585092994046,
+   "e_jev": 1.3647227908040425,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "ef8e659:gsOpenMP.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.875890831255399,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -2.1435229375421723,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f1ddb14:gsHBoxContainer.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.24203294104640494,
+   "e_claude": -0.7323678937132265,
+   "e_jev": 0.9744008347596315,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "da8ecd6:gsBasis.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.598518857902089,
+   "e_claude": -0.7323678937132265,
+   "e_jev": 1.3308867516153156,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "8096363:gsExprEvaluator.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.875890831255399,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -2.1435229375421723,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "653aa04:gsAdaptiveMeshing.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.30558286556712666,
+   "e_claude": -0.7323678937132265,
+   "e_jev": 1.0379507592803532,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "c270deb:gsHTensorBasis.hpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.309876555549295,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -1.5775086618360685,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "dda93df:gsSurfaceReparameterization.h:clean": {
+   "fold": 2,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6475234753162393,
+   "e_claude": 2.302585092994046,
+   "e_jev": 0.34493838232219354,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "319444f:gsHDomainIterator.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.9716488850831855,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -1.239280991369959,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "be6b13e:gsSurfMesh.h:clean": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.04564930182830329,
+   "e_claude": -0.7323678937132265,
+   "e_jev": 0.6867185918849232,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "52308ea:gsExpressions.h:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4336048799288466,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -2.70123698621562,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "36bd8d7:gsAsG1Domain.hpp:defective": {
+   "fold": 2,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.309876555549295,
+   "e_claude": -0.7323678937132265,
+   "e_jev": -1.5775086618360685,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "9b85bea:gsTrimSurface.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.517511060257349,
+   "e_claude": 2.740840023925201,
+   "e_jev": 1.776671036332148,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "1288e1a:gsBoehm_.cpp:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.1892849870888227,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 0.9815230702929989,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "30f14c9:gsVector.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.211353977897838,
+   "e_claude": 2.740840023925201,
+   "e_jev": 2.4705139539726373,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "9e10b21:gsMath.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.593007837602052,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.8007697543978753,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f598dfa:gsAssembler.hpp:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.93677999511056,
+   "e_claude": 2.740840023925201,
+   "e_jev": 3.195939971185359,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "b351585:gsNorm.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8065010781018158,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.0142629948976396,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "7924470:gsOptionList.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.22490479436776967,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 0.5673332888364065,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "a68c232:gsVisitorCDR.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.8065010781018158,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.0142629948976396,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "2538e1a:gsGeometry.hpp:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": 0.04215317081226977,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 0.834391254016446,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "6bc3c46:gsMultiBasis.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.238673410749891,
+   "e_claude": 2.740840023925201,
+   "e_jev": 1.4978333868246905,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f7ea620:gsHTensorBasis.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.0549444459571884,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.2627063627530124,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "24dfb28:gsAdaptiveRefUtils.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.882350310001976,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -3.0901122267977996,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "7c4698b:gsRemapInterface.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 6.0538909715250275,
+   "e_claude": 2.740840023925201,
+   "e_jev": 3.3130509475998267,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "b0cd373:gsSysInfo.cpp:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.8641892015270276,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -2.0719511183228514,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "c1895d2:gsBenchmark.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.42940223023519164,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 0.3628358529689846,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "8690d1e:gsMultiPatch.hpp:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.0549444459571884,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.2627063627530124,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4d810d7:gsExpressions.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.2424408276047734,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -2.450202744400597,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "be4426c:gsBoundaryConditions.h:defective": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.04215317081226977,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 0.834391254016446,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "bdb91a5:gsExpressions.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": 0.22577213782414018,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 1.0180102210283164,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "c0d775e:gsSparseSolver.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.0549444459571884,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.2627063627530124,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "640ac27:gsParaviewDataSet.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.081075060889093,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -0.2888369776849169,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "c74cda8:gsRationalBasis.h:defective": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.593007837602052,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -1.8007697543978753,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "83a4260:gsHElementHelper.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.3281456534183753,
+   "e_claude": 2.740840023925201,
+   "e_jev": -1.4126943705068256,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4d7cbdf:gsSurfMesh.h:clean": {
+   "fold": 3,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.8529884330102178,
+   "e_claude": -0.7922380832041762,
+   "e_jev": -0.06075034980604155,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "f104284:gsBoehm_.cpp:defective": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.5005182042525664,
+   "e_claude": 2.740840023925201,
+   "e_jev": 0.7596781803273658,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "a3ecf67:gsUtils.h:clean": {
+   "fold": 3,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 1.678275870768461,
+   "e_claude": -0.7922380832041762,
+   "e_jev": 2.4705139539726373,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "3939220:gsTHBSplineBasis.hpp:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.3164639852854716,
+   "e_claude": 2.3353749158170367,
+   "e_jev": -0.018910930531564896,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "e9f06bd:gsBasis.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.369200498944505,
+   "e_claude": 2.3353749158170367,
+   "e_jev": 2.0338255831274683,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "ec3c452:gsGridIterator.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.153469777734136,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -1.3802798895006543,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "134b4e8:gsSparseSystem.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3752738131454905,
+   "e_claude": 2.3353749158170367,
+   "e_jev": 1.0398988973284535,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "c421685:gsMpiComm.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.9217307771302905,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -2.1485408888968087,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "17dd67d:gsPatchGenerator.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3428322421149885,
+   "e_claude": 2.3353749158170367,
+   "e_jev": 1.0074573262979518,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4743852:gsBasis.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.4628293101373875,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 1.2360191983708693,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "18cd1e3:gsBoxTopology.cpp:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.4611795931257026,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -0.6879897048922208,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "cb2a24d:gsG1Mapper.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4920582745259092,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -2.7188683862924274,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "c909edc:gsAssembler.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4920582745259092,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -2.7188683862924274,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "9d1136e:gsLinPLapAssembler.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.9217307771302905,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -2.1485408888968087,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "2871374:gsTriMeshToSolid.hpp:defective": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.3316962001076287,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 1.1048860883411105,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "3ced7df:gsMath.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.0715373251073278,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 0.8447272133408096,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "69a0857:gsAssembler.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.219030819590719,
+   "e_claude": 2.3353749158170367,
+   "e_jev": 2.8836559037736818,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "96c1195:gsExprAssembler.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.9953859383732904,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -0.2221960501398086,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "e44d418:gsIetiMapper.hpp:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.4920582745259092,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -2.7188683862924274,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": -0.20067069546215124
+  },
+  "4da8593:gsExprAssembler.h:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.45283276962460106,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 0.3203571186088807,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "55d9864:gsPyBind11.cpp:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.12847196243302106,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 0.6447179258004607,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "79f3785:gsNurbsCreator.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.6658586179292199,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 1.4390485061627016,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "bb2767a:gsWriteParaview.hpp:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.6419311394112601,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -0.8687412511777783,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "4affa99:gsBoundary.h:clean": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.233731142023299,
+   "e_claude": 2.3353749158170367,
+   "e_jev": 1.8983562262062614,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "fcd9e3c:gsParaviewDataSet.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.9970381906207795,
+   "e_claude": -0.7731898882334818,
+   "e_jev": -1.2238483023872977,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "138f4a7:grad_expr.h:defective": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": 0.005705565991552808,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 0.7788954542250346,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.4054651081081642
+  },
+  "accfbe9:gsExprAssembler.h:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.45283276962460106,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 0.3203571186088807,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "6c33a77:gsMultiPatch_.cpp:clean": {
+   "fold": 4,
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.34002186813045454,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 0.43316802010302724,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  },
+  "6d1d6fb:gsKnotVector_.cpp:defective": {
+   "fold": 4,
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.6312573314846932,
+   "e_claude": -0.7731898882334818,
+   "e_jev": 1.404447219718175,
+   "asked": [
+    "claude",
+    "jev"
+   ],
+   "tau": 0.0
+  }
+ },
+ "fits": {
+  "0": {
+   "a": 0.932866182948259,
+   "b": 0.874661006544696,
+   "pi": 0.5,
+   "n": 104,
+   "claude_clean_approve": 27,
+   "n_clean": 52,
+   "claude_def_approve": 2,
+   "n_def": 52
+  },
+  "1": {
+   "a": 1.1860083898330815,
+   "b": 0.9434275482042851,
+   "pi": 0.5,
+   "n": 106,
+   "claude_clean_approve": 28,
+   "n_clean": 53,
+   "claude_def_approve": 1,
+   "n_def": 53
+  },
+  "2": {
+   "a": 0.9426767463939645,
+   "b": 0.7929964508984148,
+   "pi": 0.5,
+   "n": 106,
+   "claude_clean_approve": 29,
+   "n_clean": 53,
+   "claude_def_approve": 2,
+   "n_def": 53
+  },
+  "3": {
+   "a": 1.09083848814386,
+   "b": 0.9098676098337679,
+   "pi": 0.5,
+   "n": 106,
+   "claude_clean_approve": 30,
+   "n_clean": 53,
+   "claude_def_approve": 1,
+   "n_def": 53
+  },
+  "4": {
+   "a": 1.0074573262979518,
+   "b": 0.8109311256552398,
+   "pi": 0.5,
+   "n": 106,
+   "claude_clean_approve": 30,
+   "n_clean": 53,
+   "claude_def_approve": 2,
+   "n_def": 53
+  }
+ }
+}

@@ -1,0 +1,3027 @@
+{
+ "fold": {
+  "4030af7:gsFunctionSet.hpp:defective": 0,
+  "f6eede5:gsTHBSplineBasis.hpp:defective": 1,
+  "717697d:gsTensorNurbs.h:defective": 2,
+  "640ac27:gsParaviewDataSet.h:defective": 3,
+  "2871374:gsTriMeshToSolid.hpp:defective": 4,
+  "af3171e:gsExpressions.h:defective": 0,
+  "9366184:gsTensorBasis.hpp:defective": 1,
+  "f46c458:gsOptionList.cpp:defective": 2,
+  "8690d1e:gsMultiPatch.hpp:defective": 3,
+  "cb2a24d:gsG1Mapper.h:defective": 4,
+  "42f88b6:gsVisitorGradGrad.h:defective": 0,
+  "f5c66ad:gsVisitorDg.h:defective": 1,
+  "99b2161:gsBoundaryConditions.h:defective": 2,
+  "b351585:gsNorm.h:defective": 3,
+  "9d1136e:gsLinPLapAssembler.h:defective": 4,
+  "43d4274:gsAssembler.hpp:defective": 0,
+  "330f307:gsKnotVector.hpp:defective": 1,
+  "319444f:gsHDomainIterator.h:defective": 2,
+  "f104284:gsBoehm_.cpp:defective": 3,
+  "bb2767a:gsWriteParaview.hpp:defective": 4,
+  "e2ef56b:gsCPPInterface.h:defective": 0,
+  "2a371e4:gsBoundaryConditions.hpp:defective": 1,
+  "6bb81e9:gsUtils.cpp:defective": 2,
+  "c1895d2:gsBenchmark.h:defective": 3,
+  "c909edc:gsAssembler.h:defective": 4,
+  "607477e:gsEigenAddons.h:defective": 0,
+  "7eccbe3:gsAdaptiveParametrization.hpp:defective": 1,
+  "37899c9:gsVisitorBiharmonic.h:defective": 2,
+  "4d810d7:gsExpressions.h:defective": 3,
+  "138f4a7:grad_expr.h:defective": 4,
+  "4aab81c:gsCompactKnotVector.hpp:defective": 0,
+  "cb54e9d:gsSmoother.cpp:defective": 1,
+  "8096363:gsExprEvaluator.h:defective": 2,
+  "b0cd373:gsSysInfo.cpp:defective": 3,
+  "e44d418:gsIetiMapper.hpp:defective": 4,
+  "c75d957:gsLanczosMatrix.h:defective": 0,
+  "cea32c6:gsFreeformSubdivision.cpp:defective": 1,
+  "ef8e659:gsOpenMP.h:defective": 2,
+  "c74cda8:gsRationalBasis.h:defective": 3,
+  "ec3c452:gsGridIterator.h:defective": 4,
+  "b654d88:gsPiecewiseFunction.h:defective": 0,
+  "e05b6b0:gsG1System.h:defective": 1,
+  "c270deb:gsHTensorBasis.hpp:defective": 2,
+  "be4426c:gsBoundaryConditions.h:defective": 3,
+  "96c1195:gsExprAssembler.h:defective": 4,
+  "4f443cc:gsKroneckerMatrix.h:defective": 0,
+  "87f74c2:gsNorms_.cpp:defective": 1,
+  "52308ea:gsExpressions.h:defective": 2,
+  "a68c232:gsVisitorCDR.h:defective": 3,
+  "18cd1e3:gsBoxTopology.cpp:defective": 4,
+  "1dc79db:gsTHBSplineBasis.hpp:defective": 0,
+  "090f874:gsTensorBSpline.hpp:defective": 1,
+  "be071ba:gsPointGrid.hpp:defective": 2,
+  "f7ea620:gsHTensorBasis.h:defective": 3,
+  "6d1d6fb:gsKnotVector_.cpp:defective": 4,
+  "d729485:gsScaledDirichletPrec.hpp:defective": 0,
+  "419e2f1:gsSparseSystem.h:defective": 1,
+  "0104462:gsFunction.hpp:defective": 2,
+  "24dfb28:gsAdaptiveRefUtils.h:defective": 3,
+  "fcd9e3c:gsParaviewDataSet.h:defective": 4,
+  "840cdfa:gsHBSpline.h:defective": 0,
+  "44fe50d:gsBoxTopology.h:defective": 1,
+  "36bd8d7:gsAsG1Domain.hpp:defective": 2,
+  "bdb91a5:gsExpressions.h:defective": 3,
+  "c421685:gsMpiComm.h:defective": 4,
+  "73f5cb9:gsFileData.hpp:defective": 0,
+  "fbbc87e:gsDofMapper.h:clean": 0,
+  "4ba5f2c:gsMatrix.h:clean": 1,
+  "a4d2374:gsHTensorBasis.hpp:clean": 2,
+  "7c4698b:gsRemapInterface.h:clean": 3,
+  "e9f06bd:gsBasis.h:clean": 4,
+  "655c2f4:gsDofMapper.h:clean": 0,
+  "26a9fe5:gsMesh.h:clean": 1,
+  "dda93df:gsSurfaceReparameterization.h:clean": 2,
+  "30f14c9:gsVector.h:clean": 3,
+  "17dd67d:gsPatchGenerator.h:clean": 4,
+  "6666703:gsKnotVector.hpp:clean": 0,
+  "60b7fa3:gsBasis.h:clean": 1,
+  "be6b13e:gsSurfMesh.h:clean": 2,
+  "c0d775e:gsSparseSolver.h:clean": 3,
+  "3939220:gsTHBSplineBasis.hpp:clean": 4,
+  "05e9cec:gsKnotVector_.cpp:clean": 0,
+  "e9bc4fc:gsTensorBSpline.h:clean": 1,
+  "cb3d0b4:gsIterativeSolver.h:clean": 2,
+  "9e10b21:gsMath.h:clean": 3,
+  "accfbe9:gsExprAssembler.h:clean": 4,
+  "268423a:gsExprAssembler.h:clean": 0,
+  "b32ddaa:gsDofMapper.cpp:clean": 1,
+  "a17350b:gsBasis.hpp:clean": 2,
+  "83a4260:gsHElementHelper.h:clean": 3,
+  "69a0857:gsAssembler.h:clean": 4,
+  "a14570f:gsFitting.h:clean": 0,
+  "4386a0d:gsProperty.h:clean": 1,
+  "657a917:gsMatrix.h:clean": 2,
+  "2538e1a:gsGeometry.hpp:clean": 3,
+  "55d9864:gsPyBind11.cpp:clean": 4,
+  "fa51062:gsWeightMapper.h:clean": 0,
+  "7b9d7de:gsBasis.hpp:clean": 1,
+  "ab6e57f:gsFileData.hpp:clean": 2,
+  "7924470:gsOptionList.h:clean": 3,
+  "79f3785:gsNurbsCreator.h:clean": 4,
+  "6b89774:gsIterativeSolver.h:clean": 0,
+  "90be00a:gsPde.h:clean": 1,
+  "f1ddb14:gsHBoxContainer.h:clean": 2,
+  "9b85bea:gsTrimSurface.h:clean": 3,
+  "6c33a77:gsMultiPatch_.cpp:clean": 4,
+  "ed02c62:gsOptionList.h:clean": 0,
+  "f518d8f:gsSortedVector.h:clean": 1,
+  "653aa04:gsAdaptiveMeshing.h:clean": 2,
+  "1288e1a:gsBoehm_.cpp:clean": 3,
+  "4743852:gsBasis.h:clean": 4,
+  "ec3d317:gsQuadRule.h:clean": 0,
+  "b54fbdb:gsBoundary.h:clean": 1,
+  "fac47e8:gsMatrix.h:clean": 2,
+  "a3ecf67:gsUtils.h:clean": 3,
+  "134b4e8:gsSparseSystem.h:clean": 4,
+  "93db8f9:gsJITCompiler.h:clean": 0,
+  "0d921f0:gsExprEvaluator.h:clean": 1,
+  "2a7b94b:gismo.h:clean": 2,
+  "4d7cbdf:gsSurfMesh.h:clean": 3,
+  "3ced7df:gsMath.h:clean": 4,
+  "825f3f0:gsMemory.h:clean": 0,
+  "e53eaa2:gsWeightMapper_.cpp:clean": 1,
+  "220eca8:gsVolumeBlock.h:clean": 2,
+  "f598dfa:gsAssembler.hpp:clean": 3,
+  "4affa99:gsBoundary.h:clean": 4,
+  "eb23fba:gsMultiGrid.h:clean": 0,
+  "79096cb:gsKnotVector.h:clean": 1,
+  "da8ecd6:gsBasis.h:clean": 2,
+  "6bc3c46:gsMultiBasis.h:clean": 3,
+  "4da8593:gsExprAssembler.h:clean": 4,
+  "f9d6b06:gsMultiPatch_.cpp:clean": 0
+ },
+ "items": {
+  "42f88b6:gsVisitorGradGrad.h:defective": {
+   "fold": 0,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "840cdfa:gsHBSpline.h:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.33647223662121317,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "1dc79db:gsTHBSplineBasis.hpp:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "b654d88:gsPiecewiseFunction.h:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4aab81c:gsCompactKnotVector.hpp:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4030af7:gsFunctionSet.hpp:defective": {
+   "fold": 0,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "6666703:gsKnotVector.hpp:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "607477e:gsEigenAddons.h:defective": {
+   "fold": 0,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "825f3f0:gsMemory.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "43d4274:gsAssembler.hpp:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "6b89774:gsIterativeSolver.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "c75d957:gsLanczosMatrix.h:defective": {
+   "fold": 0,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "fbbc87e:gsDofMapper.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "af3171e:gsExpressions.h:defective": {
+   "fold": 0,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "93db8f9:gsJITCompiler.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "ec3d317:gsQuadRule.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -1.01160091167848,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "d729485:gsScaledDirichletPrec.hpp:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "73f5cb9:gsFileData.hpp:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "eb23fba:gsMultiGrid.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "655c2f4:gsDofMapper.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f9d6b06:gsMultiPatch_.cpp:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "e2ef56b:gsCPPInterface.h:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.343805421853684,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.3978952727983707,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "fa51062:gsWeightMapper.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "ed02c62:gsOptionList.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "a14570f:gsFitting.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "268423a:gsExprAssembler.h:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "05e9cec:gsKnotVector_.cpp:clean": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 2.995732273553991,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.3862943611198906,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4f443cc:gsKroneckerMatrix.h:defective": {
+   "fold": 0,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.33647223662121317,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9459101490553135,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6094379124341003,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "090f874:gsTensorBSpline.hpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "44fe50d:gsBoxTopology.h:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "b54fbdb:gsBoundary.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "cb54e9d:gsSmoother.cpp:defective": {
+   "fold": 1,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "f518d8f:gsSortedVector.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "330f307:gsKnotVector.hpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "79096cb:gsKnotVector.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "e9bc4fc:gsTensorBSpline.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "87f74c2:gsNorms_.cpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4ba5f2c:gsMatrix.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "9366184:gsTensorBasis.hpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "419e2f1:gsSparseSystem.h:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "60b7fa3:gsBasis.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f5c66ad:gsVisitorDg.h:defective": {
+   "fold": 1,
+   "domain": "PERFORMANCE",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "7b9d7de:gsBasis.hpp:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "90be00a:gsPde.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "e05b6b0:gsG1System.h:defective": {
+   "fold": 1,
+   "domain": "PERFORMANCE",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "e53eaa2:gsWeightMapper_.cpp:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "b32ddaa:gsDofMapper.cpp:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "26a9fe5:gsMesh.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "2a371e4:gsBoundaryConditions.hpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "f6eede5:gsTHBSplineBasis.hpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "7eccbe3:gsAdaptiveParametrization.hpp:defective": {
+   "fold": 1,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.9734491457141037,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.70805020110221,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4386a0d:gsProperty.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.3832596809754882,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.7346010553881064,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.6486586255873816,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "cea32c6:gsFreeformSubdivision.cpp:defective": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "0d921f0:gsExprEvaluator.h:clean": {
+   "fold": 1,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.4423470353692043,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.4423470353692043,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "99b2161:gsBoundaryConditions.h:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "a17350b:gsBasis.hpp:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "a4d2374:gsHTensorBasis.hpp:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "fac47e8:gsMatrix.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "220eca8:gsVolumeBlock.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "0104462:gsFunction.hpp:defective": {
+   "fold": 2,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "657a917:gsMatrix.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "717697d:gsTensorNurbs.h:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "be071ba:gsPointGrid.hpp:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "37899c9:gsVisitorBiharmonic.h:defective": {
+   "fold": 2,
+   "domain": "PERFORMANCE",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "6bb81e9:gsUtils.cpp:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "2a7b94b:gismo.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "cb3d0b4:gsIterativeSolver.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f46c458:gsOptionList.cpp:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "ab6e57f:gsFileData.hpp:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "ef8e659:gsOpenMP.h:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f1ddb14:gsHBoxContainer.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "da8ecd6:gsBasis.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "8096363:gsExprEvaluator.h:defective": {
+   "fold": 2,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "653aa04:gsAdaptiveMeshing.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "c270deb:gsHTensorBasis.hpp:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "dda93df:gsSurfaceReparameterization.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "319444f:gsHDomainIterator.h:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "be6b13e:gsSurfMesh.h:clean": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.5257286443082556,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.252762968495368,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "52308ea:gsExpressions.h:defective": {
+   "fold": 2,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "36bd8d7:gsAsG1Domain.hpp:defective": {
+   "fold": 2,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.02594675174646,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -1.9218125974762528,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "9b85bea:gsTrimSurface.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "1288e1a:gsBoehm_.cpp:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "30f14c9:gsVector.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "9e10b21:gsMath.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f598dfa:gsAssembler.hpp:clean": {
+   "fold": 3,
+   "domain": "SECURITY",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "b351585:gsNorm.h:defective": {
+   "fold": 3,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "7924470:gsOptionList.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "a68c232:gsVisitorCDR.h:defective": {
+   "fold": 3,
+   "domain": "PERFORMANCE",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "2538e1a:gsGeometry.hpp:clean": {
+   "fold": 3,
+   "domain": "SECURITY",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "6bc3c46:gsMultiBasis.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f7ea620:gsHTensorBasis.h:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "24dfb28:gsAdaptiveRefUtils.h:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "7c4698b:gsRemapInterface.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "b0cd373:gsSysInfo.cpp:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "c1895d2:gsBenchmark.h:defective": {
+   "fold": 3,
+   "domain": "PERFORMANCE",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.8803587226480918,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.327277705584417,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "8690d1e:gsMultiPatch.hpp:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "4d810d7:gsExpressions.h:defective": {
+   "fold": 3,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "be4426c:gsBoundaryConditions.h:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "bdb91a5:gsExpressions.h:defective": {
+   "fold": 3,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "c0d775e:gsSparseSolver.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "640ac27:gsParaviewDataSet.h:defective": {
+   "fold": 3,
+   "domain": "SECURITY",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "c74cda8:gsRationalBasis.h:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.374905754573672,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.374905754573672,
+     "calibration": "rates",
+     "source": ""
+    }
+   ]
+  },
+  "83a4260:gsHElementHelper.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4d7cbdf:gsSurfMesh.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "f104284:gsBoehm_.cpp:defective": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.8803587226480918,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.327277705584417,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "a3ecf67:gsUtils.h:clean": {
+   "fold": 3,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.7396872860453927,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.4469189829363254,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.2927683031090673,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "3939220:gsTHBSplineBasis.hpp:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "e9f06bd:gsBasis.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "ec3c452:gsGridIterator.h:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "134b4e8:gsSparseSystem.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "c421685:gsMpiComm.h:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "17dd67d:gsPatchGenerator.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4743852:gsBasis.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "18cd1e3:gsBoxTopology.cpp:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "cb2a24d:gsG1Mapper.h:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "c909edc:gsAssembler.h:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "9d1136e:gsLinPLapAssembler.h:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "2871374:gsTriMeshToSolid.hpp:defective": {
+   "fold": 4,
+   "domain": "PERFORMANCE",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.757060506303598,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "3ced7df:gsMath.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "69a0857:gsAssembler.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "96c1195:gsExprAssembler.h:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "e44d418:gsIetiMapper.hpp:defective": {
+   "fold": 4,
+   "domain": "PERFORMANCE",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4da8593:gsExprAssembler.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "55d9864:gsPyBind11.cpp:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "79f3785:gsNurbsCreator.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "bb2767a:gsWriteParaview.hpp:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "4affa99:gsBoundary.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "fcd9e3c:gsParaviewDataSet.h:defective": {
+   "fold": 4,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.8552660300363804,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "138f4a7:grad_expr.h:defective": {
+   "fold": 4,
+   "domain": "SECURITY",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.757060506303598,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "accfbe9:gsExprAssembler.h:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.6200393237794968,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": 1,
+     "evidence": 1.2729656758128876,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "6c33a77:gsMultiPatch_.cpp:clean": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.757060506303598,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": 1,
+     "evidence": 1.3470736479666094,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  },
+  "6d1d6fb:gsKnotVector_.cpp:defective": {
+   "fold": 4,
+   "domain": "LOGIC",
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -4.232365860119476,
+   "votes": [
+    {
+     "agent": "CLAUDE",
+     "vote": -1,
+     "evidence": -2.1041341542702074,
+     "calibration": "rates",
+     "source": ""
+    },
+    {
+     "agent": "CLAUDE-COMMIT",
+     "vote": -1,
+     "evidence": -2.128231705849268,
+     "calibration": "rates",
+     "source": "whole-commit"
+    }
+   ]
+  }
+ }
+}

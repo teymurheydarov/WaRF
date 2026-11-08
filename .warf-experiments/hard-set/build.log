@@ -1,0 +1,3 @@
+2218 commits 2017-01-01..2026-04-01; 120 used by ../evidence-set are excluded
+candidates: 116; operators: wrong_var 68, accumulate 16, first_second 11, plus_one 21
+skipped commits: used 106, revert 11, too long 316, changed later 371, no plant 1298

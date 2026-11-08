@@ -1,0 +1,236 @@
+ID 38858cf:gsSquareDomain.h:clean
+commit 38858cf840e72aa75b784876fa91aab7ca6dfb96 file src/gsNurbs/gsSquareDomain.h date 2024-04-17 subj fix Jacobian transpose bug for Poisson equation
+
+=== ONE decision REJECT
+[REJECT] This patch changes how the class behaves and leaves debugging code in a library header. It should not be merged as is.
+
+1. **Silent change to the default degree.** `m_domain.degreeElevate()` is commented out. `BSplineSquare()` returns a bilinear (degree 1) patch, so the default-constructed `gsSquareDomain` drops from degree 2 to degree 1. Anyone relying on the current shape behaves differently, and nothing explains or documents why.
+
+2. **Hard-coded refinement.** `m_domain.uniformRefine(15)` inserts 15 knots per span in each direction. That gives a 17×17 basis instead of the current 3×3. After removing boundary DOFs, the free controls grow from 2 to about 450. This changes `nControls()`, the size of `controls()`, and the output of `control_deriv_into` for every caller. It is also much more expensive: `control_deriv_into` calls `evalSingle_into` for every free coefficient at every point. The constant is a magic number with no parameter or constructor argument behind it, so it looks like a value left over from an experiment.
+
+3. **Debug output in a library constructor.** `gsInfo << " m_domain.coefsSize() = " ...` prints on every construction of this class. That is not acceptable in library code.
+
+4. **Leftover clutter.** The patch adds more commented-out code (`//gsDebugVar`, `//m_domain.uniformRefine()`) and has inconsistent indentation (7 spaces against the 8 used elsewhere). Together with the whitespace-only edit to `result.resize(...)`, it reads like a local work-in-progress snapshot rather than an intended change.
+
+Before this could merge, the debug print should be removed, the degree should be restored or the change justified, and the degree and refinement level should be exposed as constructor parameters instead of hard-coded.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+This patch looks like leftover experimentation, not a deliberate fix. It changes what the default constructor builds and adds unconditional console output in a library header.
+
+1. **The map silently drops from quadratic to linear.** `gsNurbsCreator<T>::BSplineSquare()` returns a degree-1 (bilinear) patch by default. The old code called `m_domain.degreeElevate()`, giving a degree-2 map. With that line commented out, every default-constructed `gsSquareDomain` is now piecewise bilinear, so the map is only C0 across element boundaries.
+   - Concrete case: construct `gsSquareDomain<2,real_t>` and evaluate second derivatives of the map inside an element. They are now identically zero.
+   - Across element interfaces, first derivatives (and so the Jacobian) are now discontinuous.
+   - Any caller that relies on the smooth parametrisation (Jacobian-based or mesh-quality objectives) gets different and less regular results. Nothing in the patch says this is intended; the commented-out lines read as trial and error.
+
+2. **The number of controls jumps from 2 to 450.** `uniformRefine(15)` inserts 15 knots per direction. Before, the degree-2 patch had a 3×3 grid of control points with one free interior point, so `nControls()` was 2. Now the degree-1 patch has 17×17 control points with 15×15 interior points, so `nControls()` is 450.
+   - `control_deriv_into` loops over every control point at every evaluation point and calls `evalSingle_into` each time. Its cost and output size therefore grow by roughly 200× per point.
+   - Any test or caller that assumes the old number of controls (`controls()` or `nControls()`) now sees a different size.
+
+3. **Unconditional debug print in a header.** `gsInfo << " m_domain.coefsSize() = " ...` runs every time the class is constructed. Any program or test that compares stdout will now see extra output. Nearby there is also a commented-out `gsDebugVar`, which confirms this is debugging code that was left in.
+
+4. **Whitespace-only edits.** The changed `resize` line and the removed blank line don't change behaviour. They show the diff was committed as a mix of work-in-progress edits.
+
+The `control_deriv_into` logic itself is still consistent with the mapper: the reshape is `nControls × targetDim` and it is indexed by `m_mapper.index(k,0,d)`. However, the constructor changes above alter the default domain's degree, its number of controls and its output. The patch should be reverted or reworked so the refinement level and degree are explicit, intended parameters, with no debug output.
+--- ADVOCATE [REJECT]
+This patch changes the default `gsSquareDomain` geometry and adds console output. It reads like local experimentation that got committed, not an intentional change.
+
+1. **The default domain changes in ways callers will notice.** Commenting out `m_domain.degreeElevate()` drops the spline from degree 2 to degree 1. The domain becomes piecewise bilinear and only C0 across element boundaries. Any code that relies on derivatives of this map now gets discontinuous derivatives across elements. Nothing in the patch, such as a comment or a parameter, says this downgrade is intended.
+
+2. **`uniformRefine(15)` is a hard-coded jump in problem size.** One knot span per direction with 15 inserted knots gives 17×17 = 289 control points. After eliminating the boundary, 15×15 interior points × 2 components = 450 controls. Before, there were 3×3 points and only 2 free controls (the center point). This matters for `control_deriv_into`: for each evaluation point it loops over every coefficient and calls `evalSingle_into` once per free (k, d). That is about 450 single-basis evaluations per point, and the output matrix is 900 × npoints, mostly zeros. Every user of the default constructor silently pays this cost, and the value 15 is a magic number. If finer resolution is wanted, the refinement level should be a constructor parameter.
+
+3. **Unconditional output from a library header.** `gsInfo << " m_domain.coefsSize() = " ...` runs every time any `gsSquareDomain` is constructed. This is debug output, and the commented-out `gsDebugVar` next to it confirms that. It should not ship in a header-only library class.
+
+4. **Leftover debug noise.** The patch adds more commented-out code (`// m_domain.degreeElevate()`, `// gsDebugVar(...)`, `// m_domain.uniformRefine()`) and has inconsistent indentation. The `result.resize(...)` whitespace change is harmless but unrelated.
+
+The DOF mapping, `updateGeom`, and `control_deriv_into` logic are unchanged and still consistent with each other. The problem is the default construction: a silent loss of smoothness, an unparameterized large refinement, and debug printing. To be acceptable, the patch should restore the previous defaults or expose degree and refinement as constructor arguments, and remove the `gsInfo` line and the commented-out debris.
+--- AUDITOR [REJECT]
+This patch reads as experimental or debugging work, not a reviewed change to a library header.
+
+1. **Silent behavior change in the default constructor.**
+   - `degreeElevate()` is commented out, so the domain changes from biquadratic to bilinear. `BSplineSquare()` is degree 1, and the patch removes the only elevation step.
+   - `uniformRefine(15)` inserts 15 knots per knot span. This turns 2×2 control points (all on the boundary, so no free DOFs) into 17×17 = 289 control points. After the boundary is eliminated, that leaves 15×15 interior points × 2 dimensions = 450 free controls.
+   - Every user of the default `gsSquareDomain()` therefore gets a different smoothness class (C⁰ instead of C¹) and many more parameters. Optimizers, tests and tuned tolerances may all be affected.
+   - Nothing explains or tests why the degree should drop or why 15 was chosen. It looks like a hardcoded tuning knob, not a constructor argument.
+
+2. **Unconditional debug output.** `gsInfo << " m_domain.coefsSize() = " ...` prints to the info stream every time an object is built. In a header-only class used inside optimization loops, this spams logs and is clearly leftover debugging.
+
+3. **More dead and commented-out code.** The patch adds commented lines (`// m_domain.degreeElevate();`, `// gsDebugVar(...)`, `// m_domain.uniformRefine();`) and has inconsistent indentation (7 and 6 spaces instead of 8). This adds noise and no function.
+
+4. **Cosmetic-only edits elsewhere.** The only other changes are removing a blank line and adding a space in `result.resize(...)`. These are harmless but mixed in with substantive behavior changes, which hides the real intent.
+
+5. **Logic check of the rest.**
+   - `nControls()`, `control_deriv_into` and `updateGeom` are unchanged and stay consistent with the mapper at the new resolution.
+   - The new configuration does not cause a correctness bug.
+   - The rejection rests on the unjustified change to default numerics and the debugging artifacts.
+
+**Recommendation:**
+- Remove the `gsInfo` line and the commented-out code.
+- If a finer or different-degree domain is needed, expose degree and refinement level as constructor parameters, keep the current defaults, and add a test.
+--- TEST-FOCUSED [REJECT]
+This patch is uncommitted debug and experiment code, and its main effect is a silent change in behavior.
+
+1. **Silent change of degree and smoothness.** `m_domain.degreeElevate()` is commented out.
+   - The domain was previously a biquadratic (C¹) square. It is now bilinear (degree 1), so it is only C⁰ across element boundaries.
+   - Nothing fails loudly. `eval_into` still returns plausible points on the unit square.
+   - However, anything that uses second derivatives, or assumes smoothness across knots, now gets wrong values that look valid. For degree 1, second derivatives are zero inside elements. Examples are Winslow or curvature-based mesh-quality functionals and Hessian-based optimizers.
+   - No exception or assertion flags this. A test would only catch it if it checked the degree or smoothness explicitly.
+
+2. **Hard-coded, much larger parameter space.** `uniformRefine(15)` on degree 1 gives 17×17 = 289 coefficients.
+   - After the boundary is eliminated, there are 15×15×2 = 450 free controls. The old elevated basis had 2.
+   - `nControls()`, `controls()` and the shape of `control_deriv_into` all change size without any API signal.
+   - Callers that size their own vectors, or reuse saved parameter vectors, will break in ways that depend on the caller. A mismatch may fail loudly, but code that copies into preallocated storage may fail silently.
+   - `control_deriv_into` is also O(points × coefs × dim) with one `evalSingle_into` call per entry. That is now about 580 basis evaluations per point, and most of them return zeros for this local-support basis.
+
+3. **Side effect in the constructor.** `gsInfo << " m_domain.coefsSize() = " ...` prints to the global info stream every time an object is built.
+   - This is leftover debug output: note the commented-out `gsDebugVar` next to it.
+   - It is a hidden global side effect, and no caller can check for it through a return value.
+
+4. **Dead and commented-out code.** The change adds more commented-out lines (`degreeElevate`, `gsDebugVar`, `uniformRefine`) and introduces inconsistent indentation. This is the signature of work-in-progress tuning, not an intended change.
+
+The whitespace-only edit in `control_deriv_into` is harmless. The constructor changes are the real problem. They change the mathematical object this class represents, from a quadratic to a heavily refined bilinear domain. They do it without a parameter or any documentation, and they add debug output. The reason for rejection is that the smoothness regression gives wrong values that still look plausible.
+
+=== DIFF
+diff --git a/src/gsNurbs/gsSquareDomain.h b/src/gsNurbs/gsSquareDomain.h
+index 8368e6f61..fc8aa363b 100644
+--- a/src/gsNurbs/gsSquareDomain.h
++++ b/src/gsNurbs/gsSquareDomain.h
+@@ -1,68 +1,69 @@
+ /** @file gsMultiBasis.h
+ 
+     @brief Provides declaration of MultiBasis class.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): A. Mantzaflaris
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsFunction.h>
+ #include <gsCore/gsDofMapper.h>
+ 
+ namespace gismo
+ {
+ 
+ template <short_t DIM, class T>
+ class gsSquareDomain : public gsFunction<T>
+ {
+     using Base = gsFunction<T> ;
+ 
+ public:
+     gsSquareDomain()
+     {
+         m_domain = *gsNurbsCreator<T>::BSplineSquare();
+-        m_domain.degreeElevate();
+-        // m_domain.uniformRefine();
+-        // m_domain.uniformRefine();
++//        m_domain.degreeElevate();
++       m_domain.uniformRefine(15);
++       gsInfo << " m_domain.coefsSize() = " << m_domain.coefsSize() << "\n";
++//      gsDebugVar(m_domain.coefsSize());
++//       m_domain.uniformRefine();
+         // m_domain.uniformRefine();
+         // Mapper storing control points
+         m_mapper = gsDofMapper(m_domain.basis(),m_domain.targetDim());
+ 
+-
+         gsMatrix<index_t> boundary = m_domain.basis().allBoundary();
+         for (index_t a = 0; a!=boundary.rows(); a++)
+             for (index_t d = 0; d!=m_domain.targetDim(); d++)
+                 m_mapper.eliminateDof(boundary(a,0),0,d);
+         m_mapper.finalize();
+ 
+         m_parameters.resize(m_mapper.freeSize());
+         // std::vector<index_t> i(m_mapper.freeSize());
+         // std::vector<index_t> j(m_mapper.freeSize());
+         for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
+             for (index_t d = 0; d!=m_domain.targetDim(); d++)
+                 if (m_mapper.is_free(k,0,d))
+                 {
+                     m_parameters[m_mapper.index(k,0,d)] = m_domain.coefs()(k,d);
+                     // i[m_mapper.index(k,0,d)] = k; // i index of free entries
+                     // j[m_mapper.index(k,0,d)] = d; // j index of free entries
+                 }
+ 
+         // This is a way to cast only the free coefficients to a vector, and change an entry of that vector.
+         // However, it cannot be used in ''gsVector<T> & controls() override { return m_parameters; };''
+         //
+         // gsDebugVar(m_domain.coefs()(i,j).diagonal()(0));
+         // m_domain.coefs()(i,j).diagonal()(0) = 0.5;
+         // gsDebugVar(m_domain.coefs()(i,j).diagonal()(0));
+ 
+     }
+ 
+     const gsTensorBSpline<DIM,T> & domain() const
+     {
+         return m_domain;
+@@ -86,53 +87,53 @@ public:
+     void eval_into(const gsMatrix<T> & u, gsMatrix<T> & result) const override
+     {
+         m_domain.eval_into(u,result);
+     }
+ 
+     void updateGeom()
+     {
+         for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
+             for (index_t d = 0; d!=m_domain.targetDim(); d++)
+             {
+                 if (m_mapper.is_free(k,0,d))
+                     m_domain.coefs()(k,d) = m_parameters[m_mapper.index(k,0,d)];
+             }
+     }
+ 
+     /// Returns the controls of the function
+     const gsVector<T> & controls() const override { return m_parameters; };
+           gsVector<T> & controls()       override { return m_parameters; };
+ 
+     /// Returns the number of controls of the function
+     size_t nControls() const override
+     {
+         return m_mapper.freeSize();
+     }
+ 
+     /// Returns the control derivative
+     virtual void control_deriv_into(const gsMatrix<T> & points, gsMatrix<T> & result) const override
+     {
+         gsMatrix<T> tmp;
+ 
+-        result.resize(targetDim()*nControls(),points.cols());
++        result.resize(targetDim()*nControls(), points.cols());
+         result.setZero();
+         for (index_t p = 0; p!=points.cols(); p++)
+         {
+             gsAsMatrix<T> res = result.reshapeCol(p,nControls(),targetDim());
+             for (index_t k = 0; k!=m_domain.coefs().rows(); k++)
+                 for (index_t d = 0; d!=m_domain.targetDim(); d++)
+                     if (m_mapper.is_free(k,0,d))
+                     {
+                         m_domain.basis().evalSingle_into(k,points.col(p),tmp); // evaluate basis function k
+                         res(m_mapper.index(k,0,d),d) = tmp(0,0); // tmp is a single value (1 point, 1 basis function)
+                     }
+         }
+     }
+ 
+ protected:
+     gsTensorBSpline<DIM,T> m_domain;
+     gsDofMapper m_mapper;
+     gsVector<T> m_parameters;
+ };
+ 
+ } // namespace gismo
+ 
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    size_t nControls() const override
+    {
+        return m_mapper.freeSize();
+    }
+

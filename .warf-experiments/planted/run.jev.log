@@ -1,0 +1,12 @@
+  jev/jev-latest; worker 0 of 1: 106 reviews to run (2 done) -> jev.w0.jsonl
+  worker 0: 10/106  0.3 s per review, ~0 min left
+  worker 0: 20/106  0.3 s per review, ~0 min left
+  worker 0: 30/106  0.3 s per review, ~0 min left
+  worker 0: 40/106  0.3 s per review, ~0 min left
+  worker 0: 50/106  0.3 s per review, ~0 min left
+  worker 0: 60/106  0.3 s per review, ~0 min left
+  worker 0: 70/106  0.3 s per review, ~0 min left
+  worker 0: 80/106  0.3 s per review, ~0 min left
+  worker 0: 90/106  0.3 s per review, ~0 min left
+  worker 0: 100/106  0.3 s per review, ~0 min left
+  worker 0 done: 106 reviews in 0.5 min

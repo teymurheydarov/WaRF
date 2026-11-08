@@ -1,0 +1,4 @@
+pool: 3518 never-fixed gismo6 C/C++ changes in phases A/B that Laya reads whole, outside the 100
+base changes: 54; operators: and 3, dec 1, eq 16, false 1, ge 2, gt 2, inc 5, le 3, lt 3, minus 3, minus_eq 1, ne 4, or 3, plus 3, plus_eq 3, true 1
+domains: LOGIC 52, SECURITY 2
+state chars: median 1964, max 2863

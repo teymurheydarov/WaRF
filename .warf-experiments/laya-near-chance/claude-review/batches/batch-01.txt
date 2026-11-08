@@ -1,0 +1,2710 @@
+<<<ITEM bbeacf>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsNurbs/gsNurbs.h b/src/gsNurbs/gsNurbs.h
+index 3a2efa16b..3e5482011 100644
+--- a/src/gsNurbs/gsNurbs.h
++++ b/src/gsNurbs/gsNurbs.h
+@@ -204,42 +204,46 @@ public:
+         gsBoehm(basis().knots(), tmp, knot, i); 
+         basis().setFromProjectiveCoefs(tmp, m_coefs, basis().weights());
+     }
+ 
+     /// Insert the knots in the range [inBegin,inEnd) without changing the curve.
+     template <class It>
+     void insertKnots(It inBegin, It inEnd)
+     {
+         gsMatrix<T> tmp = basis().projectiveCoefs(m_coefs);
+         gsBoehmRefine(basis().knots(), tmp, this->degree(), inBegin, inEnd);
+         basis().setFromProjectiveCoefs(tmp, m_coefs, basis().weights());
+     }
+     
+     /*
+     void degreeElevate(int const i, int const dir = -1)
+     {
+         GISMO_ASSERT( (dir == -1) || (dir == 0),
+                       "Invalid basis component "<< dir <<" requested for degree elevation" );
+         
+         bspline::degreeElevateBSpline(this->basis(), this->m_coefs, i);
+     }
+     */
+ 
+     //void toProjective() { m_weights=w; } ;
+     
+ 
+ protected:
+     // TODO Check function
+     // check function: check the coefficient number, degree, knot vector ...
+ 
++private:
++
++    // Avoid hidden overloads w.r.t. gsGeometry
++    using Base::insertKnot;
+ 
+ // Data members
+ private:
+ 
+     using Base::m_coefs;
+     
+     bool projective;
+ 
+ }; // class gsNurbs
+ 
+ 
+ } // namespace gismo
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    void degreeElevate(int const i, int const dir = -1)
+    {
+        GISMO_ASSERT( (dir == -1) || (dir == 0),
+                      "Invalid basis component "<< dir <<" requested for degree elevation" );
+        
+        bspline::degreeElevateBSpline(this->basis(), this->m_coefs, i);
+    }
+
+```
+<<<END bbeacf>>>
+
+<<<ITEM da06b6>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsUtils/gsL2Projection_.cpp b/src/gsUtils/gsL2Projection_.cpp
+index 50dbcf55d..e4eb77c85 100644
+--- a/src/gsUtils/gsL2Projection_.cpp
++++ b/src/gsUtils/gsL2Projection_.cpp
+@@ -1,12 +1,13 @@
+ #include <gsCore/gsTemplateTools.h>
+ 
+ //Prerequisits
+ #include <gsUtils/gsL2Projection.h>
+ #include <gsUtils/gsL2Projection.hpp>
++#include <gsAssembler/gsExprAssembler.h>
+ 
+ namespace gismo
+ {
+ 
+ STRUCT_TEMPLATE_INST gsL2Projection<real_t>;
+ 
+ }
+
+```
+<<<END da06b6>>>
+
+<<<ITEM 319ebc>>>
+Domain: SECURITY
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsDomain/gsImplicitTrimmedDomain.h b/src/gsDomain/gsImplicitTrimmedDomain.h
+index 1479d7468..cec2d95bb 100644
+--- a/src/gsDomain/gsImplicitTrimmedDomain.h
++++ b/src/gsDomain/gsImplicitTrimmedDomain.h
+@@ -40,45 +40,47 @@ public:
+     m_implFunction(memory::make_shared_not_owned(&fnc))
+     {
+         this->init(tbasis, 3);
+     }
+ 
+     /// Constructor for hierarchical tensor bases
+     gsImplicitTrimmedDomain(const gsFunction<T> & fnc,
+                         const gsHTensorBasis<d,T> & htbasis,
+                         index_t samples = 5) :
+     m_implFunction(memory::make_shared_not_owned(&fnc))
+     {
+         this->init(htbasis, samples);
+     }
+ 
+     /// Constructor for bounding-box + uniform grid
+     gsImplicitTrimmedDomain(const gsFunction<T>       & fnc,
+                         const gsMatrix<T>            & bbox,
+                         const gsVector<index_t,d>    & numCells,
+                         index_t samples = 5) :
+     m_implFunction(memory::make_shared_not_owned(&fnc))
+     {
+         this->init(bbox, numCells, samples);
+     }
+ 
+     gsImplicitTrimmedDomain(const gsFunction<T> & fnc)
+     : m_implFunction(memory::make_shared_not_owned(&fnc))
+     {
+         this->init();
+     }
+ 
++    const gsFunction<T> & implicitFunction() const { return *m_implFunction; };
++
+     inline gsVector<short_t> sign(const gsMatrix<T> & u)
+     {
+         gsVector<T> val = m_implFunction->eval(u).row(0);
+         return gsVector<short_t>(val.array().sign().template cast<short_t>());
+     }
+ 
+     gsMatrix<T> boundingBox() const override
+     {
+         //always exists?
+         return m_implFunction->support(); 
+     }
+ 
+ };
+ 
+ } // namespace gismo
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    : m_implFunction(memory::make_shared_not_owned(&fnc))
+    {
+        this->init();
+    }
+
+```
+<<<END 319ebc>>>
+
+<<<ITEM 47498e>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsBasis.hpp b/src/gsCore/gsBasis.hpp
+index 1d3ff9530..e74cfdabd 100644
+--- a/src/gsCore/gsBasis.hpp
++++ b/src/gsCore/gsBasis.hpp
+@@ -246,60 +246,66 @@ void gsBasis<T>::evalAllDersSingle_into(unsigned i, const gsMatrix<T> & u,
+ template<class T>
+ void gsBasis<T>::evalDerSingle_into(unsigned i, const 
+                                     gsMatrix<T> & u, int n, 
+                                     gsMatrix<T>& result) const
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ 
+ template<class T>
+ gsBasis<T> * gsBasis<T>::create() const
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ 
+ template<class T>
+ gsBasis<T> * gsBasis<T>::tensorize(const gsBasis & other) const 
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ typename gsBasis<T>::domainIter
+ gsBasis<T>::makeDomainIterator() const
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ typename gsBasis<T>::domainIter
+ gsBasis<T>::makeDomainIterator(const boxSide & s) const
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ int gsBasis<T>::numElements() const
+ { GISMO_NO_IMPLEMENTATION }
+ 
++template<class T>
++int gsBasis<T>::numElements(boxSide const & s) const
++{ 
++    return this->component( s.direction() ).numElements();
++}
++
+ template<class T>
+ int gsBasis<T>::elementIndex(const gsVector<T> & u) const
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ gsBasis<T>& gsBasis<T>::component(unsigned i) const
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ void gsBasis<T>::refine(gsMatrix<T> const & boxes)
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ void gsBasis<T>::refine(gsMatrix<T> const & boxes, int refExt)
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ void gsBasis<T>::refineElements(std::vector<unsigned> const & boxes)
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ void gsBasis<T>::uniformRefine(int numKnots, int mul)
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ void gsBasis<T>::uniformRefine_withCoefs(gsMatrix<T>& coefs, int numKnots, int mul)
+ { GISMO_NO_IMPLEMENTATION }
+ 
+ template<class T>
+ void gsBasis<T>::uniformRefine_withTransfer(gsSparseMatrix<T,RowMajor> & transfer, 
+
+```
+<<<END 47498e>>>
+
+<<<ITEM 5f605c>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsTemplateTools.h b/src/gsCore/gsTemplateTools.h
+index 97bdc603f..0b8c8a785 100644
+--- a/src/gsCore/gsTemplateTools.h
++++ b/src/gsCore/gsTemplateTools.h
+@@ -1,54 +1,54 @@
+ /** @file gsTemplateTools.h
+ 
+     @brief Utilities related to template programming.
+ 
+     This file is part of the G+Smo library. 
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+     
+     Author(s): A. Mantzaflaris
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsExport.h>
+ #include <utility>
+ 
+ namespace gismo
+ {
+ 
+ namespace util {
+ 
+-#if __cplusplus >= 201103
++#if __cplusplus >= 201103 || (defined(_MSC_VER) && _MSC_VER >= 1600)
+ //see also http://lists.boost.org/Archives/boost/2009/04/151209.php
+ template <typename T> struct has_move_constructor
+ {
+     typedef char yes[1];
+     typedef char no[2];
+     
+     struct AmbiguousConverter
+     {
+         operator T&& ();
+         operator const T& ();
+     };
+     template <typename C> static no& test(decltype( new C( AmbiguousConverter{} )));
+     template <typename> static yes& test(...);
+     enum { value = (sizeof(test<T>(0)) == sizeof(yes)) };
+ };
+ 
+ using std::conditional;
+ using std::enable_if;
+ using std::is_same;
+ using std::is_base_of;
+ 
+ #else
+ 
+ // template <typename T> struct has_move_constructor { enum { value = 0 }; };
+ 
+ template<bool B, class T, class F> struct conditional { typedef T type; };
+ template<class T, class F> struct conditional<false, T, F> { typedef F type; };
+ 
+ template<bool B, class T = void> struct enable_if {};
+ template<class T> struct enable_if<true, T> { typedef T type;};
+
+```
+<<<END 5f605c>>>
+
+<<<ITEM b2330f>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsNurbs/gsTensorNurbsBasis_.cpp b/src/gsNurbs/gsTensorNurbsBasis_.cpp
+new file mode 100644
+index 000000000..a3c1b117a
+--- /dev/null
++++ b/src/gsNurbs/gsTensorNurbsBasis_.cpp
+@@ -0,0 +1,19 @@
++/* Symbol export for G+Smo shared object */
++
++#define gsTensorNurbsBasis_EXPORT
++
++#include <gsNurbs/gsTensorNurbsBasis.h>
++#include <gsNurbs/gsTensorNurbsBasis.hpp>
++
++namespace gismo
++{
++
++/*
++#ifdef GISMO_WITH_PYBIND11
++
++//namespace py = pybind11;
++
++#endif
++*/
++
++}
+
+```
+<<<END b2330f>>>
+
+<<<ITEM ea4679>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsMatrix/gsFiberMatrix.h b/src/gsMatrix/gsFiberMatrix.h
+index 459b298c7..7c2e6f306 100644
+--- a/src/gsMatrix/gsFiberMatrix.h
++++ b/src/gsMatrix/gsFiberMatrix.h
+@@ -2,61 +2,61 @@
+ 
+     @brief A specialized sparse matrix class which stores separately
+     each fiber.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): A. Mantzaflaris
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsLinearAlgebra.h>
+ 
+ namespace gismo
+ {
+ 
+ /**
+  * \brief A specialized sparse matrix class which stores each row
+  *  as a separate sparse vector.
+  *
+  *  This allows efficient row resizing and insertion
+  *  operations, particularly for knot insertion algorithms.
+  */
+ template <class T, int Major = ColMajor> // RowMajor==0, ColMajor==1
+ class gsFiberMatrix
+ {
+-    bool IsRowMajor = (Major==RowMajor);
++    static bool IsRowMajor = (Major==RowMajor);
+ public:
+     typedef gsEigen::SparseVector<T> Fiber;
+ 
+     class InnerIterator : Fiber::InnerIterator
+     {
+         typedef typename Fiber::InnerIterator Base;
+         InnerIterator(gsFiberMatrix fm, index_t j) : Base() { }
+     };
+ 
+     struct RowBlockXpr;
+ 
+     gsFiberMatrix()
+     { }
+ 
+     gsFiberMatrix(index_t rows, index_t cols)
+     : m_fibers(rows)
+     {
+         for (index_t i = 0; i < rows; ++i)
+             m_fibers[i] = new Fiber(cols);
+     }
+ 
+     gsFiberMatrix(const gsFiberMatrix& other)
+     : m_fibers(other.rows())
+     {
+         for (int i = 0; i < rows(); ++i)
+             m_fibers[i] = new Fiber( *other.m_fibers[i] );
+     }
+ 
+     gsFiberMatrix(const RowBlockXpr& rowxpr)
+     : m_fibers(rowxpr.num)
+
+```
+<<<END ea4679>>>
+
+<<<ITEM 314e00>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsHSplines/gsHBSplineBasis.h b/src/gsHSplines/gsHBSplineBasis.h
+index f0034767d..cc411a9a2 100644
+--- a/src/gsHSplines/gsHBSplineBasis.h
++++ b/src/gsHSplines/gsHBSplineBasis.h
+@@ -13,62 +13,63 @@
+ 
+ #pragma once
+ 
+ #include <gsHSplines/gsHTensorBasis.h>
+ #include <gsHSplines/gsHBSpline.h>
+ 
+ namespace gismo
+ {
+     /** 
+      * \brief
+      * A hierarchical B-spline basis of parametric dimension \em d.
+      *
+      * See \cite Kraft1997 for the theory behind this kind of basis.
+      * 
+      * \tparam d the dimension of the parameter domain
+      * \tparam T coefficient type
+      *
+      * \ingroup basis
+      * \ingroup HSplines
+     */ 
+     
+ template<unsigned d, class T>
+ class gsHBSplineBasis : public gsHTensorBasis<d,T>
+ {
+ public:
+     /// Associated geometry type
+     typedef gsHBSpline<d,T> GeometryType;
+     
+     typedef typename gsHTensorBasis<d,T>::CMatrix CMatrix;
+ 
+-    //typedef gsHBSplineBasis<d-1,T> BoundaryBasisType;
+-    typedef gsHBSplineBasis<1,T> BoundaryBasisType;
++    typedef typename 
++    choose<d==1, gsConstantBasis<T>, gsHBSplineBasis<d-1,T>
++           >::type BoundaryBasisType;
+ 
+     typedef memory::shared_ptr< gsHBSplineBasis > Ptr;
+ 
+ public:
+ 
+ #ifdef _MSC_VER
+ #pragma warning( push )
+ #pragma warning( disable : 4702 )
+ #endif
+ 
+     /// Constructor out of a gsBSplineBasis
+     gsHBSplineBasis(gsBSplineBasis<T> &  bsbasis, int nlevels = 10);
+     
+     gsHBSplineBasis( gsBSplineBasis<T> &  bsbasis,
+                      std::vector<unsigned> & boxes, int nlevels = 10)
+         : gsHTensorBasis<d,T>( gsTensorBSplineBasis<d,T>(&bsbasis), nlevels, boxes) 
+     {
+         GISMO_ASSERT(d==1, "Wrong dimension");
+     }
+     
+     gsHBSplineBasis( gsBSplineBasis<T> &  bsbasis,
+                      gsMatrix<T> const & boxes, int nlevels = 10)
+         : gsHTensorBasis<d,T>(gsTensorBSplineBasis<d,T>(&bsbasis), nlevels, boxes) 
+     {
+         GISMO_ASSERT(d==1, "Wrong dimension");
+     }
+ 
+ #ifdef _MSC_VER
+ #pragma warning( pop ) 
+ #endif
+
+```
+<<<END 314e00>>>
+
+<<<ITEM d6d410>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/optional/gsParasolidExportMesh.cpp b/optional/gsParasolidExportMesh.cpp
+index 9fa5629fe..0855db427 100644
+--- a/optional/gsParasolidExportMesh.cpp
++++ b/optional/gsParasolidExportMesh.cpp
+@@ -25,35 +25,37 @@ int main(int argc, char *argv[])
+ {
+ 
+     std::string input(GISMO_DATA_DIR "/surfaces/thbs_face_3levels.xml");
+     std::string output("out");
+ 
+     gsCmdLine cmd("Ploting a geometry to paradolid wire geometry.");
+     cmd.addString("i", "input", "Input file", input);
+     cmd.addString("o", "output", "Output file", output);
+ 
+     bool ok = cmd.getValues(argc, argv);
+ 
+     if (!ok)
+     {
+ 	gsWarn << "Something went wrong with command line arguments.\n";
+     }
+ 
+     std::cout << " \n\nInput arguments: \n\n"
+ 	      << "input: " << input << "\n\n"
+ 	      << "output: " << output << "\n\n"
+ 	      << "--------------------------------------------------\n" << std::endl;
+     
+     gsGeometry<>* geom = gsReadFile<>(input);
+     
+     gsMesh<> mesh;
+     
+     makeMesh<>( geom->basis(), mesh, 5);
+     
+     geom->evaluateMesh(mesh);
+     
+     extensions::gsWriteParasolid(mesh, output);
++
++    delete geom;
+     
+     return 0;
+ }
+ 
+     
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    gsCmdLine cmd("Ploting a geometry to paradolid wire geometry.");
+    cmd.addString("i", "input", "Input file", input);
+    cmd.addString("o", "output", "Output file", output);
+
+    bool ok = cmd.getValues(argc, argv);
+
+    if (!ok)
+    {
+	gsWarn << "Something went wrong with command line arguments.\n";
+    }
+
+```
+<<<END d6d410>>>
+
+<<<ITEM 09b651>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/external/Eigen/src/Core/MathFunctions.h b/external/Eigen/src/Core/MathFunctions.h
+index a648aa0fa..19ab05015 100644
+--- a/external/Eigen/src/Core/MathFunctions.h
++++ b/external/Eigen/src/Core/MathFunctions.h
+@@ -1,45 +1,45 @@
+ // This file is part of Eigen, a lightweight C++ template library
+ // for linear algebra.
+ //
+ // Copyright (C) 2006-2010 Benoit Jacob <jacob.benoit.1@gmail.com>
+ //
+ // This Source Code Form is subject to the terms of the Mozilla
+ // Public License v. 2.0. If a copy of the MPL was not distributed
+ // with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+ #ifndef EIGEN_MATHFUNCTIONS_H
+ #define EIGEN_MATHFUNCTIONS_H
+ 
+ // source: http://www.geom.uiuc.edu/~huberty/math5337/groupe/digits.html
+ // TODO this should better be moved to NumTraits
+-#define EIGEN_PI 3.141592653589793238462643383279502884197169399375105820974944592307816406L
++#define EIGEN_PI 3.141592653589793238462643383279502884197169399375105820974944592307816406 // G+Smo
+ 
+ 
+ namespace Eigen {
+ 
+ // On WINCE, std::abs is defined for int only, so let's defined our own overloads:
+ // This issue has been confirmed with MSVC 2008 only, but the issue might exist for more recent versions too.
+ #if EIGEN_OS_WINCE && EIGEN_COMP_MSVC && EIGEN_COMP_MSVC<=1500
+ long        abs(long        x) { return (labs(x));  }
+ double      abs(double      x) { return (fabs(x));  }
+ float       abs(float       x) { return (fabsf(x)); }
+ long double abs(long double x) { return (fabsl(x)); }
+ #endif
+ 
+ namespace internal {
+ 
+ /** \internal \class global_math_functions_filtering_base
+   *
+   * What it does:
+   * Defines a typedef 'type' as follows:
+   * - if type T has a member typedef Eigen_BaseClassForSpecializationOfGlobalMathFuncImpl, then
+   *   global_math_functions_filtering_base<T>::type is a typedef for it.
+   * - otherwise, global_math_functions_filtering_base<T>::type is a typedef for T.
+   *
+   * How it's used:
+   * To allow to defined the global math functions (like sin...) in certain cases, like the Array expressions.
+   * When you do sin(array1+array2), the object array1+array2 has a complicated expression type, all what you want to know
+   * is that it inherits ArrayBase. So we implement a partial specialization of sin_impl for ArrayBase<Derived>.
+   * So we must make sure to use sin_impl<ArrayBase<Derived> > and not sin_impl<Derived>, otherwise our partial specialization
+   * won't be used. How does sin know that? That's exactly what global_math_functions_filtering_base tells it.
+   *
+
+```
+<<<END 09b651>>>
+
+<<<ITEM 792c6c>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsHSplines/gsHBSpline.h b/src/gsHSplines/gsHBSpline.h
+index 0de06006d..bfe59e2ad 100644
+--- a/src/gsHSplines/gsHBSpline.h
++++ b/src/gsHSplines/gsHBSpline.h
+@@ -16,63 +16,65 @@
+ #include <ostream>
+ 
+ #include <gsCore/gsLinearAlgebra.h>
+ #include <gsCore/gsGeometry.h>
+ #include <gsHSplines/gsHBSplineBasis.h>
+ 
+ namespace gismo
+ {
+ 
+ /** \brief
+     A hierarchical B-Spline function, in \em d dimensions.
+ 
+     This is the geometry type associated with gsHBSplineBasis.
+ 
+     \tparam T is the coefficient type
+ 
+     \ingroup geometry
+     \ingroup HSplines
+ */    
+     
+ template<unsigned d, class T>
+ class gsHBSpline : public gsGenericGeometry<gsHBSplineBasis<d,T> >
+ {   
+ public: 
+     typedef gsHBSplineBasis<d,T> Basis;
+     typedef gsGenericGeometry< gsHBSplineBasis<d,T> > Base;
+     
+     /// Shared pointer for gsHBSpline
+     typedef memory::shared_ptr< gsHBSpline<d,T> > Ptr;
+     
+-    typedef gsHBSpline<d-1,T> BoundaryGeometryType;
++    typedef typename 
++    choose<d==1, gsConstantFunction<T>, gsHBSpline<d-1,T>
++           >::type BoundaryGeometryType;
+ 
+-    typedef gsHBSplineBasis<d-1,T> BoundaryBasisType;
++    typedef typename gsHBSplineBasis<d>::BoundaryBasisType BoundaryBasisType;
+     
+ public:
+     
+     /// Default empty constructor
+     gsHBSpline() { }
+   
+     /// Construct HB-Spline by basis functions and coefficient matrix
+     gsHBSpline( const Basis * basis, const gsMatrix<T> * coefs ) :
+     Base( basis, coefs ) { }
+ 
+     /// Construct HB-Spline by basis functions and coefficient matrix
+     gsHBSpline( const Basis & basis, const gsMatrix<T> & coefs ) :
+     Base( basis, coefs ) { }
+   
+     /// Construct B-Spline from a Tensor B-Spline
+     gsHBSpline( const gsTensorBSpline<d,T> & tbsp )
+     { 
+         this->m_basis = new Basis(tbsp);
+         this->m_coefs = tbsp->coefs();
+     }
+   
+     /// Copy constructor
+     gsHBSpline( const gsHBSpline & other )
+     { 
+         this->m_basis = other.basis().clone();
+         this->m_coefs = other.coefs();
+     }
+   
+     /// Clone the gsHBspline
+     virtual gsHBSpline * clone() const
+
+```
+<<<END 792c6c>>>
+
+<<<ITEM 5a0559>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsG1Basis/gsG1OptionList.h b/src/gsG1Basis/gsG1OptionList.h
+index 4628bbc29..324329342 100644
+--- a/src/gsG1Basis/gsG1OptionList.h
++++ b/src/gsG1Basis/gsG1OptionList.h
+@@ -1,60 +1,68 @@
+ /** @file gsG1OptionList.h
+  *
+     @brief Option list for the G1 Basis
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): A. Farahat & P. Weinmueller
+ */
+ 
+ #pragma once
+ 
+ #include <gismo.h>
+ 
+ 
+ namespace gismo
+ {
+ 
+ struct gluingData
+ {
+     enum strategy
+     {
+         approximate  = 0,
+-        l2projection = 1,
+-        local = 2
++        l2projection = 1, // global L2-projection
++        local = 2 // local L2-projection
+     };
++};
+ 
++struct g1BasisEdge
++{
++    enum strategy
++    {
++        l2projection = 0, // global L2-projection
++        local = 1 // local L2-projection
++    };
+ };
+ 
+ struct user
+ {
+     enum name
+     {
+         pascal = 0,
+         andrea = 1,
+     };
+ 
+ };
+ 
+ class gsG1OptionList
+ {
+ 
+ public:
+     gsG1OptionList()
+     {
+ 
+     }
+ 
+     gsG1OptionList(gsOptionList & list)
+     {
+         optionList = list;
+     }
+ 
+     index_t getInt(const std::string label) { return optionList.getInt(label); };
+     bool getSwitch(const std::string label) { return optionList.getSwitch(label); };
+     real_t getReal(const std::string label) { return optionList.getReal(label); };
+     std::string getString(const std::string label) { return optionList.getString(label); };
+
+```
+<<<END 5a0559>>>
+
+<<<ITEM 0c0789>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/optional/gsParasolidBCURVE.cpp b/optional/gsParasolidBCURVE.cpp
+index 61d95c02b..57de837f9 100644
+--- a/optional/gsParasolidBCURVE.cpp
++++ b/optional/gsParasolidBCURVE.cpp
+@@ -20,35 +20,36 @@
+ #include <gsParasolid/gsWriteParasolid.h>
+ 
+ 
+ using namespace gismo;
+ 
+ int main(int argc, char *argv[])
+ {
+     std::string input(GISMO_DATA_DIR "/curves3d/bspline3d_curve_01.xml");
+     std::string output("out");
+ 
+     gsCmdLine cmd("Ploting a G+Smo B-spline curve to parasolid PK_BCURVE.");
+     cmd.addString("i", "input", "Input file", input);
+     cmd.addString("o", "output", "Output file", output);
+     
+     bool ok = cmd.getValues(argc, argv);
+ 
+     if (!ok)
+     {
+ 	gsWarn << "Something went wrong with command line arguments.\n";
+     }
+ 
+     std::cout << " \n\nInput arguments: \n\n"
+ 	      << "input: " << input << "\n\n"
+ 	      << "output: " << output << "\n\n"
+ 	      << "--------------------------------------------------\n" << std::endl;
+ 
+     gsBSpline<>* curve = gsReadFile<>(input);
+ 
+     extensions::gsWriteParasolid(*curve, output);
+ 
++    delete curve;
+ 
+     return 0;
+ }
+ 
+ 
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    gsCmdLine cmd("Ploting a G+Smo B-spline curve to parasolid PK_BCURVE.");
+    cmd.addString("i", "input", "Input file", input);
+    cmd.addString("o", "output", "Output file", output);
+    
+    bool ok = cmd.getValues(argc, argv);
+
+    if (!ok)
+    {
+	gsWarn << "Something went wrong with command line arguments.\n";
+    }
+
+```
+<<<END 0c0789>>>
+
+<<<ITEM 4cc013>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/examples/gsAnalysisSuitableParameterization.cpp b/examples/gsAnalysisSuitableParameterization.cpp
+index 6e68966bc..7d9601e86 100644
+--- a/examples/gsAnalysisSuitableParameterization.cpp
++++ b/examples/gsAnalysisSuitableParameterization.cpp
+@@ -1,33 +1,42 @@
+-//
+-// Created by 纪野 on 2022/10/2.
+-//
++/** @file biharmonic_example.cpp
++
++    @brief Analysis-suitable parameterization example.
++
++    This file is part of the G+Smo library.
++
++    This Source Code Form is subject to the terms of the Mozilla Public
++    License, v. 2.0. If a copy of the MPL was not distributed with this
++    file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++    Author(s): Ye Ji
++*/
+ 
+ #include <gismo.h>
+ #include <gsHLBFGS/gsHLBFGS.h>
+ #include <gsModeling/gsBarrierPatch.h>
+ #include "gsModeling/gsBarrierCore.h"
+ #include "gsModeling/gsBarrierPatchGenerator.h"
+ 
+ using namespace gismo;
+ 
+ template<typename T>
+ void makeMapperFixedInterface(const gsMultiPatch<T> &mp, gsDofMapper &mapper)
+ {
+     // control point on interfaces are fixed
+ 
+     ////! [Make mapper for the design DoFs]
+     // Now, we set all the inner control points of each patch as optimization variables
+     // It is also possible to set only a part of them as optimization variables
+     gsMultiBasis<T> mb(mp);
+     mapper.init(mb, mp.targetDim());
+ 
+     for (gsBoxTopology::const_iiterator it = mb.topology().iBegin();
+          it != mb.topology().iEnd(); ++it) // C^0 at the interface
+     {
+         mb.matchInterface(*it, mapper);
+     }
+ 
+     for (gsMultiPatch<>::const_biterator bit = mp.bBegin();
+          bit != mp.bEnd(); ++bit)
+     {
+         gsMatrix<index_t> idx = mb.basis(bit->patch).allBoundary();
+
+```
+<<<END 4cc013>>>
+
+<<<ITEM bb047a>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsIO/gsFileManager.cpp b/src/gsIO/gsFileManager.cpp
+index feedeccb2..93dbe2491 100644
+--- a/src/gsIO/gsFileManager.cpp
++++ b/src/gsIO/gsFileManager.cpp
+@@ -1,53 +1,56 @@
+ /** @file gsFileManager.cpp
+ 
+     @brief Utility class for finding files and handling paths
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): S. Takacs, A. Mantzaflaris, H. Weiner
+ */
+ 
+ #include <gsIO/gsFileManager.h>
+ #include <iostream>
+ #include <fstream>
+ #include <gsCore/gsConfig.h>
+ #include <gsUtils/gsUtils.h>
+ #include <cstdlib>
+ 
+ #if defined _WIN32
+ #include <windows.h>
+ #include <direct.h>
++#ifdef __MINGW32__
++#include <sys/stat.h>
++#endif
+ #else
+ #include <sys/stat.h>
+ #include <dlfcn.h>
+ #include <unistd.h>
+ #endif
+ 
+ namespace gismo
+ {
+ 
+ class gsFileManagerData;
+ 
+ // Use a singleton to store data:
+ class GISMO_EXPORT gsFileManagerData
+ {
+ public:
+ 
+     friend gsFileManagerData& gsFileManagerDataSingleton();
+     friend class gsFileManager;
+ 
+     bool addSearchPaths(const std::string& paths);
+ 
+     void clear() { m_paths.clear();}
+ private:
+     gsFileManagerData()
+     {
+ #ifdef GISMO_SEARCH_PATHS
+         (void)addSearchPaths("" GISMO_SEARCH_PATHS);
+ #endif
+     }
+ 
+
+```
+<<<END bb047a>>>
+
+<<<ITEM bda22f>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsForwardDeclarations.h b/src/gsCore/gsForwardDeclarations.h
+index 2b16a43e0..3d55f78e5 100644
+--- a/src/gsCore/gsForwardDeclarations.h
++++ b/src/gsCore/gsForwardDeclarations.h
+@@ -228,42 +228,45 @@ class gsOptionList;
+ 
+ template<class T = real_t, int _Rows=-1, int _Cols=-1, 
+          int _Options  = 0|((_Rows==1 && _Cols!=1)?0x1:0)> class gsMatrix;
+ template<class T = real_t, int _Rows=-1, int _Options = 0> class gsVector;
+ 
+ template<class T= real_t, int _Rows=-1, int _Cols=-1> class gsAsConstMatrix;
+ template<class T= real_t, int _Rows=-1, int _Cols=-1> class gsAsMatrix;
+ 
+ template<class T= real_t, int _Rows=-1> class gsAsVector;
+ template<class T= real_t, int _Rows=-1> class gsAsConstVector;
+ 
+ template<class T = real_t> class gsVector3d;
+ 
+ template<typename T=real_t, int _Options=0, typename _Index = index_t>
+ class gsSparseMatrix;
+ 
+ template<typename T=real_t, int _Options=0, typename _Index = index_t>
+ class gsSparseVector;
+ 
+ template <class T=real_t>                class gsSparseEntries;
+ 
+ // gsSolver
+ 
+ template <class T=real_t>                class gsLinearOperator;
+ template <class T=real_t>                class gsScaledOp;
+ template <class T=real_t>                class gsIdentityOp;
+ 
+ template <class T=real_t>                class gsPreconditionerOp;
+ template <class T=real_t>                class gsPreconditionerFromOp;
+ 
++template <class T=real_t>                class gsSumOp;
++template <class T=real_t>                class gsProductOp;
++template <class T=real_t>                class gsCompositePrecOp;
+ template <class T=real_t>                class gsBlockOp;
+ 
+ // gsMultiGrid
+ 
+ template <class T=real_t>                class gsMultiGridOp;
+ template <class T=real_t>                class gsGridHierarchy;
+ 
+ /// @endcond
+ 
+ ///@}
+ 
+ } // end namespace gismo
+
+```
+<<<END bda22f>>>
+
+<<<ITEM 8cb045>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsGeometry.hpp b/src/gsCore/gsGeometry.hpp
+index 8913853a1..800e0fcea 100644
+--- a/src/gsCore/gsGeometry.hpp
++++ b/src/gsCore/gsGeometry.hpp
+@@ -1,55 +1,55 @@
+ /** @file gsGeometry.hpp
+ 
+     @brief Provides implementation of Geometry default operatiions.
+ 
+     This file is part of the G+Smo library. 
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+     
+     Author(s): A. Mantzaflaris
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsBasis.h>
+ #include <gsUtils/gsMesh/gsMesh.h>
+ //#include <gsCore/gsBoundary.h>
+ 
+ namespace gismo
+ {
+ 
+ template<class T>
+ gsGeometry<T> * 
+-gsGeometry<T>::boundary(boundary::side const& s) const
++gsGeometry<T>::boundary(boxSide const& s) const
+ {
+     gsMatrix<unsigned> *ind = this->basis().boundary(s); // get indices of the boundary DOF
+     gsMatrix<T> coeffs (ind->size(), geoDim()); // create matrix for boundary coefficients
+     
+     for (index_t i=0; i != ind->size(); i++ )
+     {
+         coeffs.row(i) = m_coefs.row( (*ind)(i,0) );
+     }
+     delete ind;
+     gsBasis<T> *Bs = this->basis().boundaryBasis(s);  // Basis for boundary side s
+     gsGeometry *bgeo = Bs->makeGeometry( give(coeffs) );
+     delete Bs;
+     return bgeo;
+ }
+ 
+ template<class T>
+ void gsGeometry<T>::evaluateMesh(gsMesh<T>& mesh) const
+ {
+     const int pDim = parDim();
+     const int gDim = geoDim();
+ 
+     gsMatrix<T> tmp;
+ 
+     // For all vertices of the mesh, push forward the value by the
+     // geometry mapping
+     for ( int i = 0; i!= mesh.numVertices; ++i)
+     {
+         eval_into( mesh.vertex[i]->coords.topRows(pDim), tmp );
+         mesh.vertex[i]->coords.topRows( gDim ) = tmp;
+     }
+
+```
+<<<END 8cb045>>>
+
+<<<ITEM d5a8f8>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsModeling/gsPlanarDomain.hpp b/src/gsModeling/gsPlanarDomain.hpp
+index 9fa9fbe6f..5fb7b8b41 100644
+--- a/src/gsModeling/gsPlanarDomain.hpp
++++ b/src/gsModeling/gsPlanarDomain.hpp
+@@ -1,41 +1,42 @@
+ /** @file gsPlanarDomain.hpp
+ 
+-    @brief Provides implementation  of the PlanarDomain class.
++    @brief Provides implementation of the gsPlanarDomain class.
+ 
+     This file is part of the G+Smo library. 
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+     
+-    Author(s): A. Falini, A. Mantzaflaris
++    Author(s): A. Falini, C. Hofreither, A. Mantzaflaris, D. Mayer,
++            D.-M. Nguyen, M. Pauley
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsLinearAlgebra.h>
+ #include <gsCore/gsConstantFunction.h>
+ #include <gsCore/gsCurve.h>
+ 
+ #include <gsNurbs/gsNurbsCreator.h>
+ 
+ #include <gsUtils/gsMesh/gsMesh.h>
+ 
+ #include <gsUtils/gsQuadrature.h>
+ #include <gsModeling/gsTraceCurve.hpp>
+ #include <gsModeling/gsTemplate.h>
+ 
+ #include <gsNurbs/gsBSpline.h>
+ #include <gsNurbs/gsKnotVector.h>
+ 
+ namespace gismo
+ {
+ 
+ 
+ template <class T>
+ gsPlanarDomain<T>::gsPlanarDomain( std::vector< gsCurveLoop<T> *> const & loops)
+ {
+     if(!loops[0]->is_ccw())
+         loops[0]->reverse();
+     m_loops.push_back(loops[0]);
+     for(std::size_t i=1; i<loops.size();i++ )
+
+```
+<<<END d5a8f8>>>
+
+<<<ITEM 27ff7d>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsIO/gsWriteParaview.hpp b/src/gsIO/gsWriteParaview.hpp
+index 5d1b0ab29..11493e659 100644
+--- a/src/gsIO/gsWriteParaview.hpp
++++ b/src/gsIO/gsWriteParaview.hpp
+@@ -1,59 +1,59 @@
+ /** @file gsWriteParaview.hpp
+ 
+     @brief Provides implementation of functions writing Paraview files.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): A. Mantzaflaris
+ */
+ 
+ 
+ #pragma once
+ 
+ #include <gsIO/gsWriteParaview.h>
+ #include <gsIO/gsParaviewCollection.h>
+ #include <gsIO/gsIOUtils.h>
+ 
+ #include <gsCore/gsGeometry.h>
+ #include <gsCore/gsGeometrySlice.h>
+ #include <gsCore/gsField.h>
+ #include <gsCore/gsDebug.h>
+ 
+ #include <gsModeling/gsTrimSurface.h>
+ #include <gsModeling/gsSolid.h>
+ 
+-#define PLOT_PRECISION 12
++#define PLOT_PRECISION 5
+ 
+ namespace gismo
+ {
+ 
+ // Export a 3D parametric mesh
+ template<class T>
+ void writeSingleBasisMesh3D(const gsMesh<T> & sl,
+                             std::string const & fn)
+ {
+     const unsigned numVer = sl.numVertices();
+     const unsigned numEl  = numVer / 8;
+     std::string mfn(fn);
+     mfn.append(".vtu");
+     std::ofstream file(mfn.c_str());
+     if ( ! file.is_open() )
+         gsWarn<<"writeSingleBasisMesh3D: Problem opening file \""<<fn<<"\""<<std::endl;
+     file << std::fixed; // no exponents
+     file << std::setprecision (PLOT_PRECISION);
+ 
+     file <<"<?xml version=\"1.0\"?>\n";
+     file <<"<VTKFile type=\"UnstructuredGrid\" version=\"0.1\" byte_order=\"LittleEndian\">\n";
+     file <<"<UnstructuredGrid>\n";
+ 
+     // Number of vertices and number of cells
+     file <<"<Piece NumberOfPoints=\""<< numVer <<"\" NumberOfCells=\""<<numEl<<"\">\n";
+ 
+     // Coordinates of vertices
+     file <<"<Points>\n";
+     file <<"<DataArray type=\"Float32\" NumberOfComponents=\"3\" format=\"ascii\">\n";
+     for (typename std::vector< gsVertex<T>* >::const_iterator it=sl.vertices().begin(); it!=sl.vertices().end(); ++it)
+
+```
+<<<END 27ff7d>>>
+
+<<<ITEM 7bf65a>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsMSplines/gsWeightMapper_.cpp b/src/gsMSplines/gsWeightMapper_.cpp
+index 17f56b462..f5cf21d73 100644
+--- a/src/gsMSplines/gsWeightMapper_.cpp
++++ b/src/gsMSplines/gsWeightMapper_.cpp
+@@ -1,34 +1,38 @@
+ /** @file gsWeightMapper_.cpp
+ 
+     @brief instantiation file
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): F. Buchegger
+ */
+ 
+ #include <gsCore/gsTemplateTools.h>
+ 
+ #include <gsMSplines/gsWeightMapper.h>
+ #include <gsMSplines/gsWeightMapper.hpp>
+ 
+ #include <gsMSplines/gsWeightMapperUtils.h>
+ #include <gsMSplines/gsWeightMapperUtils.hpp>
+ 
++#define T real_t
++
+ namespace gismo
+ {
+ 
+     CLASS_TEMPLATE_INST gsWeightMapper<real_t> ;
+ 
+     //Utils
+ 
+-    GISMO_EXPORT index_t reorderMapperTarget (gsWeightMapper<real_t> &mapper, const std::vector<index_t>& permutation, gsPermutationMatrix* permMatrix=NULL);
+-    GISMO_EXPORT  gsWeightMapper<real_t>* combineMappers (const std::vector<gsWeightMapper<real_t>*> &mappers, std::vector<index_t> &shifts, bool needShifting=true);
+-    GISMO_EXPORT  void combineMappers (const std::vector<gsWeightMapper<real_t>*> &mappers, bool needShifting, std::vector<index_t> &shifts, gsWeightMapper<real_t>& result);
++    TEMPLATE_INST index_t reorderMapperTarget (gsWeightMapper<real_t> &mapper, const std::vector<index_t>& permutation, gsPermutationMatrix* permMatrix=NULL);
++    TEMPLATE_INST gsWeightMapper<real_t>* combineMappers (const std::vector<gsWeightMapper<real_t>*> &mappers, std::vector<index_t> &shifts, bool needShifting=true);
++    TEMPLATE_INST void combineMappers (const std::vector<gsWeightMapper<real_t>*> &mappers, bool needShifting, std::vector<index_t> &shifts, gsWeightMapper<real_t>& result);
+ 
+ 
+ } // end namespace gismo
++
++#undef T
+
+```
+<<<END 7bf65a>>>
+
+<<<ITEM 9b191f>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsMultiBasis.h b/src/gsCore/gsMultiBasis.h
+index 64526ed86..490b6ed02 100644
+--- a/src/gsCore/gsMultiBasis.h
++++ b/src/gsCore/gsMultiBasis.h
+@@ -141,61 +141,61 @@ public:
+ 
+     //reference at(size_t i)
+     //{return *m_bases.at(i);}
+ 
+     const_reference operator[](size_t i) const
+     {return *m_bases[i];}
+     
+     reference operator[](size_t i)
+     {return *m_bases[i];}
+ 
+     // reference front()
+     // {return *m_bases.front();}
+ 
+     const_reference front() const
+     {return *m_bases.front();}
+     
+     // reference back()
+     // {return *m_bases.back();}
+ 
+     const_reference back() const
+     {return *m_bases.back();}
+ 
+     void pop_back()
+     {m_bases.pop_back();}
+ 
+ public:
+ 
+     /// Swap with another gsMultiBasis.
+     void swap(gsMultiBasis& other)
+     {
+-        m_topology.swap( m_topology );
++        m_topology.swap( other.m_topology );
+ 
+         m_bases.swap( other.m_bases );
+     }
+ 
+     /// Prints the object as a string.
+     std::ostream& print( std::ostream& os ) const;
+ 
+     /// Dimension of the parameter domain (must match for all bases).
+     int dim() const
+     { return m_bases[0]->dim();}
+ 
+     /// @brief Returns the polynomial degree of basis \a i in component \a j,
+     /// if the basis is of polynomial or piecewise polynomial type.
+     int degree(size_t i = 0, int comp = 0) const
+     {
+         GISMO_ASSERT( i < m_bases.size(),
+                       "Invalid patch index "<<i<<" requested from gsMultiBasis" );
+         return m_bases[i]->degree(comp);
+     }
+ 
+     /// @brief Maximum degree with respect to variable \a k.
+     int maxDegree(int k) const;
+ 
+     /// @brief Minimum degree with respect to variable \a k.
+     int minDegree(int k) const;
+ 
+     /// @brief Maximum degree with respect to all variables
+     int maxCwiseDegree() const;
+ 
+     /// @brief Minimum degree with respect to all variables
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    void swap(gsMultiBasis& other)
+    {
+        m_topology.swap( other.m_topology );
+
+        m_bases.swap( other.m_bases );
+    }
+
+```
+<<<END 9b191f>>>
+
+<<<ITEM 616e66>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsSystem/gsFileIo.h b/src/gsSystem/gsFileIo.h
+new file mode 100644
+index 000000000..699750c32
+--- /dev/null
++++ b/src/gsSystem/gsFileIo.h
+@@ -0,0 +1,27 @@
++/** @file gsModuleManager.h
++
++    @brief The module manager for dynamically loaded modules for G+Smo.
++
++    This file is part of the G+Smo library.
++    
++    This Source Code Form is subject to the terms of the Mozilla Public
++    License, v. 2.0. If a copy of the MPL was not distributed with this
++    file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++    Author(s): A. Mantzaflaris
++*/
++
++#pragma once
++
++#include <gsSystem/gsModule.h>
++
++class gsFileIo : public gsModule
++{
++public:
++    virtual std::string extension() = 0;
++
++    virtual void read(std::string fname) {GISMO_NO_IMPLEMENTATION }
++
++    virtual void write(std::string fname) {GISMO_NO_IMPLEMENTATION }
++};
++
+
+```
+<<<END 616e66>>>
+
+<<<ITEM cbf437>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsIO/gsXmlInstance_.cpp b/src/gsIO/gsXmlInstance_.cpp
+index 32f61ec1f..078cff291 100644
+--- a/src/gsIO/gsXmlInstance_.cpp
++++ b/src/gsIO/gsXmlInstance_.cpp
+@@ -1,50 +1,51 @@
+ #include <gsCore/gsTemplateTools.h>
+ 
+ #include <gsIO/gsXmlUtils.h>
+ #include <gsIO/gsXmlUtils.hpp>
+ 
+ namespace gismo
+ {
+ 
+ // Explicit instantiation
+ 
+ namespace internal
+ {
+     CLASS_TEMPLATE_INST gsXml< gsMatrix<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsSparseMatrix<real_t> >;
+ 
+     CLASS_TEMPLATE_INST gsXml< gsGeometry<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsCurve<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsSurface<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsBasis<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsMultiPatch<real_t> >;
++    CLASS_TEMPLATE_INST gsXml< gsMultiBasis<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsSolid<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsTrimSurface<real_t> >;
+ 
+     CLASS_TEMPLATE_INST gsXml< gsBSpline<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsBSplineBasis<real_t> >;
+ 
+     CLASS_TEMPLATE_INST gsXml< gsNurbs<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsNurbsBasis<real_t> >;
+         
+     CLASS_TEMPLATE_INST gsXml< gsTensorNurbs<2,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsTensorNurbs<3,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsTensorNurbs<4,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsTensorNurbsBasis<2,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsTensorNurbsBasis<3,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsTensorNurbsBasis<4,real_t> >;
+ 
+     CLASS_TEMPLATE_INST gsXml< gsHTensorBasis<2,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsHTensorBasis<3,real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsHTensorBasis<4,real_t> >;
+ 
+     //CLASS_TEMPLATE_INST gsXml< gsBezier<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsMesh<real_t> >;
+     CLASS_TEMPLATE_INST gsXml< gsCurveFitting<real_t> >;
+     
+     CLASS_TEMPLATE_INST gsXml< gsPde<real_t>        >;
+     CLASS_TEMPLATE_INST gsXml< gsPoissonPde<real_t> >;
+ //    CLASS_TEMPLATE_INST gsXml< gsSurfacePoissonPde<real_t> >;
+ 
+     CLASS_TEMPLATE_INST gsXml< gsPlanarDomain<real_t> >;
+     
+
+```
+<<<END cbf437>>>
+
+<<<ITEM da25c2>>>
+Domain: PERFORMANCE
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsOptimizer/gsOptimizer.h b/src/gsOptimizer/gsOptimizer.h
+index d7a9a958f..d1b9ae86f 100644
+--- a/src/gsOptimizer/gsOptimizer.h
++++ b/src/gsOptimizer/gsOptimizer.h
+@@ -21,61 +21,61 @@ namespace gismo
+ {
+ 
+ /**
+    \brief Class defining an optimizer
+ */
+ template <typename T>
+ class gsOptimizer
+ {
+ public:
+ 
+     /** default constructor */
+     gsOptimizer()
+     :
+     m_op(nullptr)
+     {};
+ 
+     gsOptimizer(gsOptProblem<T> * problem)
+     :
+     m_op(problem)
+     {
+ 
+     }
+ 
+     /** default destructor */
+     virtual ~gsOptimizer() { };
+ 
+ public:
+ 
+     virtual void defaultOptions()
+     {
+-        m_options.addInt("MaxIterations","Maximum iterations",0);
++        m_options.addInt("MaxIterations","Maximum iterations",100);
+         m_options.addInt("Verbose","Verbosity level",0);
+     }
+ 
+     virtual void getOptions()
+     {
+         m_maxIterations = m_options.getInt("MaxIterations");
+         m_verbose = m_options.getInt("Verbose");
+     }
+ 
+     /// @brief Callback function is executed after every
+     ///    iteration. Returning false causes premature termination of
+     ///    the optimization
+     virtual bool intermediateCallback() { return true;}
+ 
+ public:
+ 
+     const gsMatrix<T> & currentDesign() const { return m_curDesign; }
+     gsMatrix<T> & currentDesign() { return m_curDesign; }
+ 
+     T currentObjValue() const
+     {
+         gsAsConstVector<T> tmp(m_curDesign.data(), m_op->numDesignVars());
+         return m_op->evalObj(tmp);
+     }
+ 
+     T objective()    const { return m_finalObjective; }
+ 
+     int iterations() const { return m_numIterations; }
+ 
+     gsOptionList & options() { return m_options; }
+
+```
+<<<END da25c2>>>
+
+<<<ITEM d7525b>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsUnstructuredSplines/gsC1Basis_.cpp b/src/gsC1Basis/gsC1Basis_.cpp
+similarity index 89%
+rename from src/gsUnstructuredSplines/gsC1Basis_.cpp
+rename to src/gsC1Basis/gsC1Basis_.cpp
+index d296eb863..4ead979dd 100644
+--- a/src/gsUnstructuredSplines/gsC1Basis_.cpp
++++ b/src/gsC1Basis/gsC1Basis_.cpp
+@@ -1,34 +1,34 @@
+ /** @file gsMappedBasis.cpp
+ 
+     @brief instantiation file
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): F. Buchegger
+ */
+ 
+ #include <gsCore/gsTemplateTools.h>
+ 
+-#include <gsUnstructuredSplines/gsC1Basis.h>
+-#include <gsUnstructuredSplines/gsC1Basis.hpp>
++#include <gsC1Basis/gsC1Basis.h>
++#include <gsC1Basis/gsC1Basis.hpp>
+ 
+ #include <gsNurbs/gsTensorBSplineBasis.h>
+ 
+ // #include <gsUnstructuredSplines/gsC1Pascal.hpp>
+ // #include <gsUnstructuredSplines/gsC1Pascal.hpp>
+ 
+ // #include <gsUnstructuredSplines/gsC1Andrea.hpp>
+ // #include <gsUnstructuredSplines/gsC1Andrea.hpp>
+ 
+ namespace gismo
+ {
+ 
+ // CLASS_TEMPLATE_INST gsC1Basis<1,real_t> ;
+ CLASS_TEMPLATE_INST gsC1Basis<2,real_t> ;
+ // CLASS_TEMPLATE_INST gsC1Basis<3,real_t> ;
+ 
+ } // end namespace gismo
+
+```
+<<<END d7525b>>>
+
+<<<ITEM 6e33fa>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsFunctionExpr.hpp b/src/gsCore/gsFunctionExpr.hpp
+index bf4662d35..22b5c7f6b 100644
+--- a/src/gsCore/gsFunctionExpr.hpp
++++ b/src/gsCore/gsFunctionExpr.hpp
+@@ -25,65 +25,67 @@
+ // Expressions that have comments when parsed with a build that has this
+ // option, will result in a compilation failure.
+ #define exprtk_disable_comments
+ 
+ // This define will disable the loop-wise 'break' and 'continue'
+ // capabilities. Any expression that contains those keywords will result
+ // in a compilation failure.
+ #define exprtk_disable_break_continue
+ 
+ // This define will disable the short-circuit '&' (and) and '|' (or)
+ // operators
+ #define exprtk_disable_sc_andor
+ 
+ // This define will disable all enhanced features such as strength
+ // reduction and special function optimisations and expression specific
+ // type instantiations. This feature will reduce compilation times and
+ // binary sizes but will also result in massive performance degradation
+ // of expression evaluations.
+ #if !defined(NDEBUG) || defined(__MINGW32__)
+ #define exprtk_disable_enhanced_features
+ #endif
+ 
+ // This define will disable all string processing capabilities. Any
+ // expression that contains a string or string related syntax will result
+ // in a compilation failure.
+ #define exprtk_disable_string_capabilities
+ 
+ #ifdef GISMO_WITH_ADIFF
+   /* Optional automatic differentiation */
+   #define DScalar ad::DScalar2<real_t,-1>
+-  #include <exprtk_ad_adaptor.hpp> // external file
++  #include <exprtk_ad_adaptor.hpp>   // external file
+ #elif defined(GISMO_WITH_MPFR)
+   #include <exprtk_mpfr_adaptor.hpp> // external file
++#elif defined(GISMO_WITH_MPQ)
++  #include <exprtk_gmp_adaptor.hpp>  // external file
+ #else
+-  #include <exprtk.hpp>            // external file
++  #include <exprtk.hpp>              // external file
+ #endif
+ 
+ #include <gsIO/gsXml.h>
+ 
+ namespace
+ {
+ 
+ // addition of mixed derivative for expressions
+ // see https://en.wikipedia.org/wiki/Finite_difference_coefficient
+ template <typename T>
+ T mixed_derivative(const exprtk::expression<T>& e,
+                      T& x, T& y,
+                      const double& h = 0.00001)
+ {
+     T num = T(0.0), tmp;
+     T x_init = x;
+     T y_init = y;
+     
+     x = x_init + T(2.0) * h;
+     y = y_init + T(2.0) * h;
+     num += e.value();
+     y = y_init - T(2.0) * h;
+     num -= e.value();
+     x = x_init - T(2.0) * h;
+     num += e.value();
+     y = y_init + T(2.0) * h;
+     num -= e.value();
+     
+     x = x_init + h;
+     y = y_init + h;
+
+```
+<<<END 6e33fa>>>
+
+<<<ITEM 7db77f>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsSolver/gsSimplePreconditioners_.cpp b/src/gsSolver/gsSimplePreconditioners_.cpp
+index d95315188..7ee0676e0 100644
+--- a/src/gsSolver/gsSimplePreconditioners_.cpp
++++ b/src/gsSolver/gsSimplePreconditioners_.cpp
+@@ -1,27 +1,27 @@
+ /** @file gsSimplePreconditioners_.cpp
+ 
+     @brief Collection of some simple preconditioners.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): J. Sogn, C. Hofreither, A. Mantzaflaris, S. Takacs
+ */
+ 
+ #include <gsSolver/gsSimplePreconditioners.hpp>
+ 
+ namespace gismo
+ {
+ 
+ namespace internal
+ {
+ 
+-TEMPLATE_INST void gaussSeidelSweep(const gsSparseMatrix<real_t>::Nested& A, gsMatrix<real_t>& x, const gsMatrix<real_t>& f);
+-TEMPLATE_INST void reverseGaussSeidelSweep(const gsSparseMatrix<real_t>::Nested& A, gsMatrix<real_t>& x, const gsMatrix<real_t>& f);
++TEMPLATE_INST void gaussSeidelSweep(gsSparseMatrix<real_t>::Nested& A, gsMatrix<real_t>& x, const gsMatrix<real_t>& f);
++TEMPLATE_INST void reverseGaussSeidelSweep(gsSparseMatrix<real_t>::Nested& A, gsMatrix<real_t>& x, const gsMatrix<real_t>& f);
+ 
+ } // namespace internal
+ 
+ } // namespace gismo
+
+```
+<<<END 7db77f>>>
+
+<<<ITEM a330bb>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsModeling/gsTemplate.h b/src/gsModeling/gsTemplate.h
+index a36250fc0..b7dbc90c3 100644
+--- a/src/gsModeling/gsTemplate.h
++++ b/src/gsModeling/gsTemplate.h
+@@ -559,61 +559,61 @@ public:
+     
+     ~gsTemplate() 
+     { 
+         freeAll(m_skeleton);
+     }
+     
+     /// Clone function. Used to make a copy of the object
+     gsTemplate * clone() const 
+     {
+         return new gsTemplate(*this);
+     };
+     
+ public:
+ 
+     /// Prints the object as a string.
+     std::ostream &print(std::ostream &os) const
+     { 
+         if ( this->size() > 0 )
+         {
+             os << "gsTemplate (" << this->size() << ").\n"; 
+             //os << "First patch: " << this->patch(0) << ").\n"; 
+         }
+         else
+             os << "gsTemplate ( empty! ).\n"; 
+         return os; 
+     }
+ 
+     int parDim() const { return dim; }   
+ 
+     /// Number of patches    
+-    int nPatches() const { return this->size(); } 
++    index_t nPatches() const { return this->size(); }
+ 
+     void addPatch( gsMatrix<T>* c) 
+     { 
+         this->m_corners.push_back( c );
+     }
+ 
+     void addSkeleton( gsBSpline<T> * bs ) 
+     { 
+         m_skeleton.push_back( bs );
+     }
+ 
+     std::vector< gsBSpline<T> * > skeleton() 
+     { 
+         return m_skeleton;
+     }
+     
+     gsBSpline<T> * skeleton(std::size_t const & i) 
+     { 
+         return m_skeleton[i];
+     }
+ 
+     // to do: add outer()
+     gsPlanarDomain<T> const & domain() const
+     {
+       return m_pdomain;
+     }
+     
+     const gsCurveLoop<T> & outer()
+     {
+       return m_pdomain.outer();
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    index_t nPatches() const { return this->size(); }
+
+    void addPatch( gsMatrix<T>* c) 
+    { 
+        this->m_corners.push_back( c );
+    }
+
+```
+<<<END a330bb>>>
+
+<<<ITEM ba9d41>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsModeling/gsTemplate.h b/src/gsModeling/gsTemplate.h
+index 1477d354e..529d9815a 100644
+--- a/src/gsModeling/gsTemplate.h
++++ b/src/gsModeling/gsTemplate.h
+@@ -618,40 +618,42 @@ public:
+     
+     const gsCurveLoop<T> & outer()
+     {
+       return m_pdomain.outer();
+     }
+     
+     const gsCurveLoop<T> & loop(int i) const
+     {
+       return m_pdomain.loop(i);
+     }
+     
+     int skeletonSize() 
+     { 
+         return m_skeleton.size();
+     }
+ // Data members
+ private:
+ 
+     /// List of corner points
+     gsMatrix<T> * m_corners;
+ 
+     std::vector< gsBSpline<T> * >  m_skeleton; // skeleton represents "segments" inside the template
+     
+     gsPlanarDomain<T> m_pdomain;
+     
+     /// 
+     gsMatrix<T> ponctuals;
+     
+ public:
+     // Needed since m_pdomain is 16B aligned
++#   define Eigen gsEigen
+     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
++#   undef Eigen
+ 
+ }; // class gsTemplate
+ 
+ /// Print (as string) a template
+ template<class T>
+ std::ostream &operator<<(std::ostream &os, const gsTemplate<T>& b)
+ {return b.print(os); }
+ 
+ } // namespace gismo
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    int skeletonSize() 
+    { 
+        return m_skeleton.size();
+    }
+
+```
+<<<END ba9d41>>>
+
+<<<ITEM 2d8125>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsMatrix/gsFiberMatrix.h b/src/gsMatrix/gsFiberMatrix.h
+index c9931f47e..ab8d04869 100644
+--- a/src/gsMatrix/gsFiberMatrix.h
++++ b/src/gsMatrix/gsFiberMatrix.h
+@@ -13,62 +13,62 @@
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsLinearAlgebra.h>
+ 
+ namespace gismo
+ {
+ 
+ /**
+  * \brief A specialized sparse matrix class which stores each row
+  *  as a separate sparse vector.
+  *
+  *  This allows efficient row resizing and insertion
+  *  operations, particularly for knot insertion algorithms.
+  */
+ template <class T, int Major = ColMajor> // RowMajor==0, ColMajor==1
+ class gsFiberMatrix
+ {
+     static constexpr bool IsRowMajor = (Major==RowMajor);
+ public:
+     typedef gsEigen::SparseVector<T> Fiber;
+ 
+     class iterator : public Fiber::InnerIterator
+     {
+     public:
+         typedef typename Fiber::InnerIterator Base;
+         iterator() = default;
+         iterator(const gsFiberMatrix & fm, index_t j) : Base(fm.fiber(j)) { }
+ 
+-        T operator[](index_t i)
+-        { return this->operator+(i).value(); }
++        inline T& operator[](size_t i)
++        { return const_cast<T&>(*(this->m_values+i)); }
+     };
+ 
+     struct RowBlockXpr;
+ 
+     gsFiberMatrix()
+     { }
+ 
+     gsFiberMatrix(index_t rows, index_t cols)
+     : m_fibers(IsRowMajor?rows:cols)
+     {
+         for (size_t i = 0; i < m_fibers.size(); ++i)
+             m_fibers[i] = new Fiber(cols);
+     }
+ 
+     gsFiberMatrix(const gsFiberMatrix& other)
+     : m_fibers(other.outerSize())
+     {
+         for (size_t i = 0; i < m_fibers.size(); ++i)
+             m_fibers[i] = new Fiber( *other.m_fibers[i] );
+     }
+ 
+     gsFiberMatrix(const RowBlockXpr& rowxpr)
+     : m_fibers(rowxpr.num)
+     {
+         for (index_t i = 0; i < rowxpr.num; ++i)
+             m_fibers[i] = new Fiber( *rowxpr.mat.m_fibers[rowxpr.start + i] );
+     }
+ 
+     ~gsFiberMatrix()
+     {
+
+```
+<<<END 2d8125>>>
+
+<<<ITEM d7da1f>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/optional/gsAutoDiff/src/exprtk_autodiff_forward.hpp b/optional/gsAutoDiff/src/exprtk_autodiff_forward.hpp
+new file mode 100644
+index 000000000..2b7a5ee3f
+--- /dev/null
++++ b/optional/gsAutoDiff/src/exprtk_autodiff_forward.hpp
+@@ -0,0 +1,25 @@
++/** @file exprtk_autodiff_forward.hpp
++
++    @brief Provides an exprtk adaptor for autodiff
++    arithmetic types
++
++    This file is part of the G+Smo library.
++
++    This Source Code Form is subject to the terms of the Mozilla Public
++    License, v. 2.0. If a copy of the MPL was not distributed with this
++    file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++    Author(s): H. Verhelst
++*/
++
++#pragma once
++
++#include <string>
++#include <gsAutoDiff/gsAutoDiff2.h>
++
++typedef autodiff::autodiff_real<real_t>                             autodiff_real_t;
++typedef autodiff::detail::Dual<autodiff_real_t,autodiff_real_t>     autodiff_dual_t;
++
++#define AUTODIFF_TYPE autodiff_dual_t
++#include "exprtk_autodiff_forward.h"
++#undef AUTODIFF_TYPE
+
+```
+<<<END d7da1f>>>
+
+<<<ITEM c2f1b9>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsTemplateTools.h b/src/gsCore/gsTemplateTools.h
+index ff5d1a1d7..7b0f6b163 100644
+--- a/src/gsCore/gsTemplateTools.h
++++ b/src/gsCore/gsTemplateTools.h
+@@ -1,42 +1,42 @@
+ /** @file gsTemplateTools.h
+ 
+     @brief Utilities related to template programming.
+ 
+     This file is part of the G+Smo library. 
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+     
+     Author(s): A. Mantzaflaris
+ */
+ 
+ #pragma once
+ 
+ #include <gsCore/gsExport.h>
+ 
+ namespace gismo
+ {
+ 
+ /*
+   Compile time type switching.
+   Example: The type
+ 
+-  gismo::choose<k==1,double, gsVector<double> >::type
++  gismo::conditional<k==1,double, gsVector<double> >::type
+ 
+   evaluates (at compile time) to "double" if k is equal to 1, 
+   and to "gsVector<double>" otherwise
+ */
+ 
+ template <bool flag, class IsTrue, class IsFalse>
+-struct choose;
++struct conditional;
+ 
+ template <class IsTrue, class IsFalse>
+-struct choose<true, IsTrue, IsFalse> { typedef IsTrue type; };
++struct conditional<true, IsTrue, IsFalse> { typedef IsTrue type; };
+ 
+ template <class IsTrue, class IsFalse>
+-struct choose<false, IsTrue, IsFalse> {
++struct conditional<false, IsTrue, IsFalse> {
+    typedef IsFalse type;
+ };
+ 
+ } // end namespace gismo
+
+```
+<<<END c2f1b9>>>
+
+<<<ITEM dd164a>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/examples/LinpLap_example.cpp b/examples/LinpLap_example.cpp
+index 7338c3ca0..0b6be29b6 100644
+Binary files a/examples/LinpLap_example.cpp and b/examples/LinpLap_example.cpp differ
+
+```
+<<<END dd164a>>>
+
+<<<ITEM 27cdc5>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsMSplines/gsCompositeHBasis_.cpp b/src/gsMSplines/gsCompositeHBasis_.cpp
+new file mode 100644
+index 000000000..ba01ea010
+--- /dev/null
++++ b/src/gsMSplines/gsCompositeHBasis_.cpp
+@@ -0,0 +1,25 @@
++/** @file gsCompositeHBasis_.cpp
++
++    @brief instantiation file
++
++    This file is part of the G+Smo library.
++
++    This Source Code Form is subject to the terms of the Mozilla Public
++    License, v. 2.0. If a copy of the MPL was not distributed with this
++    file, You can obtain one at http://mozilla.org/MPL/2.0/.
++
++    Author(s): F. Buchegger
++*/
++
++#include <gsCore/gsTemplateTools.h>
++
++#include <gsMSplines/gsCompositeHBasis.h>
++#include <gsMSplines/gsCompositeHBasis.hpp>
++
++namespace gismo
++{
++
++    CLASS_TEMPLATE_INST gsCompositeHBasis<1,real_t> ;
++    CLASS_TEMPLATE_INST gsCompositeHBasis<2,real_t> ;
++
++} // end namespace gismo
+
+```
+<<<END 27cdc5>>>
+
+<<<ITEM bbff37>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsCore/gsField.hpp b/src/gsCore/gsField.hpp
+index ea1c1e2b9..82183e0ef 100644
+--- a/src/gsCore/gsField.hpp
++++ b/src/gsCore/gsField.hpp
+@@ -1,46 +1,46 @@
+ /** @file gsField.hpp
+ 
+     @brief Provides implementation of the Field class.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): J. Vogl
+ */
+ 
+ #pragma once
+ 
+-#include <gsAssembler/gsExprHelper.h>
++#include <gsExpressions/gsExprHelper.h>
+ #include <gsAssembler/gsExprEvaluator.h>
+ #include <gsDomain/gsDomainIterator.h>
+ 
+ namespace gismo
+ {
+ 
+ template <class T>
+ T gsField<T>::distanceL2(gsFunctionSet<T> const & func,
+                          gsMultiBasis<T> const & B,
+                          bool isFunc_param,
+                          int numEvals) const
+ {
+     GISMO_UNUSED(numEvals);// todo: subdivided quadrature elements
+     gsExprEvaluator<T> ev;
+     ev.setIntegrationElements(B);
+     auto G = ev.getMap(this->patches());
+     auto f1a = ev.getVariable(*m_fields);
+     auto f1b = ev.getVariable(*m_fields, G);
+     auto f2a = ev.getVariable(func);
+     auto f2b = ev.getVariable(func, G);
+     if (m_parametric && isFunc_param) return math::sqrt( ev.integral((f1a-f2a).sqNorm() * meas(G)) );
+     if (m_parametric) return math::sqrt( ev.integral((f1a-f2b).sqNorm() * meas(G)) );
+     if (isFunc_param) return math::sqrt( ev.integral((f1b-f2a).sqNorm() * meas(G)) );
+     return math::sqrt( ev.integral((f1b-f2b).sqNorm() * meas(G)) );
+ }
+ 
+ template <class T>
+ T gsField<T>::distanceH1(gsFunctionSet<T> const & func,
+                          gsMultiBasis<T> const & B,
+                          bool isFunc_param,
+
+```
+<<<END bbff37>>>
+
+<<<ITEM a2edf8>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsDomain/gsHTree.h b/src/gsDomain/gsHTree_old.h
+similarity index 99%
+rename from src/gsDomain/gsHTree.h
+rename to src/gsDomain/gsHTree_old.h
+index eab9789ec..bec162354 100644
+--- a/src/gsDomain/gsHTree.h
++++ b/src/gsDomain/gsHTree_old.h
+@@ -1,47 +1,46 @@
+ /** @file gsHDomain.h
+ 
+     @brief Provides declaration of the HDomain class.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): G. Kiss, A. Mantzaflaris
+ */
+ 
+ #pragma once
+ 
+-#include <gsDomain/gsKdNode.h>
+-#include <gsDomain/gsHDomainLeafIter.h>
++#include <gsDomain/gsKdTree.h>
+ #include <gsCore/gsBoundary.h>
+ 
+ namespace gismo
+ {
+ 
+ template<class T>
+ class gsSegment;
+ 
+ // template <short_t d, class Z>
+ // class gsKdNode;
+ 
+ template <class T>
+ class gsVSegment;
+ 
+ /**
+ \brief
+ Class with a <em>hierarchical domain structure</em> represented by a box
+ k-d-tree
+ 
+ 
+ The hierarchical domain structure represets a sequence of domains \f$\Omega^\ell  \subset \Omega\f$ which are nested in the sense that
+ \f[
+ \Omega = \Omega^0 \supset \Omega^1 \supset \Omega^2 \supset \ldots \supset \Omega^N \supset \Omega^{N+1} = \emptyset \f]
+ Each subdomain \f$\Omega^\ell\f$ is a (not necessarily connected) collection of axis-aligned elements/cells.
+ 
+ \remark In the context of HB-splines and THB-splines, these elements/cells are the knot spans of the tensor-product mesh at the respective level.
+ 
+ The information on the hierarchical domains is stored in a k-d-tree, where each leaf represents an axis-aligned box
+ \f$\omega \subseteq \Omega\f$, such that
+ \f$\omega \subseteq \Omega^\ell \land \omega \cap \Omega^{\ell+1} = \emptyset\f$ (i.e., each leaf of the tree can be assiciated with exactly one level of the hierarchy).
+
+```
+<<<END a2edf8>>>
+
+<<<ITEM 1b8f07>>>
+Domain: SECURITY
+
+Patch under review (unified diff):
+```
+diff --git a/setup.py b/setup.py
+index ec11d6356..52958af92 100644
+--- a/setup.py
++++ b/setup.py
+@@ -193,39 +193,39 @@ class CMakeBuild(build_ext):
+ 
+         subprocess.run(
+             ["cmake", ext.sourcedir] + cmake_args, cwd=build_temp, check=True
+         )
+         subprocess.run(
+             ["cmake", "--build", "."] + build_args, cwd=build_temp, check=True
+         )
+ 
+         # delete eigen_sym_path
+         eigen_sym_path.unlink()
+ 
+ 
+ # use README as long description
+ with open("README.md") as readme:
+     long_description = readme.read()
+ 
+ setup(
+     name="pygismo",
+     version="0.0.0",
+     author="Angelos Mantzaflaris",
+     author_email="angelos.mantzaflaris@inria.fr",
+     description="G+Smo (Geometry + Simulation Modules)",
+     long_description=long_description,
+     long_description_content_type="text/markdown",
+     url="https://github.com/gismo/gismo",
+     install_requires=[
+         "numpy",
+     ],
+     classifiers=[
+         "Development Status :: 5 - Production/Stable",
+-        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)"
++        "License :: OSI Approved :: Mozilla Public License 2.0 (MPL 2.0)",
+         "Programming Language :: Python",
+         "Natural Language :: English",
+         "Topic :: Scientific/Engineering",
+     ],
+     ext_modules=[CMakeExtension("pygismo")],
+     cmdclass=dict(build_ext=CMakeBuild),
+     zip_safe=False,
+ )
+
+```
+<<<END 1b8f07>>>
+
+<<<ITEM db2d26>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gismo.h b/src/gismo.h
+index 359ceb76f..2e1c127f4 100644
+--- a/src/gismo.h
++++ b/src/gismo.h
+@@ -179,47 +179,47 @@ namespace internal
+ #include <gsIeti/gsIetiMapper.h>
+ #include <gsIeti/gsIetiSystem.h>
+ #include <gsIeti/gsPrimalSystem.h>
+ #include <gsIeti/gsScaledDirichletPrec.h>
+ 
+ /* ----------- IO ----------- */
+ #include <gsIO/gsOptionList.h>
+ #include <gsIO/gsCmdLine.h>
+ #include <gsIO/gsFileData.h>
+ #include <gsIO/gsFileManager.h>
+ #include <gsIO/gsWriteParaview.h>
+ #include <gsIO/gsParaviewCollection.h>
+ #include <gsIO/gsReadFile.h>
+ #include <gsUtils/gsPointGrid.h>
+ #include <gsIO/gsXmlUtils.h>
+ 
+ /* ----------- MPI ----------- */
+ #include <gsMpi/gsMpi.h>
+ 
+ /* ----------- Utilities ----------- */
+ //#include <gsUtils/gsUtils.h> - in gsForwardDeclarations.h
+ #include <gsUtils/gsStopwatch.h>
+ #include <gsUtils/gsFunctionWithDerivatives.h>
+ #include <gsUtils/gsQuasiInterpolate.h>
+ 
+ /* ----------- Extension ----------- */
+ #ifdef GISMO_WITH_ADIFF
+ #include <gsAutoDiff.h>
+ #endif
+ 
+-#ifdef GISMO_WITH_TRILINOS
++#ifdef gsTrilinos_ENABLED
+ #include <gsTrilinos/gsTrilinos.h>
+ #endif
+ 
+ /*
+ #if defined(gismo_EXPORTS) || defined(gismo_dev_EXPORTS)
+ #  ifdef _MSC_VER
+ // MSVC and GCC >= 4.4.7
+ #    pragma message ("warning: The gismo.h header is for clients using the library.")
+ #  else
+ // GCC
+ #    warning "The gismo.h header is for clients using the library."
+ #  endif
+ #endif
+ */
+ 
+ #endif // __GISMO_H__
+
+```
+<<<END db2d26>>>
+
+<<<ITEM 1f9c39>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsG1Basis/gsG1ASGluingData.h b/src/gsG1Basis/gsG1ASGluingData.h
+index f3580c6ba..1cf3500a3 100644
+--- a/src/gsG1Basis/gsG1ASGluingData.h
++++ b/src/gsG1Basis/gsG1ASGluingData.h
+@@ -17,61 +17,61 @@ namespace gismo
+ 
+ template<class T, class Visitor = gsG1ASGluingDataVisitorGlobal<T>>
+ class gsG1ASGluingData : public gsGluingData<T>
+ {
+ public:
+ 
+     //Empty constructor will set the gluing data for the boundary edges
+     gsG1ASGluingData()
+     {   setGDEdge();
+ //        gsInfo << "Solution: " << sol << "\n";
+ //        gsInfo << "Solution Beta: " << solBeta << "\n";
+     }
+ 
+ 
+     gsG1ASGluingData(gsMultiPatch<T> const & mp,
+                  gsMultiBasis<T> & mb)
+         : gsGluingData<T>(mp, mb)
+     {
+     // Solve the system for alpha_L and alpha_R (also for beta, which will be splitted)
+         refresh();
+         assemble();
+         solve();
+     // Solve the system for beta_L and beta_R
+         refreshBeta();
+         assembleBeta();
+         solveBeta();
+ 
+ //        gsInfo << "Solution: " << sol << "\n";
+ //        gsInfo << "Solution Beta: " << solBeta << "\n";
+ 
+-        AScondition(mp);
++//        AScondition(mp);
+     }
+ 
+ 
+     gsMatrix<> evalAlpha_R(gsMatrix<> points)
+     {
+         gsMatrix<> ones(1, points.cols());
+         ones.setOnes();
+         return sol.row(0) * ( ones - points ) + sol.row(1) * points;
+     }
+ 
+     gsMatrix<> evalAlpha_L(gsMatrix<> points)
+     {
+         gsMatrix<> ones(1, points.cols());
+         ones.setOnes();
+         return sol.row(2) * ( ones - points ) + sol.row(3) * points;
+     }
+ 
+ 
+     gsMatrix<> evalBeta_R(gsMatrix<> points)
+     {
+         gsMatrix<> ones(1, points.cols());
+         ones.setOnes();
+         return solBeta.row(0) * ( ones - points ) + solBeta.row(1) * points;
+     }
+ 
+     gsMatrix<> evalBeta_L(gsMatrix<> points)
+     {
+         gsMatrix<> ones(1, points.cols());
+         ones.setOnes();
+         return solBeta.row(2) * ( ones - points ) + solBeta.row(3) * points;
+
+```
+<<<END 1f9c39>>>
+
+<<<ITEM 6f2716>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsModeling/gsCoonsPatch_.cpp b/src/gsModeling/gsCoonsPatch_.cpp
+index 61eb268a8..853b6746f 100644
+--- a/src/gsModeling/gsCoonsPatch_.cpp
++++ b/src/gsModeling/gsCoonsPatch_.cpp
+@@ -7,35 +7,36 @@
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): M. Haberleitner, A. Mantzaflaris
+ */
+ 
+ #include <gsCore/gsTemplateTools.h>
+ #include <gsModeling/gsCoonsPatch.hpp>
+ 
+ namespace gismo
+ {
+ 
+ CLASS_TEMPLATE_INST gsCoonsPatch<real_t>;
+ 
+ 
+ #ifdef GISMO_WITH_PYBIND11
+ 
+ namespace py = pybind11;
+ 
+ void pybind11_init_gsCoonsPatch(py::module &m)
+ {
+     using Class = gsCoonsPatch<real_t>;
+     py::class_<Class>(m, "gsCoonsPatch")
+ 
+     // Constructors
+     .def(py::init<const gsMultiPatch<real_t> &>()) //default arguments
+ 
+     // Member functions
+     .def("compute", &Class::compute, "Computes the Coons patch.")
++    .def("result", &Class::result, "Gets the resulting Coons patch.")
+     ;
+ }
+ #endif
+ 
+ } // namespace gismo
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+void pybind11_init_gsCoonsPatch(py::module &m)
+{
+    using Class = gsCoonsPatch<real_t>;
+    py::class_<Class>(m, "gsCoonsPatch")
+
+    // Constructors
+    .def(py::init<const gsMultiPatch<real_t> &>()) //default arguments
+
+    // Member functions
+    .def("compute", &Class::compute, "Computes the Coons patch.")
+    .def("result", &Class::result, "Gets the resulting Coons patch.")
+    ;
+}
+
+```
+<<<END 6f2716>>>
+
+<<<ITEM 390b08>>>
+Domain: PERFORMANCE
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsModeling/gsLowRankFitting.h b/src/gsModeling/gsLowRankFitting.h
+index 27755febb..f81722ac1 100644
+--- a/src/gsModeling/gsLowRankFitting.h
++++ b/src/gsModeling/gsLowRankFitting.h
+@@ -55,60 +55,61 @@ public:
+ 		     gsErrType errType = gsErrType::l2)
+ 	: gsFitting<T>(params, points, basis), m_zero(zero), m_sample(sample), m_errType(errType)
+     {
+ 	initPQ(matrixUtils::diag(uWeights),
+ 	       matrixUtils::diag(vWeights));
+     }
+ 
+     /**
+        Constructor.
+ 
+        \param uNpts Number of data points in u-direction. Special
+        value -1 means that params form a quadratic array and the value
+        can be inferred.
+      */
+     gsLowRankFitting(const gsMatrix<T>& params,
+ 		     const gsMatrix<T>& points,
+ 		     gsTensorBSplineBasis<2, T>& basis,
+ 		     T zero = 1e-13,
+ 		     index_t sample = -1,
+ 		     gsErrType errType = gsErrType::l2,
+ 		     index_t uNpts = -1)
+ 	: gsFitting<T>(params, points, basis), m_zero(zero), m_sample(sample), m_errType(errType), m_uNpts(uNpts)
+     {
+ 	// Note: Forgetting the <T> leads to a confusing error message.
+ 
+ 	// If uNpts not given, compute it.
+ 	if(m_uNpts == -1)
+ 	    m_uNpts = math::sqrt(params.cols());
+ 
+ 	index_t vNpts = params.cols() / m_uNpts;
++	GISMO_ASSERT(m_uNpts * vNpts == params.cols(), "uNum and vNum not really matching");
+ 	initPQ(matrixUtils::identity<T>(m_uNpts),
+ 	       matrixUtils::identity<T>(  vNpts));
+     }
+ 
+     void computeCross(bool pivot, index_t maxIter, index_t sample);
+ 
+     void computeCross_3(bool pivot, index_t maxIter, index_t sample);
+     
+     void computeSVD(index_t maxIter, index_t sample, const std::string& filename);
+ 
+     void computeRes();
+ 
+     // Method B with weights.
+     void computeFull(const gsVector<T>& uWeights, const gsVector<T>& vWeights);
+ 
+     // Method B with more details.
+     void computeFull()
+     {
+ 	index_t uNpts = math::sqrt(this->m_param_values.cols());
+ 	gsVector<T> identity = matrixUtils::oneVector<T>(uNpts);
+ 	computeFull(identity, identity);
+     }
+ 
+     void computeCrossWithRef(bool pivot, index_t maxIter, index_t sample);
+ 
+     void computeCrossWithRefAndStop(T tol, bool pivot);
+ 
+     int computeCrossWithStop(T epsAccept, T epsAbort, bool pivot = true);
+ 
+     T methodB(bool printErr);
+
+```
+<<<END 390b08>>>
+
+<<<ITEM 665a06>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsHSplines/gsHBoxContainer_.cpp b/src/gsHSplines/gsHBoxContainer_.cpp
+index 6b110130e..f1b89fabf 100644
+--- a/src/gsHSplines/gsHBoxContainer_.cpp
++++ b/src/gsHSplines/gsHBoxContainer_.cpp
+@@ -1,8 +1,9 @@
+ #include <gsCore/gsTemplateTools.h>
+ #include <gsCore/gsForwardDeclarations.h>
+ #include <gsCore/gsLinearAlgebra.h>
++#include <gsIO/gsXml.h>
+ 
+ #define gsHBoxContainer_EXPORT
+ 
+ #include <gsHSplines/gsHBoxContainer.h>
+ #include <gsHSplines/gsHBoxContainer.hpp>
+
+```
+<<<END 665a06>>>
+
+<<<ITEM 9e3fb1>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsSolver/gsBlockOp_.cpp b/src/gsSolver/gsBlockOp_.cpp
+index 3807b13ee..b5d538843 100644
+--- a/src/gsSolver/gsBlockOp_.cpp
++++ b/src/gsSolver/gsBlockOp_.cpp
+@@ -1,23 +1,22 @@
+ /** @file gsBlockOp_.cpp
+ 
+     @brief Simple class create a block preconditioner structure.
+ 
+     This file is part of the G+Smo library.
+ 
+     This Source Code Form is subject to the terms of the Mozilla Public
+     License, v. 2.0. If a copy of the MPL was not distributed with this
+     file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ 
+     Author(s): J. Sogn
+ */
+-#pragma once
+ 
+ #include <gsSolver/gsBlockOp.hpp>
+ 
+ namespace gismo
+ {
+ 
+ CLASS_TEMPLATE_INST gsBlockOp<real_t>;
+ 
+ } // namespace gismo
+ 
+
+```
+<<<END 9e3fb1>>>
+
+<<<ITEM 6c7df7>>>
+Domain: LOGIC
+
+Patch under review (unified diff):
+```
+diff --git a/src/gsMesh2/IO_poly.cpp b/src/gsMesh2/IO_poly.cpp
+index e5cd64b49..6206a8d1e 100644
+--- a/src/gsMesh2/IO_poly.cpp
++++ b/src/gsMesh2/IO_poly.cpp
+@@ -1,36 +1,34 @@
+ 
+ #include <gsMesh2/IO.h>
+ 
+ #include <cstdio>
+-#include <vector>
+-#include <string>
+ 
+ 
+ //== NAMESPACES ===============================================================
+ 
+ 
+ namespace gismo {
+ 
+ 
+ //== IMPLEMENTATION ===========================================================
+ 
+ 
+ // helper function
+ static inline size_t io_poly_read_file_binary(FILE* in, void* t, size_t size)
+ {
+     return fread((char*)t, 1, size, in);
+ }
+ 
+ 
+ // helper function
+ static inline size_t io_poly_write_file_binary(FILE* out, const void* t, size_t size)
+ {
+     return fwrite((char*)t, 1, size, out);
+ }
+ 
+ // compatibility wrappers for prior 'read'/'write' template names
+ namespace {
+ template <typename T>
+ static inline size_t io_poly_read(FILE* in, T& t)
+ {
+     return fread((char*)&t, 1, sizeof(t), in);
+
+```
+<<<END 6c7df7>>>
+

@@ -1,0 +1,7 @@
+planted trust AUROC ~0.65: realised mean 0.663 (single Jev 0.601); panel significantly better on trust AUROC in 1/40, on AURC in 0/40
+planted trust AUROC ~0.70: realised mean 0.700 (single Jev 0.601); panel significantly better on trust AUROC in 8/40, on AURC in 0/40
+planted trust AUROC ~0.75: realised mean 0.747 (single Jev 0.601); panel significantly better on trust AUROC in 17/40, on AURC in 1/40
+planted trust AUROC ~0.80: realised mean 0.803 (single Jev 0.601); panel significantly better on trust AUROC in 34/40, on AURC in 12/40
+excess AURC jev5_R1_band - jev_single: +0.064 [+0.003, +0.127] p 0.042
+excess AURC jev5_R1_band - jev5_seat_SKEPTIC: +0.050 [-0.049, +0.139] p 0.336
+excess AURC laya5_R1_band - laya_single: +0.155 [+0.058, +0.232] p 0.001

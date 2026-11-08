@@ -1,0 +1,39 @@
+{
+ "n_bases": 50,
+ "arms": {
+  "claude": {
+   "ba": 0.74,
+   "ci": [
+    0.67,
+    0.81
+   ],
+   "caught": 49,
+   "passed": 25
+  },
+  "claude-standard": {
+   "ba": 0.8,
+   "ci": [
+    0.73,
+    0.86
+   ],
+   "caught": 49,
+   "passed": 31
+  }
+ },
+ "five_minus_one": {
+  "d": 0.06,
+  "ci": [
+   0.02,
+   0.11
+  ],
+  "only_five": [
+   "0696ac5:gsCatmullClark.cpp:clean",
+   "15977e9:gsSquareDomain.h:clean",
+   "3cf80c7:gsRationalBasis.h:clean",
+   "6c02814:gsTHBSplineBasis.hpp:clean",
+   "bfbe226:gsComposedGeometry.h:clean",
+   "c0c88af:gsAABB.h:clean"
+  ],
+  "only_one": []
+ }
+}

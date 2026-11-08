@@ -1,0 +1,43 @@
+batch-01.txt: CRLF line ends 2710, bare LF 0, stray CR left 0
+batch file BOM: False
+batch-02.txt: CRLF line ends 3086, bare LF 0, stray CR left 0
+batch-03.txt: CRLF line ends 3032, bare LF 0, stray CR left 0
+batch-04.txt: CRLF line ends 2914, bare LF 0, stray CR left 0
+batch-05.txt: CRLF line ends 2894, bare LF 0, stray CR left 0
+batch-06.txt: CRLF line ends 3013, bare LF 0, stray CR left 0
+batch-07.txt: CRLF line ends 2675, bare LF 0, stray CR left 0
+batch-08.txt: CRLF line ends 3250, bare LF 0, stray CR left 0
+Claude batch items parsed: 352 in 8 batches
+Claude result: 352 ids, 0 duplicates; keys of result file: ['literature', 'reviews']
+selection: 100 rows, 100 ids, 50 REJECT
+p_claude in selection vs result file / batch numbers disagree: 0 []
+batch state length != key state_chars (sweep's Laya state): 0
+captured Jev states (verify/refute/states.jsonl): 100
+  captured Jev state == Claude batch item, byte for byte: 100 of 100; differ: 0 []
+  stored sha256 != sha256(state): 0 (sha256 may be of another field)
+rebuilt via run_five.prepare + orchestrator frame: contexts seen {None}, enrich errors 1, near-50k truncation 0
+  rebuilt request state == Claude batch item: 100 of 100
+  rebuilt request state == captured Jev state: 100 of 100
+sessions_one: 100 sessions, ids == selection: True; Round-1 requests 100, state length == Claude item length: 100
+   labels in session file agree with selection: True
+   models answering: ['typesafe/jev-1.14-20261014']; enrich errors 1
+sessions_five: 100 sessions, ids == selection: True; Round-1 requests 500, state length == Claude item length: 500; Round-2 requests 420, extra chars min 1013 max 1022
+   labels in session file agree with selection: True
+   models answering: ['typesafe/jev-1.14-20261014']; enrich errors 1
+sessions_standard: 100 sessions, ids == selection: True; Round-1 requests 483, state length == Claude item length: 483
+   labels in session file agree with selection: True
+   models answering: ['typesafe/jev-1.14-20261014']; enrich errors 1
+Jev one-arm instructions: ['Should this change be merged as it is? A defect you can point to is a REJECT.'] [('jev', 'jev-latest')]
+Jev five-arm personas (chars): [('SKEPTIC', 500, 'jev', 'jev-latest'), ('ADVOCATE', 228, 'jev', 'jev-latest'), ('AUDITOR', 254, 'jev', 'jev-latest'), ('TEST-FOCUSED', 869, 'jev', 'jev-latest'), ('BOUNDARY', 683, 'jev', 'jev-latest')]
+criteria: {'APPROVE': 'The code is correct and safe to merge as it is.', 'REJECT': 'The code has a defect, vulnerability or regression that must be fixed before it is merged.'}
+leak checks on the 100 Claude items: own commit sha prefix in text 0, commit subject in text 0, commit metadata lines 0
+  items whose text has a fix/bug/revert word, REJECT: 0 of 50
+  items whose text has a fix/bug/revert word, APPROVE: 2 of 50
+AUC of int(id, 16) vs label: 0.552; of position within batch: 0.466; of batch number: 0.534
+whole 352-item Claude sample: AUC of position within batch 0.462
+per batch: items, REJECT share: [(1, 44, 19), (2, 44, 23), (3, 44, 21), (4, 44, 22), (5, 44, 24), (6, 44, 25), (7, 44, 20), (8, 44, 22)]
+matched selection pairs in the same Claude batch: 4 of 50; adjacent (gap 1): 0
+Claude AUC on the 100: 0.745
+Jev one AUC on the 100 (stored): 0.641
+Claude reasons on the 100 with history-like words: 4: 515d5f[REJECT] Bare <posit> include path fragile; universal library later reorganized headers.; 4b41ad[REJECT] Closing comment says namespace internal instead of util; lines likely rewritten later.; 8a1b96[APPROVE] Toggles EXPORT macro and explicit instantiations; experimental switch likely reverted late; a3d51f[REJECT] Adds gsWriteParaview include, later disabled; likely circular include problem.
+  Claude AUC without them: 0.738 (n=96)

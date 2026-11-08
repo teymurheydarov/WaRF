@@ -1,0 +1,45 @@
+== C1 paired bootstrap over the 50 pairs (2000 draws, seed 7) ==
+  Jev one - added lines        -0.075 [-0.202, +0.048]  P(>0) 0.113
+  Jev one - noncosmetic added  -0.114 [-0.247, +0.010]  P(>0) 0.038
+  Jev five R1 - added lines    -0.089 [-0.220, +0.034]  P(>0) 0.075
+  Claude - added lines         +0.028 [-0.074, +0.125]  P(>0) 0.700
+  Claude - noncosmetic added   -0.011 [-0.108, +0.080]  P(>0) 0.398
+  Claude - Jev one             +0.103 [+0.004, +0.202]  P(>0) 0.978
+  Claude - Jev five R1         +0.117 [+0.020, +0.214]  P(>0) 0.994
+
+== C2 conditional logistic on pair differences (no intercept); LR test of adding the reviewer ==
+  Claude       after log1p added              coef +0.752  LR   9.48  p 0.0021
+  Jev one      after log1p added              coef +0.148  LR   1.09  p 0.2956
+  Jev five R1  after log1p added              coef +0.180  LR   1.26  p 0.2614
+  Claude       after log1p noncosmetic added  coef +0.659  LR   5.95  p 0.0147
+  Jev one      after log1p noncosmetic added  coef +0.133  LR   0.79  p 0.3742
+  Jev five R1  after log1p noncosmetic added  coef +0.164  LR   0.92  p 0.3370
+
+== C3 within-label Spearman (REJECT, APPROVE) of the score with change features ==
+  log removed            Jev one  R -0.13  A +0.22
+  log removed            Claude   R +0.17  A -0.28
+  log added              Jev one  R +0.42  A +0.03
+  log added              Claude   R +0.28  A +0.45
+  log noncosmetic added  Jev one  R +0.38  A +0.06
+  log noncosmetic added  Claude   R +0.24  A +0.66
+  context lines          Jev one  R -0.29  A -0.14
+  context lines          Claude   R -0.13  A -0.12
+  changed fraction       Jev one  R +0.37  A +0.25
+  changed fraction       Claude   R +0.28  A +0.18
+
+== C4 AUC by how buried the change is (pairs split at the median of the pair's mean changed fraction) ==
+  change buried (low fraction)     Jev 0.604  Claude 0.718  noncosm-added 0.773  median ctx lines 41
+  change dominant (high fraction)  Jev 0.705  Claude 0.774  noncosm-added 0.777  median ctx lines 13
+
+== C5 domain header and Jev one p distribution ==
+  domains: Counter({'LOGIC': 96, 'SECURITY': 4})
+  Jev one: distinct 57  p>=0.95: 7  p<=0.05: 1  most common: [(0.59, 4), (0.71, 4), (0.2, 4)]
+
+== C6 within-APPROVE Spearman with noncosmetic added, only items with >= 1 blameable added line ==
+  Jev one  n 32  rho +0.26
+  Claude   n 32  rho +0.29
+  (REJECT, all have >=1: n 50, min nc 1)
+
+== C7 does the Jev-Claude gap widen when the change is buried? bootstrap of (gap_low - gap_high) ==
+  gap low +0.114, gap high +0.070, difference +0.044 [-0.182, +0.252]
+  pairs where both are new files: 3

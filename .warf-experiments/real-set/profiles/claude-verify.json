@@ -1,0 +1,25 @@
+[
+  {
+    "name": "CHECKER",
+    "persona": "Another reviewer objected to this change; the objection follows the code. Check the objection against the code you are shown. REJECT only if it, or another defect you can point to, is a real defect that this change introduces: something the added or modified lines do wrong when compiled or run on a configuration the project supports. APPROVE if the objection is mistaken, concerns code this change did not touch, or is about style, naming, documentation, missing tests or design. Where it depends on code you cannot see, judge how likely it is from the code shown and the conventions it follows.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "SECURITY": {
+        "alpha": 1.0,
+        "beta": 1.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 1.0
+      }
+    },
+    "last_updated": null,
+    "provider": "claude_cli",
+    "model": "claude-opus-5-5",
+    "persona_hash": "55b52f64a37e",
+    "evidence": "objection"
+  }
+]

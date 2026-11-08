@@ -1,0 +1,6 @@
+  OK    file_utils.py                     -> SECURITY      (content contains "os.path.join")
+  OK    calculator.cpp                    -> PERFORMANCE   (path contains "slow")
+  OK    calculator.cpp                    -> LOGIC         (no SECURITY or PERFORMANCE signals found)
+  OK    test_calculator.py                -> LOGIC         (no SECURITY or PERFORMANCE signals found)
+
+All correct.

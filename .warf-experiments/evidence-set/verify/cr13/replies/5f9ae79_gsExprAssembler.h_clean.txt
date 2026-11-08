@@ -1,0 +1,202 @@
+ID 5f9ae79:gsExprAssembler.h:clean
+commit 5f9ae79eef1d8f959bb5d0e5c83af04cd6e5043a file src/gsAssembler/gsExprAssembler.h date 2024-12-09 subj add pardiso solver, add paraller in pattern
+
+=== ONE decision REJECT
+[REJECT] The new OpenMP pragma runs `m_matrix.coeffRef(ii,jj)` concurrently from several threads. That is a data race, so the result is undefined.
+
+- **Shared storage is modified on insert.** `gsSparseMatrix` is an Eigen `SparseMatrix`. When `coeffRef` inserts a new entry, it can reallocate the shared value and inner-index buffers, shift data that belongs to other columns, and update `m_outerIndex` / `m_innerNonZeros`. Two threads writing to different columns still touch this shared state. Concurrent inserts can therefore corrupt the matrix or crash.
+- **The "distinct columns" comment doesn't hold.** It says columns are distinct within a patch, but that doesn't make the writes independent. Different `(c, j)` pairs may also map to the same `jj` through `colMap`, for example with coupled or matched DoFs.
+- **No synchronization.** There is no critical section, lock, or per-thread buffer. The serial code it replaces was correct, and the constructor's own comment says "assume single thread".
+- **Thread count is unbounded.** `num_threads(colInd0.rows()/5)` grows with the input size. Starting a thread team at every evaluation point would also likely cost more than it saves for a sparsity-pattern pass.
+
+If this needs to run in parallel, a safe approach is to collect `(ii, jj)` pairs into per-thread lists and insert them into the matrix serially afterwards.
+
+=== FIVE decision REJECT
+--- SKEPTIC [REJECT]
+The new `#pragma omp parallel for` makes several threads call `m_matrix.coeffRef(ii,jj)` on the same `gsSparseMatrix` (an Eigen `SparseMatrix`) at once. That is a data race. The comment's assumption that columns are distinct within a patch does not make it safe.
+
+1. **Eigen's sparse insertion is not thread-safe, even for distinct columns.** When `coeffRef` finds no existing entry, it inserts one.
+   - If the matrix is compressed, the insert first switches it to uncompressed mode, which reallocates the shared `m_outerIndex`, `m_innerNonZeros` and value/index arrays.
+   - If the matrix is uncompressed and column `jj` has used up its reserved space, Eigen calls `reserveInnerVectors`. This reallocates and moves the whole `m_data` storage and rewrites `m_outerIndex` for every column.
+   - The reservation here is only an estimate (`bdA*deg + bdB`, plus `bdO` overhead), so it can easily be exceeded, for example with a higher-degree column space or a multi-component `cd`.
+   - Concrete failure: with more than 9 active column functions, thread A inserts into column 3 and triggers a reallocation while thread B is writing into column 7 of the old buffer. The result is lost entries, a corrupted sparsity pattern, use-after-free, or a crash.
+
+2. **The "distinct columns" assumption is false in general.** `colMap.index(colInd0.at(j), patchid, c)` can map different local `(j,c)` pairs to the same global `jj`. This happens when the mapper couples or matches DoFs within one patch, such as periodic conditions, degenerate or collapsed boundaries, or self-interfaces. Two threads then call `coeffRef` on the same column, or even the same entry, which is a direct race.
+
+3. **The new pragma contradicts the existing comment.** The constructor says `//assume single thread`, and nothing else in `_pattern` is synchronised.
+
+The patch is not even worth the risk for performance. The loop body is a cheap pattern insertion, and spawning a parallel region on every `push` call costs more than it saves. But the decisive problem is correctness: concurrent mutation of a shared Eigen sparse matrix is undefined behaviour.
+--- ADVOCATE [REJECT]
+The patch adds an OpenMP `parallel for` around code that calls `m_matrix.coeffRef(ii,jj)` on a shared `gsSparseMatrix` (an Eigen `SparseMatrix`). That call is not thread-safe, so this is a data race.
+
+1. **`coeffRef` can modify the whole matrix.** When the entry `(ii,jj)` does not exist yet, `coeffRef` inserts it. If the matrix is in compressed mode, insertion first switches it to uncompressed mode, which allocates new storage. If a column has used up its reserved space, Eigen reallocates and moves the shared value and index arrays for every column. The comment "columns are distinct within patch" does not help, because one thread's reallocation invalidates memory that other threads are reading or writing for their own columns. This is undefined behavior: crashes, corrupted sparsity patterns, or lost entries. Since `_pattern` only builds the sparsity pattern, nearly every `coeffRef` call here is an insertion, so reallocation is likely rather than rare.
+
+2. **The "distinct columns" assumption is also unproven.** The comment itself says it is an assumption. Some `gsDofMapper` setups, such as matched or coupled interfaces, map different `(j, c)` pairs to the same global index `jj`. Two threads would then insert into the same column at once, which races even without reallocation.
+
+3. **It contradicts the class's own design note.** The constructor says `//assume single thread`. Nothing synchronizes access to `m_matrix`: no critical section, no per-thread buffers, no prior `reserve`/`makeCompressed` guarantee. So the code is unsafe as written, not just in an edge case.
+
+4. **Minor issue: nested parallel regions.** If `push` is called from code that is already parallel (e.g., an outer element loop), this creates nested parallel regions with an arbitrary thread count (`colInd0.rows()/5`).
+
+The non-parallel changes (removing the commented-out `m_positions.insert` line and adjusting whitespace) are harmless. A correct parallel version would need each thread to collect `(ii,jj)` pairs into its own local list, with a single-threaded merge or `setFromTriplets` afterward. Alternatively, the pattern must be fully preallocated so that `coeffRef` never inserts.
+--- AUDITOR [REJECT]
+**Data race on the sparse matrix.** The patch parallelizes the loop that calls `m_matrix.coeffRef(ii,jj)` on a shared `gsSparseMatrix` (an Eigen `SparseMatrix`). When an entry does not exist yet, `coeffRef` inserts it, which can shift or reallocate the shared value and inner-index arrays and update the outer-index and nonzero bookkeeping.
+- **Compressed mode:** any insertion moves data belonging to other columns, so concurrent writes corrupt the matrix even when columns differ.
+- **Uncompressed mode:** insertion is only column-local while the column's reserved capacity holds. If a column overflows (the reservation is just an estimate from `bdA`, `bdB` and `bdO`), Eigen reallocates the global storage, which races with every other thread.
+
+Nothing in this function guarantees the matrix is uncompressed or that the reservation is large enough. The code has no synchronization (no critical section, locks or per-thread buffers).
+
+**The "distinct columns" assumption is invalid.** The comment assumes each `(c, j)` pair maps to a unique `jj`. `gsDofMapper` can map several local DoFs to the same global index, for example when interface DoFs are glued across patches or DoFs are coupled or matched. Two threads can then write the same column at once, which is a direct race even in uncompressed mode.
+
+**The constructor contradicts the patch.** The constructor states "assume single thread", and the functor writes to shared member state (`rowInd0`, `colInd0`, `m_matrix`). The pattern class was not designed for concurrent use.
+
+**Questionable thread heuristic.** `num_threads(colInd0.rows()/5)` ties the thread count to the number of active basis functions rather than the hardware. It can oversubscribe cores or spawn threads that each do trivial work. The `if (colInd0.rows()>9)` threshold is arbitrary. Creating a parallel region inside a function called once per evaluation point will likely cost more than it saves, and it can nest badly with outer OpenMP regions in the assembler.
+
+**Minor issues.** The patch removes a commented-out `m_positions` line and mixes tabs and spaces in the indentation. These are harmless but are unrelated churn.
+
+**To make this acceptable:**
+- Collect `(ii,jj)` pairs into thread-local buffers and merge them into the matrix serially, or build a triplet list and call `setFromTriplets`.
+- Alternatively, keep the loop serial. The cost of building the sparsity pattern is usually dominated by everything else.
+--- TEST-FOCUSED [REJECT]
+The patch adds a data race on `m_matrix`. Its failures depend on thread timing, so a test cannot reliably catch them, and when they occur they are usually silent corruption rather than a crash.
+
+1. **`coeffRef` on an Eigen `SparseMatrix` is not thread-safe, even for distinct columns.** When `(ii,jj)` is not yet stored, `coeffRef` inserts it, and the insert can change storage shared by every column:
+   - On a compressed matrix it calls `insert`, which may decompress the matrix or reallocate `m_data` (values and inner indices) and update the outer index and inner-nonzero arrays.
+   - On an uncompressed matrix it can still trigger `reserveInnerVectors` and a full reallocation once a column's reserved slots run out. The reservation here is only an estimate (`bdA`, `bdB`, `bdO`), so this is a normal case, not a rare one.
+   - One thread can reallocate the buffers while another is writing into them. The result can be a use-after-free, lost nonzeros, or mismatched index and value entries.
+
+   The comment "assuming columns are distinct within patch" covers only logical overlap. It ignores the shared physical buffers. The failure appears only under particular thread interleavings, which a test cannot force.
+
+2. **The "distinct columns" assumption is itself not guaranteed.** `colMap.index(colInd0.at(j), patchid, c)` can map different local indices `(j, c)` to the same global `jj`. This happens when DoFs are matched within one patch, for example periodic or self-glued boundaries, or with coupled multi-component spaces. Two threads would then insert into the same column at once, a direct race on one inner vector.
+
+3. **The damage is silent.** This function only builds the sparsity pattern, writing zeros into `coeffRef(ii,jj)`. A lost insertion does not throw:
+   - Any harm shows up later. Either assembly hits a missing entry and reallocates again (slow but correct), or the pattern is wrong, or the heap is corrupted and something crashes far from the cause.
+   - The race usually triggers only when `colInd0.rows() > 9`, with higher-degree bases, so small-degree tests take the serial path and never exercise it.
+
+4. **The thread count is poorly chosen.** `num_threads(colInd0.rows()/5)` creates a nested parallel region on every evaluation point inside an already serial loop ("assume single thread"). The cost is heavy, and if `push` is ever called from inside a parallel region, nested-parallelism settings change the behaviour by environment.
+
+To fix this, keep the pattern loop serial. Alternatively, collect `(ii,jj)` triplets per thread and merge them once with `setFromTriplets` or a single-threaded insertion pass.
+
+=== DIFF
+diff --git a/src/gsAssembler/gsExprAssembler.h b/src/gsAssembler/gsExprAssembler.h
+index 240e781c0..3572555cd 100644
+--- a/src/gsAssembler/gsExprAssembler.h
++++ b/src/gsAssembler/gsExprAssembler.h
+@@ -655,76 +655,77 @@ private:
+         gsMatrix<index_t> rowInd0, colInd0;
+ 
+         _pattern(gsSparseMatrix<T> & _matrix,
+                  const gsMatrix<T> & _point, unsigned & _patchid)
+ 	  : m_matrix(_matrix), m_point(_point), patchid(_patchid)
+         {
+ 	  //assume single thread
+ 	}
+ 
+         template <typename E> void operator() (const gismo::expr::_expr<E> & ee)
+         {
+             //  ------- Accumulate  -------
+             if (E::isMatrix())
+                 push<true>(ee.rowVar(), ee.colVar());
+         }
+ 
+         void operator() (const expr::_expr<expr::gsNullExpr<T> > &) {}
+ 
+         template<bool isMatrix>
+         void push(const expr::gsFeSpace<T> & v,
+                   const expr::gsFeSpace<T> & u)
+         {
+             GISMO_ASSERT(v.isValid(), "The row space is not valid");
+             GISMO_ASSERT(!isMatrix || u.isValid(), "The column space is not valid");
+             const index_t rd            = v.dim();//row
+             const index_t cd            = u.dim();//col
+             const gsDofMapper  & rowMap = v.mapper();
+             const gsDofMapper  & colMap = (isMatrix ? u.mapper() : rowMap);
+             rowInd0 = v.source().piece(patchid).active(m_point);
+             colInd0 = u.source().piece(patchid).active(m_point);
++	    //parallel column wise (assuming columns are distinct within patch)
++#           pragma omp parallel for schedule(static) collapse(2) if (colInd0.rows()>9) num_threads(colInd0.rows()/5)
+ 	    for (index_t c = 0; c != cd; ++c)
+-	        for (index_t j = 0; j != colInd0.rows(); ++j)
+-                {
++	      for (index_t j = 0; j != colInd0.rows(); ++j)
++	      {
+ 		    const index_t jj = colMap.index(colInd0.at(j),patchid,c); // N_j
+ 		    if ( colMap.is_free_index(jj) )
+                     {
+ 		        for (index_t r = 0; r != rd; ++r)
+ 			    for (index_t i = 0; i != rowInd0.rows(); ++i)
+ 			    {
+ 			        const index_t ii = rowMap.index(rowInd0.at(i),patchid,r); //N_i
+ 			        if ( rowMap.is_free_index(ii) )
+-			        //m_positions.insert({ii,jj});
+-			         m_matrix.coeffRef(ii,jj) = (T)(0);
+-			  }
++				    m_matrix.coeffRef(ii,jj) = (T)(0);
++			    }
+                     }
+-                }
++	      }
+         }//push
+     };
+ 
+ }; // gsExprAssembler
+ 
+ template<class T>
+ gsOptionList gsExprAssembler<T>::defaultOptions()
+ {
+     gsOptionList opt;
+     opt.addInt("DirichletValues"  , "Method for computation of Dirichlet DoF values [100..103]", 101);
+     opt.addInt("DirichletStrategy", "Method for enforcement of Dirichlet BCs [11..14]", 11);
+     opt.addReal("quA", "Number of quadrature points: quA*deg + quB; For patchRule: Regularity of the target space", 1.0  );
+     opt.addInt ("quB", "Number of quadrature points: quA*deg + quB; For patchRule: Degree of the target space", 1    );
+     opt.addReal("bdA", "Estimated nonzeros per column of the matrix: bdA*deg + bdB", 2.0  );
+     opt.addInt ("bdB", "Estimated nonzeros per column of the matrix: bdA*deg + bdB", 1    );
+     opt.addReal("bdO", "Overhead of sparse mem. allocation: (1+bdO)(bdA*deg + bdB) [0..1]", 0.333);
+     opt.addInt ("quRule", "Quadrature rule used (1) Gauss-Legendre; (2) Gauss-Lobatto; (3) Patch-Rule",1);
+     opt.addSwitch("overInt", "Apply over-integration on boundary elements or not?", false);
+     opt.addSwitch("flipSide", "Flip side of interface where integration is performed.", false);
+     opt.addSwitch("movingInterface", "Used in interface assembly when interface is not stationary.", false);
+     return opt;
+ 
+     /// dirichlet treatment? elimination ????
+ 
+     //storage of quadrature points, TP, ... non-linear assembly.
+     
+     //gsExpressions.h -> split ?
+ 
+     //parallel interface assembly..
+     
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+        void push(const expr::gsFeSpace<T> & v,
+                  const expr::gsFeSpace<T> & u)
+        {
+            GISMO_ASSERT(v.isValid(), "The row space is not valid");
+            GISMO_ASSERT(!isMatrix || u.isValid(), "The column space is not valid");
+            const index_t rd            = v.dim();//row
+            const index_t cd            = u.dim();//col
+            const gsDofMapper  & rowMap = v.mapper();
+            const gsDofMapper  & colMap = (isMatrix ? u.mapper() : rowMap);
+            rowInd0 = v.source().piece(patchid).active(m_point);
+            colInd0 = u.source().piece(patchid).active(m_point);
+	    //parallel column wise (assuming columns are distinct within patch)
+#           pragma omp parallel for schedule(static) collapse(2) if (colInd0.rows()>9) num_threads(colInd0.rows()/5)
+	    for (index_t c = 0; c != cd; ++c)
+	      for (index_t j = 0; j != colInd0.rows(); ++j)
+	      {
+		    const index_t jj = colMap.index(colInd0.at(j),patchid,c); // N_j
+		    if ( colMap.is_free_index(jj) )
+                    {
+		        for (index_t r = 0; r != rd; ++r)
+			    for (index_t i = 0; i != rowInd0.rows(); ++i)
+			    {
+			        const index_t ii = rowMap.index(rowInd0.at(i),patchid,r); //N_i
+			        if ( rowMap.is_free_index(ii) )
+				    m_matrix.coeffRef(ii,jj) = (T)(0);
+			    }
+                    }
+	      }
+        }//push
+

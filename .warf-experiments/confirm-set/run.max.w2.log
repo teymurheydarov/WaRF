@@ -1,0 +1,6 @@
+  claude_cli/claude-opus-5-5; worker 2 of 4: 27 reviews to run (0 done) -> claude-commit-strict-tools@max.w2.jsonl
+  worker 2: 10/27  175.8 s per review, ~50 min left
+  a064e38:gismo.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  d7b6ac9:gsMesh.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  910f0ac:gsRationalBasis.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 2 stopping: 3 consecutive errors

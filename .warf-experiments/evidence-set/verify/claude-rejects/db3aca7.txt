@@ -1,0 +1,109 @@
+===== claude claude.w0.jsonl REJECT
+--- CLAUDE 30698a20810c REJECT
+1. **Null dereference on a missing attribute.** The new code calls `node->first_attribute("format")->value()` with no null check, and does it twice. `first_attribute` returns NULL when the attribute is absent. So any `<Mesh>` node without a `format` attribute crashes inside `get()` instead of reaching the error path. The old code only asserted on `type`, which compiles away in release builds, but it at least checked something.
+
+2. **Existing files break silently.** The reader now keys on `format` instead of `type="off"`. Every existing XML file that writes `<Mesh type="off" ...>` has no `format` attribute, so it now hits the null dereference above instead of loading. Nothing reads the old `type` attribute as a fallback, and nothing reports the problem clearly. Changing `type()` to `""` also means the type no longer guards dispatch, so these nodes reach `get()` and crash there.
+
+3. **The `surf` branch returns a fake success.** It returns an empty `new gsMesh<T>` after only a `gsDebug` message, which is compiled out in release builds. Callers get an apparently valid but empty mesh and cannot tell that loading did nothing. It should raise an error (e.g. `GISMO_NO_IMPLEMENTATION` or `GISMO_ERROR`), not return an empty object.
+
+4. **Minor: no return after the error.** The function's final control path is `GISMO_ERROR(...)` with no `return`. That is fine if the macro always throws, but it relies on the macro being marked noreturn, or compilers will warn about a missing return.
+
+Before merging, the patch should:
+- fetch the attribute once,
+- null-check it,
+- fall back to the legacy `type="off"` for existing files,
+- make unsupported formats an error rather than an empty result.
+===== claude-standard claude-standard.w2.jsonl REJECT
+--- SKEPTIC 49f72d66b0bf REJECT
+**Mesh nodes without a `format` attribute now crash.** Changing `type()` from `"off"` to `""` stops the lookup filtering by type: the `GSXML_COMMON_FUNCTIONS` helpers will select any `<Mesh>` node by tag alone. `get()` then does `node->first_attribute("format")->value()` without checking for null. A concrete failing input is a previously valid file:
+
+```xml
+<Mesh type="off" vertices="3" faces="1"> ... </Mesh>
+```
+
+- **Before:** the lookup only selected nodes with `type="off"`, so the `type` attribute was guaranteed to exist and the mesh was read correctly.
+- **After:** the node is selected by tag, `first_attribute("format")` returns `NULL`, and dereferencing it is undefined behaviour (in practice a segfault).
+
+The same happens for any `<Mesh>` element that lacks `format`. A compatibility break should at least give a clear `GISMO_ERROR`, not a null-pointer crash. The patch also silently renames the discriminating attribute from `type` to `format`, which breaks existing data files with no fallback.
+
+**Minor issues:**
+- The function's last statement is `GISMO_ERROR(...)` with no `return`. This is fine only if the macro always throws, but non-throwing builds will warn or fall off the end of a non-void function.
+- The `"surf"` branch returns an empty mesh after only a debug message. Callers will receive an empty `gsMesh` that looks like a successful read.
+
+**Fix:** check `node->first_attribute("format")` for null before using it, and fall back to `type` (or raise a clear error) when it is missing.
+--- ADVOCATE 32e59155d0a3 APPROVE
+**Reasoning:**
+
+The patch reorganizes the `gsMesh<T>` XML reader to dispatch on a `format` attribute instead of the `type` attribute. It reads as a deliberate schema change, signalled by `type()` now returning `""` with the `// no inheritance` comment.
+
+- **The OFF parsing logic is moved verbatim.** I compared the removed and added blocks line by line:
+  - The vertex loop with three `gsGetReal` calls and `addVertex` is unchanged.
+  - The face loop (`gsGetInt` for the count, `resize`, per-index `gsGetInt`, `addFace`) is unchanged.
+  - `cleanMesh()` and `return m` are unchanged.
+  - Only the indentation and the enclosing `if` are new.
+- **Control flow is sound.** Each branch returns: `off` returns the parsed mesh, and `surf` returns an empty mesh with a debug note. The fall-through ends in `GISMO_ERROR`, which throws in G+Smo, so there is no missing-return undefined behavior.
+- **`type()` returning `""` is consistent** with other non-polymorphic types in this file, such as `gsMatrix`. An empty type lets tag-based lookup match any `Mesh` node regardless of its `type` attribute.
+- **`put` is unchanged.** It still returns `NULL`, so no writer contradicts the new read format.
+
+**Non-blocking observations:**
+
+1. **Missing `format` attribute.** `node->first_attribute("format")` is dereferenced without a null check, and is evaluated twice. A legacy file written as `<Mesh type="off" ...>` without `format` would crash. The original code had the same unchecked-dereference pattern for `type`, so this isn't a regression in safety style. Possible fixes:
+   - Cache the attribute pointer once.
+   - Assert that it is non-null.
+   - Fall back to `type` for backward compatibility.
+2. **The `surf` stub returns an empty mesh silently** in non-debug builds. Throwing "not implemented" may be preferable to avoid confusing callers, but this is a design choice, not a defect.
+3. **`assert` vs. `GISMO_ASSERT`.** The remaining `assert` could become `GISMO_ASSERT` with a message for consistency with the `gsMatrix` reader below it.
+
+None of these is a demonstrable defect in the logic as intended, so I approve.
+--- AUDITOR 318509b9ab1f REJECT
+1. **Null-pointer dereference in release builds.** The old code called `node->first_attribute("type")->value()` only inside `assert()`, so release builds never evaluated it. The new code calls `node->first_attribute("format")->value()` unconditionally, up to twice. `first_attribute` returns NULL when the attribute is absent, so any `<Mesh>` node without a `format` attribute now crashes. There is no `GISMO_ASSERT` or null check with a diagnostic.
+
+2. **Backward compatibility break.** Existing XML files and writers use `type="off"`. The reader now requires `format="off"` and no longer looks at `type`, so legacy files hit the null dereference above instead of loading. `type()` was also changed from `"off"` to `""`, which changes how the generic `GSXML_COMMON_FUNCTIONS` machinery matches and filters Mesh nodes by type. There is no fallback, such as reading `format` and falling back to `type` if it is missing.
+
+3. **Silent failure for `format="surf"`.** This path prints only a `gsDebug` message, which is typically compiled out in release, and returns an empty `gsMesh`. Callers cannot tell "not implemented" from "valid empty mesh", which can cause wrong downstream results. An unimplemented format should raise an error like the final branch does.
+
+4. **Control flow depends on `GISMO_ERROR` never returning.** The function ends with `GISMO_ERROR(...)` and no `return`. If the macro does not throw or abort in some configuration, this is undefined behaviour (falling off the end of a non-void function).
+
+5. **Existing issue, not introduced here:** `gsGetInt(str, c)` reads into an `unsigned`. A malformed negative face count would wrap and drive a huge `face.resize(c)`. The patch also never checks that `vertices` and `faces` exist before dereferencing them.
+
+To fix: validate the attribute pointers before use, accept the legacy `type="off"` spelling, make the `surf` path an explicit error, and keep `type()` consistent with what the writer and lookup machinery expect.
+--- TEST-FOCUSED 939526b1bf45 REJECT
+**1. The "surf" branch fails silently.** When `format="surf"`, the reader logs `gsDebug<<"Reader not implemented.\n"` and returns `new gsMesh<T>`, an empty but valid mesh.
+- The caller asked for a mesh and got a plausible object with zero vertices and faces. It has no way to tell this apart from a file that really contains an empty mesh.
+- `gsDebug` output is usually compiled out or goes unnoticed in release builds, so even the log message can disappear.
+- This should be `GISMO_ERROR("Mesh format 'surf' reader not implemented")`, or it should fall through to the error at the end. "Not implemented" must not look like success.
+
+**2. Existing files now crash with undefined behavior instead of a clear error.** The old reader checked `first_attribute("type")` against `"off"`. The new one reads `first_attribute("format")->value()` without a null check.
+- Any existing XML written as `<Mesh type="off" ...>` has no `format` attribute, so `first_attribute` returns NULL and is dereferenced.
+- The result is a segfault, or whatever garbage follows, rather than a `GISMO_ERROR` with a message.
+- Whether this shows up as a clean crash depends on platform and build, which a test cannot rely on.
+- Renaming the attribute from `type` to `format` is a compatibility break the patch doesn't handle. It should either accept both attributes or fail with an explicit message.
+
+**3. Changing `type()` from `"off"` to `""` changes which nodes the lookup matches.** If `getFirst`/`getId` filter on `type()`, any `<Mesh>` node of any format now matches. Combined with point 1, an unsupported format quietly becomes an empty mesh instead of "not found."
+
+**4. Smaller pre-existing issue on the "off" path.** `vertices` and `faces` are read with `atoi` on attributes that are not null-checked. `gsGetReal` and `gsGetInt` results are never checked, so a truncated body produces uninitialized or stale `x/y/z/c` values that look valid. The patch moves this code but doesn't fix it.
+
+Point 1 alone is enough to reject: a named path returns a wrong value that looks plausible to the caller.
+--- BOUNDARY 500973c48f91 REJECT
+**Finding (category c): a missing `format` attribute dereferences a null pointer.**
+
+Input: any `<Mesh>` node without a `format` attribute. This includes every file that was valid before this patch, such as `<Mesh type="off" vertices="..." faces="...">`, since the old reader keyed on `type`.
+
+- **Old behavior:** the only access to `first_attribute("type")` was inside `assert`. In release builds that check disappears, so the reader parsed OFF data regardless of attributes.
+- **New behavior:** `get` unconditionally calls `node->first_attribute("format")->value()`. RapidXML's `first_attribute` returns `NULL` when the attribute is absent, so this crashes in every build mode.
+- **Wrong result:** a crash, instead of a parsed mesh (old files) or the intended `GISMO_ERROR("Problem in xml file Mesh format")`. The error fallback at the end exists to catch unrecognized formats, but a missing format crashes before reaching it.
+- **Cause:** the patch renames the discriminating attribute from `type` to `format` without a null check or a fallback to `type`. Changing `type()` to `""` also means the node lookup no longer filters on `type="off"`, so the caller cannot guarantee `format` is present. This boundary is therefore not ruled out by the caller's contract.
+
+A suggested fix:
+```cpp
+const gsXmlAttribute * fmt = node->first_attribute("format");
+GISMO_ENSURE(fmt, "Mesh node lacks a 'format' attribute");
+```
+Optionally, it could also accept the legacy `type="off"` attribute.
+
+**Secondary concern (not blocking):** with `format="surf"`, the reader logs a debug message and returns an empty `gsMesh`. A caller has no way to tell this apart from a genuinely empty mesh. An error or a warning that is visible in release builds would be safer.
+
+**Boundaries checked and found acceptable:**
+- **Vertex/face loops** are unchanged from the old code. When `vertices` or `faces` is `"0"`, the loops don't run and the result is an empty mesh, which is correct.
+- **Faces with `c = 0`** resize to an empty vector. This behavior is the same as before the patch.
+- **No return after `GISMO_ERROR`** is fine, because `GISMO_ERROR` throws.

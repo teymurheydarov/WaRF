@@ -1,0 +1,31 @@
+== (b) learned weights; commits 2014-12-07T07:47:28Z to 2026-03-27T12:16:29+01:00
+  date order by instant equals date order by text: True; tied author dates: 2
+  uniform panel: AUC of -Lambda 0.616 [0.530, 0.714] (finding a's interval check)
+
+  commit-date order, every profile order and stopping rule:
+    decay False mode early    decisions differing from uniform per profile order: [0, 0, 0, 0, 0, 0]
+    decay False mode noearly  decisions differing from uniform per profile order: [0, 0, 0, 0, 0, 0]
+    decay False mode nosprt   decisions differing from uniform per profile order: [0, 0, 0, 0, 0, 0]
+    decay True  mode early    decisions differing from uniform per profile order: [0, 0, 0, 0, 0, 0]
+    decay True  mode noearly  decisions differing from uniform per profile order: [0, 0, 0, 0, 0, 0]
+    decay True  mode nosprt   decisions differing from uniform per profile order: [0, 0, 0, 0, 0, 0]
+  final weights (no decay):
+    JEV     LOGIC     alpha 57 beta 41 omega 0.582 [0.484, 0.679]
+    JEV     SECURITY  alpha 4 beta 2 omega 0.667 [0.289, 1.000]
+    LAYA    LOGIC     alpha 49 beta 49 omega 0.500 [0.401, 0.599]
+    LAYA    SECURITY  alpha 3 beta 3 omega 0.500 [0.100, 0.900]
+    CLAUDE  LOGIC     alpha 55 beta 43 omega 0.561 [0.463, 0.659]
+    CLAUDE  SECURITY  alpha 3 beta 3 omega 0.500 [0.100, 0.900]
+  largest omega used 0.800; largest sum of the two heaviest 1.400; largest Jev+Claude 1.400; a k=2 REJECT stop needs omega sum >= 1.7971, a k=3 APPROVE stop needs 2.9469
+  HIGH verdicts 0; Lambda range -0.971 to +1.962
+  BA learned 0.560 vs uniform 0.560; AUC of -Lambda learned 0.596 vs uniform 0.616
+  AUC learned minus uniform -0.020 [-0.072, +0.037]
+  with decay: AUC of -Lambda 0.598, BA 0.560
+
+  200 random commit orders x 6 profile orders:
+    BA learned minus uniform: mean -0.0000 [-0.0100, +0.0100]; decisions changed per run: mean 0.31, max 8; runs with any change 168/1200; changed decisions by domain {'LOGIC': 372, 'SECURITY': 0}; largest omega in any run 0.909
+
+  controls for the AUC change (commit-date order, profile order JEV, LAYA, CLAUDE):
+    shuffled labels, trained and scored on them: mean -0.0438 [-0.0848, +0.0072] over 1000; share <= observed -0.020: 0.85, share >= observed: 0.15
+    independent random labels, trained and scored on them: mean -0.0441 [-0.0868, +0.0018] over 1000; share <= observed -0.020: 0.86, share >= observed: 0.14
+    trained on shuffled labels, scored on the real ones: mean -0.0020 [-0.0572, +0.0544] over 1000; share <= observed -0.020: 0.29, share >= observed: 0.71

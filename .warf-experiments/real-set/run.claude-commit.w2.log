@@ -1,0 +1,8 @@
+  claude_cli/claude-opus-5-5; worker 2 of 3: 43 reviews to run (1 done) -> claude-commit.w2.jsonl
+  worker 2: 10/43  18.1 s per review, ~10 min left
+  worker 2: 20/43  18.6 s per review, ~7 min left
+  worker 2: 30/43  17.3 s per review, ~4 min left
+  e2ef56b:gsCPPInterface.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  4affa99:gsBoundary.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  8096363:gsExprEvaluator.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 2 stopping: 3 consecutive errors

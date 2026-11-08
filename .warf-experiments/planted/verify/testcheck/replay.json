@@ -1,0 +1,6226 @@
+{
+ "d6c93de:gsFileManager.cpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.342,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.7,
+     0.638,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.073,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.7,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "d6c93de:gsFileManager.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.93,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.84,
+     0.05,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.073,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.84,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "07bb349:gsCurve.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.932,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.51,
+     1.224,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 0.941,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.51,
+     -0.04,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "07bb349:gsCurve.hpp:planted": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.129,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.51,
+     1.224,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     -0.041,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.176,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.51,
+     -0.04,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "bdbd602:gsMatrixCrossApproximation.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.228,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.5,
+     1.253,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.029,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.136,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.5,
+     0.0,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "bdbd602:gsMatrixCrossApproximation.h:planted": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.037,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.57,
+     1.048,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.042,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.418,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.57,
+     -0.282,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "ec4288c:main.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.077,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.46,
+     1.369,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.141,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.46,
+     0.16,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.22,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "ec4288c:main.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.133,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.079,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.22,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "6ce1f31:gsGradientMethod.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.125,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.76,
+     0.417,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.76,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "6ce1f31:gsGradientMethod.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.785,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.79,
+     0.292,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     -0.024,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.79,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "139a65a:ReshapedHelper.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.575,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.63,
+     0.867,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.449,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.63,
+     -0.532,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "139a65a:ReshapedHelper.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.291,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.68,
+     0.706,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.057,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.68,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "d8d33cb:gsGMRes.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.599,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.126,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.017,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "d8d33cb:gsGMRes.cpp:planted": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.673,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.86,
+     -0.064,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.029,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.86,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "4830c18:gsLinearOperator.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.903,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.52,
+     1.194,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 0.901,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.52,
+     -0.08,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.2,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "4830c18:gsLinearOperator.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.133,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.079,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.2,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "8f7053f:gsLinearAlgebra.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.536,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.89,
+     -0.263,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.092,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.89,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "8f7053f:gsLinearAlgebra.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.087,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.126,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.092,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "d42e749:gzclose.c:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.346,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.708,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.7,
+     0.638,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.7,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "d42e749:gzclose.c:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.258,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.67,
+     0.739,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.057,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.67,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "9790e5a:gsFileManager.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.853,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.31,
+     1.833,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.073,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.31,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 0
+ },
+ "9790e5a:gsFileManager.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.342,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.053,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.7,
+     0.638,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.073,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.7,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 0
+ },
+ "dbb991d:gsUtils.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.025,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.37,
+     1.351,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.37,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "dbb991d:gsUtils.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.031,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.043,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "4dc0868:gsCurve.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.377,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.61,
+     0.703,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.534,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.61,
+     -0.447,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "4dc0868:gsCurve.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.291,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.97,
+     -1.302,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.97,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "1da9936:gsG1AuxiliaryPatch.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.821,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.15,
+     2.147,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "1da9936:gsG1AuxiliaryPatch.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.641,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.75,
+     0.272,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.076,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.75,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "f63bdb3:Meta.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.025,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.37,
+     1.351,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.37,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "f63bdb3:Meta.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.031,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.043,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "329996e:inflate.c:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.442,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.85,
+     -0.149,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.23,
+     -0.083,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.85,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.23,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "329996e:inflate.c:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.031,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.043,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.22,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "be9bf4b:Householder.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.234,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.66,
+     0.56,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.66,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "be9bf4b:Householder.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.739,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.75,
+     0.272,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     -0.022,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.75,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "f00bb12:gsConjugateGradient.cpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.463,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.618,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.04,
+     0.144,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.04,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "f00bb12:gsConjugateGradient.cpp:planted": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.2,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.618,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.04,
+     0.144,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.04,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "54d16b7:gsBoundary.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.786,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.8,
+     0.081,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.031,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.8,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "54d16b7:gsBoundary.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.278,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.88,
+     -0.32,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.031,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.88,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "21a5672:gsAdditiveOp.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.048,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.72,
+     0.374,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.72,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.19,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "21a5672:gsAdditiveOp.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.295,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.259,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.18,
+     -0.047,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.18,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "77338a8:gsReadFile.h:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.116,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -1.105,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     -0.022,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "77338a8:gsReadFile.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.031,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.043,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "4550d58:gsUtils.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.872,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.674,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.79,
+     0.122,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.076,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.79,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 1
+ },
+ "4550d58:gsUtils.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.368,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.9,
+     -0.456,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.076,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.9,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 1
+ },
+ "5f4e141:gsUtils.h:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.367,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     0.84,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.046,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.459,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     -0.323,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "5f4e141:gsUtils.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.46,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.207,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "0064799:gsBiharmonicAssembler.hpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.001,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.76,
+     0.248,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.004,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.76,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "0064799:gsBiharmonicAssembler.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.473,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.86,
+     -0.225,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.004,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.86,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "ae7d987:gsKnotVector.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.034,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.398,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.88,
+     -0.351,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     -0.012,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.88,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "ae7d987:gsKnotVector.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.449,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -1.197,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "250536b:gsUtils.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.141,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.398,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.28,
+     1.744,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.28,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "250536b:gsUtils.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.46,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.207,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "58a6b86:gsAffineFunction.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.959,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.398,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.11,
+     2.561,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.11,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "58a6b86:gsAffineFunction.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.46,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.207,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "42f88b6:gsVisitorHelmholtz.h:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.46,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.207,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.29,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "42f88b6:gsVisitorHelmholtz.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.46,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.207,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.29,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "d3a9ae1:RhinoGetThbSurfaceObject.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.267,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.398,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.57,
+     0.869,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 0.699,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.57,
+     -0.282,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "d3a9ae1:RhinoGetThbSurfaceObject.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.661,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.89,
+     -0.421,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.013,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.89,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "a0069eb:exp_expr.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.468,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.398,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.5,
+     1.07,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.981,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.5,
+     0.0,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "a0069eb:exp_expr.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.184,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.8,
+     0.081,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     -0.012,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.8,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "838db33:gsKnotDomainIterator.h:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.628,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.67,
+     0.565,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.06,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.67,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "838db33:gsKnotDomainIterator.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.157,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.81,
+     0.036,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.06,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.81,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "8d2794b:gsAsMatrix.h:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.449,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -1.197,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "8d2794b:gsAsMatrix.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.46,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.207,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.08,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "9e5b11e:gsBSplineBasis.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.111,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.41,
+     1.33,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.034,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.228,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.41,
+     0.364,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 2
+ },
+ "9e5b11e:gsBSplineBasis.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.894,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.253,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.74,
+     0.324,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.034,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.74,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 2
+ },
+ "893626d:test_spectra.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.029,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.54,
+     1.135,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     -0.007,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.296,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.54,
+     -0.16,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "893626d:test_spectra.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.184,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.6,
+     0.922,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     -0.007,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.541,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.6,
+     -0.405,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "ea88279:Scaling.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.329,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     0.994,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.658,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     -0.323,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "ea88279:Scaling.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.49,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.376,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     -0.015,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.87,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "7328da6:gsBasis.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.861,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -1.485,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.011,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.96,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "7328da6:gsBasis.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.381,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.95,
+     -1.282,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.95,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.11,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "4ed7de2:CompositeTestReporter.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.329,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     0.994,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.658,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     -0.323,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.15,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "4ed7de2:CompositeTestReporter.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.814,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.715,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.16,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "18af693:gsTHBSplineBasis.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 5.618,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.09,
+     3.282,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "18af693:gsTHBSplineBasis.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.039,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.93,
+     -0.972,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.031,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.93,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "5cf8a87:gsGradientMethod.hpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.203,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.98,
+     -2.105,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.98,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "5cf8a87:gsGradientMethod.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.814,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.715,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.06,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "b411853:gsParaviewCollection.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.644,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.49,
+     1.309,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.021,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.49,
+     0.04,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "b411853:gsParaviewCollection.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.814,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.715,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "f813acf:gsAABB.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.505,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.53,
+     1.17,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 0.861,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.53,
+     -0.12,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "f813acf:gsAABB.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.285,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.63,
+     0.812,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.002,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.668,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.63,
+     -0.532,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "47c2bbc:gsHBSplineBasis.hpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.842,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.97,
+     -1.744,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.97,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "47c2bbc:gsHBSplineBasis.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.96,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.846,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     -0.015,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "419e389:gsMatrixCrossApproximation_2.hpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.814,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.715,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.18,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "419e389:gsMatrixCrossApproximation_2.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -3.814,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -2.715,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.18,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "24e5ff9:Fuzzy.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.61,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.335,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.24,
+     2.274,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.24,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 3
+ },
+ "24e5ff9:Fuzzy.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.614,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -1.099,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.72,
+     0.454,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.031,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.72,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 3
+ },
+ "a24ec23:gsHBSpline.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.422,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.14,
+     2.119,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.14,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "a24ec23:gsHBSpline.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -2.137,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.97,
+     -1.166,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.018,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.97,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "1c89c40:ActiveLevelCommandImplementation.cpp:clean": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.625,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.75,
+     0.31,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.053,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.75,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "1c89c40:ActiveLevelCommandImplementation.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.885,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.82,
+     0.051,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.053,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.82,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.07,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "bd66be6:SparseFuzzy.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.577,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.73,
+     0.375,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.29,
+     -0.1,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.73,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.29,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "bd66be6:SparseFuzzy.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.107,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.83,
+     0.008,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.35,
+     -0.126,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.83,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.35,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "ba986b3:gsGMRes.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.639,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.73,
+     0.375,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     -0.038,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.73,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "ba986b3:gsGMRes.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.862,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.95,
+     -0.836,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     -0.038,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.95,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.17,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "b1f3f8a:gsMultiPatch.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.094,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     0.792,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.658,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.58,
+     -0.323,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "b1f3f8a:gsMultiPatch.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.834,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.95,
+     -0.836,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     -0.009,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.95,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "9803f50:gsTHBSplineBasis.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 4.081,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.22,
+     1.778,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.471,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.22,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "9803f50:gsTHBSplineBasis.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -1.243,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.88,
+     -0.245,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     -0.009,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.88,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.13,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "d3c723f:gsSurface.hpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.559,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.29,
+     1.548,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     -0.001,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.29,
+     0.49,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "d3c723f:gsSurface.hpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "LOW",
+   "lambda": -0.553,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.71,
+     0.436,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     -0.001,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.71,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.12,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "187c209:gsMatrixUtils.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "HIGH",
+   "lambda": 3.572,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     1,
+     0.39,
+     1.27,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.428,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     1,
+     0.39,
+     0.447,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "187c209:gsMatrixUtils.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.85,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -1.861,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.09,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "9ef80df:CmdLine.h:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 1.711,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.524,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.22,
+     -0.067,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.92,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.22,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "9ef80df:CmdLine.h:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.85,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -1.861,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.21,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ },
+ "5f04642:gsSurfMesh.cpp:clean": {
+  "cal": {
+   "decision": "APPROVE",
+   "confidence": "MEDIUM",
+   "lambda": 2.663,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     2.303,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.74,
+     0.343,
+     "platt"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.018,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "APPROVE",
+   "confidence": "LOW",
+   "lambda": 0.354,
+   "votes": [
+    [
+     "CLAUDE",
+     1,
+     null,
+     0.49,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.74,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "APPROVE",
+  "truth": "APPROVE",
+  "fold": 4
+ },
+ "5f04642:gsSurfMesh.cpp:planted": {
+  "cal": {
+   "decision": "REJECT",
+   "confidence": "HIGH",
+   "lambda": -2.85,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.989,
+     "rates"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -1.861,
+     "platt"
+    ]
+   ]
+  },
+  "cold": {
+   "decision": "REJECT",
+   "confidence": "MEDIUM",
+   "lambda": -0.762,
+   "votes": [
+    [
+     "CLAUDE",
+     -1,
+     null,
+     -0.626,
+     "omega"
+    ],
+    [
+     "JEV",
+     -1,
+     0.99,
+     -0.626,
+     "capped"
+    ],
+    [
+     "LAYA",
+     1,
+     0.1,
+     0.49,
+     "capped"
+    ]
+   ]
+  },
+  "claude": "REJECT",
+  "truth": "REJECT",
+  "fold": 4
+ }
+}

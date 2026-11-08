@@ -1,0 +1,114 @@
+items: 100, bases 50, kinds [('clean', 'APPROVE'), ('planted', 'REJECT')]
+claude: 100 records, 100 ids; dup ids []
+claude-standard: 100 records, 100 ids; dup ids []
+ids missing: one [], five []; extra: []
+one: records whose kind/base/operator/artifact/domain disagree with items.jsonl: []
+five: records whose kind/base/operator/artifact/domain disagree with items.jsonl: []
+
+== recompute ==
+bases reviewed by both arms: 50
+  one: BA 0.7400  planted caught 49/50  clean passed 25/50
+  five: BA 0.8000  planted caught 49/50  clean passed 31/50
+  seed 4 (score_set's order): one BA 95% [0.670, 0.810] (2.5/97.5 order stats 50th/1950th of 2000)
+  seed 4 (score_set's order): five BA 95% [0.730, 0.860] (2.5/97.5 order stats 50th/1950th of 2000)
+  seed 4 (score_set's order): diff [+0.020, +0.110], <=0 0.15%, <0 0.00%
+  seed 12345: one BA 95% [0.670, 0.810] (2.5/97.5 order stats 50th/1950th of 2000)
+  seed 12345: five BA 95% [0.730, 0.870] (2.5/97.5 order stats 50th/1950th of 2000)
+  seed 12345: diff [+0.020, +0.110], <=0 0.10%, <0 0.00%
+  seed 2026: one BA 95% [0.680, 0.810] (2.5/97.5 order stats 50th/1950th of 2000)
+  seed 2026: five BA 95% [0.730, 0.860] (2.5/97.5 order stats 50th/1950th of 2000)
+  seed 2026: diff [+0.020, +0.110], <=0 0.15%, <0 0.00%
+  20000 resamples seed 7: diff [+0.020, +0.110], <=0 0.18%
+  five minus one +0.0600; only five right 6, only one right 0, exact McNemar p 0.0312
+    only five: ['0696ac5:gsCatmullClark.cpp:clean', '15977e9:gsSquareDomain.h:clean', '3cf80c7:gsRationalBasis.h:clean', '6c02814:gsTHBSplineBasis.hpp:clean', 'bfbe226:gsComposedGeometry.h:clean', 'c0c88af:gsAABB.h:clean']
+    only one:  []
+  per plant kind (one / five):
+    arg_swap     6/6  6/6
+    drop_stmt    15/16  15/16
+    loop_bound   5/5  5/5
+    minus_one    8/8  8/8
+    rows_cols    7/7  7/7
+    start_index  7/7  7/7
+    swap_ij      1/1  1/1
+  missed plants:
+    5c4f8f4:gsTensorDomainIterator.h   drop_stmt    one APPROVE  five APPROVE AAAAA
+  clean rejected:
+    06377a8:gsSurfMesh.cpp             one REJECT   five REJECT   RARRR
+    0696ac5:gsCatmullClark.cpp         one REJECT   five APPROVE  AAARA
+    15977e9:gsSquareDomain.h           one REJECT   five APPROVE  AARRA
+    2a29aa6:gsMultiPatch.hpp           one REJECT   five REJECT   RRRR
+    2f8cd81:gsBSpline.hpp              one REJECT   five REJECT   AARRR
+    38858cf:gsSquareDomain.h           one REJECT   five REJECT   RRRR
+    3cf80c7:gsRationalBasis.h          one REJECT   five APPROVE  AARRA
+    5853a6f:gsExprEvaluator.h          one REJECT   five REJECT   RRRR
+    5f9ae79:gsExprAssembler.h          one REJECT   five REJECT   RRRR
+    6c02814:gsTHBSplineBasis.hpp       one REJECT   five APPROVE  AAARA
+    6fc3f69:gsMultiBasis.hpp           one REJECT   five REJECT   RRRR
+    8058d91:gsHDomain.h                one REJECT   five REJECT   RRRR
+    890cd00:gsComposedGeometry.hpp     one REJECT   five REJECT   RRRR
+    8ca586f:gsParaviewUtils.h          one REJECT   five REJECT   RRRR
+    9b1851c:gsMobiusDomain.h           one REJECT   five REJECT   RRRR
+    a86cf94:gsSquareDomain.h           one REJECT   five REJECT   RRRR
+    a880e56:gsOptProblem.h             one REJECT   five REJECT   RRRR
+    af41faa:gsWriteParaview.hpp        one REJECT   five REJECT   RRRR
+    bfbe226:gsComposedGeometry.h       one REJECT   five APPROVE  AAARA
+    c0c88af:gsAABB.h                   one REJECT   five APPROVE  AAAAA
+    c826b44:gsComposedBasis.h          one REJECT   five REJECT   RRRR
+    d9fca63:gsComposedGeometry.h       one REJECT   five REJECT   RRRR
+    da35b0c:gsSysInfo.cpp              one REJECT   five REJECT   RRRR
+    db3aca7:gsXmlUtils.hpp             one REJECT   five REJECT   RARRR
+    e42bec0:gsExprEvaluator.h          one REJECT   five REJECT   RRARR
+  splits: ('clean', 4, 4): 15, ('clean', 5, 0): 11, ('clean', 5, 1): 16, ('clean', 5, 2): 4, ('clean', 5, 3): 1, ('clean', 5, 4): 3, ('planted', 4, 4): 49, ('planted', 5, 0): 1
+  calls: one 100, five 436
+
+== audit claude-standard ==
+  decision       0  []
+  lambda         0  []
+  fired          0  []
+  confidence     0  []
+  norm           0  []
+  theta          0  []
+  order          0  []
+  omega          0  []
+  model          0  []
+  calls          0  []
+  parse          0  []
+  reasoning      0  []
+  inexact        1  [('da35b0c:gsSysInfo.cpp:planted', 'TEST-FOCUSED', '**REJECT**\n\n**1. The fallback branch reads an uninitialized buffer (silent, unde')]
+  short          0  []
+  sent           0  []
+  sent_vs_one    0  []
+  provider       0  []
+
+== audit one-Claude arm ==
+  decision       0  []
+  parse          0  []
+  inexact        1  [('1050623:gsFitting.h:clean', '**APPROVE**\n\nI found no logic defect. The new sparse `threeOnDiag` builds the sa')]
+  model          0  []
+  sent           0  []
+  votes          0  []
+
+== errors / resume ==
+errors.jsonl: 10 entries, arms ['claude-standard'], times 2026-11-04T16:55:34.542569+00:00 .. 2026-11-04T16:55:50.503063+00:00
+  2a29aa6:gsMultiPatch.hpp:planted           record ['claude-standard.w0.jsonl:22'] created 2026-11-04T20:25:03.509084+00:00 after error: True  votes RRRR calls 4 decision REJECT secs 59.75
+  5853a6f:gsExprEvaluator.h:planted          record ['claude-standard.w0.jsonl:23'] created 2026-11-04T20:26:05.170834+00:00 after error: True  votes RRRR calls 4 decision REJECT secs 61.66
+  a86cf94:gsSquareDomain.h:clean             record ['claude-standard.w0.jsonl:17'] created 2026-11-04T20:17:14.752424+00:00 after error: True  votes RRRR calls 4 decision REJECT secs 62.78
+  2f8cd81:gsBSpline.hpp:planted              record ['claude-standard.w2.jsonl:19'] created 2026-11-04T20:22:25.021211+00:00 after error: True  votes RRRR calls 4 decision REJECT secs 49.86
+  db3aca7:gsXmlUtils.hpp:clean               record ['claude-standard.w2.jsonl:15'] created 2026-11-04T20:17:43.510346+00:00 after error: True  votes RARRR calls 5 decision REJECT secs 91.53
+  8058d91:gsHDomain.h:planted                record ['claude-standard.w2.jsonl:20'] created 2026-11-04T20:23:28.117127+00:00 after error: True  votes RRRR calls 4 decision REJECT secs 63.1
+  bfbe226:gsComposedGeometry.h:clean         record ['claude-standard.w0.jsonl:18'] created 2026-11-04T20:19:59.939067+00:00 after error: True  votes AAARA calls 5 decision APPROVE secs 165.17
+  6fc3f69:gsMultiBasis.hpp:clean             record ['claude-standard.w1.jsonl:24'] created 2026-11-04T20:17:30.001988+00:00 after error: True  votes RRRR calls 4 decision REJECT secs 78.03
+  387b42a:gsBSpline.hpp:clean                record ['claude-standard.w3.jsonl:23'] created 2026-11-04T20:17:39.903844+00:00 after error: True  votes AAARA calls 5 decision APPROVE secs 87.92
+  486fe11:gsComposedBasis.hpp:clean          record ['claude-standard.w1.jsonl:25'] created 2026-11-04T20:18:59.644303+00:00 after error: True  votes AAARA calls 5 decision APPROVE secs 89.64
+  claude-standard.w0.jsonl: 23 records, first 2026-11-04T16:36:01.141287+00:00, last 2026-11-04T20:26:05.170834+00:00, monotone True, after last error 7
+  claude-standard.w1.jsonl: 29 records, first 2026-11-04T16:37:28.746171+00:00, last 2026-11-04T20:26:05.714443+00:00, monotone True, after last error 6
+  claude-standard.w2.jsonl: 20 records, first 2026-11-04T16:38:20.111543+00:00, last 2026-11-04T20:23:28.117127+00:00, monotone True, after last error 6
+  claude-standard.w3.jsonl: 28 records, first 2026-11-04T16:37:30.359420+00:00, last 2026-11-04T20:25:32.813411+00:00, monotone True, after last error 6
+  claude.w0.jsonl: 35 records, first 2026-11-04T16:34:57.826271+00:00, last 2026-11-04T16:44:51.867095+00:00, monotone True
+  claude.w1.jsonl: 33 records, first 2026-11-04T16:36:53.098834+00:00, last 2026-11-04T16:44:46.511892+00:00, monotone True
+  claude.w2.jsonl: 32 records, first 2026-11-04T16:36:58.956983+00:00, last 2026-11-04T16:45:01.114713+00:00, monotone True
+  five earliest: [('2026-11-04T16:36:01.141287+00:00', 'b7557bf:gsKnotVector_.cpp:clean'), ('2026-11-04T16:36:35.113270+00:00', 'b7557bf:gsKnotVector_.cpp:planted'), ('2026-11-04T16:37:28.746171+00:00', '5c5aa76:gsAdaptiveMeshingUtils.h:planted'), ('2026-11-04T16:37:30.359420+00:00', 'e42bec0:gsExprEvaluator.h:planted'), ('2026-11-04T16:38:03.553071+00:00', '15b38e2:gsMappedBasis.hpp:planted'), ('2026-11-04T16:38:03.932126+00:00', '5c5aa76:gsAdaptiveMeshingUtils.h:clean'), ('2026-11-04T16:38:10.786806+00:00', 'c0c88af:gsAABB.h:planted'), ('2026-11-04T16:38:20.111543+00:00', 'e42bec0:gsExprEvaluator.h:clean'), ('2026-11-04T16:38:49.643805+00:00', '7199f75:gsKnotVector.h:planted'), ('2026-11-04T16:38:53.983102+00:00', 'fbcf2aa:gsHElementMarker.hpp:planted')]
+  one earliest: [('2026-11-04T16:34:57.826271+00:00', 'b7557bf:gsKnotVector_.cpp:clean'), ('2026-11-04T16:35:06.331214+00:00', 'b7557bf:gsKnotVector_.cpp:planted'), ('2026-11-04T16:36:53.098834+00:00', '5c5aa76:gsAdaptiveMeshingUtils.h:planted'), ('2026-11-04T16:36:58.956983+00:00', 'e42bec0:gsExprEvaluator.h:clean'), ('2026-11-04T16:36:59.878302+00:00', '5c5aa76:gsAdaptiveMeshingUtils.h:clean'), ('2026-11-04T16:37:06.464919+00:00', '15b38e2:gsMappedBasis.hpp:planted'), ('2026-11-04T16:37:09.061544+00:00', 'e42bec0:gsExprEvaluator.h:planted'), ('2026-11-04T16:37:32.254926+00:00', '15b38e2:gsMappedBasis.hpp:clean')]
+  five slowest reviews: [(132.83, '06377a8:gsSurfMesh.cpp:planted', 4), (137.87, 'fbcf2aa:gsHElementMarker.hpp:clean', 5), (155.31, 'cda7674:gsBSplineBasis.hpp:clean', 5), (165.17, 'bfbe226:gsComposedGeometry.h:clean', 5), (171.83, '06377a8:gsSurfMesh.cpp:clean', 5)]
+
+  five: votes per record {5: 36, 4: 64}

@@ -1,0 +1,152 @@
+{
+ "all": {
+  "Claude alone": {
+   "ba": 0.8241,
+   "ci": [
+    0.75,
+    0.8889
+   ],
+   "caught": 52,
+   "passed": 37,
+   "pairs": 36,
+   "n": 54
+  },
+  "Mixed panel, log-odds (calibrated out of fold)": {
+   "ba": 0.8519,
+   "ci": [
+    0.787,
+    0.9167
+   ],
+   "caught": 50,
+   "passed": 42,
+   "pairs": 39,
+   "n": 54
+  },
+  "Mixed panel, log-odds (cold start)": {
+   "ba": 0.8519,
+   "ci": [
+    0.7778,
+    0.9167
+   ],
+   "caught": 52,
+   "passed": 40,
+   "pairs": 39,
+   "n": 54
+  },
+  "  member: Jev alone": {
+   "ba": 0.6481,
+   "ci": [
+    0.5926,
+    0.713
+   ],
+   "caught": 54,
+   "passed": 16,
+   "pairs": 16,
+   "n": 54
+  },
+  "  member: Laya alone": {
+   "ba": 0.5,
+   "ci": [
+    0.5,
+    0.5
+   ],
+   "caught": 0,
+   "passed": 54,
+   "pairs": 0,
+   "n": 54
+  },
+  "Mixed panel, log-odds (calibrated out of fold) - Claude alone": {
+   "d": 0.0278,
+   "ci": [
+    -0.0093,
+    0.0648
+   ],
+   "only_panel": 5,
+   "only_claude": 2
+  },
+  "Mixed panel, log-odds (cold start) - Claude alone": {
+   "d": 0.0278,
+   "ci": [
+    0.0,
+    0.0648
+   ],
+   "only_panel": 3,
+   "only_claude": 0
+  }
+ },
+ "without boundary swaps": {
+  "Claude alone": {
+   "ba": 0.8409,
+   "ci": [
+    0.7727,
+    0.9091
+   ],
+   "caught": 44,
+   "passed": 30,
+   "pairs": 30,
+   "n": 44
+  },
+  "Mixed panel, log-odds (calibrated out of fold)": {
+   "ba": 0.875,
+   "ci": [
+    0.8068,
+    0.9318
+   ],
+   "caught": 43,
+   "passed": 34,
+   "pairs": 33,
+   "n": 44
+  },
+  "Mixed panel, log-odds (cold start)": {
+   "ba": 0.875,
+   "ci": [
+    0.8068,
+    0.9318
+   ],
+   "caught": 44,
+   "passed": 33,
+   "pairs": 33,
+   "n": 44
+  },
+  "  member: Jev alone": {
+   "ba": 0.6591,
+   "ci": [
+    0.5909,
+    0.7273
+   ],
+   "caught": 44,
+   "passed": 14,
+   "pairs": 14,
+   "n": 44
+  },
+  "  member: Laya alone": {
+   "ba": 0.5,
+   "ci": [
+    0.5,
+    0.5
+   ],
+   "caught": 0,
+   "passed": 44,
+   "pairs": 0,
+   "n": 44
+  },
+  "Mixed panel, log-odds (calibrated out of fold) - Claude alone": {
+   "d": 0.0341,
+   "ci": [
+    -0.0114,
+    0.0909
+   ],
+   "only_panel": 4,
+   "only_claude": 1
+  },
+  "Mixed panel, log-odds (cold start) - Claude alone": {
+   "d": 0.0341,
+   "ci": [
+    0.0,
+    0.0795
+   ],
+   "only_panel": 3,
+   "only_claude": 0
+  }
+ }
+}

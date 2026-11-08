@@ -1,0 +1,21 @@
+REJECT votes: JEV 53, LAYA 0, CLAUDE 6
+majority of three: REJECT 6, bal.acc 0.560; AUC of the REJECT-vote count 0.616
+majority identical to CLAUDE's vote: True
+raw log-odds sum: REJECT 10, bal.acc 0.580, AUC 0.732
+JEV: calibrated (gradient descent) REJECT 47, bal.acc 0.550
+LAYA: calibrated (gradient descent) REJECT 53, bal.acc 0.530
+CLAUDE: calibrated (gradient descent) REJECT 52, bal.acc 0.640
+calibrated log-odds sum: REJECT 51, bal.acc 0.630, AUC 0.736
+majority of calibrated votes: REJECT 47, bal.acc 0.590
+raw        early stopping, order JEV-LAYA-CLAUDE   : HIGH verdicts 17 (13 right), decisions changed by stopping early 0, bal.acc 0.580
+raw        early stopping, order JEV-CLAUDE-LAYA   : HIGH verdicts 17 (13 right), decisions changed by stopping early 0, bal.acc 0.580
+raw        early stopping, order LAYA-JEV-CLAUDE   : HIGH verdicts 16 (13 right), decisions changed by stopping early 0, bal.acc 0.580
+raw        early stopping, order LAYA-CLAUDE-JEV   : HIGH verdicts 18 (15 right), decisions changed by stopping early 0, bal.acc 0.580
+raw        early stopping, order CLAUDE-JEV-LAYA   : HIGH verdicts 16 (13 right), decisions changed by stopping early 0, bal.acc 0.580
+raw        early stopping, order CLAUDE-LAYA-JEV   : HIGH verdicts 18 (15 right), decisions changed by stopping early 0, bal.acc 0.580
+calibrated early stopping, order JEV-LAYA-CLAUDE   : HIGH verdicts 1 (1 right), decisions changed by stopping early 0, bal.acc 0.630
+calibrated early stopping, order JEV-CLAUDE-LAYA   : HIGH verdicts 1 (1 right), decisions changed by stopping early 0, bal.acc 0.630
+calibrated early stopping, order LAYA-JEV-CLAUDE   : HIGH verdicts 1 (1 right), decisions changed by stopping early 0, bal.acc 0.630
+calibrated early stopping, order LAYA-CLAUDE-JEV   : HIGH verdicts 1 (1 right), decisions changed by stopping early 0, bal.acc 0.630
+calibrated early stopping, order CLAUDE-JEV-LAYA   : HIGH verdicts 1 (1 right), decisions changed by stopping early 0, bal.acc 0.630
+calibrated early stopping, order CLAUDE-LAYA-JEV   : HIGH verdicts 1 (1 right), decisions changed by stopping early 0, bal.acc 0.630

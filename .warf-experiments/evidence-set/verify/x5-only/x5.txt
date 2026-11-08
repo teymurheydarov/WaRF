@@ -1,0 +1,289 @@
+====================================================================================================
+1050623:gsFitting.h REJECT
+--- seat CLAUDE-1 APPROVE
+I found no correctness defect. The new sparse `threeOnDiag` builds the same matrix as the old dense version.
+
+- **Layout matches the original.** The result is `3*brows x 3*bcols`. Each nonzero `(r, j, v)` of `block` is written to `(r, j)`, `(brows+r, bcols+j)` and `(2*brows+r, 2*bcols+j)`. That puts copies at block offsets (0,0), (brows,bcols) and (2·brows,2·bcols), exactly as the old dense code did.
+- **Iteration is correct.** `gsSparseMatrix<T>` is column-major by default, so `block.begin(j)` walks column `j`, and `it.row()` with `j` gives the right coordinates. Insertions go to separate columns (`j`, `bcols+j`, `2*bcols+j`), so no `(i,j)` entry is inserted twice.
+- **Reserve and compress are safe.** `reservePerColumn(block.nonZeros() / bcols)` can under-reserve because of integer division. Eigen's uncompressed insert reallocates as needed, so that costs speed, not correctness. `makeCompressed()` then puts the result in standard form.
+- **The caller is consistent.** `assembleBlockB` used to pass `3*num_pts` and `3*num_basis` explicitly. Those equal `3*block.rows()` and `3*block.cols()` because `collocationMatrix(params)` returns a `num_pts x num_basis` matrix. Dimensions are unchanged, and the dense round-trip is gone.
+
+Non-blocking notes:
+- `num_pts`, `points` and `num_basis` are now unused in `assembleBlockB`. With `-Werror` builds this could raise unused-variable warnings.
+- Several commented-out blocks were left behind (the old function and old assembly lines) and should be removed.
+- The doc comment still describes `rows`/`cols` parameters that no longer exist.
+- `threeOnDiag`'s signature changed. Any other caller of the 4-argument form (for example in `gsFitting.hpp` or derived classes) would fail to compile. That is easy to catch at build time, but I couldn't check it from this diff.
+--- seat CLAUDE-2 REJECT
+**The core logic is correct.** The sparse rewrite builds the same block-diagonal matrix as the dense version:
+- The result size is `3*brows × 3*bcols`. This matches the old `3*num_pts × 3*num_basis`, since `collocationMatrix(params)` is `num_pts × num_basis`.
+- Each nonzero `(r, j)` is copied to `(r, j)`, `(brows+r, bcols+j)` and `(2*brows+r, 2*bcols+j)`, which matches the old `dense.block(...)` offsets.
+- No position is inserted twice, so using `insert` via `insertTo` is safe.
+
+So I don't see a wrong result in normal use. These defects still block merging as is:
+
+1. **Division by zero.** `result.reservePerColumn(block.nonZeros() / bcols)` divides by `bcols` without a guard. An empty basis or empty collocation matrix (`bcols == 0`) triggers integer division by zero, which is undefined behavior. The old dense version handled empty blocks fine. A guard such as `if (bcols > 0)` is needed. Alternatively, reserve from per-column nonzero counts, which the commented-out line already hints at.
+
+2. **Under-reservation.** Integer division of the average nonzeros per column truncates and ignores uneven column fill. Columns above the average force Eigen to reallocate during insertion. This is not wrong, but it partly defeats the reason for the rewrite.
+
+3. **Stale documentation.** The doc comment still says the function "Constructs a gsSparseMatrix<T> with \a rows rows and \a cols cols". The `rows` and `cols` parameters no longer exist, so the docs no longer match the signature.
+
+4. **Unused variable.** In `assembleBlockB`, `num_pts` is computed but never used, which triggers an unused-variable warning. `points` and `num_basis` are also no longer used in the body.
+
+5. **Dead commented-out code.** The old `threeOnDiag`, the old `assembleBlockB` body, the `result.block(...)` attempts and the commented `reserve`/`makeCompressed` lines are all left in. They should be removed before merging.
+
+The fix is small: guard or rework the reserve, update the doc comment, remove the unused variable, and delete the commented-out code. After that, the change looks good to merge.
+--- seat CLAUDE-3 REJECT
+1. **Division by zero in `threeOnDiag` when the block has no columns.** The new code calls `result.reservePerColumn(block.nonZeros() / bcols);`. If the basis is empty, `bcols == 0`, and integer division by zero is undefined behaviour (a crash on most platforms). The old dense version handled a zero-width block without trouble. The function now takes any `gsSparseMatrix<T>` but does not guard this case.
+
+2. **The reservation does not fit the matrix's shape.** `nonZeros() / bcols` is a rounded-down average. B-spline collocation matrices have uneven column counts: boundary basis functions touch fewer points than interior ones. Columns above the average overflow their reserved space and force reallocations during `insertTo`. That removes much of the speed-up this change is for. A per-column reserve would fit, for example `block.nonZerosPerCol()` replicated three times. The patch's own commented-out line shows the author knew this and dropped it.
+
+3. **Leftovers from the refactor in `assembleBlockB`.** `num_pts` is computed but no longer used, and the `num_basis` parameter is also unused. This produces unused-variable and unused-parameter warnings, which break `-Werror` builds. The function signature now promises sizing behaviour it ignores.
+
+4. **The doc comment no longer matches the code.** It still says the result has "\a rows rows and \a cols cols". The new signature has no `rows` or `cols` parameters, and the size is now always 3·brows × 3·bcols.
+
+5. **Commented-out code is committed.** The old `threeOnDiag`, the old `sparseColloc` setup, a non-compiling `result.block(...)` attempt, and a stray `reserve` line are all left in as comments. This is debugging residue and should be removed before merging.
+
+The diagonal placement itself is correct: blocks go at (0,0), (brows,bcols) and (2·brows,2·bcols), which matches the original. But item 1 is a concrete crash, and items 2–5 are measurable defects, so the patch should not be merged as it is.
+--- seat CLAUDE-4 REJECT
+**Main defect: under-reservation in `threeOnDiag`.**
+- `result.reservePerColumn(block.nonZeros() / bcols)` reserves the *average* (truncated) number of nonzeros per column. It does not reserve the *maximum*.
+- In a collocation matrix, column fill is very uneven. It depends on basis-function support and how points are distributed. Many columns will therefore hold more entries than the floor of the average.
+- Every overflowing `insert` into the uncompressed matrix makes Eigen re-reserve and shift storage. Assembly can then degrade badly, which defeats the purpose of this change (avoiding the dense intermediate).
+- The commented-out `nonZerosPerCol().template replicate<3,1>()` line shows the author knew what the correct reservation was. It was simply left unused.
+- Fix: reserve per column from the block's actual per-column counts, replicated three times, or at least reserve the maximum column count.
+
+**Crash on empty input:**
+- `block.nonZeros() / bcols` divides by zero when `bcols == 0`. The old dense implementation handled an empty block without trouble.
+
+**Interface and API problems:**
+- `assembleBlockB` still accepts `points` and `num_basis`, but neither is used anymore. `num_pts` is computed and never read. Builds that treat warnings as errors will fail on the unused variable.
+- The result size used to come from the caller (`3*num_pts × 3*num_basis`). It now comes silently from the collocation matrix, so a size mismatch is no longer caught.
+- The doc comment still describes `rows`/`cols` parameters, which no longer exist.
+
+**Cleanup needed:**
+- The patch leaves a lot of commented-out code: the old `threeOnDiag`, the old `sparseColloc` setup, `result.block(...)` attempts, and stray reserve lines. It also adds inconsistent indentation (2 spaces vs. 4). This should be removed before merging.
+
+The direction is good: building the block-diagonal directly in sparse form instead of via a dense matrix. But the reservation logic is wrong for the very matrices it targets, and the patch needs cleanup.
+--- seat CLAUDE-5 REJECT
+The block-diagonal construction is correct: for each nonzero `(r, j)` the patch writes `(r, j)`, `(brows+r, bcols+j)` and `(2·brows+r, 2·bcols+j)`, which matches the old dense version. The blocking defect is in the reserve call, and there are smaller maintenance problems besides.
+
+1. **Integer division by zero (blocking).** `result.reservePerColumn(block.nonZeros() / bcols);` divides by `bcols` without a guard. If the collocation matrix has zero columns (an empty or degenerate basis), this is undefined behaviour and in practice crashes. The old dense code handled that case without failing, so this is a regression in robustness. Guard it (`bcols > 0 ? ... : 0`), or use `result.reserve(3 * block.nonZeros())` or a per-column vector built from `block`.
+
+2. **The reserve is an average, not a bound.** `nonZeros()/bcols` is an average per column, rounded down. Collocation columns for tensor-product B-splines vary in fill, so columns above the average will trigger reallocation in Eigen's uncompressed `insert`. The result is still correct but slower. A per-column reserve built from the block's own column counts would be exact; the commented-out line shows the author intended this but did not finish it.
+
+3. **Unused names and warnings.** `num_pts` in `assembleBlockB` is now computed but never used. The `points` and `num_basis` parameters are also unused, which causes `-Wunused` warnings, and these break builds that use `-Werror`.
+
+4. **Outdated documentation.** The doc comment still says "Constructs a gsSparseMatrix with *rows* rows and *cols* cols…", but those parameters no longer exist.
+
+5. **Dead code.** The patch adds large commented-out blocks: the old `threeOnDiag`, the old `assembleBlockB` body, an unfinished `reserve(...)` line and a stray `sparseColloc.makeCompressed()` comment. This should not be merged as it is.
+
+The performance improvement (no dense `3n × 3m` intermediate) is worthwhile. It should be resubmitted with a guarded and accurate reserve, the unused variable and parameters removed, the doc comment updated, and the commented-out code deleted.
+====================================================================================================
+a60880c:gsWriteParaview.hpp REJECT
+--- seat CLAUDE-1 REJECT
+**1. Regression for n > 4.** Before this patch, the `else if (n>3)` branch exported every control net with geometric dimension 4 or higher as a point cloud via `gsWriteParaviewPoints(cp.transpose(), fn)`. The patch narrows that branch to `n == 4` and adds an `n > 4` branch that only warns and returns.
+
+- Any caller exporting a 5D or higher control net now gets no file at all, where before it got a point-cloud file.
+- Downstream code that expects `fn` to exist, such as a collection or `.pvd` writer that references the file, will now point to a missing file.
+
+This is a loss of existing functionality presented as a refactor. The new comment asserts that point clouds only work up to dimension 4, but the patch changes no code to support that claim. If `gsWriteParaviewPoints` really cannot handle more than 4 rows, the fix belongs there, or the patch should keep the old behaviour and document the limitation.
+
+**2. The warning has no trailing newline.** The `gsWarn` message ends with `"...up to dimension 4."` and no `\n`. The next log line will run onto the same line. The other messages in this file, including the `gsDebug` message in this same patch, end with `\n`.
+
+**3. Typo.** "Fallling" has three l's.
+
+**4. The new comments contradict each other.** One says "We can only write control nets up to dimension 4", and the next says a 4D net "need[s] to fall back to an unstructured point cloud". So the code only writes a real control net up to dimension 3, and the comments misstate the limit.
+
+The other changes look fine. Moving the `geoDim()` check ahead of `controlNet(msh)` avoids building a mesh that is then thrown away. The `n == 1` lifting logic and the whitespace edits do not change behaviour. The regression in point 1 is enough to block the merge as it stands.
+--- seat CLAUDE-2 REJECT
+1. **Regression for geometries with more than 4 dimensions.** The old code sent every `n > 3` case to `gsWriteParaviewPoints(cp.transpose(), fn)`, so 5-D and higher control nets still produced an output file. The patch routes only `n == 4` there. For `n > 4` it now logs a warning and returns without writing anything, so callers that used to get a point cloud get no file. The patch gives no evidence that `gsWriteParaviewPoints` fails above 4 rows. If it does have a limit, that belongs in `gsWriteParaviewPoints` itself, not in silently skipping output here.
+
+2. **Broken log output.** The `gsWarn` message has no trailing `"\n"`, unlike the `gsDebug` message just above it and the usual style in this file. The warning will run into whatever is printed next.
+
+3. **Typo in the user-visible message.** "Fallling" has three l's.
+
+4. **The new comments are inconsistent.** "We can only write control nets up to dimension 4" sits directly above a branch that does *not* write a 4-D control net; it falls back to a point cloud. Read literally, nets are supported only up to dimension 3, with a degraded fallback at exactly 4.
+
+The rest of the patch is fine: moving `Geo.controlNet(msh)` after the early returns avoids building a mesh that would be thrown away, and the `n == 1` lifting logic is unchanged apart from whitespace. Item 1 changes behavior for valid inputs, so this should not be merged as is.
+--- seat CLAUDE-3 REJECT
+**Functional regression for geoDim > 4.** The old code sent every `n > 3` net, including 5D and higher, to `gsWriteParaviewPoints(cp.transpose(), fn)`. That function writes the first three rows as coordinates and any remaining rows as point data. The patch now writes the point cloud only for `n == 4`. For `n > 4` it logs a warning and returns without writing a file. Callers that used to get a `.vtp` output now get nothing. The patch's claim that "a >4D net is not supported at all" does not match the old behaviour, so this removes a working path rather than fixing a broken one.
+
+**Minor defects in the new code:**
+- The `gsWarn` message has no trailing `"\n"`. The next log output will run onto the same line, unlike the other `gsWarn` and `gsDebug` calls in this file.
+- "Fallling" is misspelled in the debug message.
+- The comment "We can only write control nets up to dimension 4" contradicts the code. Only `n < 4` produces an actual control-net mesh; `n == 4` is already a point-cloud fallback.
+
+**Cosmetic changes:** the whitespace edits (`n == 1`, `i != ...`) and moving the `n` declaration up are harmless. Skipping `controlNet()` for `n >= 4` is also fine.
+
+To be acceptable, the patch should keep the point-cloud fallback for all `n >= 4`, or justify dropping it with a hard error rather than a silent skip. It should also fix the newline and the typo.
+--- seat CLAUDE-4 APPROVE
+The control-flow change is correct. I didn't build or run it; this is from reading the diff.
+
+- **n ≤ 3 (normal path):** The original routed geoDim 1–3 to the regular mesh writer. The new code does the same, including the n == 1 lifting step. The only difference is that `Geo.controlNet(msh)` now runs after the dimension checks. That just avoids building a mesh that would be thrown away.
+- **n == 4:** Same as before. The coefficients are transposed (geoDim rows by coefficient columns) and written as a point cloud.
+- **n > 4:** This is the actual behaviour change. Previously these cases also went to `gsWriteParaviewPoints`. From memory of that function, it only handles inputs with 1–4 rows and raises an error otherwise, so any geoDim ≥ 5 would have aborted. The patch logs a warning and returns instead, which is better for an export helper. If your copy of `gsWriteParaviewPoints` does accept more than 4 rows, this would instead be a regression for n ≥ 5, so that is worth a quick check.
+- No off-by-one problems, the branches cover every n without overlap, and the patch doesn't change the types (`unsigned n` compared with literals).
+
+Non-blocking nits:
+- The `gsWarn` message has no trailing `"\n"`, so the next log line will run onto it.
+- There is a typo in the debug string: "Fallling" should be "Falling".
+- The comment "We can only write control nets up to dimension 4" is slightly misleading, since dimension 4 itself is only written as a point cloud, not as a control net.
+--- seat CLAUDE-5 APPROVE
+- **The core fix is correct.** In the old code, `Geo.controlNet(msh)` ran before the dimension check. `gsMesh` vertices are 3D (`gsVertex` derives from `gsVector3d`), so building a mesh from a 4D or higher control net is invalid. The patch checks `n` first and only calls `controlNet` when `n <= 3`.
+- **The 4D path keeps its old behaviour.** It still writes a point cloud via `gsWriteParaviewPoints<T>(cp.transpose(), fn)`. The transpose gives a `geoDim × numCoefs` matrix, which is the orientation that function expects.
+- **Skipping dimensions above 4 is a reasonable choice.** As I recall it (not checked here), `gsWriteParaviewPoints` only handles 1–4 rows and errors beyond that. If so, the old code would hit that error for `n > 4`, and a warning plus early return is better.
+- **The `n == 1` branch is unchanged** apart from whitespace.
+- **Two cosmetic nits, neither blocking:**
+  - "Fallling" is misspelled in the debug message.
+  - The `gsWarn` message lacks a trailing `"\n"`.
+====================================================================================================
+cd9af47:gsHTensorBasis.hpp REJECT
+--- seat CLAUDE-1 REJECT
+The patch doesn't change behaviour: every edit renames `targetLevel` to `minLevel`, and the arithmetic, control flow and assertions are the same. But the new name is wrong for half the functions it's applied to.
+
+- **`refineToLevel` and its variants:** `minLevel` is accurate. Leaves below the given level are raised to it, so it is a lower bound.
+- **`unrefineToLevel` and its variants:** The parameter is an upper bound. Leaves whose level is above it are brought down to it, and the check is `leafIt.level() - minLevel > 0`. Calling it `minLevel` inverts its meaning. The new assertion text, "The minimum level must be between 0 and the current max level", is also misleading, since it describes the level users will get as the new maximum.
+- **`unrefineFinestLevel`:** The local variable holds the finest (highest) non-empty level. The comment right above it says "Find the finest (highest) non-empty level", and the code then stores that value in a variable called `minLevel`. The name contradicts both the comment and the value. It also misleads at the call site `unrefineToLevel(minLevel-1)`, which actually passes "finest level minus one".
+- **`refineCoarsestLevel`:** The variable holds the coarsest active level, not a minimum the caller asked for, so `minLevel` is ambiguous here too.
+
+A rename whose only purpose is clarity, but which makes several signatures, an assertion message and a local variable say the opposite of what they mean, is a defect in the change itself. Keep `targetLevel`, or use `minLevel` for refine and `maxLevel` for unrefine. Note that `unrefineToLevel` already has a local named `maxLevel`, so that one would need renaming as well. The header declarations and Doxygen comments, which this diff doesn't touch, should be updated to match.
+--- seat CLAUDE-2 REJECT
+The patch only renames `targetLevel` to `minLevel`, so behavior is unchanged. The defect is that the new name is wrong for the unrefine half of the API, and the error message now gives users false information.
+
+- **`refineToLevel(minLevel)` is correct.** It skips every leaf with `leafIt.level() >= minLevel` and lifts the rest up to `minLevel`. Afterwards, `minLevel` really is the lowest leaf level.
+- **`unrefineToLevel(minLevel)` is backwards.** It skips leaves with `leafIt.level() <= minLevel` and coarsens every leaf above it down to `minLevel`. Afterwards, this value is the highest level in the tree, not the lowest. The assert text now reads "The minimum level must be between 0 and the current max level", which tells a caller the opposite of what the argument does. Someone who passes the level they want as a floor will discard refinement they meant to keep.
+- **`unrefineFinestLevel()` contradicts its own comment.** The local variable `minLevel` is filled by a loop commented "Find the finest (highest) non-empty level". The code then calls `unrefineToLevel(minLevel-1)`, which reads as lowering a floor when it actually lowers the ceiling.
+- **`refineCoarsestLevel()` is misleading too.** Here `minLevel` correctly holds the coarsest level, but the call `refineToLevel(minLevel+1)` passes a different value under the same name, which invites confusion.
+
+A rename-only patch is justified only if the new names are more accurate. These names are less accurate for half the functions and wrong in a user-facing assert message.
+
+**Fix:** keep `targetLevel`, or use `minLevel` for `refine*` and `maxLevel`/`targetMaxLevel` for `unrefine*`. The unrefine path already has a local called `maxLevel`, so pick a different parameter name there. Then correct the assert message.
+--- seat CLAUDE-3 APPROVE
+This is a pure rename of `targetLevel` to `minLevel`, plus updated assert text. I found no logic defect.
+
+**Behavior is unchanged.** I checked each substitution:
+- **`refineToLevel`:** `dLevel = minLevel - leafIt.level()`, the skip condition `dLevel <= 0`, the pushed level, and the `2^dLevel` corner scaling are the same as before.
+- **`unrefineToLevel`:** the range assert, the early return when `maxLevel - minLevel == 0`, the per-leaf `dLevel`, the pushed level, and the corner division are the same.
+- **`refineCoarsestLevel`:** it still finds the lowest non-empty level and calls `refineToLevel(minLevel+1)`.
+- **`unrefineFinestLevel`:** it still finds the highest non-empty level, returns early if that is 0, and otherwise calls `unrefineToLevel(minLevel-1)`.
+- **Wrappers:** the `_withTransfer` and `_withCoefs` versions pass the renamed parameter through unchanged.
+
+Each rename is applied consistently within its scope, so no reference is left dangling or mixed. Parameter names in definitions don't have to match the header declarations, so this compiles the same.
+
+**Non-blocking concern: some of the new names are misleading.**
+- In `unrefineToLevel`, the parameter is effectively the new *maximum* level. The new assert text, "The minimum level must be between 0 and the current max level", may confuse users.
+- In `unrefineFinestLevel`, the local variable `minLevel` holds the *finest* (highest) level, which is the opposite of what the name says.
+
+These names are worth fixing in a follow-up, but they don't change any behavior.
+--- seat CLAUDE-4 REJECT
+This patch only renames `targetLevel` to `minLevel` and rewords the assertion messages. The control flow and arithmetic are unchanged, so it introduces no behavioral regression. But the new name is semantically wrong in half the functions it touches, which makes the code and its diagnostics misleading:
+
+- **`refineToLevel(minLevel)`**: the name fits here. Leaves below the level are raised to it, so afterwards every leaf is at least at that level.
+- **`unrefineToLevel(minLevel)`**: the meaning is inverted. Leaves with `leafIt.level() > minLevel` are coarsened down to `minLevel`, so afterwards it is an upper bound on leaf levels, not a minimum. The assertion now says "The minimum level must be between 0 and the current max level", which describes the parameter as the opposite of what it does.
+- **`unrefineFinestLevel()`**: the local `minLevel` holds the finest (highest) non-empty level. That contradicts the comment directly above it ("Find the finest (highest) non-empty level"). The call `unrefineToLevel(minLevel-1)` then reads as "unrefine to one below the minimum", which is nonsensical.
+- The `*_withTransfer` and `*_withCoefs` unrefine variants inherit the same wrong name.
+
+A rename whose whole purpose is clarity, but which makes the unrefinement API read backwards, should not be merged. Either keep `targetLevel`, which is accurate for both directions, or use distinct names: `minLevel` for refinement and `maxLevel` or `targetLevel` for unrefinement. In `unrefineFinestLevel`, use something like `finestLevel`. Any Doxygen comments in the header that refer to `targetLevel` should be updated to match.
+
+There is also an older issue in context lines this patch doesn't modify. In `unrefineToLevel`, `i2[j]` rounds up using `upperCorner()[j] % 2 != 0` even when `dLevel > 1`. Correct ceiling division would need `% math::pow(2,dLevel)`. That may under-cover boxes when unrefining by more than one level. It isn't introduced here, but it's worth a follow-up.
+--- seat CLAUDE-5 APPROVE
+- **Behavior is unchanged.** This is a pure rename of `targetLevel` to `minLevel` across the `refineToLevel*`, `unrefineToLevel*`, `refineCoarsestLevel` and `unrefineFinestLevel` bodies. The hunk line counts match (259/259), and every changed line swaps only the identifier or the assertion text. The control flow, arithmetic, box construction and assertion conditions are all identical.
+- **Callers are not affected.** C++ parameter names in definitions don't have to match the header declarations, so callers and the ABI are unchanged. Every function body uses the new name consistently, so nothing is left referring to the old one.
+- **For `refineToLevel` the new name is accurate.** It refines every leaf below `minLevel` up to `minLevel` and leaves finer leaves alone, so after the call `minLevel` really is the minimum level.
+- **The name is misleading elsewhere, though not wrong in behavior:**
+  - In `unrefineToLevel`, the parameter is effectively the *maximum* level after the call, since leaves finer than it are coarsened.
+  - In `unrefineFinestLevel`, the local `minLevel` holds the *finest* non-empty level.
+  - The assertion message "The minimum level must be between 0 and the current max level" reads oddly for an unrefine operation.
+
+  A follow-up should keep `targetLevel` (or use `maxLevel`) in the unrefine paths and in `unrefineFinestLevel`. Header Doxygen `@param` names should also be checked so they match.
+====================================================================================================
+fbcf2aa:gsHElementMarker.hpp REJECT
+--- seat CLAUDE-1 REJECT
+The new level filter only works when `Jump` is 2, but `Jump` is a configurable option.
+
+- **What the code checks.** A marked cell `refElem` at level k creates children at level k+1. These children can only collide with a coarsening-extension cell when k+1 ≥ `coarseningElem.level()`. So the correct filter is `refElem.level() >= coarseningElem.level() - 1`.
+- **What the patch hardcodes.** It uses `refElem.level() >= elem.level()` instead. That assumes `coarseningElem.level() == elem.level() + 1`, and the new comment states this assumption directly.
+- **Why that assumption fails.** The extension comes from `getCextension(parent, m_options.askInt("Jump",2))`. Its level depends on the jump m: it is roughly `parent.level() + m`, which is `elem.level() - 1 + m`. That equals `elem.level() + 1` only when m = 2.
+
+**Consequences for other `Jump` values:**
+
+- **`Jump` = 1:** the extension cells are at `elem.level()`. A `refElem` at `elem.level() - 1` creates children at exactly that level, so it should block the coarsening. The filter skips it, so a coarsening that breaks admissibility is allowed. This is the bug the patch set out to fix, still present for this setting.
+- **`Jump` ≥ 3:** the extension cells are at `elem.level() + m - 1`. A `refElem` at `elem.level()` creates children at `elem.level() + 1`, which is still admissible. The filter accepts it, and `contains(refElem, coarseningElem)` is true, so valid coarsenings are wrongly rejected.
+
+**Suggested fix:** compare against `coarseningElem.level() - 1` instead of `elem.level()`. Better still, follow `gsOverlapCompare` and intersect with the children of the marked refinement cells. Either way, update the comment so it no longer claims the extension is always at `elem.level() + 1`.
+
+**Minor, pre-existing:** the `if (erase) break;` inside the inner loop is dead code, because the branch above it already breaks. The outer loop also keeps running after `erase` is set to true.
+--- seat CLAUDE-2 REJECT
+**Defect: the level guard assumes `Jump == 2`, but the function takes `Jump` as an option.**
+
+The patch filters refinement cells with `refElem.level() >= elem.level()`. That only works if every `coarseningElem` sits at `elem.level()+1`, as the new comment states. But the extension is built with `m_helper.getCextension(parent, m_options.askInt("Jump",2))`. Its cells sit at a level that depends on `Jump`: roughly `parent.level() + m = elem.level() - 1 + m`. That equals `elem.level()+1` only when `m == 2`. (I haven't checked the `getCextension` source.)
+
+The comment's own reasoning is that a `refElem` produces cells at `refElem.level()+1`, so it can only reach the extension when `refElem.level() + 1 >= coarseningElem.level()`. The guard should be stated against `coarseningElem`, not `elem`:
+
+```cpp
+if (refElem.level() + 1 >= coarseningElem.level() &&
+    (m_helper.contains(coarseningElem, refElem) ||
+     m_helper.contains(refElem, coarseningElem)))
+```
+
+With the patch as written and `Jump = 3` (extension at `L+2`):
+- A neighbour `refElem` at level `L` passes the guard.
+- `contains(refElem, coarseningElem)` is true, so `elem` is removed from the coarsening set.
+- Yet refining that neighbour only creates level `L+1` cells. Coarsening `elem` to `L-1` then gives a jump of 2, which `Jump = 3` allows.
+
+So for any `Jump != 2`, admissible coarsenings are wrongly rejected. The new bidirectional `contains` check turns the old always-false case into an over-eager true case.
+
+For `Jump == 2` the logic looks right. Both containment directions plus the level filter correctly match "the children of `refElem` overlap `coarseningElem`" on nested hierarchical grids.
+
+**Minor issues:**
+- The inner comment "If the coarsening element contains a refinement element" is now stale, since containment is tested in both directions.
+- The `if (erase) break;` inside the inner loop can never run; it is old dead code, worth cleaning up while touching this block.
+- The comment hard-codes "coarseningElem lives at elem.level()+1", which documents the same `Jump == 2` assumption.
+
+Please express the guard relative to `coarseningElem.level()`, or derive it from `Jump`. Add a test with `Jump = 3`, since the current change probably only passes the default case.
+--- seat CLAUDE-3 APPROVE
+**Correctness of the new condition.** The patch fixes a real missed case in `_markCrs_admissible`.
+
+- `elem` is at level L, so `parent` is at L−1. With Jump m=2, the cells in `getCextension(parent, m)` are at L−1+m = L+1. This matches the `levelInBasis(coarseningElem) >= coarseningElem.level()` check just above.
+- A marked `refElem` at level k produces cells at level k+1. Those cells can only conflict with the extension when k+1 ≥ L+1, which is exactly the new guard `refElem.level() >= elem.level()`.
+- The overlap test needs both directions because `contains(a, b)` requires `a.level() <= b.level()`:
+  - **k = L:** `refElem` is coarser than `coarseningElem`, so only `contains(refElem, coarseningElem)` can detect the overlap. The old code tested only `contains(coarseningElem, refElem)`. It therefore missed same-level neighbours whose refinement would land on the extension, and the coarsening could pass and create a jump of 2.
+  - **k ≥ L+1:** `contains(coarseningElem, refElem)` still covers it. This case is largely redundant anyway, because the `levelInBasis` check already catches a level-L+1 cell present there.
+- Marked elements at level L−1 or below only produce cells at level L or below. These cannot violate the m=2 grading against a cell coarsened to L−1, so skipping them is correct.
+
+**Minor issues, none blocking.**
+- The comment says the old test was "always-false for every refElem at or below elem.level()+1". At exactly level L+1, `contains(coarseningElem, refElem)` can be true when the two cells are the same, so the comment overstates the problem. The real gap was refElem at level L.
+- After the inner loop sets `erase`, the outer loop over `coarseningExtension` keeps going. The `if (erase) break;` inside the inner loop is dead code. This was already there before the patch, and it only wastes work; it does not change the result.
+- The claim that `gsOverlapCompare` uses `getChildren()` is offered as justification. I couldn't verify it from the diff, but the fix is correct on its own.
+--- seat CLAUDE-4 REJECT
+The patch fixes the real bug, the always-false containment test. But it hardcodes an offset that only holds when `Jump == 2`.
+
+**What the patch gets right.** The original `contains(coarseningElem, refElem)` could never be true for a `refElem` coarser than `coarseningElem`. Those coarser elements are the ones whose children would land in the extension. Adding the reverse direction `contains(refElem, coarseningElem)` is a correct fix.
+
+**The defect: the level filter assumes `Jump == 2`.**
+- `getCextension(parent, m)` returns cells at level `parent.level() + m`, which is `elem.level() - 1 + m`.
+- A `refElem` creates cells at `refElem.level() + 1`. So the condition that matters is `refElem.level() + 1 >= coarseningElem.level()`.
+- The patch writes this as `refElem.level() >= elem.level()`. That is the same thing only when `m = 2`. The comment admits the assumption: "coarseningElem lives at elem.level()+1".
+- But `m` comes from `m_options.askInt("Jump",2)`, which is user-configurable.
+
+**What goes wrong for other `Jump` values:**
+- **`Jump = 1`:** The extension sits at level `L = elem.level()`. A `refElem` at level `L-1` creates level-`L` cells that overlap it. That is a real violation. The filter skips it because `L-1 < L`, so an inadmissible coarsening is let through. This is the unsafe direction.
+- **`Jump = 3`:** The extension sits at level `L+2`. A `refElem` at level `L` only creates level-`L+1` cells, which is not a violation. The filter still accepts it, and the reverse `contains` test fires, so a valid coarsening is rejected. This is wrong, though only over-cautious.
+
+**Fix.** Compare against the extension cell's own level, `refElem.level() + 1 >= coarseningElem.level()`, instead of `elem.level()`. This gives the same result for `Jump = 2` and is correct for every `m`.
+
+**Minor issues:**
+- The comment says the old test was always false for `refElem` "at or below elem.level()+1". At exactly `elem.level()+1` the levels are equal, so `contains()` works there. The comment should say "below".
+- The `if (erase) break;` inside the inner loop can never run, since the `break` above it already exits.
+--- seat CLAUDE-5 REJECT
+The patch claims to be "equivalent" to `gsOverlapCompare(extension, markedRef.getChildren())`, but the new level filter breaks that equivalence.
+
+- **The filter hardcodes `Jump == 2`.** The coarsening extension comes from `getCextension(parent, m_options.askInt("Jump",2))`, so the level of `coarseningElem` depends on `Jump`. It is not always `elem.level()+1`. Yet the patch filters with `refElem.level() >= elem.level()`, which bakes in the comment's assumption that `coarseningElem` sits at `elem.level()+1`. For any other `Jump`, the filter is off by `Jump-2` levels. Refinement elements whose children do reach the extension's level can be skipped, or the reverse. Any cutoff here should be derived from `coarseningElem.level()`, not `elem.level()`.
+
+- **It drops coarser refinement elements that still overlap.** The bidirectional `contains` test on its own already decides spatial overlap between `coarseningElem` and the children of `refElem`. Those children tile `refElem`, so "children overlap `coarseningElem`" is the same as "`refElem` and `coarseningElem` overlap in either direction". The extra `refElem.level() >= elem.level()` guard then throws away coarser `refElem`s whose children overlap the extension spatially. The reference `gsOverlapCompare` on children would still report those as overlaps and erase the coarsening. So the patch can approve coarsenings the reference marker rejects, and they then overlap cells created in the same step. That is the exact level-jump violation the check is meant to prevent.
+
+- **The comment overstates the fix.** It documents the result as equivalent to the reference when it is not. That makes this silent discrepancy harder to catch later.
+
+- **Minor:** the `if (erase) break;` inside the inner loop is unreachable dead code. It runs after the `break` and is left over from the original.
+
+To fix it, drop the level guard and keep the two-way `contains` test. If a level cutoff is wanted for performance, base it on `coarseningElem.level() - 1` so it holds for any `Jump`. Add a test with `Jump = 3` and with a coarser marked refinement element next to the coarsened one.

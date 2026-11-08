@@ -1,0 +1,7 @@
+  claude_cli/claude-opus-5-5; worker 3 of 4: 30 reviews to run (11 done) -> claude-commit-strict-tools@max.w3.jsonl
+  worker 3: 10/30  158.2 s per review, ~53 min left
+  worker 3: 20/30  141.9 s per review, ~24 min left
+  640ac27:gsParaviewDataSet.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  c74cda8:gsRationalBasis.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  319444f:gsHDomainIterator.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 3 stopping: 3 consecutive errors

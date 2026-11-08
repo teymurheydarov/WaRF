@@ -1,0 +1,48 @@
+== (d) log-odds variant
+  mean log-odds of APPROVE per seat (raw): JEV -0.24, LAYA +1.86, CLAUDE +1.68
+  share of commits where the seat's log-odds point to APPROVE (raw): JEV 46, LAYA 100, CLAUDE 94
+
+  [raw log-odds, uniform omega, every vote] AUC of -Lambda 0.732 [0.631, 0.820]
+    AUC minus Claude p            -0.013 [-0.082, +0.055]
+    AUC minus Jev p               +0.091 [+0.033, +0.151]
+    AUC minus Laya p              +0.146 [-0.005, +0.300]
+    AUC minus mean member         +0.075 [+0.020, +0.128]
+    AUC minus vote panel -Lambda  +0.116 [+0.049, +0.184]
+    decisions: REJECT 10 (9 later fixed); BA 0.580 [0.530, 0.640]
+    BA minus Claude vote  (0.560) +0.020 [-0.040, +0.070], 5/3, sign p 0.73
+    BA minus Jev vote     (0.590) -0.010 [-0.100, +0.090], 21/22, sign p 1.00
+    BA minus vote panel   (0.560) +0.020 [-0.040, +0.070], 5/3, sign p 0.73
+    BA minus mean member vote (0.550) +0.030 [-0.023, +0.087]
+
+  [calibrated log-odds (out of fold), uniform omega, every vote] AUC of -Lambda 0.736 [0.634, 0.824]
+    AUC minus Claude p            -0.009 [-0.061, +0.038]
+    AUC minus Jev p               +0.094 [+0.014, +0.179]
+    AUC minus Laya p              +0.150 [-0.002, +0.302]
+    AUC minus mean member         +0.078 [+0.024, +0.131]
+    AUC minus vote panel -Lambda  +0.119 [+0.042, +0.196]
+    decisions: REJECT 51 (32 later fixed); BA 0.630 [0.540, 0.720]
+    BA minus Claude vote  (0.640) -0.010 [-0.070, +0.050], 4/5, sign p 1.00
+    BA minus Jev vote     (0.550) +0.080 [-0.010, +0.180], 16/8, sign p 0.15
+    BA minus vote panel   (0.560) +0.070 [-0.020, +0.170], 26/19, sign p 0.37
+    BA minus mean member vote (0.573) +0.057 [-0.013, +0.127]
+
+  WaRF's A/B boundaries on the log-odds Lambda (uniform omega):
+    raw: (order, mode, HIGH, HIGH right, decisions changed vs all-vote synthesis) J,L,C early 17/13/0; J,L,C noearly 17/13/0; J,C,L early 17/13/0; J,C,L noearly 17/13/0; L,J,C early 16/13/0; L,J,C noearly 16/13/0; L,C,J early 18/15/0; L,C,J noearly 18/15/0; C,J,L early 16/13/0; C,J,L noearly 16/13/0; C,L,J early 18/15/0; C,L,J noearly 18/15/0
+    calibrated: (order, mode, HIGH, HIGH right, decisions changed vs all-vote synthesis) J,L,C early 1/1/0; J,L,C noearly 1/1/0; J,C,L early 1/1/0; J,C,L noearly 1/1/0; L,J,C early 1/1/0; L,J,C noearly 1/1/0; L,C,J early 1/1/0; L,C,J noearly 1/1/0; C,J,L early 1/1/0; C,J,L noearly 1/1/0; C,L,J early 1/1/0; C,L,J noearly 1/1/0
+
+  learned omega, commit-date order (vote correctness updates the Betas), per stopping rule:
+    raw        early    BA 0.610, AUC 0.712, REJECT 15, HIGH 13
+    raw        noearly  BA 0.610, AUC 0.715, REJECT 15, HIGH 13
+    raw        nosprt   BA 0.610, AUC 0.715, REJECT 15, HIGH 0; minus Claude vote +0.050 [-0.010, +0.110] 8/3 p 0.23; minus mean member +0.060 [+0.007, +0.117]
+    calibrated early    BA 0.650, AUC 0.741, REJECT 53, HIGH 1
+    calibrated noearly  BA 0.650, AUC 0.741, REJECT 53, HIGH 1
+    calibrated nosprt   BA 0.650, AUC 0.741, REJECT 53, HIGH 0; minus Claude vote +0.010 [-0.040, +0.060] 4/3 p 1.00; minus mean member +0.077 [+0.003, +0.150]
+
+  equal-weight average of unit-SD logits (the earlier 0.768):
+    AUC 0.768 [0.668, 0.858]
+    minus Claude p     +0.023 [-0.057, +0.102] (pair bootstrap [-0.059, +0.103])
+    minus mean member  +0.110 [+0.064, +0.154] (pair bootstrap [+0.060, +0.153])
+    raw logit sum          AUC 0.732; minus Claude -0.013 [-0.080, +0.053]
+    calibrated logit sum   AUC 0.736; minus Claude -0.009 [-0.059, +0.034]
+    mean of p              AUC 0.712; minus Claude -0.033 [-0.111, +0.046]
+    mean of ranks          AUC 0.768; minus Claude +0.023 [-0.058, +0.098]

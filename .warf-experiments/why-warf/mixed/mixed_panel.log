@@ -1,0 +1,256 @@
+
+==============================================================================================================
+0. Data, seats, and a check of the simulator against WaRF's own stored reviews
+==============================================================================================================
+  100 commits, 50 later fixed (REJECT), 50 never fixed (APPROVE); domains {'LOGIC': 96, 'SECURITY': 4}; commit dates 2014-12-07 to 2026-03-27
+  engine.py: A +2.890, B -2.251, LLR_APPROVE +0.981, LLR_REJECT -1.253, THETA {'LOGIC': 0.0, 'SECURITY': 0.2, 'PERFORMANCE': -0.1}, oracle gamma 1.0
+
+  seat     REJECT votes  of later fixed  of never fixed  vote bal.acc             AUC of p       p range  Platt a, b (all data)
+  JEV                53              31              22         0.590 0.641 [0.528, 0.747]   0.03-0.99  -0.07, +0.32
+  LAYA                0               0               0         0.500 0.586 [0.472, 0.693]   0.05-0.33  +1.14, +0.61
+  CLAUDE              6               6               0         0.560 0.745 [0.645, 0.834]   0.02-0.86  +1.44, +0.85
+  calibrated votes (out-of-fold Platt p > 0.5): JEV 47 REJECT, bal.acc 0.550, LAYA 53 REJECT, bal.acc 0.530, CLAUDE 52 REJECT, bal.acc 0.640
+  reference, why_five.py's logit average of the three: AUC 0.768 [0.669, 0.860]
+  JEV-LAYA: votes disagree on 0.53 of commits; correlation of logit p -0.15, within label -0.20
+  JEV-CLAUDE: votes disagree on 0.47 of commits; correlation of logit p +0.57, within label +0.53
+  LAYA-CLAUDE: votes disagree on 0.06 of commits  (under 0.15: a clone pair by SPECIFICATION 3.1.2); correlation of logit p -0.13, within label -0.22
+
+  simulator replaying WaRF's stored reviews from their own votes and omegas: single Jev agent 100/100 identical (decision, confidence, Lambda, agents asked); WaRF's default five-agent review on Jev, early stopping on, 100/100 identical
+
+==============================================================================================================
+(a) WaRF as it is: uniform omega 0.5, fixed LLRs, early stopping on, every seat order
+==============================================================================================================
+  Reach of the SPRT with three seats at omega 0.5: all three REJECT gives Lambda -1.879 (B = -2.251); all three APPROVE +1.471 (A = +2.890).
+  Neither boundary can be reached, so every review ends in the synthesis (a majority of three).
+  6 orders x 3 stopping rules: identical decisions and Lambda in all 18 runs: True; SPRT verdicts (HIGH) 0; agents asked per review [3]
+  balanced accuracy over the 6 orders: mean 0.560, range 0.560 to 0.560; AUC of -Lambda: mean 0.616, range 0.616 to 0.616
+  REJECT votes per commit: 0: 47 commits (19 later fixed), 1: 47 commits (25 later fixed), 2: 6 commits (6 later fixed)
+  WaRF's confidence: LOW 1 reviews, 0 right, MEDIUM 99 reviews, 56 right
+
+  (a) WaRF, uniform weights, votes (any order, early stopping on or off)
+    REJECT 6 of 100 (6 later fixed); balanced accuracy 0.560 [0.520, 0.610]; AUC 0.616 [0.520, 0.708]
+    vs JEV     decision -0.030 [-0.120, +0.060]  right only here / only JEV: 22 / 25, sign p 0.771   AUC -0.025 [-0.085, +0.035]
+    vs LAYA    decision +0.060 [+0.020, +0.110]  right only here / only LAYA:  6 /  0, sign p 0.031   AUC +0.030 [-0.130, +0.199]
+    vs CLAUDE  decision +0.000 [+0.000, +0.000]  right only here / only CLAUDE:  0 /  0, sign p 1.000   AUC -0.128 [-0.215, -0.039]
+    vs mean member  decision +0.010 [-0.027, +0.050]   AUC -0.041 [-0.112, +0.033]   (members' decisions: votes at p > 0.5)
+
+  (a') diagnostic: the same, but each seat votes with an out-of-fold calibrated threshold (calibrated p > 0.5)
+    REJECT 47 of 100 (28 later fixed); balanced accuracy 0.590 [0.500, 0.680]; AUC 0.636 [0.537, 0.732]
+    vs JEV     decision +0.040 [-0.040, +0.110]  right only here / only JEV: 10 /  6, sign p 0.454   AUC -0.006 [-0.097, +0.087]
+    vs LAYA    decision +0.060 [-0.070, +0.200]  right only here / only LAYA: 27 / 21, sign p 0.471   AUC +0.050 [-0.087, +0.184]
+    vs CLAUDE  decision -0.050 [-0.120, +0.030]  right only here / only CLAUDE:  5 / 10, sign p 0.302   AUC -0.109 [-0.191, -0.025]
+    vs mean member  decision +0.017 [-0.040, +0.073]   AUC -0.022 [-0.084, +0.036]   (members' decisions: calibrated votes)
+
+==============================================================================================================
+(b) Learned weights, prequential in commit-date order: review with the current omegas, then the label
+==============================================================================================================
+  Structure: with three seats the weighted vote differs from the majority only if a lone dissenter's
+  omega exceeds the other two combined (LOGIC; SECURITY, theta +0.2: a lone REJECT needs 2/3 of their sum).
+  A REJECT boundary needs the rejecting seats' omegas to sum to 1.797 with no APPROVE in between;
+  an APPROVE boundary needs 2.947, more than three seats at omega < 0.982 can give.
+  learned         6 tie-break orders: balanced accuracy 0.560 to 0.560, AUC of -Lambda 0.596 to 0.596, SPRT verdicts [0], decisions identical across orders: True
+  learned, decay  6 tie-break orders: balanced accuracy 0.560 to 0.560, AUC of -Lambda 0.598 to 0.598, SPRT verdicts [0], decisions identical across orders: True
+  uniform         6 tie-break orders: balanced accuracy 0.560 to 0.560, AUC of -Lambda 0.616 to 0.616, SPRT verdicts [0], decisions identical across orders: True
+  learned vs uniform, same order: 0 decisions differ (0 to right, 0 to wrong), sign p 1.000
+  learned, decay vs uniform, same order: 0 decisions differ (0 to right, 0 to wrong), sign p 1.000
+  omegas after all 100 labels (LOGIC, 95 % interval by omega_ci; SECURITY saw 4 labels):
+    JEV     alpha  57.0 beta  41.0 omega 0.582 [0.484, 0.679];  SECURITY omega 0.667
+    LAYA    alpha  49.0 beta  49.0 omega 0.500 [0.401, 0.599];  SECURITY omega 0.500
+    CLAUDE  alpha  55.0 beta  43.0 omega 0.561 [0.463, 0.659];  SECURITY omega 0.500
+  LOGIC omegas when the k-th commit is reviewed: k=10: JEV 0.46, LAYA 0.46, CLAUDE 0.46; k=25: JEV 0.46, LAYA 0.39, CLAUDE 0.42; k=50: JEV 0.55, LAYA 0.43, CLAUDE 0.47; k=75: JEV 0.58, LAYA 0.45, CLAUDE 0.49; k=100: JEV 0.58, LAYA 0.51, CLAUDE 0.57
+  largest omega reached 0.800; largest sum of the two heaviest 1.400 (REJECT boundary at k=2 needs 1.797)
+
+  (b) WaRF, learned weights (prequential, commit-date order, early stopping on)
+    REJECT 6 of 100 (6 later fixed); balanced accuracy 0.560 [0.520, 0.610]; AUC 0.596 [0.487, 0.708]
+    vs JEV     decision -0.030 [-0.120, +0.060]  right only here / only JEV: 22 / 25, sign p 0.771   AUC -0.045 [-0.109, +0.017]
+    vs LAYA    decision +0.060 [+0.020, +0.110]  right only here / only LAYA:  6 /  0, sign p 0.031   AUC +0.010 [-0.160, +0.183]
+    vs CLAUDE  decision +0.000 [+0.000, +0.000]  right only here / only CLAUDE:  0 /  0, sign p 1.000   AUC -0.148 [-0.256, -0.042]
+    vs mean member  decision +0.010 [-0.027, +0.050]   AUC -0.061 [-0.148, +0.027]   (members' decisions: votes at p > 0.5)
+    vs uniform weights, same order: AUC of -Lambda -0.020 [-0.075, +0.033]
+  learned weights with WaRF's decay (0.95 per week, reviews dated at commit time): balanced accuracy 0.560, AUC 0.598
+  200 random review orders x 6 tie-break orders: learned balanced accuracy mean 0.559 [0.550, 0.570], uniform 0.560; learned minus uniform -0.0008 [-0.010, +0.010]; decisions changed per run: max 7, mean 0.28; AUC of -Lambda mean 0.564
+  control, 1000 shuffles of the labels (oracle and scoring both shuffled, commit-date order): learned minus uniform balanced accuracy mean -0.0001 [+0.000, +0.000], decisions changed max 3; AUC of -Lambda learned minus uniform mean -0.0447 [-0.083, +0.001]
+    observed with the real labels: balanced accuracy +0.0000 (one-sided p 0.994), AUC -0.0200 (one-sided p 0.127); trained on shuffled labels and scored on the real ones: balanced accuracy mean 0.560 [0.560, 0.560]
+    labels drawn independently instead (no fixed 50/50 split): AUC of -Lambda learned minus uniform mean -0.0430 [-0.085, +0.003]
+    weights trained on shuffled labels, Lambda scored on the real labels: AUC learned minus uniform mean +0.0003 [-0.054, +0.055]
+    (so the drop appears only when the labels that moved the weights are the labels scored: each label shifts
+    every later Lambda toward itself, which works against the AUC's comparisons across time)
+
+==============================================================================================================
+(c) WaRF's routing rule (SPECIFICATION 1, principle 3): use only the vote of the heaviest seat
+==============================================================================================================
+  The weights count right votes, so the seat they can single out is the best VOTER: JEV 0.590, LAYA 0.500, CLAUDE 0.560 -> JEV; the best RANKER by AUC is CLAUDE.
+  votes right JEV only / CLAUDE only: 25 / 22, sign p 0.771
+  votes right JEV only / LAYA only: 31 / 22, sign p 0.272
+  votes right CLAUDE only / LAYA only: 6 / 0, sign p 0.031
+  after all 100 labels, WaRF's Beta posteriors give P(JEV's vote accuracy is the highest) = 0.58 (Monte Carlo, independent Betas)
+
+  route_shadow: every seat votes and learns, the decision is the heaviest seat's vote
+    profile order JEV-LAYA-CLAUDE    bal.acc 0.590; routed to JEV 100, LAYA 0, CLAUDE 0; leader after 100 labels JEV, settled after 0 commits; vs JEV alone 0/0 (p 1.00); vs uniform vote panel 25/22 (p 0.77)
+    profile order JEV-CLAUDE-LAYA    bal.acc 0.590; routed to JEV 100, LAYA 0, CLAUDE 0; leader after 100 labels JEV, settled after 0 commits; vs JEV alone 0/0 (p 1.00); vs uniform vote panel 25/22 (p 0.77)
+    profile order LAYA-JEV-CLAUDE    bal.acc 0.540; routed to JEV 83, LAYA 17, CLAUDE 0; leader after 100 labels JEV, settled after 84 commits; vs JEV alone 0/5 (p 0.06); vs uniform vote panel 21/23 (p 0.88)
+    profile order LAYA-CLAUDE-JEV    bal.acc 0.530; routed to JEV 82, LAYA 17, CLAUDE 1; leader after 100 labels JEV, settled after 84 commits; vs JEV alone 0/6 (p 0.03); vs uniform vote panel 20/23 (p 0.76)
+    profile order CLAUDE-JEV-LAYA    bal.acc 0.540; routed to JEV 82, LAYA 0, CLAUDE 18; leader after 100 labels JEV, settled after 84 commits; vs JEV alone 0/5 (p 0.06); vs uniform vote panel 20/22 (p 0.88)
+    profile order CLAUDE-LAYA-JEV    bal.acc 0.540; routed to JEV 82, LAYA 0, CLAUDE 18; leader after 100 labels JEV, settled after 84 commits; vs JEV alone 0/5 (p 0.06); vs uniform vote panel 20/22 (p 0.88)
+    200 random orders x 6: bal.acc mean 0.546 [0.500, 0.590]; leader after 100 labels JEV 1.00, LAYA 0.00, CLAUDE 0.00; share of commits routed JEV 0.64, LAYA 0.05, CLAUDE 0.32
+      runs ending with JEV as leader: it led for good after median 82 commits (quartiles 52, 93; 90th percentile 97)
+
+  route_only: warf review --max-agents 1: only the heaviest seat is asked, and only it learns
+    profile order JEV-LAYA-CLAUDE    bal.acc 0.510; routed to JEV 6, LAYA 93, CLAUDE 1; leader after 100 labels LAYA, settled after 94 commits; vs LAYA alone 1/0 (p 1.00); vs uniform vote panel 1/6 (p 0.12)
+    profile order JEV-CLAUDE-LAYA    bal.acc 0.570; routed to JEV 6, LAYA 1, CLAUDE 93; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 1/0 (p 1.00); vs uniform vote panel 1/0 (p 1.00)
+    profile order LAYA-JEV-CLAUDE    bal.acc 0.490; routed to JEV 2, LAYA 96, CLAUDE 2; leader after 100 labels LAYA, settled after 6 commits; vs LAYA alone 0/1 (p 1.00); vs uniform vote panel 0/7 (p 0.02)
+    profile order LAYA-CLAUDE-JEV    bal.acc 0.500; routed to JEV 4, LAYA 95, CLAUDE 1; leader after 100 labels LAYA, settled after 6 commits; vs LAYA alone 1/1 (p 1.00); vs uniform vote panel 1/7 (p 0.07)
+    profile order CLAUDE-JEV-LAYA    bal.acc 0.550; routed to JEV 2, LAYA 2, CLAUDE 96; leader after 100 labels CLAUDE, settled after 6 commits; vs CLAUDE alone 0/1 (p 1.00); vs uniform vote panel 0/1 (p 1.00)
+    profile order CLAUDE-LAYA-JEV    bal.acc 0.560; routed to JEV 4, LAYA 1, CLAUDE 95; leader after 100 labels CLAUDE, settled after 6 commits; vs CLAUDE alone 1/1 (p 1.00); vs uniform vote panel 1/1 (p 1.00)
+    200 random orders x 6: bal.acc mean 0.549 [0.490, 0.590]; leader after 100 labels JEV 0.41, LAYA 0.21, CLAUDE 0.39; share of commits routed JEV 0.39, LAYA 0.24, CLAUDE 0.37
+      runs ending with JEV as leader: it led for good after median 47 commits (quartiles 7, 87; 90th percentile 96)
+      runs ending with LAYA as leader: it led for good after median 82 commits (quartiles 64, 91; 90th percentile 97)
+      runs ending with CLAUDE as leader: it led for good after median 80 commits (quartiles 52, 91; 90th percentile 96)
+
+  route_shadow, calibrated votes: every seat votes and learns, the decision is the heaviest seat's vote (diagnostic: each seat votes at its out-of-fold calibrated threshold; best calibrated voter CLAUDE)
+    profile order JEV-LAYA-CLAUDE    bal.acc 0.610; routed to JEV 6, LAYA 17, CLAUDE 77; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 7/10 (p 0.63); vs uniform vote panel 28/23 (p 0.58)
+    profile order JEV-CLAUDE-LAYA    bal.acc 0.600; routed to JEV 6, LAYA 12, CLAUDE 82; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 5/9 (p 0.42); vs uniform vote panel 27/23 (p 0.67)
+    profile order LAYA-JEV-CLAUDE    bal.acc 0.620; routed to JEV 2, LAYA 21, CLAUDE 77; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 9/11 (p 0.82); vs uniform vote panel 29/23 (p 0.49)
+    profile order LAYA-CLAUDE-JEV    bal.acc 0.610; routed to JEV 1, LAYA 21, CLAUDE 78; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 8/11 (p 0.65); vs uniform vote panel 29/24 (p 0.58)
+    profile order CLAUDE-JEV-LAYA    bal.acc 0.590; routed to JEV 1, LAYA 12, CLAUDE 87; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 4/9 (p 0.27); vs uniform vote panel 27/24 (p 0.78)
+    profile order CLAUDE-LAYA-JEV    bal.acc 0.590; routed to JEV 1, LAYA 12, CLAUDE 87; leader after 100 labels CLAUDE, settled after 94 commits; vs CLAUDE alone 4/9 (p 0.27); vs uniform vote panel 27/24 (p 0.78)
+    200 random orders x 6: bal.acc mean 0.602 [0.550, 0.630]; leader after 100 labels JEV 0.00, LAYA 0.00, CLAUDE 1.00; share of commits routed JEV 0.08, LAYA 0.14, CLAUDE 0.78
+      runs ending with CLAUDE as leader: it led for good after median 69 commits (quartiles 45, 85; 90th percentile 96)
+
+  (c) routing, every seat learns (commit-date order, profile order JEV-LAYA-CLAUDE)
+    REJECT 53 of 100 (31 later fixed); balanced accuracy 0.590 [0.500, 0.680]
+    vs JEV     decision +0.000 [+0.000, +0.000]  right only here / only JEV:  0 /  0, sign p 1.000
+    vs LAYA    decision +0.090 [+0.000, +0.180]  right only here / only LAYA: 31 / 22, sign p 0.272
+    vs CLAUDE  decision +0.030 [-0.060, +0.120]  right only here / only CLAUDE: 25 / 22, sign p 0.771
+    vs mean member  decision +0.040 [-0.020, +0.100]   (members' decisions: votes at p > 0.5)
+
+  (c') routing on calibrated votes, every seat learns (commit-date order, profile order JEV-LAYA-CLAUDE)
+    REJECT 57 of 100 (34 later fixed); balanced accuracy 0.610 [0.510, 0.700]
+    vs JEV     decision +0.060 [-0.050, +0.170]  right only here / only JEV: 21 / 15, sign p 0.405
+    vs LAYA    decision +0.080 [-0.050, +0.210]  right only here / only LAYA: 28 / 20, sign p 0.312
+    vs CLAUDE  decision -0.030 [-0.110, +0.050]  right only here / only CLAUDE:  7 / 10, sign p 0.629
+    vs mean member  decision +0.037 [-0.040, +0.110]   (members' decisions: calibrated votes)
+
+==============================================================================================================
+(d) 'Use the probability' (IDEAS.md): each seat adds its log-odds instead of a fixed LLR
+==============================================================================================================
+  Lambda += omega * log((1-p)/p) (WaRF's sign: positive = APPROVE). 'sum': every seat adds, no SPRT,
+  decision APPROVE iff the omega-weighted mean log-odds >= theta (the synthesis rule with log-odds for votes).
+  'early': WaRF's boundaries A, B on the same Lambda, early stopping on, every seat order.
+
+  raw log-odds, uniform omega, early stopping on: SPRT verdicts per order [17, 17, 16, 18, 16, 18], mean agents asked 2.96; bal.acc mean 0.580 (range 0.580 to 0.580); AUC of -Lambda mean 0.733 (range 0.732 to 0.734)
+
+  (d) raw log-odds, uniform omega, every seat adds, sign of the sum against theta
+    REJECT 10 of 100 (9 later fixed); balanced accuracy 0.580 [0.530, 0.640]; AUC 0.732 [0.630, 0.827]
+    vs JEV     decision -0.010 [-0.110, +0.080]  right only here / only JEV: 21 / 22, sign p 1.000   AUC +0.091 [+0.033, +0.151]
+    vs LAYA    decision +0.080 [+0.030, +0.140]  right only here / only LAYA:  9 /  1, sign p 0.021   AUC +0.146 [-0.006, +0.294]
+    vs CLAUDE  decision +0.020 [-0.030, +0.080]  right only here / only CLAUDE:  5 /  3, sign p 0.727   AUC -0.013 [-0.082, +0.052]
+    vs mean member  decision +0.030 [-0.023, +0.087]   AUC +0.075 [+0.019, +0.127]   (members' decisions: votes at p > 0.5)
+
+  (d) raw log-odds, uniform omega, early stopping on, the order with the lowest bal.acc (JEV-LAYA-CLAUDE)
+    REJECT 10 of 100 (9 later fixed); balanced accuracy 0.580 [0.530, 0.640]; AUC 0.732 [0.629, 0.827]
+    vs JEV     decision -0.010 [-0.110, +0.080]  right only here / only JEV: 21 / 22, sign p 1.000   AUC +0.090 [+0.033, +0.151]
+    vs LAYA    decision +0.080 [+0.030, +0.140]  right only here / only LAYA:  9 /  1, sign p 0.021   AUC +0.146 [-0.006, +0.294]
+    vs CLAUDE  decision +0.020 [-0.030, +0.080]  right only here / only CLAUDE:  5 /  3, sign p 0.727   AUC -0.013 [-0.082, +0.052]
+    vs mean member  decision +0.030 [-0.023, +0.087]   AUC +0.074 [+0.019, +0.127]   (members' decisions: votes at p > 0.5)
+    (best order JEV-LAYA-CLAUDE: bal.acc 0.580, AUC 0.732)
+
+  (d) raw log-odds with learned omegas (prequential, commit-date order), every seat adds
+    REJECT 15 of 100 (13 later fixed); balanced accuracy 0.610 [0.540, 0.680]; AUC 0.715 [0.610, 0.816]
+    vs JEV     decision +0.020 [-0.070, +0.110]  right only here / only JEV: 20 / 18, sign p 0.871   AUC +0.074 [+0.019, +0.129]
+    vs LAYA    decision +0.110 [+0.040, +0.180]  right only here / only LAYA: 13 /  2, sign p 0.007   AUC +0.129 [-0.024, +0.280]
+    vs CLAUDE  decision +0.050 [-0.010, +0.110]  right only here / only CLAUDE:  8 /  3, sign p 0.227   AUC -0.029 [-0.117, +0.054]
+    vs mean member  decision +0.060 [+0.003, +0.120]   AUC +0.058 [-0.003, +0.116]   (members' decisions: votes at p > 0.5)
+
+  calibrated log-odds, uniform omega, early stopping on: SPRT verdicts per order [1, 1, 1, 1, 1, 1], mean agents asked 3.00; bal.acc mean 0.630 (range 0.630 to 0.630); AUC of -Lambda mean 0.736 (range 0.736 to 0.736)
+
+  (d) calibrated log-odds, uniform omega, every seat adds, sign of the sum against theta
+    REJECT 51 of 100 (32 later fixed); balanced accuracy 0.630 [0.530, 0.720]; AUC 0.736 [0.638, 0.828]
+    vs JEV     decision +0.080 [-0.020, +0.170]  right only here / only JEV: 16 /  8, sign p 0.152   AUC +0.094 [+0.014, +0.175]
+    vs LAYA    decision +0.100 [-0.050, +0.250]  right only here / only LAYA: 35 / 25, sign p 0.245   AUC +0.150 [-0.003, +0.292]
+    vs CLAUDE  decision -0.010 [-0.070, +0.050]  right only here / only CLAUDE:  4 /  5, sign p 1.000   AUC -0.009 [-0.060, +0.037]
+    vs mean member  decision +0.057 [-0.017, +0.127]   AUC +0.078 [+0.023, +0.131]   (members' decisions: calibrated votes)
+
+  (d) calibrated log-odds, uniform omega, early stopping on, the order with the lowest bal.acc (JEV-LAYA-CLAUDE)
+    REJECT 51 of 100 (32 later fixed); balanced accuracy 0.630 [0.530, 0.720]; AUC 0.736 [0.638, 0.828]
+    vs JEV     decision +0.080 [-0.020, +0.170]  right only here / only JEV: 16 /  8, sign p 0.152   AUC +0.094 [+0.014, +0.175]
+    vs LAYA    decision +0.100 [-0.050, +0.250]  right only here / only LAYA: 35 / 25, sign p 0.245   AUC +0.150 [-0.003, +0.292]
+    vs CLAUDE  decision -0.010 [-0.070, +0.050]  right only here / only CLAUDE:  4 /  5, sign p 1.000   AUC -0.009 [-0.060, +0.037]
+    vs mean member  decision +0.057 [-0.017, +0.127]   AUC +0.078 [+0.023, +0.131]   (members' decisions: calibrated votes)
+    (best order JEV-LAYA-CLAUDE: bal.acc 0.630, AUC 0.736)
+
+  (d) calibrated log-odds with learned omegas (prequential, commit-date order), every seat adds
+    REJECT 52 of 100 (32 later fixed); balanced accuracy 0.620 [0.520, 0.710]; AUC 0.736 [0.636, 0.830]
+    vs JEV     decision +0.070 [-0.030, +0.160]  right only here / only JEV: 15 /  8, sign p 0.210   AUC +0.095 [+0.018, +0.172]
+    vs LAYA    decision +0.090 [-0.060, +0.230]  right only here / only LAYA: 35 / 26, sign p 0.306   AUC +0.150 [-0.002, +0.297]
+    vs CLAUDE  decision -0.020 [-0.080, +0.040]  right only here / only CLAUDE:  4 /  6, sign p 0.754   AUC -0.008 [-0.063, +0.041]
+    vs mean member  decision +0.047 [-0.027, +0.117]   AUC +0.079 [+0.024, +0.133]   (members' decisions: calibrated votes)
+
+  for scale: why_five.py's logit average (z-scored, equal weights) AUC 0.768 [0.669, 0.860]; vs CLAUDE +0.023 [-0.062, +0.106]; vs mean member +0.110 [+0.061, +0.157]
+  raw log-odds sum minus the vote panel, AUC +0.116 [+0.045, +0.183], decisions +0.020 [-0.030, +0.080], right only here/only the vote panel 5/3 (p 0.727)
+  calibrated log-odds sum minus the vote panel, AUC +0.119 [+0.037, +0.197], decisions +0.070 [-0.030, +0.160], right only here/only the vote panel 26/19 (p 0.371)
+  share of the summed |log-odds| each seat contributes, raw: JEV 0.26, LAYA 0.38, CLAUDE 0.36; LAYA's raw log-odds are all positive (APPROVE), mean +1.86
+
+==============================================================================================================
+(e) Positive control: LAYA replaced by a synthetic seat with independent signal (AUC 0.70 expected)
+==============================================================================================================
+  SYN: score s = +/-0.371 (later fixed / never fixed) + N(0, 1), independent of everything else;
+  p = sigmoid(0.742 * s), its exact posterior (calibrated); votes REJECT iff s > 0. 500 draws.
+  SYN realised AUC mean 0.696 [0.587, 0.806], vote bal.acc mean 0.641; within-label correlation with JEV -0.008, with CLAUDE +0.004 (JEV-CLAUDE: +0.527)
+  vote panel identical in all 6 orders in 500 of 500 draws
+
+  (mean over draws [2.5 %, 97.5 % of draws], share of draws > 0)        value
+  (a) votes: bal.acc                                                 +0.641 [+0.570, +0.710]  1.00
+  (a) votes: bal.acc minus best member's vote                        -0.004 [-0.080, +0.050]  0.42
+  (a) votes: bal.acc minus CLAUDE's vote                             +0.081 [+0.010, +0.150]  0.98
+  (a) votes: bal.acc minus mean member's vote                        +0.044 [-0.010, +0.093]  0.95
+  (a) votes: AUC of -Lambda                                          +0.690 [+0.627, +0.760]  1.00
+  (a) votes: AUC minus best member's AUC                             -0.061 [-0.118, -0.011]  0.01
+  (a) votes: AUC minus CLAUDE's AUC                                  -0.054 [-0.118, +0.015]  0.06
+  (d) raw log-odds sum: AUC                                          +0.750 [+0.716, +0.782]  1.00
+  (d) raw: AUC minus best member                                     -0.001 [-0.037, +0.026]  0.51
+  (d) raw: AUC minus CLAUDE                                          +0.005 [-0.029, +0.038]  0.63
+  (d) raw: AUC minus mean member                                     +0.056 [+0.037, +0.075]  1.00
+  (d) raw: bal.acc                                                   +0.659 [+0.610, +0.700]  1.00
+  (d) raw: bal.acc minus best member's vote                          +0.014 [-0.080, +0.080]  0.63
+  (d) raw, early stopping on (mean of 6 orders): bal.acc             +0.659 [+0.610, +0.700]  1.00
+  (d) raw, early stopping on (mean of 6 orders): AUC                 +0.749 [+0.715, +0.782]  1.00
+  (d) calibrated log-odds sum: AUC                                   +0.773 [+0.722, +0.847]  1.00
+  (d) calibrated: AUC minus best member                              +0.022 [-0.023, +0.064]  0.77
+  (d) calibrated: AUC minus CLAUDE                                   +0.028 [-0.023, +0.103]  0.77
+  (d) calibrated: AUC minus mean member                              +0.079 [+0.052, +0.119]  1.00
+  (d) calibrated: bal.acc                                            +0.695 [+0.630, +0.780]  1.00
+  (d) calibrated: bal.acc minus best member's calibrated vote        +0.035 [-0.030, +0.100]  0.81
+  logit average (z-scored): AUC                                      +0.775 [+0.725, +0.825]  1.00
+  logit average: AUC minus best member                               +0.024 [-0.021, +0.061]  0.86
+
+  power on n = 100 (first 100 draws, paired bootstrap with 200 resamples): share of draws whose 95 % interval excludes 0
+    a_ba_vs_best           0.00
+    dr_auc_vs_claude       0.00
+    dc_auc_vs_claude       0.10
+    dc_auc_vs_best         0.03
+
+==============================================================================================================
+Summary: each variant against its best, average and weakest member (paired, same 100 commits)
+==============================================================================================================
+  variant                                              bal.acc             - JEV vote          - CLAUDE vote                 - mean                 - LAYA
+  (a) uniform, votes (any order)                         0.560 -0.030 [-0.120, +0.060] +0.000 [+0.000, +0.000] +0.010 [-0.027, +0.050] +0.060 [+0.020, +0.110]
+  (a') uniform, calibrated votes                         0.590 +0.040 [-0.040, +0.110] -0.050 [-0.120, +0.030] +0.017 [-0.040, +0.073] +0.060 [-0.070, +0.200]
+  (b) learned weights, votes                             0.560 -0.030 [-0.120, +0.060] +0.000 [+0.000, +0.000] +0.010 [-0.027, +0.050] +0.060 [+0.020, +0.110]
+  (c) routing to the heaviest seat                       0.590 +0.000 [+0.000, +0.000] +0.030 [-0.060, +0.120] +0.040 [-0.020, +0.100] +0.090 [+0.000, +0.180]
+  (c') routing, calibrated votes                         0.610 +0.060 [-0.050, +0.170] -0.030 [-0.110, +0.050] +0.037 [-0.040, +0.110] +0.080 [-0.050, +0.210]
+  (d) raw log-odds, every seat                           0.580 -0.010 [-0.110, +0.080] +0.020 [-0.030, +0.080] +0.030 [-0.023, +0.087] +0.080 [+0.030, +0.140]
+  (d) raw log-odds, early stop, worst order              0.580 -0.010 [-0.110, +0.080] +0.020 [-0.030, +0.080] +0.030 [-0.023, +0.087] +0.080 [+0.030, +0.140]
+  (d) calibrated log-odds, every seat                    0.630 +0.080 [-0.020, +0.170] -0.010 [-0.070, +0.050] +0.057 [-0.017, +0.127] +0.100 [-0.050, +0.250]
+  (d) calibrated log-odds, learned omega                 0.620 +0.070 [-0.030, +0.160] -0.020 [-0.080, +0.040] +0.047 [-0.027, +0.117] +0.090 [-0.060, +0.230]
+  (decisions of the members: their votes at p > 0.5, or their calibrated votes for the calibrated variants)
+
+  variant                                                  AUC                  - JEV               - CLAUDE                 - mean                 - LAYA
+  (a) uniform, votes: -Lambda                            0.616 -0.025 [-0.085, +0.035] -0.128 [-0.215, -0.039] -0.041 [-0.112, +0.033] +0.030 [-0.130, +0.199]
+  (b) learned weights, votes: -Lambda                    0.596 -0.045 [-0.109, +0.017] -0.148 [-0.256, -0.042] -0.061 [-0.148, +0.027] +0.010 [-0.160, +0.183]
+  (d) raw log-odds sum                                   0.732 +0.091 [+0.033, +0.151] -0.013 [-0.082, +0.052] +0.075 [+0.019, +0.127] +0.146 [-0.006, +0.294]
+  (d) calibrated log-odds sum                            0.736 +0.094 [+0.014, +0.175] -0.009 [-0.060, +0.037] +0.078 [+0.023, +0.131] +0.150 [-0.003, +0.292]
+  (d) calibrated, learned omega                          0.736 +0.095 [+0.018, +0.172] -0.008 [-0.063, +0.041] +0.079 [+0.024, +0.133] +0.150 [-0.002, +0.297]
+  logit average (why_five.py), for scale                 0.768                        +0.023 [-0.062, +0.106] +0.110 [+0.061, +0.157]
+
+  38 s

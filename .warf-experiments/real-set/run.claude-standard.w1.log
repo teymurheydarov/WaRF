@@ -1,0 +1,5 @@
+  claude_cli/claude-opus-5-5; worker 1 of 3: 44 reviews to run (1 done) -> claude-standard.w1.jsonl
+  99b2161:gsBoundaryConditions.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  9b85bea:gsTrimSurface.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  840cdfa:gsHBSpline.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 1 stopping: 3 consecutive errors

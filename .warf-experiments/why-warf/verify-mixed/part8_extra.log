@@ -1,0 +1,13 @@
+== early stopping on the log-odds Lambda, learned omega
+  raw        commit-date order, per profile order (HIGH, decisions changed, BA): [(13, 0, 0.61), (13, 0, 0.61), (13, 0, 0.61), (13, 0, 0.61), (13, 0, 0.61), (13, 0, 0.61)]
+  calibrated commit-date order, per profile order (HIGH, decisions changed, BA): [(1, 0, 0.62), (1, 0, 0.62), (1, 0, 0.62), (1, 0, 0.62), (1, 0, 0.62), (1, 0, 0.62)]
+  raw        1200 random orders: HIGH per run 10 to 36 (mean 20.9); runs with a changed decision 560/1200 (max 4 per run); BA early minus no boundary mean +0.0034 [-0.010, +0.030]
+  calibrated 1200 random orders: HIGH per run 0 to 1 (mean 0.9); runs with a changed decision 36/1200 (max 1 per run); BA early minus no boundary mean -0.0002 [+0.000, +0.000]
+
+== --max-agents 1 (route 'only'): is the final leader the seat that led early?
+  final LOGIC leader equals the leader at the 6th LOGIC review in 76%, at the 21st in 92%; equals the first seat that was right when asked in 70% of 1200 runs
+
+== synthesis with three seats: when does one seat outvote two (theta per domain)?
+  LOGIC        lone REJECT wins from omega 1.000 (others 0.5 + 0.5); lone APPROVE wins from omega 1.000 (others 0.5 + 0.5)
+  SECURITY     lone REJECT wins from omega 0.667 (others 0.5 + 0.5); lone APPROVE wins from omega 1.000 (others 0.5 + 0.5)
+  PERFORMANCE  lone REJECT wins from omega 1.000 (others 0.5 + 0.5); lone APPROVE wins from omega 0.818 (others 0.5 + 0.5)

@@ -1,0 +1,46 @@
+== Part 2d: does Jev add to simple features? (unconditional logistic, ridge on standardised slopes)
+  log1p added                                          + logit Jev    ridge 0.01: LR  2.71 p 0.100 (z +1.62) | ridge 1: LR  2.71 p 0.100 (z +1.61) | ridge 10: LR  2.73 p 0.099 (z +1.54)
+  log1p added                                          + logit Jev3   ridge 0.01: LR  2.77 p 0.096 (z +1.64) | ridge 1: LR  2.77 p 0.096 (z +1.63) | ridge 10: LR  2.80 p 0.094 (z +1.56)
+  log1p added                                          + logit Claude ridge 0.01: LR 11.31 p 0.001 (z +3.08) | ridge 1: LR 11.29 p 0.001 (z +3.08) | ridge 10: LR 10.70 p 0.001 (z +2.90)
+  log1p added                                          + logit Laya   ridge 0.01: LR  0.63 p 0.427 (z +0.79) | ridge 1: LR  0.63 p 0.427 (z +0.81) | ridge 10: LR  0.72 p 0.398 (z +0.85)
+  log1p added+comment-only+deletion-only/deleted       + logit Jev    ridge 0.01: LR  1.46 p 0.227 (z +1.19) | ridge 1: LR  1.48 p 0.224 (z +1.21) | ridge 10: LR  1.62 p 0.203 (z +1.25)
+  log1p added+comment-only+deletion-only/deleted       + logit Jev3   ridge 0.01: LR  1.54 p 0.215 (z +1.22) | ridge 1: LR  1.55 p 0.213 (z +1.24) | ridge 10: LR  1.69 p 0.194 (z +1.27)
+  log1p added+comment-only+deletion-only/deleted       + logit Claude ridge 0.01: LR  4.32 p 0.038 (z +2.00) | ridge 1: LR  4.47 p 0.034 (z +2.09) | ridge 10: LR  5.24 p 0.022 (z +2.21)
+  log1p added+comment-only+deletion-only/deleted       + logit Laya   ridge 0.01: LR  0.77 p 0.379 (z +0.88) | ridge 1: LR  0.77 p 0.381 (z +0.87) | ridge 10: LR  0.76 p 0.385 (z +0.84)
+  11 features                                          + logit Jev    ridge 0.01: LR  0.78 p 0.379 (z +0.88) | ridge 1: LR  0.83 p 0.362 (z +0.96) | ridge 10: LR  1.19 p 0.276 (z +1.11)
+  11 features                                          + logit Jev3   ridge 0.01: LR  0.86 p 0.353 (z +0.92) | ridge 1: LR  0.92 p 0.337 (z +1.01) | ridge 10: LR  1.27 p 0.260 (z +1.14)
+  11 features                                          + logit Claude ridge 0.01: LR  7.71 p 0.005 (z +2.53) | ridge 1: LR  7.84 p 0.005 (z +2.61) | ridge 10: LR  7.52 p 0.006 (z +2.49)
+  11 features                                          + logit Laya   ridge 0.01: LR  0.65 p 0.422 (z +0.80) | ridge 1: LR  0.64 p 0.425 (z +0.78) | ridge 10: LR  0.58 p 0.448 (z +0.74)
+  logit Jev + log1p added: LR 9.90 p 0.0017 (z +2.97)
+  logit Jev + comment-only: LR 8.44 p 0.0037 (z -0.55)
+
+  pair-matched conditional logistic (50 pairs), ridge 0.1:
+    (nothing)                                            + logit Jev    LR  5.33, p 0.0210, beta +0.46
+    (nothing)                                            + logit Jev3   LR  5.45, p 0.0195, beta +0.46
+    (nothing)                                            + logit Claude LR 19.85, p 0.0000, beta +1.11
+    (nothing)                                            + logit Laya   LR  2.57, p 0.1086, beta +0.33
+    log1p added                                          + logit Jev    LR  1.09, p 0.2955, beta +0.24
+    log1p added                                          + logit Jev3   LR  1.12, p 0.2892, beta +0.25
+    log1p added                                          + logit Claude LR  9.48, p 0.0021, beta +0.91
+    log1p added                                          + logit Laya   LR  0.38, p 0.5382, beta +0.15
+    log1p added+comment-only+deletion-only/deleted       + logit Jev    LR  0.33, p 0.5670, beta +0.14
+    log1p added+comment-only+deletion-only/deleted       + logit Jev3   LR  0.38, p 0.5364, beta +0.15
+    log1p added+comment-only+deletion-only/deleted       + logit Claude LR  2.77, p 0.0961, beta +0.59
+    log1p added+comment-only+deletion-only/deleted       + logit Laya   LR  0.52, p 0.4709, beta +0.18
+    11 features                                          + logit Jev    LR  0.01, p 0.9126, beta +0.07
+    11 features                                          + logit Jev3   LR  0.06, p 0.8086, beta +0.11
+    11 features                                          + logit Claude LR  5.80, p 0.0161, beta +1.24
+    11 features                                          + logit Laya   LR  0.47, p 0.4922, beta +0.21
+
+  Jev's AUC within bins of added lines:
+    added 0-0: R  0 A  7  (one label only)  mean Jev p 0.541
+    added 1-1: R 12 A 22  Jev AUC 0.564  Claude AUC 0.608  mean Jev p R 0.474 A 0.428
+    added 2-3: R 10 A  9  Jev AUC 0.600  Claude AUC 0.789  mean Jev p R 0.447 A 0.407
+    added 4-7: R  9 A  2  Jev AUC 0.500  Claude AUC 0.611  mean Jev p R 0.723 A 0.775
+    added 8-15: R  6 A  6  Jev AUC 0.611  Claude AUC 0.667  mean Jev p R 0.562 A 0.367
+    added 16-more: R 13 A  4  Jev AUC 0.654  Claude AUC 0.606  mean Jev p R 0.754 A 0.632
+    pooled within-bin AUC: Jev 0.583, Claude 0.648 (460 comparisons)
+    permutation within bins: Jev within-bin AUC 0.583, one-sided p 0.120
+
+  added lines: mean R 10.3, A 4.5; median R 4, A 1
+  Spearman(Jev, added) among R +0.42, among A +0.03

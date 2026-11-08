@@ -1,0 +1,27 @@
+== (c) routing
+  votes right only Jev / only Claude: 25/22, sign p 0.77
+
+  [raw votes] single-seat vote BA: JEV 0.590, LAYA 0.500, CLAUDE 0.560
+   commit-date order, route 'shadow' (all seats vote and learn), per profile order:
+     JEV,LAYA,CLAUDE      BA 0.590; final leader JEV; JEV leads for good after 0 reviews (LOGIC-only reading 0); shares JEV 1.00, LAYA 0.00, CLAUDE 0.00
+     JEV,CLAUDE,LAYA      BA 0.590; final leader JEV; JEV leads for good after 0 reviews (LOGIC-only reading 0); shares JEV 1.00, LAYA 0.00, CLAUDE 0.00
+     LAYA,JEV,CLAUDE      BA 0.540; final leader JEV; JEV leads for good after 84 reviews (LOGIC-only reading 20); shares JEV 0.83, LAYA 0.17, CLAUDE 0.00
+     LAYA,CLAUDE,JEV      BA 0.530; final leader JEV; JEV leads for good after 84 reviews (LOGIC-only reading 21); shares JEV 0.82, LAYA 0.17, CLAUDE 0.01
+     CLAUDE,JEV,LAYA      BA 0.540; final leader JEV; JEV leads for good after 84 reviews (LOGIC-only reading 21); shares JEV 0.82, LAYA 0.00, CLAUDE 0.18
+     CLAUDE,LAYA,JEV      BA 0.540; final leader JEV; JEV leads for good after 84 reviews (LOGIC-only reading 21); shares JEV 0.82, LAYA 0.00, CLAUDE 0.18
+   1200 random orders, route 'shadow': BA mean 0.548 [0.500, 0.590]; final leader JEV 100%, LAYA 0%, CLAUDE 0%; JEV leads for good after median/quartiles (81.0, 52.0, 93.0) (LOGIC-only (73.0, 32.0, 91.0); runs where it ends as leader 1184/1200); routed shares JEV 0.67, LAYA 0.04, CLAUDE 0.29
+   1200 random orders, route 'only': BA mean 0.548 [0.490, 0.590]; final leader JEV 40%, LAYA 22%, CLAUDE 38%; JEV leads for good after median/quartiles (58, 9.0, 88.0) (LOGIC-only (5, 1.0, 12.5); runs where it ends as leader 489/1200); routed shares JEV 0.38, LAYA 0.25, CLAUDE 0.37
+
+  [calibrated votes] single-seat vote BA: JEV 0.550, LAYA 0.530, CLAUDE 0.640
+   commit-date order, route 'shadow' (all seats vote and learn), per profile order:
+     JEV,LAYA,CLAUDE      BA 0.610; final leader CLAUDE; CLAUDE leads for good after 94 reviews (LOGIC-only reading 19); shares JEV 0.06, LAYA 0.17, CLAUDE 0.77
+     JEV,CLAUDE,LAYA      BA 0.600; final leader CLAUDE; CLAUDE leads for good after 94 reviews (LOGIC-only reading 18); shares JEV 0.06, LAYA 0.12, CLAUDE 0.82
+     LAYA,JEV,CLAUDE      BA 0.620; final leader CLAUDE; CLAUDE leads for good after 94 reviews (LOGIC-only reading 19); shares JEV 0.02, LAYA 0.21, CLAUDE 0.77
+     LAYA,CLAUDE,JEV      BA 0.610; final leader CLAUDE; CLAUDE leads for good after 94 reviews (LOGIC-only reading 19); shares JEV 0.01, LAYA 0.21, CLAUDE 0.78
+     CLAUDE,JEV,LAYA      BA 0.590; final leader CLAUDE; CLAUDE leads for good after 94 reviews (LOGIC-only reading 18); shares JEV 0.01, LAYA 0.12, CLAUDE 0.87
+     CLAUDE,LAYA,JEV      BA 0.590; final leader CLAUDE; CLAUDE leads for good after 94 reviews (LOGIC-only reading 18); shares JEV 0.01, LAYA 0.12, CLAUDE 0.87
+   1200 random orders, route 'shadow': BA mean 0.602 [0.550, 0.640]; final leader JEV 0%, LAYA 0%, CLAUDE 100%; CLAUDE leads for good after median/quartiles (67.0, 41.0, 86.0) (LOGIC-only (28.0, 11.0, 48.0); runs where it ends as leader 1170/1200); routed shares JEV 0.09, LAYA 0.13, CLAUDE 0.79
+   1200 random orders, route 'only': BA mean 0.577 [0.510, 0.640]; final leader JEV 26%, LAYA 24%, CLAUDE 49%; CLAUDE leads for good after median/quartiles (50, 3.0, 86.0) (LOGIC-only (2.0, 0.0, 7.0); runs where it ends as leader 589/1200); routed shares JEV 0.28, LAYA 0.25, CLAUDE 0.47
+
+  posterior P(highest vote accuracy), final LOGIC Betas JEV Beta(57,41), LAYA Beta(49,49), CLAUDE Beta(55,43): JEV 0.582, LAYA 0.061, CLAUDE 0.358
+  pooled over domains: JEV Beta(60,42) 0.635, LAYA Beta(51,51) 0.052, CLAUDE Beta(57,45) 0.313

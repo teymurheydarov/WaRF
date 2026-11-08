@@ -1,0 +1,75 @@
+{
+ "all": {
+  "claude": {
+   "ba": 0.8241,
+   "ci": [
+    0.75,
+    0.8889
+   ],
+   "caught": 52,
+   "passed": 37,
+   "n": 54
+  },
+  "claude-standard": {
+   "ba": 0.8611,
+   "ci": [
+    0.7963,
+    0.9259
+   ],
+   "caught": 51,
+   "passed": 42,
+   "n": 54
+  },
+  "five_minus_one": {
+   "d": 0.037,
+   "ci": [
+    0.0,
+    0.0833
+   ],
+   "only_five": [
+    "d6c93de:gsFileManager.cpp:clean",
+    "893626d:test_spectra.cpp:clean",
+    "838db33:gsKnotDomainIterator.h:clean",
+    "9790e5a:gsFileManager.cpp:clean",
+    "9e5b11e:gsBSplineBasis.h:clean"
+   ],
+   "only_one": [
+    "be9bf4b:Householder.h:planted"
+   ]
+  }
+ },
+ "cleaned (no harmless/dead/non-compiling plants, no defective originals)": {
+  "claude": {
+   "ba": 0.9286,
+   "ci": [
+    0.8714,
+    0.9714
+   ],
+   "caught": 35,
+   "passed": 30,
+   "n": 35
+  },
+  "claude-standard": {
+   "ba": 0.9571,
+   "ci": [
+    0.9143,
+    1.0
+   ],
+   "caught": 35,
+   "passed": 32,
+   "n": 35
+  },
+  "five_minus_one": {
+   "d": 0.0286,
+   "ci": [
+    0.0,
+    0.0714
+   ],
+   "only_five": [
+    "d6c93de:gsFileManager.cpp:clean",
+    "838db33:gsKnotDomainIterator.h:clean"
+   ],
+   "only_one": []
+  }
+ }
+}

@@ -1,0 +1,11 @@
+batch 1: AUC 0.664 mean p 0.189
+batch 2: AUC 0.787 mean p 0.205
+batch 3: AUC 0.816 mean p 0.221
+batch 4: AUC 0.919 mean p 0.265
+batch 5: AUC 0.873 mean p 0.271
+batch 6: AUC 0.623 mean p 0.190
+batch 7: AUC 0.838 mean p 0.229
+batch 8: AUC 0.782 mean p 0.212
+mean within-batch AUC 0.788; pooled 0.780
+pooled AUC of within-batch ranks 0.786
+100: AUC patch_chars 0.502  state_tokens 0.464

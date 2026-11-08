@@ -1,0 +1,74 @@
+=== --arm one
+  Jev at https://openrouter.ai/api, model jev-latest
+  arm one: 97 reviews to run (3 done) -> sessions_one.jsonl
+  10/97  0.5 s per review, ~1 min left
+  20/97  0.5 s per review, ~1 min left
+  30/97  0.4 s per review, ~0 min left
+  40/97  0.4 s per review, ~0 min left
+  50/97  0.4 s per review, ~0 min left
+  60/97  0.4 s per review, ~0 min left
+  70/97  0.4 s per review, ~0 min left
+  80/97  0.4 s per review, ~0 min left
+  90/97  0.4 s per review, ~0 min left
+  done: 97 reviews in 0.7 min
+rc=0
+=== --arm one --repeat 20
+  Jev at https://openrouter.ai/api, model jev-latest
+  arm one: 20 reviews to run (0 done) -> repeat_one.jsonl
+  10/20  0.4 s per review, ~0 min left
+  20/20  0.4 s per review, ~0 min left
+  done: 20 reviews in 0.1 min
+rc=0
+=== --arm five
+  Jev at https://openrouter.ai/api, model jev-latest
+  arm five: 100 reviews to run (0 done) -> sessions_five.jsonl
+  10/100  3.0 s per review, ~4 min left
+  20/100  2.9 s per review, ~4 min left
+  30/100  2.9 s per review, ~3 min left
+  40/100  2.9 s per review, ~3 min left
+  50/100  2.9 s per review, ~2 min left
+  60/100  2.9 s per review, ~2 min left
+  70/100  3.0 s per review, ~1 min left
+  80/100  3.0 s per review, ~1 min left
+  90/100  3.0 s per review, ~0 min left
+  100/100  3.0 s per review, ~0 min left
+  done: 100 reviews in 5.0 min
+rc=0
+=== --arm one --plant
+  Jev at https://openrouter.ai/api, model jev-latest
+  arm one: 100 reviews to run (0 done) -> controls_one.jsonl
+  10/100  0.4 s per review, ~1 min left
+  20/100  0.4 s per review, ~1 min left
+  30/100  0.4 s per review, ~0 min left
+  40/100  0.4 s per review, ~0 min left
+  50/100  0.4 s per review, ~0 min left
+  60/100  0.4 s per review, ~0 min left
+  70/100  0.4 s per review, ~0 min left
+  80/100  0.4 s per review, ~0 min left
+  done: 86 reviews in 0.6 min; 14 skipped, the patch adds no line to plant after
+rc=0
+=== --arm five --plant
+  Jev at https://openrouter.ai/api, model jev-latest
+  arm five: 100 reviews to run (0 done) -> controls_five.jsonl
+  10/100  1.7 s per review, ~2 min left
+  20/100  1.6 s per review, ~2 min left
+  30/100  1.6 s per review, ~2 min left
+  40/100  1.7 s per review, ~2 min left
+  50/100  1.7 s per review, ~1 min left
+  60/100  1.7 s per review, ~1 min left
+  70/100  1.7 s per review, ~1 min left
+  80/100  1.7 s per review, ~1 min left
+  done: 86 reviews in 2.4 min; 14 skipped, the patch adds no line to plant after
+rc=0
+  Jev at https://openrouter.ai/api, model jev-latest
+  arm standard: 98 reviews to run (2 done) -> sessions_standard.jsonl
+  10/98  2.8 s per review, ~4 min left
+  20/98  2.4 s per review, ~3 min left
+  30/98  2.3 s per review, ~3 min left
+  40/98  2.2 s per review, ~2 min left
+  50/98  2.2 s per review, ~2 min left
+  60/98  2.2 s per review, ~1 min left
+  70/98  2.2 s per review, ~1 min left
+  80/98  2.2 s per review, ~1 min left
+  90/98  2.1 s per review, ~0 min left
+  done: 98 reviews in 3.4 min

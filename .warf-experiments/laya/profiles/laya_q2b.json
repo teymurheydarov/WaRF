@@ -1,0 +1,23 @@
+[
+  {
+    "name": "LAYA",
+    "persona": "True or false: this code contains a defect that causes incorrect behaviour or a security vulnerability. True means REJECT, false means APPROVE.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 4.0,
+        "beta": 6.0
+      },
+      "SECURITY": {
+        "alpha": 1.0,
+        "beta": 5.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 3.0
+      }
+    },
+    "last_updated": "2026-10-29T16:14:28.099769+00:00",
+    "provider": "laya",
+    "persona_hash": "b9bc07303c74"
+  }
+]

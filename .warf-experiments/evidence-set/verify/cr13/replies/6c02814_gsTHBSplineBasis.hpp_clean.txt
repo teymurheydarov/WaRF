@@ -1,0 +1,174 @@
+ID 6c02814:gsTHBSplineBasis.hpp:clean
+commit 6c02814664399553a46ffb90202e4a8be9cadb18 file src/gsHSplines/gsTHBSplineBasis.hpp date 2024-07-19 subj updates in gsHSplines
+
+=== ONE decision REJECT
+[REJECT] - **The flag doesn't apply to this basis.** The patch forwards the outer `sameElement` flag into `m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. That flag means "all columns of `u` lie in the same element of *this THB basis*." The callee is a different basis: the 1D component at level `level`. Its knot spans are not THB elements, so forwarding the promise is a contract mismatch.
+
+- **The call is reused across different bases.** `cwb` and the call site serve many active functions. Each can come from a different `level`, and the loop also runs over every component `k` and every point `i`. If the callee honours `sameElement` by reusing previous span or support data instead of recomputing from `tmp`, it would mix up data:
+  - It could return values computed for another level's knot vector or another coordinate direction.
+  - `first = ...firstActive(tmp.value())` is recomputed independently. So `cwb[l].at(ti[k]-first)` would index into results laid out for a different span, giving silently wrong values or out-of-range access.
+
+- **There's no upside.** `tmp` is a single 1×1 point, so the flag can't save any work here. At best the change is a no-op; at worst it is a correctness hazard. The original call, using the default `false`, was the correct and safe choice.
+
+- **The comment edit has the same problem.** It adds `sameElement` to the commented-out `evalAllDersSingle_into` call, which spreads the same mistaken contract into the "has a bug" note.
+
+I don't recall exactly how the B-spline component's `evalAllDers_into` uses `sameElement`, so the bad-data scenario depends on that. But the forwarding is wrong by contract either way, and it buys nothing.
+
+**Recommendation:** revert to `evalAllDers_into(tmp, n, cwb)`.
+
+=== FIVE decision APPROVE
+--- SKEPTIC [APPROVE]
+The only functional change passes `sameElement` to the 1-D `component(k).evalAllDers_into(tmp, n, cwb, sameElement)` call. The other edited line is a comment.
+
+- **Single-point input.** `tmp` is a 1×1 matrix, so it holds exactly one evaluation point. The `sameElement` contract ("all points lie in the same element") is trivially true for one point. Whatever the caller passes, the 1-D basis cannot misuse it: it computes the active span and derivatives for that single point either way.
+- **Scope.** The hunk header shows the enclosing `evalAllDers_into(const gsMatrix<T> & u, int n, ...)`. It matches the gsBasis virtual signature, which ends in `bool sameElement`, so the identifier is the function's own parameter. If it were not, the patch would fail to compile rather than misbehave.
+- **Index consistency.** `firstActive(tmp.value())` is computed separately from the same single point. So `cwb[l].at(ti[k]-first)` still indexes the same active-function ordering the 1-D evaluation produced. `cwb` is resized by the callee for each `k`, so nothing stale carries over between components.
+- **Unchanged logic I checked.** The early `break` on a zero index after `j != 0` (padding in `active_into`) was not changed. The `n>-1` value product and the `n>0` gradient product are also unchanged and correct. The latter places the k-th derivative factor and multiplies by the 0-th order factors of every other direction.
+
+I could not construct an input, state, or call sequence where this patch changes the results.
+--- ADVOCATE [APPROVE]
+The patch forwards `sameElement` into the per-direction 1D `evalAllDers_into` call, and makes the matching edit in the commented-out alternative. I found no clear defect.
+
+- **The identifier is in scope.** In G+Smo, `gsBasis::evalAllDers_into` and its overrides take `bool sameElement = false` as their last argument. The THB override shown here has that signature, which the truncated header is consistent with. So this compiles and simply passes the caller's flag along.
+
+- **The semantics are preserved.** `sameElement` promises that all evaluation points lie in a single element. A THB element is a cell at its own level. Each tensor-level basis `m_bases[level]` that contributes an active function there is coarser or equal, so that cell lies inside one element of that basis. The promise still holds for the level basis, and therefore for each 1D component.
+
+- **It is harmless at the call site.** Each call evaluates a single point (`tmp` is 1×1). An "all points share an element" flag cannot change the result for one point. It can only skip redundant work.
+
+- **Nothing else depends on it.** `firstActive(tmp.value())` is still computed directly from the point. The offset `ti[k]-first` into `cwb` therefore does not depend on any span reuse the flag might enable.
+
+- **The rest of the hunk is unchanged context.** That includes the zero-padding `break`, the `m_is_truncated` check, and the value and first-derivative assembly. I see no change in behavior there.
+
+Overall this is a consistent change that does not alter results.
+--- AUDITOR [APPROVE]
+The patch makes two changes inside `gsTHBSplineBasis<d,T>::evalAllDers_into`:
+
+1. **Functional change:** it forwards `sameElement` to the per-direction call: `component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. The hunk header cuts off the signature at `int n,`. This assumes the enclosing function takes a `bool sameElement` parameter, which matches the current G+Smo `gsBasis::evalAllDers_into(u, n, result, bool sameElement)` interface. Passing it down keeps the THB override consistent with the base-class API.
+2. **Comment-only change:** it updates the disabled `evalAllDersSingle_into` line. This has no runtime effect.
+
+**Correctness:**
+- `tmp` is a single 1×1 point, so the inner 1D call evaluates only one point. The `sameElement` hint means "all evaluation points share one element", which is trivially true for one point. It cannot produce a different active set or different values.
+- `firstActive(tmp.value())` is still computed on its own from the same point. So the offset `ti[k]-first` into `cwb` stays correct whatever the flag says.
+- Nothing else changes: indexing, result sizing, the truncated/non-truncated branching and the derivative assembly are all as before.
+
+**Risks noted (not blocking):**
+- The patch only compiles if `sameElement` is in scope, meaning it is a parameter of the enclosing function. The truncated header suggests it is, and the build/CI would catch it if not.
+- Some existing issues remain, such as `unsigned level` shadowing the outer `index_t level`, but this patch does not introduce or worsen them.
+
+The change is low-risk API-consistent parameter forwarding with no observable change in behaviour, so I approve it.
+--- TEST-FOCUSED [REJECT]
+The patch forwards the caller's `sameElement` flag into a call where that flag means something different.
+
+- **Contract mismatch.** On the outer `evalAllDers_into(u, n, result, sameElement)`, `sameElement` is a promise about the caller's point set `u`: all its points lie in one element of the hierarchical mesh. The patched line passes this flag to `m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. That call works on a different point set (the single coordinate `u(k,i)` in `tmp`), on a 1D basis at a specific `level`, with its own knot spans. The flag is now a claim about input it was never checked against. For a one-point `tmp` it may be redundant at best. At worst, the level basis or a future version of it may use the flag to skip span lookup or reuse cached data, which is valid only when the original promise holds for that basis.
+
+- **Why a failure would be silent.** If the flag changes anything in the 1D evaluator, the result is a set of plausible-looking derivative values in `cwb`. These pass through `cw[k].at(l) = cwb[l].at(ti[k]-first)`, where `first` comes from a separate `firstActive(tmp.value())` call that ignores `sameElement`. If the two disagree about which span is active, `ti[k]-first` reads the wrong function's value with no assertion and no exception. The products in `result[0]` and `result[1]` are then wrong but finite. A test would catch this only if it happened to call with `sameElement=true` on points where the level-`level` spans differ from what the evaluator assumed. That depends on refinement layout, which a typical test does not control.
+
+- **No benefit.** `tmp` holds exactly one point, so `sameElement` cannot make this call faster. It adds risk and gains nothing; the old call without the flag was correct.
+
+- **Pre-existing fragile code, not introduced here.**
+  - `if (j != 0 && index == 0) break;` treats a real basis function with index 0 as padding.
+  - The inner `unsigned level` shadows `const index_t level`.
+
+  Both are silent-failure patterns, but this patch adds a new one rather than fixing either.
+
+Drop the `sameElement` argument from the inner call, or pass `false`.
+--- BOUNDARY [APPROVE]
+The patch makes two changes. It edits a commented-out line, which has no runtime effect. It also forwards `sameElement` from the enclosing `evalAllDers_into` to the 1-D call `component(k).evalAllDers_into(tmp, n, cwb, sameElement)`. The diff truncates the outer signature, so I'm assuming `sameElement` is a parameter there.
+
+**Boundary analysis**
+
+- **`sameElement` semantics on the inner call.** The inner call always gets `tmp`, a 1×1 matrix holding one point. A single point trivially lies in one element, so `sameElement = true` cannot violate the callee's precondition. With `false` the behavior is unchanged from before. Category (a).
+- **`tmp` reused across iterations at different `level`s and points.** Each inner call is a separate `const` invocation on possibly different component bases. Nothing in the visible code depends on state carried between calls under `sameElement`. `first` is recomputed independently via `firstActive(tmp.value())`, so the offset `ti[k]-first` into `cwb[l]` stays consistent with that call's evaluation. Category (a).
+- **`n = 0`.** `cwb` has one entry, the `l` loop runs once, and the `n>0` derivative block is skipped. The new argument doesn't change this. Category (a).
+- **`n < 0` and empty `u` / zero active functions.** The loops don't execute, and the new argument is never reached. Categories (a)/(b).
+- **Truncated functions (`level != -1`).** This path is outside the hunk and unaffected.
+
+**Result**
+
+Every boundary falls in category (a) or (b). The only caveat is unverified: the patch assumes `sameElement` exists in the enclosing function's signature. If it didn't, the build would fail rather than produce a wrong runtime result, and the diff gives no evidence of that. I found no input that yields an incorrect value.
+
+=== DIFF
+diff --git a/src/gsHSplines/gsTHBSplineBasis.hpp b/src/gsHSplines/gsTHBSplineBasis.hpp
+index c6b4a98db..f8dac8d72 100644
+--- a/src/gsHSplines/gsTHBSplineBasis.hpp
++++ b/src/gsHSplines/gsTHBSplineBasis.hpp
+@@ -1317,63 +1317,63 @@ void gsTHBSplineBasis<d,T>::evalAllDers_into(const gsMatrix<T> & u, int n,
+     gsMatrix<T> tmp(1,1);
+     std::vector<gsMatrix<T> > cw(d), cwb, cwt(d);
+     for ( short_t k=0; k<d; ++k)
+         cw[k].resize(n+1,1);
+     gsVector<index_t, d> ti;
+     gsVector<index_t> str(n+1);
+ 
+     this->active_into(u, indices);
+     for (int l = 0; l <= n; l++)
+     {
+         str[l] = numCompositions(l,d);
+         result[l].setZero(indices.rows() * str[l], u.cols());
+     }
+ 
+     for (index_t i = 0; i < indices.cols(); i++) // for all points
+     {
+         for (index_t j = 0; j < indices.rows(); j++) // for all active functions
+         {
+             const index_t index = indices(j, i);
+             if (j != 0 && index == 0)
+                 break;
+ 
+             const index_t level = this->m_is_truncated[index];
+             if (level == -1)  // basis function not truncated
+             {
+                 unsigned level = this->levelOf(index);
+                 ti = this->m_bases[level]->tensorIndex(flatTensorIndexOf(index, level));
+                 for(short_t k = 0; k!=d; ++k)
+                 {
+                     *tmp.data() = u(k,i);
+-                    //this->m_bases[level]->component(k).evalAllDersSingle_into(ti[k], tmp, n, cw[k]); // has a bug
++                    //this->m_bases[level]->component(k).evalAllDersSingle_into(ti[k], tmp, n, cw[k], sameElement); // has a bug
+                     // less efficient alternative
+-                    this->m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb);
++                    this->m_bases[level]->component(k).evalAllDers_into(tmp, n, cwb, sameElement);
+                     const index_t first = this->m_bases[level]->component(k).firstActive(tmp.value());
+ 
+                     for (int l = 0; l <= n; l++)
+                     {
+                         cw[k].at(l) = cwb[l].at(ti[k]-first);
+                     }
+                     //end less efficient alternative
+                 }
+                 // -- Start eval
+                 if (n>-1)
+                 {
+                     result[0](j,i) = cw[0].at(0);
+                     for ( short_t k=1; k<d; ++k)
+                         result[0](j,i) *= cw[k].at(0);
+                 }
+ 
+                 if (n>0)
+                 {
+                     T * acc = result[1].col(i).data() + str[1]*j;
+                     for ( short_t k=0; k<d; ++k)
+                     {
+                         // derivative w.r.t. k-th variable
+                         *acc = cw[k].at(1);
+                         for ( short_t l=0; l<k; ++l)
+                             *acc *= cw[l].at(0);
+                         for ( short_t l=k+1; l<d; ++l)
+                             *acc *= cw[l].at(0);
+                         ++acc;
+                     }
+                 }
+
+
+────────────────────────────────────────────────────────────
+# Full function context (WaRF function-aware diff)
+
+    gsVector<index_t> str(n+1);
+
+    this->active_into(u, indices);
+    for (int l = 0; l <= n; l++)
+    {
+        str[l] = numCompositions(l,d);
+        result[l].setZero(indices.rows() * str[l], u.cols());
+    }
+

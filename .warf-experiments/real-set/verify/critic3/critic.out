@@ -1,0 +1,56 @@
+W3 replay keys sample: ['fold']
+
+== single arms ==
+  claude                 BA 0.758
+  claude-strict          BA 0.856
+  claude-advocate        BA 0.841
+  claude-commit          BA 0.773
+  claude-commit-strict   BA 0.864
+  W1.ADVOCATE            BA 0.826
+W1.SKEPTIC missing on 1
+
+== OR / AND of every pair (BA; vs commit-strict only-rule/only-cs, p) ==
+  OR        claude-strict + claude-commit-strict 0.879  AND 0.841  agree 121/132  vs cs 4/2 p 0.688
+  OR      claude-advocate + claude-commit-strict 0.848  AND 0.856  agree 117/132  vs cs 5/7 p 0.774
+  OR        claude-strict + claude-advocate      0.841  AND 0.856  agree 124/132  vs cs 6/9 p 0.607
+  OR        claude-strict + W1.ADVOCATE          0.833  AND 0.848  agree 120/132  vs cs 6/10 p 0.454
+  OR claude-commit-strict + W1.ADVOCATE          0.833  AND 0.856  agree 115/132  vs cs 5/9 p 0.424
+  OR      claude-advocate + W1.ADVOCATE          0.833  AND 0.833  agree 124/132  vs cs 7/11 p 0.481
+  OR        claude-strict + claude-commit        0.780  AND 0.848  agree 95/132  vs cs 13/24 p 0.099
+  OR        claude-commit + claude-commit-strict 0.780  AND 0.856  agree 94/132  vs cs 13/24 p 0.099
+  OR        claude-commit + W1.ADVOCATE          0.773  AND 0.826  agree 103/132  vs cs 13/25 p 0.073
+  OR      claude-advocate + claude-commit        0.765  AND 0.848  agree 99/132  vs cs 13/26 p 0.053
+  OR               claude + claude-strict        0.758  AND 0.856  agree 95/132  vs cs 14/28 p 0.044
+  OR               claude + claude-commit-strict 0.758  AND 0.864  agree 90/132  vs cs 13/27 p 0.038
+  OR               claude + claude-advocate      0.758  AND 0.841  agree 103/132  vs cs 14/28 p 0.044
+  OR               claude + W1.ADVOCATE          0.758  AND 0.826  agree 105/132  vs cs 14/28 p 0.044
+  OR               claude + claude-commit        0.720  AND 0.811  agree 112/132  vs cs 14/33 p 0.008
+
+== OR(strict, commit-strict) vs each seat, by other_files ==
+  no other files: 46 items (19 defective)
+    vs claude-strict: only OR / only seat (1, 0)
+    vs claude-commit-strict: only OR / only seat (1, 1)
+    seats disagree on 3
+  other files: 86 items (47 defective)
+    vs claude-strict: only OR / only seat (3, 1)
+    vs claude-commit-strict: only OR / only seat (3, 1)
+    seats disagree on 8
+
+== size ==  AUC added lines 0.834; AUC commit-input chars 0.638; AUC other_files chars 0.596
+  threshold on added lines: in-sample best BA 0.795 (t=7), out-of-fold BA 0.750
+  threshold on commit chars: in-sample best BA 0.621 (t=19876), out-of-fold BA 0.568
+
+== discordant items W3(OR) vs commit-strict, with added lines / other_files ==
+  840cdfa:gsHBSpline.h:defective                     def=True  strict=True  cs=False added=26 other=10
+  1288e1a:gsBoehm_.cpp:clean                         def=False strict=True  cs=False added=1 other=14
+  ec3d317:gsQuadRule.h:clean                         def=False strict=False cs=True  added=6 other=6
+  2871374:gsTriMeshToSolid.hpp:defective             def=True  strict=True  cs=False added=8 other=17
+  c1895d2:gsBenchmark.h:defective                    def=True  strict=False cs=True  added=2 other=2
+  fcd9e3c:gsParaviewDataSet.h:defective              def=True  strict=False cs=True  added=51 other=0
+  7eccbe3:gsAdaptiveParametrization.hpp:defective    def=True  strict=False cs=True  added=46 other=2
+  138f4a7:grad_expr.h:defective                      def=True  strict=True  cs=False added=1 other=0
+  6c33a77:gsMultiPatch_.cpp:clean                    def=False strict=True  cs=False added=1 other=0
+  4f443cc:gsKroneckerMatrix.h:defective              def=True  strict=True  cs=False added=62 other=2
+  f104284:gsBoehm_.cpp:defective                     def=True  strict=False cs=True  added=33 other=12
+
+== timing == claude-strict records 2026-11-05T16:57:02.349529+00:00 .. 2026-11-05T19:40:42.236119+00:00; commit-strict 2026-11-05T20:47:00.376735+00:00 .. 2026-11-06T05:41:36.212742+00:00

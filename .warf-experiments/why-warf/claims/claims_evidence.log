@@ -1,0 +1,169 @@
+========================================================================================================
+1. The labelled corpus (.warf/sessions.jsonl), Claude Haiku 4.5
+========================================================================================================
+
+1a. Early stopping and cost (all logged sessions)
+  252 sessions; sprt_fired (HIGH) on 115 (46%); the technical document quotes 109 of 246 (44%).
+  3-agent default: 3 votes no boundary x29, 3 votes fired x2
+  5-agent default: 1 votes no boundary x12, 2 votes no boundary x11, 3 votes no boundary x8, 3 votes fired x84, 4 votes no boundary x7, 4 votes fired x4, 5 votes no boundary x70, 5 votes fired x25
+  5-agent era, sessions that are full five-agent pools or stopped early at k=3/4 (upper bound on early stops: some 3-vote sessions may be '--agents' pools of three): 183
+    stopped before the fifth agent: 88/183 = 48%; agent calls per review 4.06 (a single agent: 1.00; five without early stopping: 5.00)
+  token counts are logged on 71 of 252 sessions (the CLI provider reports none)
+    2 votes, no boundary: n 5, median tokens 14702, per call 7351
+    3 votes, no boundary: n 29, median tokens 23359, per call 7786
+    3 votes, fired: n 18, median tokens 2218, per call 739
+    4 votes, fired: n 4, median tokens 41469, per call 10367
+    5 votes, no boundary: n 12, median tokens 9569, per call 1914
+    5 votes, fired: n 3, median tokens 4979, per call 996
+
+1b. Confidence bands on the 62 labelled sessions (stored labels), WaRF vs the first agent asked
+  LOW     WaRF 4/15 = 27%     [0.08, 0.55]   first agent 7/15 = 47%     [0.21, 0.73]   WaRF-only/agent-only right 2/5, sign p 0.45
+  MEDIUM  WaRF 22/35 = 63%    [0.45, 0.79]   first agent 19/35 = 54%    [0.37, 0.71]   WaRF-only/agent-only right 4/1, sign p 0.38
+  HIGH    WaRF 9/12 = 75%     [0.43, 0.95]   first agent 9/12 = 75%     [0.43, 0.95]   WaRF-only/agent-only right 1/1, sign p 1.00
+  exact trend test, accuracy rising LOW < MEDIUM < HIGH: WaRF one-sided p 0.008; first agent on the same bands p 0.108
+  HIGH vs the rest, WaRF right: 9/12 = 75% vs 26/50 = 52%, Fisher p 0.20
+  LOW 'below a coin flip': 4/15 = 27%, exact binomial p vs 0.5 = 0.118 (inverting LOW would give 11/15; the first agent asked was right on 7)
+  MEDIUM vs LOW, WaRF right: Fisher p 0.030
+  the same votes replayed at equal weights (what agreement alone gives): LOW 9/17 = 53%, MEDIUM 30/45 = 67%, HIGH 0/0; trend p 0.239
+  five equal-weight votes in LOGIC: a 3-2 split gives normalised +-0.2, margin exactly 0.2 -> MEDIUM/MEDIUM (LOW cannot occur in LOGIC on a fresh five-agent install)
+  split by what was reviewed (synthetic = validation/ files with a planted defect; real = requests, urllib3, G+Smo):
+    synthetic n  8: LOW 0/0, MEDIUM 0/0, HIGH 8/8 = 100%; first agent asked right 8/8 = 100%, WaRF right 8/8 = 100%
+    real      n 54: LOW 4/15 = 27%, MEDIUM 22/35 = 63%, HIGH 1/4 = 25%; first agent asked right 27/54 = 50%, WaRF right 27/54 = 50%
+    real code only, exact trend test: one-sided p 0.166
+  HIGH sessions in detail:
+    2026-06-20  file_utils.py                  REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  db_query.py                    REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  counter.py                     REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  counter.py                     REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  runner.py                      REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  string_ops.c                   REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  file_server.py                 REJECT  truth REJECT  votes 3 debate no
+    2026-07-23  node_list.cpp                  REJECT  truth REJECT  votes 3 debate no
+    2026-07-25  help.py                        REJECT  truth REJECT  votes 5 debate yes
+    2026-07-27  _internal_utils.py             REJECT  truth APPROVE votes 5 debate yes   WRONG
+    2026-08-03  connection.py                  REJECT  truth APPROVE votes 3 debate no   WRONG
+    2026-08-03  connection.py                  REJECT  truth APPROVE votes 3 debate no   WRONG
+
+1c. Per-domain accuracy of each agent where it voted (stored labels; debate sessions scored on Round 2 as WaRF does)
+  AUDITOR       LOGIC 18/20 = 90%    SECURITY 19/33 = 58%    PERFORMANCE 3/3 = 100% LOGIC vs SECURITY Fisher p 0.02
+                always-APPROVE on the same sessions: LOGIC 17/20 = 85% SECURITY 16/33 = 48%; balanced accuracy LOGIC 0.94 SECURITY 0.58
+  ADVOCATE      LOGIC 13/16 = 81%    SECURITY 19/33 = 58%    PERFORMANCE 3/3 = 100% LOGIC vs SECURITY Fisher p 0.12
+                always-APPROVE on the same sessions: LOGIC 15/16 = 94% SECURITY 16/33 = 48%; balanced accuracy LOGIC 0.43 SECURITY 0.58
+  SKEPTIC       LOGIC 3/12 = 25%     SECURITY 17/30 = 57%    PERFORMANCE 2/3 = 67%  LOGIC vs SECURITY Fisher p 0.09
+                always-APPROVE on the same sessions: LOGIC 12/12 = 100% SECURITY 16/30 = 53%; balanced accuracy LOGIC nan SECURITY 0.59
+  BOUNDARY      LOGIC 6/12 = 50%     SECURITY 7/15 = 47%     PERFORMANCE 0/0        LOGIC vs SECURITY Fisher p 1.00
+                always-APPROVE on the same sessions: LOGIC 9/12 = 75% SECURITY 10/15 = 67%; balanced accuracy LOGIC 0.56 SECURITY 0.45
+  TEST-FOCUSED  LOGIC 3/17 = 18%     SECURITY 11/21 = 52%    PERFORMANCE 0/0        LOGIC vs SECURITY Fisher p 0.04
+                always-APPROVE on the same sessions: LOGIC 14/17 = 82% SECURITY 10/21 = 48%; balanced accuracy LOGIC 0.50 SECURITY 0.50
+  labels by domain: LOGIC 19 APPROVE / 3 REJECT, SECURITY 16 APPROVE / 21 REJECT, PERFORMANCE 1 APPROVE / 2 REJECT
+
+1d. Learned weights vs equal weights on the same votes (62 labelled sessions)
+  decisions changed by the learned weights: 4; changed to right 0, to wrong 4; sign p 0.125
+
+1e. Bandit (--sast) votes on record
+  2026-08-07 sessions.py      Bandit APPROVE WaRF REJECT [LOW]  corpus label for the file: APPROVE
+  2026-08-07 sast_demo.py     Bandit REJECT  WaRF REJECT [HIGH]  corpus label for the file: none
+
+1f. The 12 August SKEPTIC-clone run in the corpus (early stopping on)
+  cookies.py     REJECT [HIGH] after 4 votes; corpus label REJECT
+  hooks.py       REJECT [HIGH] after 4 votes; corpus label APPROVE   WRONG
+  sessions.py    REJECT [HIGH] after 4 votes; corpus label APPROVE   WRONG
+  utils.py       REJECT [HIGH] after 4 votes; corpus label none
+
+========================================================================================================
+2. The 12-file persona experiment: 'harder to fool' (uniform weights, early stopping as in a review)
+========================================================================================================
+  persona_v3    right 11/12 = 92%    HIGH  5, wrong at HIGH 0; agent calls with early stopping 55 of 60
+                by band: LOW 1/1 = 100%, MEDIUM 5/6 = 83%, HIGH 5/5 = 100%
+  h2h_auditor5  right 10/12 = 83%    HIGH  6, wrong at HIGH 0; agent calls with early stopping 54 of 60
+                by band: LOW 0/0, MEDIUM 4/6 = 67%, HIGH 6/6 = 100%
+  h2h_skeptic5  right 11/12 = 92%    HIGH  7, wrong at HIGH 1 (_types.py REJECT); agent calls with early stopping 53 of 60
+                by band: LOW 1/1 = 100%, MEDIUM 4/4 = 100%, HIGH 6/7 = 86%
+  wrong-at-HIGH, mixed panel vs five SKEPTICs: 0/12 vs 1/12, Fisher p 1.00
+  wrong among HIGH verdicts: mixed 0/5, five AUDITORs 0/6, five SKEPTICs 1/7
+  single agents of the mixed panel on the same 12 files (every agent voted):
+    AUDITOR       right 11/12 = 92%, wrong 1 (a single agent never reaches HIGH: |lambda| <= 1.253 < 2.251)
+    ADVOCATE      right 10/12 = 83%, wrong 2 (a single agent never reaches HIGH: |lambda| <= 1.253 < 2.251)
+    SKEPTIC       right 8/12 = 67%, wrong 4 (a single agent never reaches HIGH: |lambda| <= 1.253 < 2.251)
+    TEST-FOCUSED  right 11/12 = 92%, wrong 1 (a single agent never reaches HIGH: |lambda| <= 1.253 < 2.251)
+    BOUNDARY      right 8/12 = 67%, wrong 4 (a single agent never reaches HIGH: |lambda| <= 1.253 < 2.251)
+
+========================================================================================================
+3. Jev on 100 gismo6 commits (git-history labels: REJECT = later fixed), one agent vs WaRF's default review
+========================================================================================================
+  100 commits, 50 later fixed
+
+3a. Decisions
+  one Jev agent: REJECT 53, right 59, balanced accuracy 0.590
+  WaRF default:  REJECT 21, right 53, balanced accuracy 0.530
+  WaRF minus one agent, balanced accuracy -0.060 [-0.150, +0.030] (bootstrap within label); exact McNemar on right/wrong: WaRF-only 13, agent-only 19, p 0.38
+
+3b. Does WaRF's confidence track accuracy here? (independent labels, uniform priors, nothing learned)
+  LOW     n   0 ({})  right - 
+  MEDIUM  n  83 ({'APPROVE': 79, 'REJECT': 4})  right 43/83 = 52% [0.41, 0.63]
+  HIGH    n  17 ({'REJECT': 17})  right 10/17 = 59% [0.33, 0.82]
+  exact trend test LOW < MEDIUM < HIGH: one-sided p 0.399
+  one Jev agent, low |p-0.5|   n 33  right 17/33 = 52% [0.34, 0.69]  |p-0.5| 0.00..0.16
+  one Jev agent, mid |p-0.5|   n 33  right 19/33 = 58% [0.39, 0.75]  |p-0.5| 0.16..0.33
+  one Jev agent, high |p-0.5|  n 34  right 23/34 = 68% [0.49, 0.83]  |p-0.5| 0.34..0.49
+  exact trend test for the single agent's own confidence: one-sided p 0.112
+
+3c. The CI gate: '--fail-on HIGH' against a single-agent threshold that blocks as many commits
+  WaRF REJECT [HIGH]                 blocks 17: later fixed 10/17 = 59%  [0.33, 0.82]; recall 10/50
+  one Jev agent, p(REJECT) >= 0.88   blocks 17: later fixed 10/17 = 59%  [0.33, 0.82]; recall 10/50
+  added lines >= 16                  blocks 17: later fixed 13/17 = 76%  [0.50, 0.93]; recall 13/50
+  precision, WaRF minus one agent: +0.000 [-0.072, +0.075] (bootstrap over commits, thresholds fixed); overlap of the two blocked sets 16
+  calls: WaRF 4.83 per commit (SPRT stopped 17), one agent 1.00; Jev cost $0.0174 vs $0.0032; tokens 433562 vs 81028
+  HIGH REJECT on a never-fixed change: 7/50 = 14% of never-fixed [0.06, 0.27] (Wald's bound assumed 10%); share of HIGH REJECTs that were never fixed 7/17 = 41%
+  REJECT votes among the agents asked (WaRF default): {0: 44, 1: 14, 2: 21, 3: 4, 4: 17}
+
+========================================================================================================
+4. Five Laya agents (debate on, early stopping off): confidence bands of WaRF's final verdict
+========================================================================================================
+  LOW     n   0 ({})  right - 
+  MEDIUM  n  98 ({'APPROVE': 92, 'REJECT': 6})  right 50/98 = 51% [0.41, 0.61]
+  HIGH    n   2 ({'REJECT': 2})  right 0/2 = 0% [0.00, 0.84]
+  exact trend test LOW < MEDIUM < HIGH: one-sided p 1.000
+
+========================================================================================================
+5. WaRF's rule over three DIFFERENT models (stored votes: blinded Claude, one Jev, one Laya; one seat each)
+========================================================================================================
+  Laya's vote is its argmax: REJECT on 0 of 100, so its seat always adds +0.49 to lambda
+  Claude's vote = REJECT if p >= 0.5 (REJECT on 6):
+    Claude alone                     REJECT   6  balanced accuracy 0.560
+    Jev alone                        REJECT  53  balanced accuracy 0.590
+    WaRF rule, uniform omega         REJECT   6  balanced accuracy 0.560
+    WaRF rule, leave-one-out omega   REJECT   6  balanced accuracy 0.560
+    WaRF rule minus Claude alone: +0.000 [+0.000, +0.000]; McNemar WaRF-only 0 / Claude-only 0, p 1.00; decisions changed by learned omega: 0
+  Claude's vote = REJECT if top quarter (REJECT on 26):
+    Claude alone                     REJECT  26  balanced accuracy 0.680
+    Jev alone                        REJECT  53  balanced accuracy 0.590
+    WaRF rule, uniform omega         REJECT  23  balanced accuracy 0.650
+    WaRF rule, leave-one-out omega   REJECT  23  balanced accuracy 0.650
+    WaRF rule minus Claude alone: -0.030 [-0.070, +0.000]; McNemar WaRF-only 0 / Claude-only 3, p 0.25; decisions changed by learned omega: 0
+
+========================================================================================================
+6. The SPRT's vote model: measured P1 = P(APPROVE | good), P0 = P(APPROVE | bad), pooled over seats
+========================================================================================================
+  assumed: P1 0.80, P0 0.30 -> LLR APPROVE +0.981, REJECT -1.253
+  Claude Haiku, persona_v3, 12 files           votes   60: P1 0.741  P0 0.189  -> LLR APPROVE +1.365, REJECT -1.140
+  Jev, five personas, Round 1, 100 commits     votes  500: P1 0.742  P0 0.659  -> LLR APPROVE +0.119, REJECT -0.280
+  Laya, five personas, Round 1, 100 commits    votes  500: P1 0.821  P0 0.837  -> LLR APPROVE -0.019, REJECT +0.093
+  Jev, one agent, 100 commits                  votes  100: P1 0.558  P0 0.385  -> LLR APPROVE +0.372, REJECT -0.330
+
+========================================================================================================
+7. How often each routing-table row fires: (decision, confidence) in every log
+========================================================================================================
+  .warf\sessions.jsonl                            252: APPROVE LOW 17, APPROVE MEDIUM 47, REJECT HIGH 115, REJECT LOW 30, REJECT MEDIUM 43
+  .warf-experiments\sessions.jsonl                 55: APPROVE HIGH 2, APPROVE LOW 2, APPROVE MEDIUM 16, REJECT HIGH 29, REJECT LOW 3, REJECT MEDIUM 3
+    APPROVE HIGH: profile h2h_auditor5, compat.py, stored label APPROVE, corpus label now APPROVE
+    APPROVE HIGH: profile h2h_auditor5, help.py, stored label APPROVE, corpus label now REJECT
+  .warf-experiments\jev-five\sessions_standard.jsonl  100: APPROVE MEDIUM 79, REJECT HIGH 17, REJECT MEDIUM 4
+  .warf-experiments\jev-five\sessions_five.jsonl  100: APPROVE MEDIUM 78, REJECT HIGH 17, REJECT MEDIUM 5
+  .warf-experiments\laya-five\sessions.jsonl      100: APPROVE MEDIUM 92, REJECT HIGH 2, REJECT MEDIUM 6
+
+========================================================================================================
+8. Each persona seat alone (Round 1) against WaRF's decision, balanced accuracy on the 100 commits
+========================================================================================================
+  Jev   SKEPTIC 0.53 (21 REJ), ADVOCATE 0.53 (19 REJ), AUDITOR 0.55 (49 REJ), TEST-FOCUSED 0.57 (47 REJ), BOUNDARY 0.53 (13 REJ);  WaRF default 0.53
+  Laya  SKEPTIC 0.51 (49 REJ), ADVOCATE 0.49 (3 REJ), AUDITOR 0.47 (19 REJ), TEST-FOCUSED 0.48 (2 REJ), BOUNDARY 0.51 (11 REJ);  WaRF final 0.50

@@ -1,0 +1,21 @@
+class                                                                n       claude-one  claude-standard          jev-one     jev-standard   jev p  old p_claude
+visible defect, fix addresses it                                     15     14 (0.93)       7 (0.47)      11 (0.73)       6 (0.40)   0.65   0.46
+visible doc slip, fix addresses it                                    2      2 (1.00)       1 (0.50)       2 (1.00)       2 (1.00)   0.94   0.38
+arguable                                                              4      4 (1.00)       0 (0.00)       3 (0.75)       2 (0.50)   0.65   0.26
+real defect, not visible in this diff                                 7      3 (0.43)       0 (0.00)       4 (0.57)       1 (0.14)   0.58   0.32
+no defect introduced (refactor, later change, comment/author edit)   22      3 (0.14)       1 (0.05)      10 (0.45)       4 (0.18)   0.51   0.16
+never fixed, other                                                   32     13 (0.41)       2 (0.06)      14 (0.44)       5 (0.16)   0.46   0.18
+never fixed, t18                                                     18      8 (0.44)       4 (0.22)       8 (0.44)       4 (0.22)   0.47   0.05
+
+visible-defect set V (17) vs never-fixed: AUC [95% bootstrap]
+  vs A other  claude-one        0.767 [0.658, 0.861]
+  vs A other  claude-std share  0.816 [0.690, 0.919]
+  vs A other  jev-one p         0.730 [0.581, 0.872]
+  vs A other  old p_claude      0.887 [0.758, 0.982]
+  vs all A    claude-one        0.761 [0.661, 0.840]
+  vs all A    claude-std share  0.790 [0.662, 0.904]
+  vs all A    jev-one p         0.724 [0.575, 0.846]
+  vs all A    old p_claude      0.924 [0.830, 0.992]
+
+'no defect introduced' later-fixed (22) vs A other: claude-one 0.365  claude-std share 0.457  jev-one p 0.561  old p_claude 0.401
+V vs 'no defect introduced' later-fixed: claude-one 0.902  claude-std share 0.885  jev-one p 0.699  old p_claude 0.898

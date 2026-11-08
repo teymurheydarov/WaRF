@@ -1,0 +1,5 @@
+  claude_cli/claude-opus-5-5; worker 2 of 3: 43 reviews to run (1 done) -> claude-standard.w2.jsonl
+  44fe50d:gsBoxTopology.h:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  fac47e8:gsMatrix.h:clean: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  0104462:gsFunction.hpp:defective: RuntimeError: [claude_cli/claude-opus-5-5] claude CLI error (rc=1): 
+  worker 2 stopping: 3 consecutive errors

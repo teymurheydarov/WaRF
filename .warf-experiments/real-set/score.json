@@ -1,0 +1,98 @@
+{
+ "n": 132,
+ "arms": {
+  "claude": {
+   "ba": 0.7576,
+   "recall": 64,
+   "false_alarms": 30
+  },
+  "claude-strict": {
+   "ba": 0.8561,
+   "recall": 52,
+   "false_alarms": 5
+  },
+  "claude-advocate": {
+   "ba": 0.8409,
+   "recall": 55,
+   "false_alarms": 10
+  },
+  "claude-standard": {
+   "ba": 0.8258,
+   "recall": 55,
+   "false_alarms": 12
+  },
+  "mixed": {
+   "ba": 0.7955,
+   "recall": 56,
+   "false_alarms": 17
+  },
+  "jev": {
+   "ba": 0.7045,
+   "recall": 60,
+   "false_alarms": 33
+  }
+ },
+ "comparisons": {
+  "claude-standard - claude": {
+   "d": 0.0682,
+   "ci": [
+    -0.0076,
+    0.1364
+   ],
+   "only_warf": 18,
+   "only_single": 9,
+   "p": 0.1221
+  },
+  "claude-standard - claude-strict": {
+   "d": -0.0303,
+   "ci": [
+    -0.0833,
+    0.0227
+   ],
+   "only_warf": 4,
+   "only_single": 8,
+   "p": 0.3877
+  },
+  "claude-standard - claude-advocate": {
+   "d": -0.0152,
+   "ci": [
+    -0.053,
+    0.0227
+   ],
+   "only_warf": 3,
+   "only_single": 5,
+   "p": 0.7266
+  },
+  "mixed - claude": {
+   "d": 0.0379,
+   "ci": [
+    -0.0303,
+    0.1061
+   ],
+   "only_warf": 14,
+   "only_single": 9,
+   "p": 0.4049
+  },
+  "mixed - claude-strict": {
+   "d": -0.0606,
+   "ci": [
+    -0.1515,
+    0.0227
+   ],
+   "only_warf": 14,
+   "only_single": 22,
+   "p": 0.243
+  },
+  "mixed - claude-advocate": {
+   "d": -0.0455,
+   "ci": [
+    -0.1288,
+    0.0379
+   ],
+   "only_warf": 14,
+   "only_single": 20,
+   "p": 0.3915
+  }
+ },
+ "verdict": "no case for WaRF"
+}

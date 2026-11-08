@@ -1,0 +1,106 @@
+== (a) mixed panel, uniform omega 0.5, fixed LLRs; 6 profile orders x 3 stopping rules
+  reachable Lambda with 3 seats at omega 0.5: -1.879 to +1.471 (B -2.251, A +2.890); per-domain thresholds as engine.THETA
+
+  [reported inputs: p > 0.5, Jev from sessions_one] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 6 (6 later fixed); BA 0.560; AUC of -Lambda 0.616
+    confidence: LOW 1 (0 right), MEDIUM 99 (56 right)
+    panel BA 0.560 [0.520, 0.610]
+    BA minus JEV     vote (0.590): -0.030 [-0.130, +0.070] (pair bootstrap [-0.140, +0.080]); right only panel/only JEV: 22/25, sign p 0.771
+    BA minus LAYA    vote (0.500): +0.060 [+0.020, +0.110] (pair bootstrap [+0.020, +0.100]); right only panel/only LAYA: 6/0, sign p 0.031
+    BA minus CLAUDE  vote (0.560): +0.000 [+0.000, +0.000] (pair bootstrap [+0.000, +0.000]); right only panel/only CLAUDE: 0/0, sign p 1.000
+    BA minus mean member (0.550): +0.010 [-0.030, +0.047]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: -0.025 [-0.087, +0.031]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.030 [-0.131, +0.199]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.128 [-0.220, -0.038]
+    AUC(-Lambda) minus mean member AUC: -0.041 [-0.115, +0.034]
+    panel REJECT rows equal Claude's REJECT rows: True
+
+== robustness of (a) to the vote inputs
+
+  [Jev rerun A (stored choice; REJECT 53, BA 0.590)] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 6 (6 later fixed); BA 0.560; AUC of -Lambda 0.616
+    confidence: LOW 1 (0 right), MEDIUM 99 (56 right)
+    panel BA 0.560 [0.520, 0.600]
+    BA minus JEV     vote (0.590): -0.030 [-0.120, +0.070] (pair bootstrap [-0.140, +0.080]); right only panel/only JEV: 22/25, sign p 0.771
+    BA minus LAYA    vote (0.500): +0.060 [+0.020, +0.100] (pair bootstrap [+0.020, +0.110]); right only panel/only LAYA: 6/0, sign p 0.031
+    BA minus CLAUDE  vote (0.560): +0.000 [+0.000, +0.000] (pair bootstrap [+0.000, +0.000]); right only panel/only CLAUDE: 0/0, sign p 1.000
+    BA minus mean member (0.550): +0.010 [-0.030, +0.047]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: -0.025 [-0.088, +0.032]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.030 [-0.127, +0.196]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.128 [-0.230, -0.040]
+    AUC(-Lambda) minus mean member AUC: -0.041 [-0.111, +0.032]
+    panel REJECT rows equal Claude's: True
+
+  [Jev rerun B (stored choice; REJECT 53, BA 0.570)] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 6 (6 later fixed); BA 0.560; AUC of -Lambda 0.598
+    confidence: LOW 1 (0 right), MEDIUM 99 (56 right)
+    panel BA 0.560 [0.520, 0.600]
+    BA minus JEV     vote (0.570): -0.010 [-0.100, +0.080] (pair bootstrap [-0.120, +0.100]); right only panel/only JEV: 23/24, sign p 1.000
+    BA minus LAYA    vote (0.500): +0.060 [+0.020, +0.100] (pair bootstrap [+0.020, +0.110]); right only panel/only LAYA: 6/0, sign p 0.031
+    BA minus CLAUDE  vote (0.560): +0.000 [+0.000, +0.000] (pair bootstrap [+0.000, +0.000]); right only panel/only CLAUDE: 0/0, sign p 1.000
+    BA minus mean member (0.543): +0.017 [-0.023, +0.053]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: -0.044 [-0.103, +0.019]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.012 [-0.159, +0.167]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.147 [-0.253, -0.059]
+    AUC(-Lambda) minus mean member AUC: -0.060 [-0.138, +0.015]
+    panel REJECT rows equal Claude's: True
+
+  [Jev votes REJECT at p >= 0.5] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 6 (6 later fixed); BA 0.560; AUC of -Lambda 0.626
+    confidence: LOW 1 (0 right), MEDIUM 99 (56 right)
+    panel BA 0.560 [0.520, 0.600]
+    BA minus JEV     vote (0.600): -0.040 [-0.130, +0.060] (pair bootstrap [-0.150, +0.070]); right only panel/only JEV: 22/26, sign p 0.665
+    BA minus LAYA    vote (0.500): +0.060 [+0.020, +0.100] (pair bootstrap [+0.020, +0.110]); right only panel/only LAYA: 6/0, sign p 0.031
+    BA minus CLAUDE  vote (0.560): +0.000 [+0.000, +0.000] (pair bootstrap [+0.000, +0.000]); right only panel/only CLAUDE: 0/0, sign p 1.000
+    BA minus mean member (0.553): +0.007 [-0.033, +0.047]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: -0.015 [-0.080, +0.044]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.040 [-0.118, +0.196]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.118 [-0.223, -0.025]
+    AUC(-Lambda) minus mean member AUC: -0.031 [-0.097, +0.040]
+
+  [Claude votes REJECT at p > 0.4 (REJECT 14, BA 0.640)] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 12 (12 later fixed); BA 0.620; AUC of -Lambda 0.663
+    confidence: LOW 1 (0 right), MEDIUM 99 (62 right)
+    panel BA 0.620 [0.560, 0.680]
+    BA minus JEV     vote (0.590): +0.030 [-0.060, +0.120] (pair bootstrap [-0.080, +0.140]); right only panel/only JEV: 22/19, sign p 0.755
+    BA minus LAYA    vote (0.500): +0.120 [+0.060, +0.180] (pair bootstrap [+0.060, +0.180]); right only panel/only LAYA: 12/0, sign p 0.000
+    BA minus CLAUDE  vote (0.640): -0.020 [-0.050, +0.000] (pair bootstrap [-0.050, +0.000]); right only panel/only CLAUDE: 0/2, sign p 0.500
+    BA minus mean member (0.577): +0.043 [+0.003, +0.087]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: +0.021 [-0.046, +0.083]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.077 [-0.089, +0.242]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.082 [-0.167, -0.002]
+    AUC(-Lambda) minus mean member AUC: +0.005 [-0.064, +0.076]
+
+  [Claude votes REJECT at p > 0.3 (REJECT 23, BA 0.670)] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 21 (18 later fixed); BA 0.650; AUC of -Lambda 0.669
+    confidence: LOW 1 (0 right), MEDIUM 99 (65 right)
+    panel BA 0.650 [0.580, 0.720]
+    BA minus JEV     vote (0.590): +0.060 [-0.030, +0.150] (pair bootstrap [-0.030, +0.150]); right only panel/only JEV: 19/13, sign p 0.377
+    BA minus LAYA    vote (0.500): +0.150 [+0.070, +0.230] (pair bootstrap [+0.080, +0.220]); right only panel/only LAYA: 18/3, sign p 0.001
+    BA minus CLAUDE  vote (0.670): -0.020 [-0.050, +0.000] (pair bootstrap [-0.050, +0.000]); right only panel/only CLAUDE: 0/2, sign p 0.500
+    BA minus mean member (0.587): +0.063 [+0.023, +0.107]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: +0.028 [-0.036, +0.095]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.083 [-0.082, +0.247]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.075 [-0.156, +0.001]
+    AUC(-Lambda) minus mean member AUC: +0.012 [-0.052, +0.084]
+
+  [Claude votes REJECT at p > 0.2 (REJECT 42, BA 0.680)] 18/18 runs identical to (JEV,LAYA,CLAUDE)/early; HIGH verdicts 0; 3 seats asked every time: True
+    Lambda range -0.762 to +1.471; panel REJECT 33 (24 later fixed); BA 0.650; AUC of -Lambda 0.673
+    confidence: LOW 1 (0 right), MEDIUM 99 (65 right)
+    panel BA 0.650 [0.570, 0.740]
+    BA minus JEV     vote (0.590): +0.060 [-0.010, +0.140] (pair bootstrap [-0.010, +0.130]); right only panel/only JEV: 13/7, sign p 0.263
+    BA minus LAYA    vote (0.500): +0.150 [+0.060, +0.230] (pair bootstrap [+0.070, +0.220]); right only panel/only LAYA: 24/9, sign p 0.014
+    BA minus CLAUDE  vote (0.680): -0.030 [-0.090, +0.020] (pair bootstrap [-0.090, +0.020]); right only panel/only CLAUDE: 3/6, sign p 0.508
+    BA minus mean member (0.590): +0.060 [+0.010, +0.103]
+    AUC(-Lambda) minus AUC(JEV p) 0.641: +0.032 [-0.050, +0.111]
+    AUC(-Lambda) minus AUC(LAYA p) 0.586: +0.087 [-0.080, +0.257]
+    AUC(-Lambda) minus AUC(CLAUDE p) 0.745: -0.071 [-0.131, -0.016]
+    AUC(-Lambda) minus mean member AUC: +0.016 [-0.052, +0.083]
+
+== (a') each seat votes REJECT when its out-of-fold Platt-calibrated p > 0.5
+  18/18 runs give the same decisions; HIGH 0
+  majority of calibrated votes: REJECT 47, BA 0.590 [0.490, 0.690], AUC of -Lambda 0.636
+  BA minus JEV calibrated vote (0.550): +0.040 [-0.040, +0.120], 10/6, sign p 0.45
+  BA minus LAYA calibrated vote (0.530): +0.060 [-0.070, +0.190], 27/21, sign p 0.47
+  BA minus CLAUDE calibrated vote (0.640): -0.050 [-0.130, +0.020], 5/10, sign p 0.30
+  AUC(-Lambda) minus AUC(Claude p): -0.109 [-0.194, -0.027]

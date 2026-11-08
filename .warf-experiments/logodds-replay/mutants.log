@@ -1,0 +1,13 @@
+unmutated copy: tests rc=0 (expect 0)
+  caught  calibration ignores the model
+  caught  boundary tested on incomplete models
+  caught  HIGH despite disagreeing models
+  caught  readout without the sum check
+  caught  p that contradicts the vote is used
+  caught  strict UTF-8 log reading
+  caught  sum instead of mean within a model
+  caught  base rate not removed
+  caught  tau always 0
+  caught  persona filter dropped
+  caught  CLI allows --debate with logodds
+11 of 11 mutants caught

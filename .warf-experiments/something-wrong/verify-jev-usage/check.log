@@ -1,0 +1,60 @@
+== A. data/plumbing ==
+  five: n 100, ids==selection True, models ['typesafe/jev-1.14-20261014']
+  standard: n 100, ids==selection True, models ['typesafe/jev-1.14-20261014']
+  one: n 100, ids==selection True, models ['typesafe/jev-1.14-20261014']
+  rerun_A: n 100, ids==selection True, models ['typesafe/jev-1.14-20261014']
+  rerun_B: n 100, ids==selection True, models ['typesafe/jev-1.14-20261014']
+  five-arm p values 920, distinct 100, on 0.01 grid True
+  confidence==|1-2p| (0.01): 500 of 500
+  five-arm reviews without Round 2: 16; later-fixed among them 9
+  standard: reviews with <5 R1 answers 17
+== B. AUCs ==
+  SKEPTIC       R1 0.600  R2(fallback) 0.620  R2 debated-only 0.642 (n 84)  std R1 0.605 (n 100)  mean p 0.30  REJ votes 21
+  ADVOCATE      R1 0.640  R2(fallback) 0.637  R2 debated-only 0.651 (n 84)  std R1 0.638 (n 100)  mean p 0.30  REJ votes 19
+  AUDITOR       R1 0.637  R2(fallback) 0.652  R2 debated-only 0.677 (n 84)  std R1 0.630 (n 100)  mean p 0.47  REJ votes 49
+  TEST-FOCUSED  R1 0.618  R2(fallback) 0.634  R2 debated-only 0.647 (n 84)  std R1 0.603 (n 100)  mean p 0.49  REJ votes 47
+  BOUNDARY      R1 0.625  R2(fallback) 0.623  R2 debated-only 0.644 (n 84)  std R1 0.634 (n 83)  mean p 0.19  REJ votes 13
+  one 0.641
+  rerun_A 0.651
+  rerun_B 0.633
+  five mean logit R1 0.630, mean p R1 0.628
+  added lines (from states code) 0.716
+  null AUC SD (random scores) 0.0580
+== C. state parity ==
+  state_chars == len(states.jsonl state): 600 of 600; max state len 1986
+  five R1 state_chars identical across seats: 100 of 100
+== D. correlations / eigen ==
+  SKEPTIC       1.000 0.905 0.908 0.906 0.909
+  ADVOCATE      0.905 1.000 0.963 0.863 0.886
+  AUDITOR       0.908 0.963 1.000 0.870 0.893
+  TEST-FOCUSED  0.906 0.863 0.870 1.000 0.902
+  BOUNDARY      0.909 0.886 0.893 0.902 1.000
+  eigen 4.603, 0.182, 0.095, 0.084, 0.037  first 92.1%
+  Spearman range 0.862 to 0.967
+  SKEPTIC       five vs std same seat wl r 0.993 (n 100)
+  ADVOCATE      five vs std same seat wl r 0.988 (n 100)
+  AUDITOR       five vs std same seat wl r 0.993 (n 100)
+  TEST-FOCUSED  five vs std same seat wl r 0.992 (n 100)
+  BOUNDARY      five vs std same seat wl r 0.975 (n 83)
+  one vs A 0.990, one vs B 0.991, A vs B 0.991
+  one vs seats: SKEPTIC 0.904, ADVOCATE 0.961, AUDITOR 0.975, TEST-FOCUSED 0.867, BOUNDARY 0.880
+== E. own parts ==
+  SKEPTIC       R2 0.894 slope 0.97 own AUC five 0.432, std(n83) 0.447, five vs std own r 0.867; Spearman own vs log added 0.08
+  ADVOCATE      R2 0.892 slope 0.90 own AUC five 0.619, std(n83) 0.556, five vs std own r 0.843; Spearman own vs log added 0.22
+  AUDITOR       R2 0.900 slope 1.07 own AUC five 0.522, std(n83) 0.541, five vs std own r 0.919; Spearman own vs log added 0.15
+  TEST-FOCUSED  R2 0.849 slope 0.87 own AUC five 0.475, std(n83) 0.470, five vs std own r 0.947; Spearman own vs log added 0.03
+  BOUNDARY      R2 0.875 slope 1.07 own AUC five 0.500, std(n83) 0.533, five vs std own r 0.888; Spearman own vs log added -0.37
+  one on mean(A,B): R2 0.986, residual AUC 0.500
+== F. paired bootstrap ADVOCATE-SKEPTIC ==
+  +0.040 [-0.005, +0.086]
+== G. controls ==
+  BUG comment      SKEPTIC       n 43 -1.70 -> +1.17 rise +2.87  at p>=0.99 after 0
+  BUG comment      ADVOCATE      n 43 -1.75 -> +2.23 rise +3.97  at p>=0.99 after 1
+  BUG comment      AUDITOR       n 43 -0.64 -> +4.53 rise +5.17  at p>=0.99 after 31
+  BUG comment      TEST-FOCUSED  n 43 -0.44 -> +4.26 rise +4.70  at p>=0.99 after 28
+  BUG comment      BOUNDARY      n 43 -2.76 -> +2.09 rise +4.85  at p>=0.99 after 1
+  null dereference SKEPTIC       n 43 -1.70 -> +2.79 rise +4.49  at p>=0.99 after 11
+  null dereference ADVOCATE      n 43 -1.75 -> +3.71 rise +5.46  at p>=0.99 after 25
+  null dereference AUDITOR       n 43 -0.64 -> +4.73 rise +5.37  at p>=0.99 after 33
+  null dereference TEST-FOCUSED  n 43 -0.44 -> +4.25 rise +4.69  at p>=0.99 after 29
+  null dereference BOUNDARY      n 43 -2.76 -> +3.10 rise +5.87  at p>=0.99 after 15

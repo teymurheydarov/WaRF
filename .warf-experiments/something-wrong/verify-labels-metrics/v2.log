@@ -1,0 +1,40 @@
+== REJECTs of the 100: blamed line classes
+   b2330f comment-only ['#ifdef GISMO_WITH_PYBIND11', '#endif']
+   5201b9 comment-only ['@brief Multigrid solver for isogeometric discretizations.', 'This file is part of the G+Smo library.', 'This Source Code Form is subject to the terms of the Mozilla Public']
+   b1f90f comment-only ['@brief DESCRIPTION']
+   7f37bf comment-only ['Author(s): A. Mantzaflaris']
+   ebe5b3 comment-only ['@brief Tutorial on how to use expression assembler to builde multipatc']
+   894df0 comment-only ['Author(s): G. Kiss, A. Mantzaflaris']
+  summary {'plumbing': 31, 'comment-only': 6, 'has-code': 13} lines field truncated? 0
+
+== fixes behind the 50 REJECTs
+  first fix within 1 day 15, within 7 days 23; same author email 27; first-fix kinds {'defect': 39, 'test': 1, 'build': 10}
+  min later_days APPROVE 195.2 REJECTs with later_days < 180: 2
+
+== AUC on subsets
+  drop comment-only REJECTs: n 94 R 44 A 50
+    Claude 0.787  Jev one 0.663  Jev five R1 mean 0.654  Jev five final mean 0.652  Laya one 0.564  added 0.701  added_noncosmetic 0.745
+  only has-code REJECTs vs all A: n 63 R 13 A 50
+    Claude 0.775  Jev one 0.652  Jev five R1 mean 0.684  Jev five final mean 0.680  Laya one 0.645  added 0.767  added_noncosmetic 0.788
+  auditor-style trivial (nothing added or comment-only): 15 all APPROVE: True
+    mean Claude               on those 0.037
+    mean Jev one              on those 0.385
+    mean Jev five R1 mean     on those 0.239
+    mean Jev five final mean  on those 0.224
+    mean Laya one             on those 0.130
+  drop the 15 auditor-trivial APPROVEs: n 85 R 50 A 35
+    Claude 0.657  Jev one 0.609  Jev five R1 mean 0.594  Jev five final mean 0.607  Laya one 0.577  added 0.633  added_noncosmetic 0.651
+  18 unblameable APPROVEs, extra 3 beyond the 15: [('252d7a', 1, False), ('e604d8', 1, False), ('d311b7', 3, False)]
+  drop the 18 unblameable APPROVEs: n 82 R 50 A 32
+    Claude 0.646  Jev one 0.652  Jev five R1 mean 0.639  Jev five final mean 0.652  Laya one 0.572  added 0.618  added_noncosmetic 0.618
+  drop 18 unblameable A and comment-only R: n 76 R 44 A 32
+    Claude 0.691  Jev one 0.676  Jev five R1 mean 0.668  Jev five final mean 0.670  Laya one 0.550  added 0.598  added_noncosmetic 0.601
+
+  pairs where both add a blameable line: 32
+    Claude               pairs won 22.5 of 32
+    Jev one              pairs won 19.0 of 32
+    Jev five R1 mean     pairs won 17.0 of 32
+    Jev five final mean  pairs won 18.0 of 32
+    Laya one             pairs won 21.0 of 32
+    added                pairs won 19.5 of 32
+    added_noncosmetic    pairs won 21.5 of 32

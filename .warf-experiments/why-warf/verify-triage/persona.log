@@ -1,0 +1,51 @@
+persona_v3: 12 files; order ['SKEPTIC', 'ADVOCATE', 'AUDITOR', 'TEST-FOCUSED', 'BOUNDARY']
+
+--- truth: current
+  _internal_utils.py       truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 0.60 val False votes RAAAA
+  _types.py                truth +1 uniform APPROVE MEDIUM as run APPROVE LOW    agree 0.40 val False votes RAAAR
+  certs.py                 truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 1.00 val False votes AAAAA
+  compat.py                truth +1 uniform APPROVE LOW    as run APPROVE LOW    agree 0.40 val False votes AAARR
+  help.py                  truth -1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 0.60 val False votes AAARA
+  status_codes.py          truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 0.60 val False votes RAAAA
+  db_query.py              truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  counter.py               truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  runner.py                truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  string_ops.c             truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  file_server.py           truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  node_list.cpp            truth -1 uniform REJECT  MEDIUM as run REJECT  LOW    agree 0.40 val True votes RARRA
+  WaRF uniform right 11/12; as run 11/12
+  uniform HIGH 5: right 5, CP [0.48, 1.00], validation 5, agreement [1.0, 1.0, 1.0, 1.0, 1.0]
+  HIGH + MEDIUM uniform 10/11 (wrong: ['help.py']); as run 8/9
+  SKEPTIC       alone right 8/12; P(5 random verdicts all right) = 0.071
+  ADVOCATE      alone right 10/12; P(5 random verdicts all right) = 0.318
+  AUDITOR       alone right 11/12; P(5 random verdicts all right) = 0.583
+  TEST-FOCUSED  alone right 11/12; P(5 random verdicts all right) = 0.583
+  BOUNDARY      alone right 8/12; P(5 random verdicts all right) = 0.071
+  band,|L|   AURC 0.043 vs random 0.083; exact permutation p 0.500 (12 placements); trust AUROC 0.636
+  agreement  AURC 0.043 vs random 0.083; exact permutation p 0.500 (12 placements); trust AUROC 0.636
+  HIGH vs rest Fisher p 1.000 (5/5 vs 6/7)
+
+--- truth: stored
+  _internal_utils.py       truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 0.60 val False votes RAAAA
+  _types.py                truth +1 uniform APPROVE MEDIUM as run APPROVE LOW    agree 0.40 val False votes RAAAR
+  certs.py                 truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 1.00 val False votes AAAAA
+  compat.py                truth +1 uniform APPROVE LOW    as run APPROVE LOW    agree 0.40 val False votes AAARR
+  help.py                  truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 0.60 val False votes AAARA
+  status_codes.py          truth +1 uniform APPROVE MEDIUM as run APPROVE MEDIUM agree 0.60 val False votes RAAAA
+  db_query.py              truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  counter.py               truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  runner.py                truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  string_ops.c             truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  file_server.py           truth -1 uniform REJECT  HIGH   as run REJECT  HIGH   agree 1.00 val True votes RRRRR
+  node_list.cpp            truth -1 uniform REJECT  MEDIUM as run REJECT  LOW    agree 0.40 val True votes RARRA
+  WaRF uniform right 12/12; as run 12/12
+  uniform HIGH 5: right 5, CP [0.48, 1.00], validation 5, agreement [1.0, 1.0, 1.0, 1.0, 1.0]
+  HIGH + MEDIUM uniform 11/11 (wrong: []); as run 9/9
+  SKEPTIC       alone right 9/12; P(5 random verdicts all right) = 0.159
+  ADVOCATE      alone right 11/12; P(5 random verdicts all right) = 0.583
+  AUDITOR       alone right 12/12; P(5 random verdicts all right) = 1.000
+  TEST-FOCUSED  alone right 10/12; P(5 random verdicts all right) = 0.318
+  BOUNDARY      alone right 9/12; P(5 random verdicts all right) = 0.159
+  band,|L|   AURC 0.000 vs random 0.000; exact permutation p 1.000 (1 placements); trust AUROC nan
+  agreement  AURC 0.000 vs random 0.000; exact permutation p 1.000 (1 placements); trust AUROC nan
+  HIGH vs rest Fisher p 1.000 (5/5 vs 7/7)

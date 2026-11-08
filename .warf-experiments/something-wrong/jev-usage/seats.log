@@ -1,0 +1,111 @@
+== 0. Data ==
+  five      n=100 models=['typesafe/jev-1.14-20261014']
+  standard  n=100 models=['typesafe/jev-1.14-20261014']
+  one       n=100 models=['typesafe/jev-1.14-20261014']
+  rerun_A   n=100 models=['typesafe/jev-1.14-20261014']
+  rerun_B   n=100 models=['typesafe/jev-1.14-20261014']
+  five-arm p values: 920, distinct 100, all on a 0.01 grid: True
+  confidence == |p(A) - p(R)| (to 0.01) in 500 of 500 Round-1 answers
+  mean input tokens per seat, Round 1: SKEPTIC 857, ADVOCATE 803, AUDITOR 798, TEST-FOCUSED 940, BOUNDARY 910
+  persona minus shortest persona (tokens, same state): SKEPTIC 59, ADVOCATE 5, AUDITOR 0, TEST-FOCUSED 142, BOUNDARY 112
+  states under 1000 chars: 23 of 100
+  AUC SD of a label-unrelated score, 50 vs 50: 0.058
+
+== 1. Per-seat AUC ==
+  SKEPTIC       R1 0.600  R2 0.620  standard R1 0.605 (n 100)  mean p R1 0.30  REJECT votes 23
+  ADVOCATE      R1 0.640  R2 0.637  standard R1 0.638 (n 100)  mean p R1 0.30  REJECT votes 19
+  AUDITOR       R1 0.637  R2 0.652  standard R1 0.630 (n 100)  mean p R1 0.47  REJECT votes 49
+  TEST-FOCUSED  R1 0.618  R2 0.634  standard R1 0.603 (n 100)  mean p R1 0.49  REJECT votes 47
+  BOUNDARY      R1 0.625  R2 0.623  standard R1 0.634 (n 83)  mean p R1 0.19  REJECT votes 13
+  one question: 0.641, rerun A 0.651, rerun B 0.633
+  five-seat mean logit R1: 0.630
+  added lines: 0.716
+
+== 2. Spearman (all 100) / within-label r of logits, Round 1 ==
+                        SKEPTIC        ADVOCATE         AUDITOR        TEST-FOC        BOUNDARY             one
+  SKEPTIC         1.00/ 1.00      0.91/ 0.91      0.91/ 0.91      0.92/ 0.91      0.91/ 0.91      0.92/ 0.90   
+  ADVOCATE        0.91/ 0.91      1.00/ 1.00      0.97/ 0.96      0.86/ 0.86      0.88/ 0.89      0.97/ 0.96   
+  AUDITOR         0.91/ 0.91      0.97/ 0.96      1.00/ 1.00      0.87/ 0.87      0.88/ 0.89      0.98/ 0.98   
+  TEST-FOCUSED    0.92/ 0.91      0.86/ 0.86      0.87/ 0.87      1.00/ 1.00      0.90/ 0.90      0.87/ 0.87   
+  BOUNDARY        0.91/ 0.91      0.88/ 0.89      0.88/ 0.89      0.90/ 0.90      1.00/ 1.00      0.88/ 0.88   
+  eigenvalues of the within-label correlation matrix: 4.603, 0.182, 0.095, 0.084, 0.037  (first = 92.1% of the variance)
+
+== 3. Test-retest: same question asked again vs another seat ==
+  one vs rerun_A 0.990, one vs rerun_B 0.991, A vs B 0.991  (within-label r)
+  SKEPTIC       five-R1 vs standard-R1, same seat 0.993 (n 100); vs the other four seats 0.870 to 0.917
+  ADVOCATE      five-R1 vs standard-R1, same seat 0.988 (n 100); vs the other four seats 0.814 to 0.968
+  AUDITOR       five-R1 vs standard-R1, same seat 0.993 (n 100); vs the other four seats 0.820 to 0.973
+  TEST-FOCUSED  five-R1 vs standard-R1, same seat 0.992 (n 100); vs the other four seats 0.840 to 0.908
+  BOUNDARY      five-R1 vs standard-R1, same seat 0.975 (n 83); vs the other four seats 0.890 to 0.910
+
+== 4. Shift/scale: seat A's logit fitted as a + b * seat B's logit (all 100) ==
+  R^2 of the fit / AUC of A's residual (A after removing B's ranking)
+  SKEPTIC                     0.82/0.419   0.83/0.453   0.83/0.503   0.83/0.447  
+  ADVOCATE      0.82/0.613                 0.93/0.577   0.76/0.611   0.79/0.588  
+  AUDITOR       0.83/0.585   0.93/0.467                 0.77/0.568   0.81/0.538  
+  TEST-FOCUSED  0.83/0.543   0.76/0.458   0.77/0.486                 0.82/0.506  
+  BOUNDARY      0.83/0.564   0.79/0.467   0.81/0.522   0.82/0.536                
+
+== 5. Each seat's own part: residual on the mean of the other four seats ==
+  (reproducible across the two independent panel runs? AUC of that part?)
+  SKEPTIC       R^2 on the others 0.894, slope 0.97, own part AUC 0.432; own part five vs standard: r 0.852 (n 83), standard own part AUC 0.447
+  ADVOCATE      R^2 on the others 0.892, slope 0.90, own part AUC 0.619; own part five vs standard: r 0.841 (n 83), standard own part AUC 0.556
+  AUDITOR       R^2 on the others 0.900, slope 1.07, own part AUC 0.522; own part five vs standard: r 0.914 (n 83), standard own part AUC 0.541
+  TEST-FOCUSED  R^2 on the others 0.849, slope 0.87, own part AUC 0.475; own part five vs standard: r 0.942 (n 83), standard own part AUC 0.470
+  BOUNDARY      R^2 on the others 0.875, slope 1.07, own part AUC 0.500; own part five vs standard: r 0.879 (n 83), standard own part AUC 0.533
+  one-question asked again: R^2 of one on mean(rerun A, B) 0.986, residual AUC 0.500
+
+== 6. What the own parts track (Spearman with simple features, five R1) ==
+                    log added   log removed   state chars        header  comment only
+  SKEPTIC                0.08          0.18         -0.07         -0.17         -0.23
+  ADVOCATE               0.22          0.09         -0.15         -0.01          0.04
+  AUDITOR                0.15         -0.14         -0.20         -0.06          0.01
+  TEST-FOCUSED           0.03         -0.19          0.15         -0.05         -0.03
+  BOUNDARY              -0.37          0.11          0.15          0.22          0.11
+  raw seat logits for comparison:
+  SKEPTIC                0.24          0.10         -0.08          0.09         -0.31
+  ADVOCATE               0.29          0.08         -0.11          0.10         -0.27
+  AUDITOR                0.27          0.01         -0.15          0.10         -0.29
+  TEST-FOCUSED           0.26         -0.04         -0.06          0.09         -0.28
+  BOUNDARY               0.12          0.06         -0.02          0.19         -0.28
+
+== 7. Contrasts between seats (seat X logit minus seat Y logit) ==
+  AUC in the five run / in the standard run / r of the contrast between runs
+  SKEPTIC       - ADVOCATE      0.414 / 0.409 / r 0.88 (n 100)
+  SKEPTIC       - AUDITOR       0.418 / 0.414 / r 0.92 (n 100)
+  SKEPTIC       - TEST-FOCUSED  0.496 / 0.560 / r 0.91 (n 100)
+  SKEPTIC       - BOUNDARY      0.436 / 0.458 / r 0.86 (n 83)
+  ADVOCATE      - AUDITOR       0.486 / 0.514 / r 0.74 (n 100)
+  ADVOCATE      - TEST-FOCUSED  0.582 / 0.601 / r 0.92 (n 100)
+  ADVOCATE      - BOUNDARY      0.522 / 0.499 / r 0.88 (n 83)
+  AUDITOR       - TEST-FOCUSED  0.570 / 0.596 / r 0.95 (n 100)
+  AUDITOR       - BOUNDARY      0.506 / 0.518 / r 0.91 (n 83)
+  TEST-FOCUSED  - BOUNDARY      0.454 / 0.451 / r 0.91 (n 83)
+
+== 8. Debate: Round 2 (Round 1 where no debate ran) vs Round 1 per seat ==
+  SKEPTIC       within-label r R1 vs R2 0.969, vote changes 3
+  ADVOCATE      within-label r R1 vs R2 0.960, vote changes 1
+  AUDITOR       within-label r R1 vs R2 0.978, vote changes 1
+  TEST-FOCUSED  within-label r R1 vs R2 0.964, vote changes 3
+  BOUNDARY      within-label r R1 vs R2 0.969, vote changes 2
+
+== 9. Are the seats' AUCs different? Paired bootstrap (resampling within label), 2000 draws ==
+  ADVOCATE - SKEPTIC: +0.040 [-0.005, +0.086]
+  AUDITOR - SKEPTIC: +0.038 [-0.010, +0.086]
+  ADVOCATE - TEST-FOCUSED: +0.022 [-0.041, +0.087]
+  best minus worst seat observed 0.040
+  seat labels shuffled within commit: spread >= observed in 1816 of 2000 (raw p; shuffling also mixes strictness, so this is only a rough null)
+
+== 10. Planted lines, per seat (controls_five.jsonl vs sessions_five Round 1, never-fixed changes) ==
+  BUG comment:
+    SKEPTIC       n 43: mean logit -1.70 -> +1.17 (rise +2.87), p>=0.5 after 39
+    ADVOCATE      n 43: mean logit -1.75 -> +2.23 (rise +3.97), p>=0.5 after 43
+    AUDITOR       n 43: mean logit -0.64 -> +4.53 (rise +5.17), p>=0.5 after 43
+    TEST-FOCUSED  n 43: mean logit -0.44 -> +4.26 (rise +4.70), p>=0.5 after 43
+    BOUNDARY      n 43: mean logit -2.76 -> +2.09 (rise +4.85), p>=0.5 after 42
+  null dereference:
+    SKEPTIC       n 43: mean logit -1.70 -> +2.79 (rise +4.49), p>=0.5 after 42
+    ADVOCATE      n 43: mean logit -1.75 -> +3.71 (rise +5.46), p>=0.5 after 43
+    AUDITOR       n 43: mean logit -0.64 -> +4.73 (rise +5.37), p>=0.5 after 43
+    TEST-FOCUSED  n 43: mean logit -0.44 -> +4.25 (rise +4.69), p>=0.5 after 43
+    BOUNDARY      n 43: mean logit -2.76 -> +3.10 (rise +5.87), p>=0.5 after 42

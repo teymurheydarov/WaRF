@@ -1,0 +1,40 @@
+arm                                      BA     caught passed  onlyArm onlyClaude  McNemar2s
+Claude alone                             0.824   52/54  37/54     0       0      1.000
+cal claude+jev+laya                      0.852   50/54  42/54     5       2      0.453
+cal claude+jev                           0.861   51/54  42/54     5       1      0.219
+cal claude+laya                          0.824   52/54  37/54     0       0      1.000
+cold claude+jev+laya                     0.852   52/54  40/54     3       0      0.250
+cold claude+jev                          0.685   54/54  20/54     2      17      0.001
+cold claude+laya                         0.824   52/54  37/54     0       0      1.000
+AND rule: Claude REJ and Jev REJ         0.861   52/54  41/54     4       0      0.125
+AND rule, Jev p>0.55                     0.861   51/54  42/54     5       1      0.219
+AND rule, Jev p>0.6                      0.852   49/54  43/54     6       3      0.508
+AND rule, Jev p>0.65                     0.843   48/54  43/54     6       4      0.754
+cal full panel flips vs Claude: ['07bb349:gsCurve.hpp:planted', '893626d:test_spectra.cpp:clean', '9790e5a:gsFileManager.cpp:clean', '9e5b11e:gsBSplineBasis.h:clean', 'bdbd602:gsMatrixCrossApproximation.h:clean', 'bdbd602:gsMatrixCrossApproximation.h:planted', 'd3c723f:gsSurface.hpp:clean']
+cold full panel flips vs Claude: ['9790e5a:gsFileManager.cpp:clean', '9e5b11e:gsBSplineBasis.h:clean', 'd3c723f:gsSurface.hpp:clean']
+Laya evidence cal: min -0.126 median +0.013 max +0.144; Laya votes REJECT 0
+Laya evidence cold: min +0.490 median +0.490 max +0.490; Laya votes REJECT 0
+id form: dbb991d:gsUtils.h:clean dbb991d:gsUtils.h
+proper bootstrap cal claude+jev+laya - Claude: [-0.009, +0.065], share <= 0: 0.123
+proper bootstrap cold claude+jev+laya - Claude: [+0.000, +0.065], share <= 0: 0.043
+proper bootstrap cal claude+jev - Claude: [+0.000, +0.083], share <= 0: 0.067
+unique bases per scorer resample: mean 34.322
+
+items where cal full panel and cal claude+jev differ:
+  bdbd602:gsMatrixCrossApproximation.h:planted defect {'claude': -1.053, 'jev': 1.048, 'laya': 0.042} jev p 0.57
+disagreement items (cal), per-seat evidence:
+  07bb349:gsCurve.hpp:planted {'claude': -1.053, 'jev': 1.224, 'laya': -0.041} jev p 0.51 sum 0.129
+  893626d:test_spectra.cpp:clean {'claude': -1.099, 'jev': 1.135, 'laya': -0.007} jev p 0.54 sum 0.029
+  9790e5a:gsFileManager.cpp:clean {'claude': -1.053, 'jev': 1.833, 'laya': 0.073} jev p 0.31 sum 0.853
+  9e5b11e:gsBSplineBasis.h:clean {'claude': -1.253, 'jev': 1.33, 'laya': 0.034} jev p 0.41 sum 0.111
+  bdbd602:gsMatrixCrossApproximation.h:clean {'claude': -1.053, 'jev': 1.253, 'laya': 0.029} jev p 0.5 sum 0.228
+  bdbd602:gsMatrixCrossApproximation.h:planted {'claude': -1.053, 'jev': 1.048, 'laya': 0.042} jev p 0.57 sum 0.037
+  d3c723f:gsSurface.hpp:clean {'claude': -0.989, 'jev': 1.548, 'laya': -0.001} jev p 0.29 sum 0.559
+
+per fold: Claude APPROVE evidence, Jev evidence at p=0.99 (clamp), Jev zero crossing p
+  fold 0: Claude APP +2.708 REJ -1.053; Jev a 1.253 b 0.725 prior +0.000; Jev at p=.99 -2.079; Jev zero at p=0.849
+  fold 1: Claude APP +2.674 REJ -0.989; Jev a 0.999 b 0.662 prior +0.000; Jev at p=.99 -2.043; Jev zero at p=0.819
+  fold 2: Claude APP +2.398 REJ -1.253; Jev a 1.070 b 0.713 prior +0.000; Jev at p=.99 -2.207; Jev zero at p=0.818
+  fold 3: Claude APP +2.335 REJ -1.099; Jev a 1.274 b 0.868 prior +0.000; Jev at p=.99 -2.715; Jev zero at p=0.813
+  fold 4: Claude APP +2.303 REJ -0.989; Jev a 0.992 b 0.621 prior +0.000; Jev at p=.99 -1.861; Jev zero at p=0.832
+Claude-APPROVE items with Jev p>=0.95: 1 of 39 ; min Claude+Jev sum on them: 0.85

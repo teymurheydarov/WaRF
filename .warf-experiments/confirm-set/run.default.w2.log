@@ -1,0 +1,9 @@
+  claude_cli/claude-opus-5-5; worker 2 of 3: 73 reviews to run (0 done) -> claude-commit-strict-tools.w2.jsonl
+  worker 2: 10/73  28.3 s per review, ~30 min left
+  worker 2: 20/73  25.2 s per review, ~22 min left
+  worker 2: 30/73  25.3 s per review, ~18 min left
+  worker 2: 40/73  25.1 s per review, ~14 min left
+  worker 2: 50/73  24.5 s per review, ~9 min left
+  worker 2: 60/73  24.8 s per review, ~5 min left
+  worker 2: 70/73  25.4 s per review, ~1 min left
+  worker 2 done: 73 reviews in 31.3 min

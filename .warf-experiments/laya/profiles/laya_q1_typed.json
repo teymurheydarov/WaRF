@@ -1,0 +1,24 @@
+[
+  {
+    "name": "LAYA",
+    "persona": "Should this change be merged as it is? A defect you can point to is a REJECT.",
+    "weights": {
+      "LOGIC": {
+        "alpha": 2.0,
+        "beta": 8.0
+      },
+      "SECURITY": {
+        "alpha": 1.0,
+        "beta": 5.0
+      },
+      "PERFORMANCE": {
+        "alpha": 1.0,
+        "beta": 3.0
+      }
+    },
+    "last_updated": "2026-10-29T16:15:02.398507+00:00",
+    "provider": "laya",
+    "model": "typed-decisions",
+    "persona_hash": "30698a20810c"
+  }
+]

@@ -1,0 +1,4 @@
+670 non-merge commits on origin/dev since 2024-01-01 touch src/ C++; 1 reverted
+candidates: 120; operators: swap_ij 3, rows_cols 15, arg_swap 18, loop_bound 15, start_index 15, minus_one 14, drop_stmt 40
+skipped commits: revert 1, no file 0, too long 168, no plant 259, error 0
+dates: 2024-01-15 to 2026-09-10; after 2026-06-30: 6

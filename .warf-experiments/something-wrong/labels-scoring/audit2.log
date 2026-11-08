@@ -1,0 +1,70 @@
+== blamed lines of the 50 REJECTs (content at the blamed commit)
+  515d5f #include     #include <posit>
+  c518a5 preprocessor #define FDBB_WITH_CXX11
+  e001c7 #include     #include "Vector.h"
+  03e58b #include     #include <gsCore/gsDebug.h>
+  da06b6 #include     #include <gsAssembler/gsExprAssembler.h>
+  b2330f preprocessor #ifdef GISMO_WITH_PYBIND11 | #endif
+  5f8ecf other        template class gsKnotVector<real_t>;
+  b4f8a3 #include     #include <gsMpi/gsMpi.h>
+  5201b9 other        @brief Multigrid solver for isogeometric discretizations. | This file is part of the G+Smo library. | This Source Code Form is subject to the terms of the Mozilla
+  b89217 preprocessor #pragma once
+  cc497b other        CLASS_TEMPLATE_INST gsKnotVector<real_t>;
+  616e66 other        virtual std::string extension() = 0; | virtual void read(std::string fname) {GISMO_NO_IMPLEMENTATIO | virtual void write(std::string fname) {GISMO_NO_IMPLEMENTATI
+  4b41ad other        namespace util {
+  60f802 other        #include <gsHSplines/gsHBoxContainer.h> | #include <gsHSplines/gsHBoxContainer.hpp> | CLASS_TEMPLATE_INST gsHBoxContainer<1,real_t>;
+  6c5281 #include     #include <universal/utility/directives.hpp>
+  6017c0 preprocessor #define gsTensorBSplineBasis_EXPORT
+  b1f90f other        @brief DESCRIPTION
+  920dfd other        #include <gsMatrix/gsMatrix.h> | void applyKronecker(const std::vector< gsLinearOperator* > &
+  7f37bf other        Author(s): A. Mantzaflaris
+  7db77f other        TEMPLATE_INST void gaussSeidelSweep(gsSparseMatrix<real_t>:: | TEMPLATE_INST void reverseGaussSeidelSweep(gsSparseMatrix<re
+  2a162c preprocessor #define EXTERN_STRUCT_TEMPLATE extern template struct //GISM | #define EXTERN_CLASS_TEMPLATE  extern template class  //GISM | #define EXTERN_TEMPLATE        extern template        //GISM
+  6d18ae #include     #include <gsMSplines/gsMPBESBasis.h> | #include <gsMSplines/gsMPBESBasis.hpp>
+  c2f1b9 other        gismo::conditional<k==1,double, gsVector<double> >::type | struct conditional; | struct conditional<true, IsTrue, IsFalse> { typedef IsTrue t
+  ebe5b3 other        @brief Tutorial on how to use expression assembler to builde
+  09b5b3 #include     #include <gsUtils/gsCombinatorics.h>
+  46d7d2 other        namespace numeric { namespace details { struct codi_rr_type_
+  a314c7 #include     #include <gsCore/gsGeometry.h>
+  482f99 preprocessor #endif (edited)
+  d05ce2 preprocessor #endif (edited)
+  2140a8 other        GISMO_EXPORT index_t reorderMapperTarget (gsWeightMapper<rea | GISMO_EXPORT  gsWeightMapper<real_t>* combineMappers (const  | GISMO_EXPORT  void combineMappers (const std::vector<gsWeigh
+  bb047a preprocessor #ifdef __MINGW32__ | #include <sys/stat.h> | #endif
+  d983e9 other        GSXML_GET_INTO(gsTHBSplineBasis<TMPLA2(d,T)>)
+  7cac17 #include     #include <gsCore/gsDofMapper.h>
+  39f2ad #include     #include <gsHSplines/gsHTensorBasis.h> | #include <gsHSplines/gsHTensorBasis.hpp>
+  c1b11a #include     #include <gsCore/gsAffineFunction.h>
+  16af02 other        Compile time type switching. | Example: The type | gismo::choose<k==1,double, gsVector<double> >::type
+  7d18e0 #include     #include <gsIO/gsWriteParaview.h>
+  f38d3a preprocessor #define STRUCT_TEMPLATE_EINST template struct | #define CLASS_TEMPLATE_EINST  template class | #define TEMPLATE_EINST        template
+  ebcf2a other        Author(s): J. Sogn, C. Hofreither, A. Mantzaflaris | TEMPLATE_INST void dampedRichardsonSweep(const gsSparseMatri | TEMPLATE_INST void dampedJacobiSweep(const gsSparseMatrix<re
+  c79f8b other        inline Scalar val() const { return _c; }
+  88cb75 other        void pardisoinit(void* , int*, int*, int*, void*, int* );
+  a3d51f #include     #include <gsIO/gsWriteParaview.h>
+  ff66f7 #include     #include <gsG1Basis/gsG1ASGluingDataAssembler.h>
+  ee60aa other        #define TYPE_TAG_(UNUM_TYPE) UNUM_TYPE ## _type_tag | #define TYPE_TAG(UNUM_TYPE) TYPE_TAG_(UNUM_TYPE) | #define UNUM_TYPE_TAG TYPE_TAG(UNUM_TYPE)
+  fad955 preprocessor #ifdef _OPENMP >= 202111
+  19767a other        CLASS_TEMPLATE_INST internal::gsXml< gsTensorBSplineBasis<1,
+  451246 preprocessor #else | #endif
+  d9b330 other        class GISMO_EXPORT gsSolidHalfEdge : public gsSolidElement<T
+  0c0789 other        delete curve;
+  894df0 other        Author(s): G. Kiss, A. Mantzaflaris
+  kinds of blamed lines: {'#include': 15, 'preprocessor': 11, 'other': 24}
+
+  added lines AUC 0.716; non-blank non-comment added lines AUC 0.756; 'any code line added' AUC 0.680
+  items with no code line added: R 0 A 18
+
+== Claude minus Jev, all 100 and without the 15 trivial APPROVEs (resampling within label)
+  Claude - Jev one       all +0.103 [-0.001, +0.204]   non-trivial +0.047 [-0.075, +0.169]
+  Claude - Jev five R1   all +0.117 [+0.012, +0.218]   non-trivial +0.062 [-0.060, +0.188]
+  Claude - added lines   all +0.028 [-0.081, +0.134]   non-trivial +0.024 [-0.121, +0.166]
+  Jev one - added lines  all -0.075 [-0.201, +0.060]   non-trivial -0.023 [-0.189, +0.137]
+
+== replay decomposition: raw AUC -> two-decimal clamp -> out-of-fold Platt evidence (replay's folds, seed 11)
+  JEV     raw 0.641  clamped 0.641  OOF Platt pooled 0.629  mean of per-fold AUCs 0.636
+          fits (a, b, prior): [(0.105, 0.301, 0.0), (0.05, 0.398, 0.0), (0.047, 0.272, 0.0), (0.067, 0.439, 0.0), (0.071, 0.282, 0.0)]
+  LAYA    raw 0.586  clamped 0.584  OOF Platt pooled 0.579  mean of per-fold AUCs 0.576
+          fits (a, b, prior): [(-0.811, 0.462, 0.0), (-0.67, 0.377, 0.0), (-1.038, 0.581, 0.0), (-0.783, 0.444, 0.0), (-0.557, 0.315, 0.0)]
+  CLAUDE  raw 0.745  clamped 0.745  OOF Platt pooled 0.737  mean of per-fold AUCs 0.749
+          fits (a, b, prior): [(-1.093, 0.685, 0.0), (-1.254, 0.791, 0.0), (-1.152, 0.706, 0.0), (-1.186, 0.734, 0.0), (-1.355, 0.886, 0.0)]
+  (b > 0 in every fit means evidence falls as p(REJECT) rises: the sign convention is right)

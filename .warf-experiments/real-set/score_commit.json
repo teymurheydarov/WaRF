@@ -1,0 +1,88 @@
+{
+ "n": 132,
+ "arms": {
+  "claude": {
+   "ba": 0.7576,
+   "recall": 64,
+   "false_alarms": 30
+  },
+  "claude-strict": {
+   "ba": 0.8561,
+   "recall": 52,
+   "false_alarms": 5
+  },
+  "claude-advocate": {
+   "ba": 0.8409,
+   "recall": 55,
+   "false_alarms": 10
+  },
+  "claude-commit": {
+   "ba": 0.7727,
+   "recall": 64,
+   "false_alarms": 28
+  },
+  "claude-commit-strict": {
+   "ba": 0.8636,
+   "recall": 52,
+   "false_alarms": 4
+  },
+  "w3": {
+   "ba": 0.8788,
+   "recall": 56,
+   "false_alarms": 6
+  }
+ },
+ "comparisons": {
+  "claude": {
+   "d": 0.1212,
+   "ci": [
+    0.0379,
+    0.197
+   ],
+   "only_w3": 26,
+   "only_single": 10,
+   "p": 0.0113
+  },
+  "claude-strict": {
+   "d": 0.0227,
+   "ci": [
+    -0.0076,
+    0.0606
+   ],
+   "only_w3": 4,
+   "only_single": 1,
+   "p": 0.375
+  },
+  "claude-advocate": {
+   "d": 0.0379,
+   "ci": [
+    -0.0,
+    0.0833
+   ],
+   "only_w3": 7,
+   "only_single": 2,
+   "p": 0.1797
+  },
+  "claude-commit": {
+   "d": 0.1061,
+   "ci": [
+    0.0303,
+    0.1818
+   ],
+   "only_w3": 23,
+   "only_single": 9,
+   "p": 0.0201
+  },
+  "claude-commit-strict": {
+   "d": 0.0152,
+   "ci": [
+    -0.0152,
+    0.053
+   ],
+   "only_w3": 4,
+   "only_single": 2,
+   "p": 0.6875
+  }
+ },
+ "verdict": "favours W3, not shown"
+}
