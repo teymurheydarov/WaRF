@@ -1,0 +1,287 @@
+% WaRF with Jev: the log-odds panel (LO)
+% Companion note to slides/warf_technical.tex
+% Build: pdflatex warf_jev_lo.tex (twice, for the table of contents)
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{microtype}
+\usepackage{xcolor}
+\usepackage{enumitem}
+
+\geometry{margin=2.5cm}
+\hypersetup{colorlinks=true,linkcolor=blue!60!black,citecolor=blue!60!black,urlcolor=blue!60!black}
+
+\title{\textbf{WaRF with Jev: the Log-Odds Panel}\\[0.4em]
+\large Technical Note}
+\author{Teymur Heydarov}
+\date{November 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\bigskip\hrule
+\bigskip
+
+% =============================================================================
+\section{Summary}
+
+WaRF was run with TypeSafe's Jev as its only model, on real defects from the
+G+Smo history. A panel of five persona seats, three on \texttt{jev-1.14} and two
+on \texttt{jev-1.13}, aggregated in WaRF's log-odds mode after learning from
+132 labelled reviews (\emph{LO}), reviewed 220 fresh changes correctly in
+\textbf{73.2\%} of cases (balanced accuracy), against \textbf{67.7\%} for one
+Jev. This is the first preregistered test in which WaRF beat its single
+reviewer (exact McNemar $p = 0.012$, Holm-adjusted $0.024$). Because it was the
+sixth comparison on those changes, LO was then frozen and tested once on a
+second project, MFEM: on 300 fresh changes it scored \textbf{80.0\%} against
+\textbf{75.3\%} for one Jev (23 against 9 changes, $p = 0.020$), with a
+calibration learned only on G+Smo. One Claude Opus scores 85.5\% on the G+Smo
+fresh set.
+
+% =============================================================================
+\section{Data and Measure}
+
+\begin{description}[leftmargin=1.5em]
+\item[Defective changes] C++ changes in the gismo6 history that a later fix
+  blamed (B-SZZ), kept only if two independent judges, who see the fix,
+  agree that the change introduced the defect. The reviewers never see the fix.
+\item[Clean changes] Changes whose added lines all survive unchanged at
+  \texttt{origin/dev}, one per defective change, matched by date and size.
+\item[Development set] 132 changes (66 + 66), used for all tuning and learning.
+\item[Fresh set] 220 changes (110 + 110), never used for tuning; every test on
+  it was written down before the first call.
+\item[Input] The diff with 30 lines of context and the enclosing function
+  bodies, as WaRF sends it.
+\item[Measure] Balanced accuracy (BA), the mean of the share of defects caught
+  and the share of clean changes passed. Counting added lines alone ranks the
+  fresh set with AUC 0.79, so size is a strong confound.
+\end{description}
+
+% =============================================================================
+\section{Jev}
+
+Jev (TypeSafe System One) is a decision model: it takes a state and typed
+questions and returns, per question, a probability for each option, with no
+text. WaRF asks one choice question, APPROVE or REJECT, with the seat's persona
+as its instructions. Two versions are served through OpenRouter:
+\texttt{jev-1.14} (2026-10-14) and \texttt{jev-1.13} (2026-09-17). A call costs
+about \$0.0001--0.0002; an LO review (five calls) about \$0.0006.
+
+Jev is stable but forms one opinion per change: identical calls agree on the
+decision in 97--99\% of cases, and its scores correlate 0.84--0.97 across
+wordings, input formats, retrieved context and the two versions.
+
+% =============================================================================
+\section{The Log-Odds Panel}
+
+\subsection{Seats}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Seat & Persona & Model \\
+\midrule
+SKEPTIC      & defensive, concrete defects only & \texttt{jev-1.14} \\
+ADVOCATE     & author's intent                  & \texttt{jev-1.14} \\
+AUDITOR      & neutral audit                    & \texttt{jev-1.14} \\
+TEST-FOCUSED & coverage                         & \texttt{jev-1.13} \\
+BOUNDARY     & edge cases                       & \texttt{jev-1.13} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{Aggregation (ADR 0001)}
+
+Each seat $s$ returns $p_s = p(\mathrm{REJECT})$, read to two decimals and
+clamped to $[0.01, 0.99]$. Its log-odds for APPROVE is
+$r_s = \ln\bigl((1-p_s)/p_s\bigr)$.
+
+\textbf{Calibration.} From the labelled history of that seat (same persona,
+model and evidence source), WaRF fits Platt scaling once it has at least 10
+labelled reviews of each class:
+\[
+  e_s = a_s + b_s\, r_s - \pi_s,
+\]
+where $\pi_s$ is the logit of the smoothed clean share of the training labels,
+so $e_s$ is a likelihood ratio rather than a posterior. Without enough history,
+$r_s$ is capped at the seat's vote-mode step $\omega_s \cdot \mathrm{LLR}$.
+
+\textbf{Pooling.} Seats of one model shown the same input form one group $g$;
+a group contributes the mean of its seats' evidence, and the groups are summed:
+\[
+  \Lambda = \sum_{g} \frac{1}{|g|} \sum_{s \in g} e_s .
+\]
+The three \texttt{jev-1.14} seats thus count as one source and the two
+\texttt{jev-1.13} seats as another (SPECIFICATION \S3.1: one model is one fault
+domain sampled $n$ times).
+
+\textbf{Decision.} After each complete group, WaRF stops if
+$\Lambda \ge A \approx 2.890$ (APPROVE) or $\Lambda \le B \approx -2.251$
+(REJECT), unless two groups point in opposite directions by at least $\ln 2$
+each. If no boundary is crossed, it decides APPROVE if $\Lambda \ge \tau$,
+with $\tau = \operatorname{logit}\bigl((1+\theta)/2\bigr)$: 0 for LOGIC,
+0.405 for SECURITY, $-0.201$ for PERFORMANCE.
+
+\subsection{Learning}
+
+The panel reviewed the 132 development changes; after each review the known
+answer was recorded with \texttt{apply\_oracle} and \texttt{append\_session},
+WaRF's own labelling path. The resulting session log is LO's calibration
+history. No fresh change entered it.
+
+% =============================================================================
+\section{Results on the Fresh Set}
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Reviewer (220 fresh changes) & Right & Caught & False alarms \\
+\midrule
+One Jev (usual question, threshold from dev)      & 67.7\% & 73/110 & 34/110 \\
+WaRF Jev, 7 narrow checks per hunk                & 71.4\% & 67/110 & 20/110 \\
+WaRF Jev, narrow checks of both versions          & 71.8\% & 70/110 & 22/110 \\
+WaRF panel, untrained, vote mode                  & 69.5\% & 85/110 & 42/110 \\
+WaRF panel, learned weights, vote mode            & 69.1\% & 85/110 & 43/110 \\
+\textbf{LO: WaRF panel, learned, log-odds mode}   & \textbf{73.2\%} & 83/110 & 32/110 \\
+\midrule
+One Claude Opus, default effort                   & 85.5\% & 91/110 & 13/110 \\
+WaRF Claude, three efforts, reject if any rejects & 86.8\% & 100/110 & 19/110 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{LO against one Jev:} only LO right on 16 changes, only one Jev on 4;
+$p = 0.012$, Holm $0.024$ over the two arms of that test. The preregistered
+verdict is a win. LO against the untrained panel: $+3.6$ points ($p = 0.077$);
+against the narrow checks: $+1.8$ points ($p = 0.61$).
+
+The seats' answers are the same in the vote-mode and log-odds arms; the gain
+comes from the aggregation. Calibrated evidence pooled per model keeps most of
+the extra defects the panel catches while cutting its false alarms from 42 to 32.
+
+% =============================================================================
+\section{Second Repository: MFEM}
+
+Because the G+Smo fresh set had been used for six comparisons, LO was frozen
+and tested once on a second C++ project, MFEM (github.com/mfem/mfem, read with
+git only). The test was preregistered before any change was built.
+
+\begin{description}[leftmargin=1.5em]
+\item[Set] B-SZZ candidates from 2,949 fix commits on \texttt{master}; judge A
+  judged 360 candidates (157 yes), judge B judged those 157 (151 yes); the first
+  150 confirmed defects were kept, with 150 surviving clean changes matched by
+  date and size.
+\item[LO] Exactly as tested on G+Smo, calibrated only on the 132 G+Smo
+  development reviews; nothing from MFEM entered it.
+\item[One Jev] The usual question, REJECT at $p \ge 0.79$ (fixed on G+Smo).
+\end{description}
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Reviewer (300 MFEM changes) & Right & Caught & False alarms \\
+\midrule
+One Jev                                   & 75.3\% & 94/150 & 18/150 \\
+WaRF Jev, 7 narrow checks per hunk        & 74.3\% & 88/150 & 15/150 \\
+\textbf{LO: WaRF log-odds panel}          & \textbf{80.0\%} & 112/150 & 22/150 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{LO against one Jev:} only LO right on 23 changes, only one Jev on 9;
+exact McNemar $p = 0.020$. The preregistered verdict is a win. LO also beats
+the narrow checks (29 against 12, $p = 0.012$); the narrow checks do not beat
+one Jev here. On the 87 defects visible from the diff LO scores 85.2\% against
+80.8\%. Ranked by the seats' mean $p$, LO's AUC is 0.883 against 0.866 for the
+count of added lines: the gain lies in WaRF's decision, not in a better ranking.
+
+% =============================================================================
+\section{Development of LO}
+
+LO's decision depends only on the seats' stored $p_s$ and the labelled history,
+so it was rebuilt offline with WaRF's own calibrator, grouping and decision
+functions. The rebuild reproduces all 220 logged decisions. Variants were judged
+by stratified 10-fold cross-validation, repeated five times, over all 352 judged
+changes, calibrating on the training folds only; no further look at the fresh
+set was spent. Repeats vary by about $\pm 0.4$ points.
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Cross-validated, 352 changes & Right \\
+\midrule
+One Jev seat in WaRF (usual question, calibrated)  & 73.8\% \\
+\textbf{LO, five personas}                         & \textbf{76.3\%} \\
+LO + the usual question on both versions           & 76.7\% \\
+LO + the 7 narrow checks of both versions          & 76.4\% \\
+LO + usual question + narrow checks                & 75.5\% \\
+LO + a context seat (retrieved declarations)       & 75.2\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+More Jev seats do not move LO: they repeat what the personas already say. A
+context seat, shown the declarations of the names on the changed lines, helps a
+little on its own (74.1\%) but lowers LO: as a separate source its evidence is
+summed with the two Jev groups although it mostly repeats them.
+
+\subsection{Cold Start}
+
+A new user has no labelled history, so every seat starts uncalibrated:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Labelled reviews before the fresh set & LO right \\
+\midrule
+none                         & 68.6\% \\
+10 defective + 10 clean      & 70.5\% \\
+15 + 15                      & 71.4\% \\
+20 + 20                      & 73.6\% \\
+66 + 66 (development set)    & 73.2\% \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Without history LO is about one Jev. It needs 10--20 confirmed defects, which in
+a real project may take months to collect; clean labels are easy.
+
+% =============================================================================
+\section{Limitations}
+
+\begin{itemize}[leftmargin=1.5em]
+\item Both projects are C++ numerics libraries (isogeometric analysis and
+  finite elements); other kinds of code are untested.
+\item Jev's ranking stays close to a count of added lines (G+Smo fresh set
+  0.75--0.77 against 0.79; MFEM 0.88 against 0.87); much of any Jev score is
+  change size.
+\item LO asks five seats where one Jev asks one: about \$0.00065 against
+  \$0.00013 per review.
+\item The labels rest on two Claude judges who see the later fix.
+\item The clean controls are clean only in that their lines survived; a few may
+  hold unfound defects.
+\item Claude Opus remains about 12 points ahead of LO.
+\end{itemize}
+
+% =============================================================================
+\section{Files}
+
+\begin{itemize}[leftmargin=1.5em]
+\item \texttt{.warf-experiments/confirm-set/README.md}: the preregistered tests
+  and their results (second to fifth test).
+\item \texttt{.warf-experiments/confirm-set/jev-learned/}: LO's learning log,
+  profiles, runner and scorer.
+\item \texttt{.warf-experiments/mfem-set/}: the MFEM preregistration, mining,
+  judgements, items, runs and score.
+\item \texttt{.warf-experiments/lo-dev/}: the offline rebuild, cross-validation,
+  learning curve and context seat.
+\item \texttt{.warf-experiments/real-set/DEV.md}: everything tried on the
+  development set.
+\end{itemize}
+
+\end{document}

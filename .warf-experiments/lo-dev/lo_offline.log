@@ -1,0 +1,17 @@
+reproduction of LO on the 220 confirm items: 220/220 decisions equal WaRF's; BA 73.2%
+
+cross-validated balanced accuracy, 352 items (10 folds x 5 repeats; calibration from training folds only)
+  LO: 5 personas (as tested)                          76.3%   (repeats 75.9-76.7)
+  LO + usual question on both versions                76.7%   (repeats 76.4-77.0)
+  LO + narrow checks of both versions (own source)    76.4%   (repeats 76.1-76.7)
+  LO + usual question + narrow checks                 75.5%   (repeats 75.3-75.6)
+  narrow checks of both versions only                 76.3%   (repeats 76.1-76.7)
+  one Jev seat (usual question, jev-1.14)             73.8%   (repeats 73.6-74.1)
+
+for information only (another look at the confirm set): calibrate on dev, decide confirm
+  LO: 5 personas (as tested)                          73.2%
+  LO + usual question on both versions                73.2%
+  LO + narrow checks of both versions (own source)    70.9%
+  LO + usual question + narrow checks                 70.9%
+  narrow checks of both versions only                 72.3%
+  one Jev seat (usual question, jev-1.14)             68.6%

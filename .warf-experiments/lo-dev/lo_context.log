@@ -1,0 +1,13 @@
+cross-validated, 352 items (10 folds x 5 repeats); 44 defects need another file
+  LO: 5 personas (as tested)             right  76.3% (repeats 75.9-76.7)   caught of the needs-other-file defects  70.5%
+  LO + context seat (usual question)     right  75.2% (repeats 75.0-75.6)   caught of the needs-other-file defects  65.9%
+  LO + context seats (7 checks)          right  75.5% (repeats 75.3-75.9)   caught of the needs-other-file defects  64.1%
+  context seat alone (usual question)    right  74.1% (repeats 73.9-74.4)   caught of the needs-other-file defects  68.2%
+  one Jev seat (usual question)          right  73.8% (repeats 73.6-74.1)   caught of the needs-other-file defects  63.6%
+
+for information only (another look at the confirm set): calibrate on dev, decide confirm
+  LO: 5 personas (as tested)              73.2%
+  LO + context seat (usual question)      72.3%
+  LO + context seats (7 checks)           71.8%
+  context seat alone (usual question)     70.0%
+  one Jev seat (usual question)           68.6%
