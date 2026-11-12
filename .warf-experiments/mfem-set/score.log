@@ -1,0 +1,13 @@
+300 MFEM items (150 defective, 150 clean); narrow run ['typesafe/jev-1.14-20261014']; LO ['typesafe/jev-1.13-20260917', 'typesafe/jev-1.14-20261014']; Jev cost $0.292
+  V, one Jev                   right  75.3%  caught 94/150  false alarms 18/150
+  N, WaRF Jev narrow checks    right  74.3%  caught 88/150  false alarms 15/150
+  LO, WaRF log-odds panel      right  80.0%  caught 112/150  false alarms 22/150
+
+PRIMARY  LO - V: +4.7 points; only LO right 23, only V right 9; exact McNemar p 0.0201 -> LO WINS
+secondary LO - N: +5.7 points; 29 vs 12; McNemar p 0.0115
+secondary N - V: -1.0 points; 11 vs 14; McNemar p 0.6900
+secondary AUC: added lines 0.866, V 0.863, N 0.865, LO mean seat p 0.883
+secondary, the 87 defects visible from the diff (with all clean items):
+  V   right  80.8%  caught 64/87
+  N   right  80.1%  caught 61/87
+  LO  right  85.2%  caught 74/87
