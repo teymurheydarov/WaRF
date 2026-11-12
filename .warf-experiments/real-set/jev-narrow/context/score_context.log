@@ -1,0 +1,30 @@
+answers_context.jsonl: 132 calls, cost $0.022411
+
+score                                 AUC  within    LOO               d vs N [95%]              d vs W0 [95%]   AUC nof17 AUC rest49
+N  ref: generic 7, hunk max         0.892   0.830  0.910   +0.000 [+0.000,+0.000]   +0.008 [-0.009,+0.028]       0.824      0.916
+W0 ref: generic 7, whole, no ctx    0.884   0.831  0.904   -0.008 [-0.028,+0.009]   +0.000 [+0.000,+0.000]       0.835      0.901
+V0 ref: verdict, whole, no ctx      0.855   0.775  0.848   -0.037 [-0.074,-0.003]   -0.029 [-0.061,+0.000]       0.797      0.876
+C  PRIMARY: generic 7, whole+ctx    0.881   0.832  0.904   -0.011 [-0.040,+0.015]   -0.004 [-0.027,+0.018]       0.862      0.887
+CV verdict, whole+ctx               0.841   0.764  0.852   -0.051 [-0.094,-0.011]   -0.044 [-0.084,-0.007]       0.798      0.856
+CA mean of C and W0                 0.885   0.836  0.905   -0.007 [-0.027,+0.013]   +0.001 [-0.011,+0.014]       0.849      0.898
+CN max(whole+ctx, hunks)            0.885   0.828  0.904   -0.007 [-0.027,+0.012]   +0.001 [-0.018,+0.018]       0.850      0.897
+
+Subset bootstrap (17 needs_other_file defects vs 66 clean), d = AUC(score) - AUC(ref):
+  C - W0   +0.027 [-0.013,+0.070]
+  C - N    +0.037 [-0.012,+0.091]
+  CV - V0  +0.000 [-0.040,+0.044]
+
+Subset bootstrap (49 other defects vs 66 clean):
+  C - W0   -0.014 [-0.038,+0.005]
+  CV - V0  -0.020 [-0.046,+0.002]
+
+check      AUC no ctx  AUC ctx  within no  within ctx
+offbyone        0.850    0.830      0.741       0.717
+condition       0.853    0.856      0.785       0.791
+wrongvar        0.842    0.844      0.808       0.801
+missing         0.864    0.851      0.786       0.772
+memory          0.832    0.808      0.732       0.724
+interface       0.644    0.663      0.770       0.792
+compile         0.775    0.764      0.680       0.678
+
+Spearman(C, W0) = 0.972 (ties broken by order)

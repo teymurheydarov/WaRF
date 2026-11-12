@@ -1,0 +1,7 @@
+
+30-line diff, verdict               0.855   0.775           0.872
+30-line diff, narrow mean logit     0.884   0.831           0.899
+whole commit + message, verdict     0.852   0.784           0.885
+whole commit + message, narrow mean logit  0.878   0.828           0.899
+changed lines only, verdict         0.801   0.721           0.850
+changed lines only, narrow mean logit  0.844   0.776           0.881

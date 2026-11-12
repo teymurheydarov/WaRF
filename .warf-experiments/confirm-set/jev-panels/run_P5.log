@@ -1,0 +1,13 @@
+P5: seats {'SKEPTIC': 'jev-1.14', 'ADVOCATE': 'jev-1.14', 'AUDITOR': 'jev-1.14', 'TEST-FOCUSED': 'jev-1.13', 'BOUNDARY': 'jev-1.13'}; 220 reviews to run (0 done)
+  20/220  3.1 s per review, $0.0132
+  40/220  3.2 s per review, $0.0236
+  60/220  3.2 s per review, $0.0340
+  80/220  3.2 s per review, $0.0455
+  100/220  3.3 s per review, $0.0600
+  120/220  3.3 s per review, $0.0689
+  140/220  3.2 s per review, $0.0823
+  160/220  3.2 s per review, $0.0946
+  180/220  3.1 s per review, $0.1078
+  200/220  3.0 s per review, $0.1203
+  220/220  2.9 s per review, $0.1326
+done: cost $0.1326

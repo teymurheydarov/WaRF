@@ -1,0 +1,220 @@
+  1 6befacc:poisson2d_example_adaptRef.cpp:defective   names  22 cand  20 used 17 chars  5976
+  2 78c7f79:gsBoehm.h:clean                            names   0 cand   0 used  0 chars    32
+  3 e7dcc17:gsGeometryConverter.cpp:defective          names   4 cand   0 used  0 chars    32
+  4 1d1a9e8:gsHTensorBasis.h:clean                     names   2 cand   1 used  1 chars   240
+  5 ad1bbc8:gsErrEstPoissonResidual.h:defective        names   3 cand   3 used  5 chars  2163
+  6 cbe0787:gsTHBSplineBasis.hpp:clean                 names   6 cand   4 used  6 chars  2942
+  7 e0ebfc6:gsDofMapper.h:defective                    names   6 cand   3 used  1 chars   314
+  8 2dbd2e8:gsBoundary.h:clean                         names   0 cand   0 used  0 chars    32
+  9 ab69d69:gsHTensorBasis.hpp:defective               names  22 cand  18 used 17 chars  5890
+ 10 d4e9453:gsHTensorBasis.h:clean                     names   6 cand   5 used  8 chars  2851
+ 11 483dfe5:gsSolverUtils.h:defective                  names  22 cand  13 used  8 chars  3435
+ 12 c1e3066:gsBoundary.h:clean                         names   2 cand   1 used  1 chars   504
+ 13 410a438:gsGeometryEvaluator.hpp:defective          names  45 cand  23 used 14 chars  5852
+ 14 f1e1343:Arg.h:clean                                names   3 cand   2 used  1 chars   531
+ 15 8b0f10e:gsSeminormH2.h:defective                   names  51 cand  44 used 16 chars  5873
+ 16 e3f89d1:gsXmlUtils.hpp:clean                       names   2 cand   2 used  1 chars   238
+ 17 270c931:gsTHBSplineBasis.hpp:defective             names   8 cand   8 used 11 chars  5996
+ 18 ce31a86:gsCombinatorics.h:clean                    names   3 cand   3 used  5 chars  2137
+ 19 170f759:gsHeatEquation.h:defective                 names  45 cand  36 used 16 chars  5981
+ 20 52d3d3d:gsWriteParaview.hpp:clean                  names   4 cand   3 used  4 chars  1341
+ 21 f63dea1:GeneralMatrixMatrix.h:defective            names   2 cand   1 used  1 chars   577
+ 22 3963ae7:gsGeometryData.hpp:clean                   names   4 cand   4 used  6 chars  2374
+ 23 9133ead:gsWriteParaview.hpp:defective              names   1 cand   1 used  1 chars   461
+ 24 9b1f1c4:gsFuncData.h:clean                         names   4 cand   3 used  2 chars   882
+ 25 e0e6273:gsBSplineBasis.h:defective                 names   4 cand   4 used  4 chars   921
+ 26 c40b666:gsStopwatch.h:clean                        names   2 cand   1 used  0 chars    32
+ 27 3ecff2e:gzguts.h:defective                         names   2 cand   0 used  0 chars    32
+ 28 62bc708:gzguts.h:clean                             names   2 cand   0 used  0 chars    32
+ 29 8d92e1e:gsFuncData.h:defective                     names  52 cand  39 used 12 chars  5882
+ 30 41cbb34:gsAsMatrix.h:clean                         names  12 cand  11 used 12 chars  4815
+ 31 6ca5a9c:gsHTensorBasis.h:defective                 names   3 cand   3 used  2 chars   680
+ 32 da02037:gsBSpline.h:clean                          names   1 cand   1 used  1 chars   482
+ 33 23297df:gsGenericAssembler.h:defective             names  10 cand   7 used 10 chars  3749
+ 34 5b4636c:gsBasis.hpp:clean                          names   5 cand   4 used  5 chars  2150
+ 35 4c7a79d:gsGeometry.hpp:defective                   names  17 cand  11 used 13 chars  5767
+ 36 5498820:gsSparseSystem.h:clean                     names   3 cand   3 used  5 chars  1885
+ 37 7695414:gsSparseMatrix.h:defective                 names   9 cand   5 used  6 chars  2248
+ 38 1b05209:gsTraceCurve.hpp:clean                     names   3 cand   3 used  6 chars  1331
+ 39 6897a17:gsKnotIterator.h:defective                 names  16 cand  16 used 10 chars  3581
+ 40 0e184b2:gsTHBSplineBasis.h:clean                   names  54 cand  40 used 13 chars  5826
+ 41 4efa202:gsHBSplineBasis.hpp:defective              names  12 cand  11 used 10 chars  4726
+ 42 e3eede2:gsTHBSplineBasis.hpp:clean                 names   7 cand   6 used  8 chars  3287
+ 43 9ac3e01:gsGridIterator.h:defective                 names  18 cand  11 used  9 chars  3207
+ 44 7ee674a:gsMatrix.h:clean                           names   1 cand   1 used  2 chars   762
+ 45 6a92e66:gsAsMatrix.h:defective                     names   8 cand   8 used  6 chars  2009
+ 46 989b2ab:gsSparseSystem.h:clean                     names   4 cand   4 used  4 chars  1529
+ 47 8f70df8:gsFunction.hpp:defective                   names  10 cand   9 used  8 chars  3879
+ 48 42edc17:gsMatrixOp.h:clean                         names   2 cand   1 used  1 chars   273
+ 49 8b645db:gsLinearOperator.h:defective               names   5 cand   5 used  4 chars  1587
+ 50 80690dd:gsPoissonPde.h:clean                       names   7 cand   7 used  7 chars  2374
+ 51 2470748:gsWriteParaview.h:defective                names   5 cand   3 used  4 chars  1435
+ 52 d348807:gsJITCompiler.h:clean                      names   9 cand   5 used  4 chars  1286
+ 53 dd8fb0a:gsSparseSystem.h:defective                 names   2 cand   2 used  1 chars   226
+ 54 5ac1ec6:gsAssemblerOptions.h:clean                 names   1 cand   0 used  0 chars    32
+ 55 aba4b74:gsAutoDiff.h:defective                     names  11 cand  10 used 10 chars  4238
+ 56 23702ae:gsWriteParaview.hpp:clean                  names   3 cand   2 used  1 chars   374
+ 57 726f7f3:gsUtils.cpp:defective                      names  20 cand  16 used 13 chars  4259
+ 58 c247abb:gsTensorBasis.h:clean                      names   2 cand   2 used  3 chars   900
+ 59 e236517:gsTrilinosSolvers.cpp:defective            names  11 cand   4 used  5 chars  1884
+ 60 e9f4f59:gsAssembler.h:clean                        names   0 cand   0 used  0 chars    32
+ 61 85fd37b:gsTensorNurbs.h:defective                  names  15 cand  12 used  6 chars  1890
+ 62 97264e5:RandomSetter.h:clean                       names  32 cand  14 used 15 chars  5991
+ 63 dc1a23f:gsTrilinosSolvers.cpp:defective            names   3 cand   1 used  2 chars   747
+ 64 f84df16:gsJITCompiler.h:clean                      names   1 cand   1 used  0 chars    32
+ 65 80fe247:gsMemory.h:defective                       names   1 cand   0 used  0 chars    32
+ 66 37d7812:gsMesh.hpp:clean                           names  10 cand   9 used  6 chars  2070
+ 67 8de009e:gsNorm.h:defective                         names  45 cand  34 used 17 chars  5972
+ 68 50f9f4f:gsBSplineBasis.h:clean                     names   4 cand   3 used  3 chars  1099
+ 69 3945dc4:gsCurveLoop.h:defective                    names   1 cand   1 used  1 chars   280
+ 70 3c36038:gsSparseMatrix.h:clean                     names   2 cand   2 used  4 chars  1429
+ 71 4ed7de2:test.h:defective                           names   4 cand   0 used  0 chars    32
+ 72 5e2b953:gsLinearAlgebra.h:clean                    names   2 cand   2 used  3 chars  1252
+ 73 ee3e014:mpi_example.cpp:defective                  names   9 cand   2 used  3 chars   766
+ 74 0ceda19:commandLineArg_example.cpp:clean           names   0 cand   0 used  0 chars    32
+ 75 1aee206:exprtk_ad_adaptor.hpp:defective            names   9 cand   5 used  5 chars  1910
+ 76 378137e:gsQuadratureRules_test.cpp:clean           names   7 cand   1 used  1 chars   419
+ 77 33719ab:gsField.h:defective                        names   2 cand   2 used  3 chars  1122
+ 78 0626094:gsFileData.h:clean                         names   4 cand   4 used  6 chars  1823
+ 79 e5c8e67:gsDofMapper.cpp:defective                  names  20 cand  18 used 15 chars  5873
+ 80 7296bc7:gsMemory.h:clean                           names   5 cand   3 used  3 chars  1413
+ 81 0b70522:gsMesh.h:defective                         names  11 cand  10 used  6 chars  2320
+ 82 e5b0ec1:gsCmdLine.cpp:clean                        names   1 cand   1 used  1 chars   559
+ 83 46fec10:gsHalfEdgeMesh.hpp:defective               names   6 cand   4 used  5 chars  2452
+ 84 612b66b:gsAssembler.hpp:clean                      names  26 cand  18 used 14 chars  5868
+ 85 d54425f:gsPoint.h:defective                        names   3 cand   2 used  1 chars   198
+ 86 ce31268:gsCurveFitting.h:clean                     names   0 cand   0 used  0 chars    32
+ 87 6c42e89:gsFunctionExpr.hpp:defective               names   2 cand   1 used  1 chars   274
+ 88 a064e38:gismo.h:clean                              names   3 cand   3 used  5 chars  1232
+ 89 f12766e:gsExpressions.h:defective                  names  16 cand  15 used 17 chars  5934
+ 90 75a06b8:gsMatrixBlockView.h:clean                  names  14 cand   4 used  3 chars  1107
+ 91 e924dc2:gsMpiComm.h:defective                      names   6 cand   6 used  3 chars   756
+ 92 7ec8d54:gsJITCompiler.h:clean                      names  10 cand  10 used  7 chars  2417
+ 93 fc0969f:gsMaterialMatrix_test.cpp:defective        names  46 cand  19 used 15 chars  5999
+ 94 97f0463:gsIterativeSolver.h:clean                  names  21 cand  16 used  9 chars  3451
+ 95 b0054df:gsMaterialMatrix_test.cpp:defective        names  46 cand  19 used 15 chars  5999
+ 96 34dbddb:kirchhoff-Love_example.cpp:clean           names   2 cand   2 used  3 chars  1145
+ 97 cc761b2:gsDirichletValues.h:defective              names  43 cand  34 used 13 chars  5915
+ 98 d7b6ac9:gsMesh.h:clean                             names   5 cand   4 used  5 chars  1812
+ 99 66840ef:gsG1AuxiliaryPatch.h:defective             names  35 cand  17 used 14 chars  5789
+100 37ae9f9:gsPreconditioner.h:clean                   names  12 cand  12 used 13 chars  5270
+101 115107e:gsDirichletValues.h:defective              names  28 cand  24 used 16 chars  5859
+102 abe4468:kirchhoff-Love_example.cpp:clean           names   6 cand   2 used  2 chars   764
+103 fed0f8f:gsDirichletValues.h:defective              names   4 cand   4 used  3 chars  1176
+104 910f0ac:gsRationalBasis.h:clean                    names   4 cand   3 used  5 chars  1646
+105 f83ebcc:gsTemplateTools.h:defective                names   6 cand   2 used  3 chars  1324
+106 756e497:gsXmlInstance_.cpp:clean                   names   0 cand   0 used  0 chars    32
+107 a033686:gsG1ASVisitorBiharmonic.h:defective        names   7 cand   5 used  3 chars   897
+108 92668b5:gsBoundaryConditions_test.cpp:clean        names   1 cand   1 used  2 chars   771
+109 e6bb5a1:gismo.h:defective                          names   4 cand   4 used  6 chars  1534
+110 02e2856:gsGeometry.h:clean                         names   3 cand   3 used  4 chars  1451
+111 61c0cc8:gsExpressions.h:defective                  names   6 cand   6 used  9 chars  2976
+112 a6d9c0c:gsStopwatch.h:clean                        names   3 cand   3 used  5 chars  1950
+113 376d87f:gsTensorDomainIterator.h:defective         names   4 cand   4 used  4 chars  1510
+114 df211ae:gsTensorBasis.h:clean                      names   3 cand   3 used  5 chars  1936
+115 ff868fc:gsGeometry.hpp:defective                   names  15 cand   8 used 13 chars  5680
+116 b725633:gsPatchRule.hpp:clean                      names   9 cand   6 used  7 chars  2541
+117 6502ba5:quasiInterpolation_example.cpp:defective   names   2 cand   1 used  2 chars   333
+118 1ef492e:gsIetiMapper.hpp:clean                     names   2 cand   2 used  1 chars   917
+119 07de11f:gsSpectra.h:defective                      names  29 cand   6 used 10 chars  3476
+120 773d288:kirchhoff-Love_example.cpp:clean           names   2 cand   1 used  1 chars   506
+121 3816a1f:gsHTensorBasis.hpp:defective               names  30 cand  26 used 15 chars  5931
+122 e5d4880:ieti_example.cpp:clean                     names  12 cand   8 used 12 chars  5869
+123 ab5f24e:gsG1ASVisitorBiharmonic.h:defective        names   5 cand   4 used  3 chars  1344
+124 cea3d73:gsFileData.hpp:clean                       names   2 cand   0 used  0 chars    32
+125 f462237:gsMappedBasis.hpp:defective                names  17 cand  12 used  9 chars  3848
+126 46d87b9:gsSparseSolver.h:clean                     names  18 cand  16 used 14 chars  5232
+127 17be5bb:gsMappedSpline.hpp:defective               names  14 cand  10 used  6 chars  2457
+128 5e273bc:gsFileData.hpp:clean                       names   0 cand   0 used  0 chars    32
+129 a03bf96:gsC1Basis.h:defective                      names  14 cand  11 used  9 chars  3411
+130 02ae024:gsMath.h:clean                             names   0 cand   0 used  0 chars    32
+131 c1ad9c6:fastfitting_surface.cpp:defective          names  25 cand  24 used 15 chars  5891
+132 a17fc06:linearAlgebra_example.cpp:clean            names   1 cand   1 used  1 chars   574
+133 11377cc:gsContainerBasis.h:defective               names  59 cand  40 used 15 chars  5914
+134 f2b93c5:kirchhoff-Love_example.cpp:clean           names  50 cand  31 used 15 chars  5993
+135 ae149d1:gsBenchmark.h:defective                    names  45 cand  34 used 20 chars  5814
+136 056bc37:gsMath.h:clean                             names   0 cand   0 used  0 chars    32
+137 814d9ad:Macros.h:defective                         names  18 cand   7 used  3 chars  1210
+138 729ace8:gsGeometry_.cpp:clean                      names   3 cand   2 used  2 chars   719
+139 5c32b4e:gsBoundaryConditions.hpp:defective         names  17 cand   9 used  8 chars  3257
+140 7d00e22:gsBoundaryConditions_.cpp:clean            names  13 cand   7 used  9 chars  3248
+141 0132c06:gsSurfMesh.cpp:defective                   names  17 cand  14 used 14 chars  4661
+142 07d845e:opennurbs_lookup.h:clean                   names   2 cand   0 used  0 chars    32
+143 7d07409:refit_patches.cpp:defective                names  18 cand  11 used 14 chars  5667
+144 4fcf0fe:gsGeometry.h:clean                         names   5 cand   4 used  5 chars  2445
+145 48bf19d:optimizer_example.cpp:defective            names   1 cand   0 used  0 chars    32
+146 eb524d0:gsFitting.hpp:clean                        names   7 cand   7 used  6 chars  2210
+147 503447f:gsExprEvaluator.h:defective                names  45 cand  44 used 14 chars  5837
+148 84b6454:gsMultiPatch.h:clean                       names   0 cand   0 used  0 chars    32
+149 89aeee4:gsFupBasis.h:defective                     names  25 cand  10 used 14 chars  5697
+150 fb0840c:patches_from_mesh.cpp:clean                names  40 cand  37 used 15 chars  5966
+151 73786f6:gsFupBasis.h:defective                     names  14 cand   6 used  5 chars  1396
+152 d3ea618:gsBasis.h:clean                            names   2 cand   1 used  0 chars    32
+153 429ef7c:gsParaviewDataSet.h:defective              names  26 cand  23 used 15 chars  5933
+154 e4c498e:gsTensorBSpline.hpp:clean                  names   4 cand   4 used  6 chars  2156
+155 8264e41:gsNurbsCreator.hpp:defective               names   5 cand   5 used  6 chars  2573
+156 e3da8d6:fileIo_example.cpp:clean                   names   3 cand   2 used  2 chars   834
+157 f4b1a37:gsFupBasis.h:defective                     names   9 cand   4 used  8 chars  2880
+158 acd8550:gsMappedBasis.hpp:clean                    names   0 cand   0 used  0 chars    32
+159 5dc997f:gsFuncCoordinate.h:defective               names  11 cand   6 used  5 chars  2411
+160 06252ee:spectra_test01.cpp:clean                   names   8 cand   2 used  3 chars   826
+161 e84785b:gsXml.h:defective                          names  23 cand  19 used 15 chars  5542
+162 f75b63c:gsFunction.hpp:clean                       names   3 cand   3 used  5 chars  1914
+163 65bf84f:gsBasis.hpp:defective                      names  24 cand  14 used 14 chars  5497
+164 d6d7d9f:gsLevenbergMarquardt.h:clean               names  60 cand  49 used 17 chars  5770
+165 4ab4b33:gsPyBind11.cpp:defective                   names   6 cand   2 used  1 chars   455
+166 1a9d9f8:ArgException.h:clean                       names   2 cand   1 used  2 chars   827
+167 6e4e4ee:mex_common.h:defective                     names  17 cand   5 used  7 chars  2923
+168 d9fc37e:gsFileData.h:clean                         names   3 cand   2 used  1 chars   464
+169 d0e43f7:mex_gsKnotVector.cpp:defective             names  29 cand   9 used 13 chars  5229
+170 02012bb:linear_elasticity_example.cpp:clean        names   1 cand   0 used  0 chars    32
+171 f681b83:gsBSpline.h:defective                      names   1 cand   1 used  1 chars   384
+172 e16518a:gsQuadrature.h:clean                       names   1 cand   1 used  1 chars   458
+173 cf1b071:gsPreCICE.h:defective                      names  14 cand   6 used  9 chars  3409
+174 1893136:refitting_example.cpp:clean                names   5 cand   2 used  2 chars  1232
+175 fac550a:gsLookupFunction.h:defective               names  21 cand   8 used 13 chars  5159
+176 cf4d177:gsRationalBasis.h:clean                    names   2 cand   2 used  3 chars  1094
+177 e2fe651:test-communication-inverted-flag-solid.cpp names   3 cand   0 used  0 chars    32
+178 b9be78e:gsCombinatorics.h:clean                    names   1 cand   1 used  2 chars  1007
+179 ef1fad7:quasiInterpolation_check_simple.cpp:defect names  22 cand   8 used 12 chars  5092
+180 9f5a7b6:gsWriteParaview_.cpp:clean                 names   6 cand   5 used  6 chars  2481
+181 576678a:gsExpressions.h:defective                  names   2 cand   2 used  2 chars   776
+182 03a69a1:gsMultiPatch.h:clean                       names   0 cand   0 used  0 chars    32
+183 948b5ae:gsQuasiInterpolate.hpp:defective           names  32 cand  21 used 12 chars  5794
+184 85799bd:gsComposedBasis.h:clean                    names   5 cand   3 used  4 chars  1394
+185 c833d62:gsExpressions.h:defective                  names   6 cand   2 used  2 chars   892
+186 ebc2464:sparseSolvers_example.cpp:clean            names  17 cand  11 used 13 chars  4390
+187 7a6f438:gsPatchPreconditionersCreator.hpp:defectiv names  29 cand  22 used 16 chars  5877
+188 05eb9d0:gsMappedBasis.h:clean                      names   6 cand   5 used  6 chars  2740
+189 9c6192c:gsFileData.hpp:defective                   names   6 cand   4 used  4 chars  1087
+190 90f6194:grad_expr.h:clean                          names   4 cand   3 used  5 chars  1785
+191 acb2de8:gsFiberMatrix.h:defective                  names   7 cand   4 used  3 chars  1365
+192 4a58d8b:gsTensorNurbs.h:clean                      names   0 cand   0 used  0 chars    32
+193 e0b5578:rh_elasticity_example.cpp:defective        names   8 cand   6 used  7 chars  2946
+194 bb89773:gsRationalBasis.h:clean                    names   2 cand   2 used  1 chars   297
+195 47ea14a:rh_elasticity_example.cpp:defective        names   5 cand   4 used  5 chars  2091
+196 35d0337:gsJSON.h:clean                             names   8 cand   1 used  2 chars   751
+197 8c60946:grad_expr.h:defective                      names   7 cand   6 used 11 chars  3781
+198 9d526f2:gsSparseMatrix.h:clean                     names   0 cand   0 used  0 chars    32
+199 f813acf:gsKdTree.h:defective                       names  15 cand  11 used 14 chars  5052
+200 f2565ee:gsWriteParaview_.cpp:clean                 names   5 cand   3 used  5 chars  2159
+201 70ae5b2:gsKdTree.h:defective                       names  10 cand   9 used  6 chars  1839
+202 1273496:gsMultiPatch.hpp:clean                     names   2 cand   0 used  0 chars    32
+203 4b2e90b:gsHTree.hpp:defective                      names  29 cand  21 used 18 chars  5996
+204 4620adc:gsHTensorBasis.hpp:clean                   names   6 cand   5 used  4 chars  1342
+205 64e7629:gsKnotVector.hpp:defective                 names  24 cand  19 used 17 chars  5851
+206 a3f703d:gsAdaptiveMeshingCompare.h:clean           names   6 cand   6 used  7 chars  3188
+207 27355c5:gsFreeformSubdivision.cpp:defective        names  17 cand  14 used 14 chars  5257
+208 01ba062:gsWriteParaview_.cpp:clean                 names   5 cand   3 used  4 chars  1672
+209 0dc9ac6:gismo_paraview_geometry.cpp:defective      names   1 cand   1 used  2 chars   875
+210 e241ce5:gsMultiPatch.h:clean                       names   3 cand   3 used  4 chars  1439
+211 622ab85:gsQuadrature.h:defective                   names   9 cand   1 used  1 chars   602
+212 a5c6e51:gsPreconditioner.h:clean                   names   1 cand   1 used  1 chars   345
+213 4359d30:freeform_fitfunc.cpp:defective             names  11 cand   8 used 14 chars  5756
+214 4cf0985:gsTensorNurbsBasis.h:clean                 names  11 cand   8 used  9 chars  3226
+215 04bcbbc:tensor_assembly_example.cpp:defective      names  29 cand  24 used 19 chars  5979
+216 1f43daf:gsBinaryFunctions.h:clean                  names   9 cand   4 used  3 chars  1098
+217 25995fa:thbSplineBasis_example.cpp:defective       names  11 cand   8 used 13 chars  5028
+218 d8cceb9:gsLinearAlgebra.h:clean                    names   0 cand   0 used  0 chars    32
+219 26918ba:gsAsG1Basis.hpp:defective                  names  25 cand  13 used 14 chars  5646
+220 895282d:gsPKUtils.h:clean                          names  25 cand   9 used 12 chars  4866

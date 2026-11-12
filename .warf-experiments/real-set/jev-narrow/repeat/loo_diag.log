@@ -1,0 +1,5 @@
+ref N in [0,1]: 7  loo raw size+N: 0.905
+mean3 N in [0,1]: 8  loo raw size+N: 0.904
+run2 N in [0,1]: 6  loo raw size+N: 0.902
+run3 N in [0,1]: 8  loo raw size+N: 0.903
+mean12 N in [0,1]: 7  loo raw size+N: 0.903

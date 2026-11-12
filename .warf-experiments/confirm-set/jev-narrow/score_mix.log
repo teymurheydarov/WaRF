@@ -1,0 +1,8 @@
+models: ['typesafe/jev-1.13-20260917'] and ['typesafe/jev-1.14-20261014']; 220 items (110 defective)
+Spearman N(1.13) vs N(1.14): 0.964
+  M two-version WaRF Jev   BA 0.718  caught 70/110  false alarms 22/110
+  N WaRF Jev (1.14)        BA 0.714  caught 67/110  false alarms 20/110
+  V one Jev                BA 0.677  caught 73/110  false alarms 34/110
+  PRIMARY M - N: BA +0.005; only M right 6, only N right 5, McNemar p 1.000 -> not shown
+  secondary M - V: BA +0.041; only M right 20, only V right 11, McNemar p 0.150 -> not shown
+  secondary AUC: M 0.773, N 0.771, N(1.13) 0.770; M - N +0.002 [-0.009, +0.014]

@@ -1,0 +1,14 @@
+fit check vs jevscore._fit (ridge 1, all 132): max |dw| = 2.22e-15
+items 132; common ids answers.jsonl/answers_json.jsonl 132; items with >1 hunk 42
+B: ridge chosen per outer fold {0.3: 0, 1.0: 1, 3.0: 110, 10.0: 21}
+
+score                       AUC  within  LOOsz  LOOraw   d vs ref_N [95% CI]
+ref_N                     0.892   0.830  0.910   0.905   +0.000 [+0.000, +0.000]
+N_json (component)        0.891   0.846  0.901   0.907   -0.001 [-0.022, +0.020]
+B_ridge_nested            0.883   0.777  0.882   0.875   -0.009 [-0.043, +0.022]
+A_noisyor                 0.882   0.810  0.895   0.899   -0.010 [-0.028, +0.007]
+A_top2                    0.877   0.831  0.909   0.903   -0.015 [-0.039, +0.007]
+C_mean_plain_json         0.895   0.842  0.903   0.907   +0.003 [-0.007, +0.014]
+
+Pearson correlation of N_json and ref_N = 0.973
+elapsed 326 s

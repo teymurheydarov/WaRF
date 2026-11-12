@@ -1,0 +1,27 @@
+run1: 321 calls, models ['typesafe/jev-1.14-20261014'], cost $0.0386
+run2: 321 calls, models ['typesafe/jev-1.14-20261014'], cost $0.0386
+run3: 321 calls, models ['typesafe/jev-1.14-20261014'], cost $0.0386
+cost runs 2+3: $0.0772
+
+Call-to-call noise per question (pairs of runs, 321 calls each, both states)
+question    mean|dp|  max|dp|  same p same choice whole mean|dp|
+verdict        0.021     0.16    0.25        0.98          0.019
+offbyone       0.009     0.12    0.64        0.99          0.011
+condition      0.017     0.15    0.42        0.99          0.018
+wrongvar       0.015     0.15    0.43        0.99          0.018
+missing        0.022     0.22    0.25        0.98          0.023
+memory         0.010     0.27    0.58        0.99          0.011
+interface      0.023     0.24    0.29        0.97          0.024
+compile        0.020     0.14    0.27        0.98          0.021
+
+Item-level N noise: mean |dN| between runs (logit units), Spearman-free check of rank agreement
+  N_run1 vs N_run2: mean |dN| 0.096, max 0.358
+  N_run1 vs N_run3: mean |dN| 0.097, max 0.365
+  N_run2 vs N_run3: mean |dN| 0.093, max 0.311
+
+score                 auc  within  loo_size   d vs ref_N [95% CI]
+ref_N (run 1)       0.892   0.830     0.910
+N_mean3 (primary)   0.892   0.834     0.891   -0.000 [-0.006, +0.006]
+N_run2              0.888   0.831     0.905   -0.004 [-0.014, +0.006]
+N_run3              0.892   0.827     0.904   -0.000 [-0.010, +0.009]
+N_mean12            0.892   0.836     0.903   +0.000 [-0.006, +0.006]

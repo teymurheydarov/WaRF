@@ -1,0 +1,19 @@
+321 calls, cost $0.0481; added-lines AUC 0.834
+score                                       AUC  within    LOO  d vs N            95% CI
+ref N (generic 7, frozen)                 0.892   0.830  0.910
+P21 (primary): orig + 2 paraphrases       0.897   0.838  0.912  +0.005 [-0.004, +0.016]
+P14: 14 paraphrases alone                 0.901   0.846  0.896  +0.009 [-0.004, +0.025]
+Pa: paraphrase set a                      0.896   0.844  0.908  +0.004 [-0.012, +0.020]
+Pb: paraphrase set b                      0.903   0.848  0.899  +0.011 [-0.004, +0.028]
+
+diagnostics: per-check logit(hunk max) Pearson over items, and single-question AUC
+check       r(o,a)  r(o,b)  r(a,b)  AUC o  AUC a  AUC b
+offbyone      0.97    0.97    0.95  0.823  0.859  0.819
+condition     0.91    0.89    0.93  0.845  0.851  0.851
+wrongvar      0.96    0.96    0.94  0.843  0.814  0.851
+missing       0.97    0.96    0.94  0.873  0.841  0.855
+memory        0.97    0.95    0.96  0.844  0.864  0.868
+interface     0.95    0.93    0.94  0.644  0.631  0.691
+compile       0.96    0.96    0.97  0.794  0.807  0.822
+mean-logit N vs P14 Pearson 0.99; Pa vs Pb 0.99
+verdict re-asked (whole): AUC 0.852 vs original 0.856

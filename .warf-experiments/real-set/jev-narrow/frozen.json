@@ -1,0 +1,10 @@
+{
+ "verdict": {
+  "threshold": 0.79,
+  "dev_ba": 0.8258
+ },
+ "narrow": {
+  "threshold": -1.7337654334212138,
+  "dev_ba": 0.8333
+ }
+}

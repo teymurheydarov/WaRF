@@ -1,0 +1,53 @@
+Exception in thread Thread-1767 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 147446: invalid continuation byte
+Exception in thread Thread-2007 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 142584: invalid continuation byte
+Exception in thread Thread-4721 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 148123: invalid continuation byte
+Exception in thread Thread-5501 (_readerthread):
+Traceback (most recent call last):
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1082, in _bootstrap_inner
+    self._context.run(self.run)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\threading.py", line 1024, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\workdir\claudeVersuch\gs\cf\Lib\subprocess.py", line 1614, in _readerthread
+    buffer.append(fh.read())
+                  ~~~~~~~^^
+  File "<frozen codecs>", line 325, in decode
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe4 in position 145795: invalid continuation byte
+defective candidates 454 (tier 1 0, in src/ 373), clean pool 203

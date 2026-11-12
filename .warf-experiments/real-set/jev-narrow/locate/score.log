@@ -1,0 +1,6 @@
+271 calls, 132 items, cost in answers_locate.jsonl $0.02618
+score     auc    within  loo_size  d_vs_N  [lo, hi]
+ref_N    0.892  0.830   0.910   +0.000  [+0.000, +0.000]
+locate   0.874  0.820   0.895   -0.018  [-0.058, +0.022]
+checks   0.901  0.848   0.909   +0.009  [-0.012, +0.031]
+maxline  0.704  0.764   0.880   -0.188  [-0.266, -0.107]

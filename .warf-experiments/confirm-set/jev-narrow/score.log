@@ -1,0 +1,8 @@
+220 items (110 defective, 110 clean); calls: 220 whole, 304 hunks
+added-lines AUC 0.790 (thirds at [3, 15])
+  V usual question:  AUC 0.753  within thirds 0.650
+  N narrow checks:   AUC 0.771  within thirds 0.688
+  PRIMARY  N - V: AUC +0.017 [-0.016, +0.051]  ->  PREREGISTERED VERDICT: not shown
+  V at dev threshold   BA 0.677  caught 73/110  false alarms 34/110
+  N at dev threshold   BA 0.714  caught 67/110  false alarms 20/110
+  secondary: only N right 18, only V right 10, McNemar p 0.185

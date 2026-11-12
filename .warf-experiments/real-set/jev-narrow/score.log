@@ -1,0 +1,17 @@
+132 items; thirds of added lines at [3, 14]; added-lines AUC 0.834; LOO size-only model 0.807
+score                                             AUC  within  LOO size+score
+stored verdict (earlier run)                    0.854   0.771           0.872
+verdict, whole change (this run)                0.856   0.775           0.872
+verdict, max over hunks                         0.852   0.761           0.871
+narrow checks, whole, max                       0.797   0.783           0.884
+narrow checks, whole, mean logit                0.884   0.831           0.904
+narrow checks, max over hunks of max            0.808   0.767           0.882
+narrow checks, hunks, mean logit of hunk max    0.892   0.830           0.910
+  check 'offbyone', whole                       0.850   0.741           0.853
+  check 'condition', whole                      0.853   0.785           0.882
+  check 'wrongvar', whole                       0.842   0.808           0.879
+  check 'missing', whole                        0.864   0.786           0.882
+  check 'memory', whole                         0.832   0.732           0.874
+  check 'interface', whole                      0.644   0.770           0.883
+  check 'compile', whole                        0.775   0.680           0.837
+all 8 whole answers + size (LOO logistic)                               0.896

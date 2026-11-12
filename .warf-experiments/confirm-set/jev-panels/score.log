@@ -1,0 +1,38 @@
+220 items (110 defective, 110 clean)
+  V one Jev (dev threshold)          right  67.7%  caught 73/110  false alarms 34/110
+  N WaRF Jev narrow checks           right  71.4%  caught 67/110  false alarms 20/110
+
+P5: seats {'SKEPTIC': 'jev-1.14', 'ADVOCATE': 'jev-1.14', 'AUDITOR': 'jev-1.14', 'TEST-FOCUSED': 'jev-1.13', 'BOUNDARY': 'jev-1.13'}; models answering ['typesafe/jev-1.13-20260917', 'typesafe/jev-1.14-20261014']; cost $0.1326
+  P5 WaRF decision                   right  69.5%  caught 85/110  false alarms 42/110
+    seat SKEPTIC (jev-1.14) alone, p>=0.5 right  69.5%  caught 89/110  false alarms 46/110
+    seat ADVOCATE (jev-1.14) alone, p>=0.5 right  66.4%  caught 67/110  false alarms 31/110
+    seat AUDITOR (jev-1.14) alone, p>=0.5 right  67.3%  caught 90/110  false alarms 52/110
+    seat TEST-FOCUSED (jev-1.13) alone, p>=0.5 right  62.3%  caught 97/110  false alarms 70/110
+    seat BOUNDARY (jev-1.13) alone, p>=0.5 right  69.5%  caught 63/110  false alarms 20/110
+    agreement SKEPTIC / ADVOCATE (same version): 82.3%
+    agreement SKEPTIC / AUDITOR (same version): 89.5%
+    agreement SKEPTIC / TEST-FOCUSED (different versions): 80.9%
+    agreement SKEPTIC / BOUNDARY (different versions): 75.5%
+    agreement ADVOCATE / AUDITOR (same version): 80.0%
+    agreement ADVOCATE / TEST-FOCUSED (different versions): 65.9%
+    agreement ADVOCATE / BOUNDARY (different versions): 86.8%
+    agreement AUDITOR / TEST-FOCUSED (different versions): 80.5%
+    agreement AUDITOR / BOUNDARY (different versions): 72.3%
+    agreement TEST-FOCUSED / BOUNDARY (same version): 61.8%
+  AUC of mean seat p(REJECT): 0.763  (N 0.771, V 0.753)
+  secondary vs N: -1.8 points, only P5 right 19, only N right 23, McNemar p 0.644
+
+P3: seats {'SKEPTIC': 'jev-1.14', 'ADVOCATE': 'jev-1.14', 'AUDITOR': 'jev-1.13'}; models answering ['typesafe/jev-1.13-20260917', 'typesafe/jev-1.14-20261014']; cost $0.0784
+  P3 WaRF decision                   right  68.6%  caught 86/110  false alarms 45/110
+    seat SKEPTIC (jev-1.14) alone, p>=0.5 right  67.7%  caught 89/110  false alarms 50/110
+    seat ADVOCATE (jev-1.14) alone, p>=0.5 right  68.2%  caught 71/110  false alarms 31/110
+    seat AUDITOR (jev-1.13) alone, p>=0.5 right  65.9%  caught 90/110  false alarms 55/110
+    agreement SKEPTIC / ADVOCATE (same version): 82.3%
+    agreement SKEPTIC / AUDITOR (different versions): 88.2%
+    agreement ADVOCATE / AUDITOR (different versions): 79.5%
+  AUC of mean seat p(REJECT): 0.756  (N 0.771, V 0.753)
+  secondary vs N: -2.7 points, only P3 right 20, only N right 26, McNemar p 0.461
+
+PRIMARY: each panel's WaRF decision vs V (one Jev), exact McNemar, Holm over the two panels
+  P5 - V: +1.8 points; only P5 right 13, only V right 9; p 0.523, Holm 1.000 -> not shown
+  P3 - V: +0.9 points; only P3 right 13, only V right 11; p 0.839, Holm 1.000 -> not shown

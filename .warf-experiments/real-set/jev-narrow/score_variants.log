@@ -1,0 +1,13 @@
+128 items (few-shot examples excluded)
+variant / score                         AUC  within
+plain, verdict                        0.853   0.761
+plain, narrow mean logit              0.881   0.821
+noul, verdict                         0.847   0.758
+noul, narrow mean logit               0.896   0.825
+score, verdict                        0.855   0.767
+score, narrow mean logit              0.885   0.832
+score, severity (expected score)      0.842   0.766
+json, verdict                         0.857   0.770
+json, narrow mean logit               0.888   0.837
+fewshot, verdict                      0.836   0.761
+fewshot, narrow mean logit            0.884   0.840
