@@ -1,0 +1,3 @@
+869 candidates (0 never judged): kept 400 confirmed by both judges (37 more confirmed beyond the target of 400), disagree on 38, rejected 394
+clean controls: 400; date gap median 712 days, max 1254
+defect visibility (both judges): diff 250, needs_other_file 120, not_visible 3, split 27

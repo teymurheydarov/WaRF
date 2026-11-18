@@ -1,0 +1,28 @@
+  c583157:memtablelist.cc:defective                REJECT   build 0.92  [L59] MemTable* x __attribute__((unused)) = m->Unref();
+  9a83fd2:db_impl.cc:defective                     REJECT   build 0.58  [L5] static uint64_t stats_dump_threads_started = 0;
+  a3acf2e:db_impl.cc:defective                     REJECT   build 0.91  [L1] periodic_work_scheduler_->UnregisterRecordSeqnoTimeWork
+  7d83b4e:writable_file_writer.cc:defective        APPROVE  build 0.43  [L6] UpdateFileChecksum(data);
+  4f1dd05:fault_injection_fs.cc:defective          REJECT   build 0.64  [L4] IOStatus TestFSRandomAccessFile::MultiRead(FSReadReques
+  d10801e:replayer.h:clean                         APPROVE  build 0.53  [L18] const std::function<void(Status, std::unique_ptr<Trace
+  ec346da:db_options_test.cc:clean                 APPROVE  build 0.48  [L5] if (!Snappy_Supported() || !LZ4_Supported()) {
+  9794acb:db.h:clean                               APPROVE  build 0.65  [L23] PinnableWideColumns* /* results */,
+  c9d8e6a:db.h:clean                               REJECT   build 0.65  [L18] virtual void MultiGetEntity(const ReadOptions& /* opti
+  1777e5f:pessimistic_transaction_db.cc:clean      APPROVE  build 0.61  [L29] Status SnapshotCreationCallback::operator()(SequenceNu
+
+Live p(REJECT) minus stored, per seat (mean absolute difference over the 10 changes)
+  SKEPTIC              verdict  n=10  mean |diff| 0.030  mean diff -0.010
+  ADVOCATE             verdict  n=10  mean |diff| 0.027  mean diff -0.019
+  AUDITOR              verdict  n=10  mean |diff| 0.014  mean diff -0.006
+  TEST-FOCUSED         verdict  n=10  mean |diff| 0.027  mean diff +0.011
+  BOUNDARY             verdict  n=10  mean |diff| 0.025  mean diff +0.011
+  LOCATE-BUILD         locate   n=10  mean |diff| 0.037  mean diff +0.011
+  LOCATE-RUNTIME       locate   n=10  mean |diff| 0.026  mean diff +0.002
+  CHECK-INTTYPE        check    n=10  mean |diff| 0.010  mean diff -0.008
+  CHECK-FORMAT         check    n=10  mean |diff| 0.036  mean diff -0.020
+  CHECK-WARNING        check    n=10  mean |diff| 0.074  mean diff +0.072
+  CHECK-ASSERT         check    n=10  mean |diff| 0.041  mean diff -0.035
+  CHECK-LIFETIME       check    n=10  mean |diff| 0.025  mean diff +0.023
+  CHECK-CONCURRENCY    check    n=10  mean |diff| 0.047  mean diff -0.021
+  CHECK-EDGE           check    n=10  mean |diff| 0.067  mean diff -0.067
+
+input tokens 455710

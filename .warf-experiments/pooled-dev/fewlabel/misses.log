@@ -1,0 +1,13 @@
+
+DuckDB: PANEL3, balanced accuracy 76.5%
+  defects diff               243  caught  204  (84%)
+  defects needs_other_file   132  caught   85  (64%)
+  defects split               25  caught   20  (80%)
+  clean changes           400  false alarms 97  (24%)
+
+PPSSPP: PANEL3, balanced accuracy 70.8%
+  defects diff               253  caught  195  (77%)
+  defects needs_other_file   111  caught   63  (57%)
+  defects split               23  caught   17  (74%)
+  defects not_visible         13  caught   10  (77%)
+  clean changes           400  false alarms 119  (30%)

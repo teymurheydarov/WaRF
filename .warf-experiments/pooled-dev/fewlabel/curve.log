@@ -1,0 +1,33 @@
+Balanced accuracy (mean of 5 repetitions) by labelled changes per class from the target project
+
+RocksDB, PANEL3 (source of the prior: DuckDB)
+  method           0      5     10     20     40     80    160    360
+  warf          71.2   71.2   72.5   73.1   72.9   73.6   73.4   73.6
+  transfer      68.2   68.2   68.2   68.2   68.2   68.2   68.2   68.2
+  prior 0.25    68.2   69.4   70.0   70.9   71.0   71.6   72.3   73.1
+  prior 0.5     68.2   70.1   70.9   72.2   72.4   73.0   73.0   73.6
+  prior 1       68.2   70.6   72.1   73.0   72.8   73.4   73.4   73.7
+
+RocksDB, LO-ctx (source of the prior: DuckDB)
+  method           0      5     10     20     40     80    160    360
+  warf          70.0   70.0   69.4   69.8   69.6   70.0   70.1   70.2
+  transfer      69.9   69.9   69.9   69.9   69.9   69.9   69.9   69.9
+  prior 0.25    69.9   69.9   70.0   70.1   70.0   70.2   70.2   70.3
+  prior 0.5     69.9   69.6   69.8   69.9   69.7   70.2   70.2   70.2
+  prior 1       69.9   68.8   69.4   69.8   69.7   70.1   70.2   70.2
+
+DuckDB, PANEL3 (source of the prior: RocksDB)
+  method           0      5     10     20     40     80    160    360
+  warf          75.9   75.9   76.8   77.1   76.8   76.8   76.8   76.6
+  transfer      76.6   76.6   76.6   76.6   76.6   76.6   76.6   76.6
+  prior 0.25    76.6   76.9   77.1   77.2   77.7   77.3   77.2   77.1
+  prior 0.5     76.6   77.4   77.4   77.7   77.1   77.1   76.8   76.6
+  prior 1       76.6   76.8   77.1   77.2   76.8   76.9   76.8   76.6
+
+DuckDB, LO-ctx (source of the prior: RocksDB)
+  method           0      5     10     20     40     80    160    360
+  warf          74.8   74.8   75.2   74.5   75.1   74.8   74.9   75.1
+  transfer      74.9   74.9   74.9   74.9   74.9   74.9   74.9   74.9
+  prior 0.25    74.9   74.6   75.1   74.6   74.8   74.9   74.8   75.2
+  prior 0.5     74.9   74.7   75.1   74.4   74.9   74.8   74.9   75.1
+  prior 1       74.9   74.3   75.3   74.6   75.1   74.8   74.9   75.1

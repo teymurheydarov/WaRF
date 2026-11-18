@@ -40,8 +40,10 @@ reviewer (exact McNemar $p = 0.012$, Holm-adjusted $0.024$). Because it was the
 sixth comparison on those changes, LO was then frozen and tested once on a
 second project, MFEM: on 300 fresh changes it scored \textbf{80.0\%} against
 \textbf{75.3\%} for one Jev (23 against 9 changes, $p = 0.020$), with a
-calibration learned only on G+Smo. One Claude Opus scores 85.5\% on the G+Smo
-fresh set.
+calibration learned only on G+Smo. On a third project, KeePassXC, LO scored
+\textbf{82.3\%} against \textbf{77.6\%} for one Jev (192 changes, $p = 0.064$),
+and a jointly fitted calibrator developed on MFEM did not beat LO there.
+One Claude Opus scores 85.5\% on the G+Smo fresh set.
 
 % =============================================================================
 \section{Data and Measure}
@@ -201,6 +203,55 @@ one Jev here. On the 87 defects visible from the diff LO scores 85.2\% against
 count of added lines: the gain lies in WaRF's decision, not in a better ranking.
 
 % =============================================================================
+\section{Third Repository: KeePassXC}
+
+After MFEM, a variant of LO's calibration was developed offline: one logistic
+regression (\emph{JOINT}) fitted on the mean $r_s$ of the \texttt{jev-1.14}
+seats, that of the \texttt{jev-1.13} seats and $-\ln(1 + \text{added lines})$,
+instead of summing separately calibrated groups. On MFEM it scored 84.3\%
+against LO's 78.7\%, but MFEM was no longer fresh, so both were frozen and
+tested once on a third project, KeePassXC (github.com/keepassxreboot/keepassxc,
+a C++/Qt password manager, not numerical code). The test was preregistered
+before any change was built.
+
+\begin{description}[leftmargin=1.5em]
+\item[Set] B-SZZ candidates from all 844 fix commits on \texttt{develop}: only
+  200 candidates; judge A judged all 200 (100 yes), judge B judged those 100
+  (96 yes); the 96 confirmed defects were kept, with 96 surviving clean changes
+  matched by date and size: 192 changes, fewer than the planned 300.
+\item[Training] Every labelled change so far, 352 from G+Smo and 300 from MFEM;
+  nothing from KeePassXC. LO is calibrated on them through WaRF; JOINT's
+  weights were fitted on them and frozen.
+\item[One Jev] The usual question on \texttt{jev-1.14}, calibrated in WaRF on
+  the same 652 changes.
+\end{description}
+
+\begin{center}
+\begin{tabular}{lrrr}
+\toprule
+Reviewer (192 KeePassXC changes) & Right & Caught & False alarms \\
+\midrule
+One Jev                                   & 77.6\% & 72/96 & 19/96 \\
+Size alone (added lines, calibrated)      & 80.2\% & 73/96 & 15/96 \\
+\textbf{LO: WaRF log-odds panel}          & \textbf{82.3\%} & 80/96 & 18/96 \\
+JOINT without the size                    & 79.2\% & 81/96 & 25/96 \\
+JOINT                                     & 83.9\% & 83/96 & 18/96 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{JOINT against LO:} only JOINT right on 13 changes, only LO on 10;
+exact McNemar $p = 0.68$. The preregistered verdict is \emph{not shown}.
+Without the size JOINT falls below LO (3 against 9, $p = 0.15$): fitting the
+two versions' weights together, which carried most of the gain on MFEM, does
+not carry over. The size adds 4.7 points to JOINT (14 against 5, $p = 0.064$).
+
+\textbf{LO on a third project:} unchanged except for its larger training
+history, LO is right in 82.3\% of cases against 77.6\% for one Jev (14 against
+5, $p = 0.064$); on this smaller set the gain is not significant on its own.
+LO stays WaRF's configuration; JOINT is not adopted.
+
+% =============================================================================
 \section{Development of LO}
 
 LO's decision depends only on the seats' stored $p_s$ and the labelled history,
@@ -255,8 +306,10 @@ a real project may take months to collect; clean labels are easy.
 \section{Limitations}
 
 \begin{itemize}[leftmargin=1.5em]
-\item Both projects are C++ numerics libraries (isogeometric analysis and
-  finite elements); other kinds of code are untested.
+\item All three projects are C++: two numerics libraries (isogeometric
+  analysis and finite elements) and one Qt application; other languages are
+  untested. The KeePassXC set is small (96 + 96), because its history held only
+  200 candidates.
 \item Jev's ranking stays close to a count of added lines (G+Smo fresh set
   0.75--0.77 against 0.79; MFEM 0.88 against 0.87); much of any Jev score is
   change size.
@@ -278,6 +331,10 @@ a real project may take months to collect; clean labels are easy.
   profiles, runner and scorer.
 \item \texttt{.warf-experiments/mfem-set/}: the MFEM preregistration, mining,
   judgements, items, runs and score.
+\item \texttt{.warf-experiments/size-seat/}: the offline development of JOINT
+  and the size seat, with its controls.
+\item \texttt{.warf-experiments/kpx-set/}: the KeePassXC preregistration,
+  frozen weights, mining, judgements, items, runs and score.
 \item \texttt{.warf-experiments/lo-dev/}: the offline rebuild, cross-validation,
   learning curve and context seat.
 \item \texttt{.warf-experiments/real-set/DEV.md}: everything tried on the

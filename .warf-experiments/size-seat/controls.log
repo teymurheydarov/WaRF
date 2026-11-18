@@ -1,0 +1,12 @@
+JOINT's weights, fitted on all 352 G+Smo items: [intercept, jev-1.14 mean input, jev-1.13 mean input, -(ln(1+added)-3)]
+  -0.275, -0.032, +0.533, +0.657
+
+MFEM one look (calibrated on G+Smo), balanced accuracy
+  JOINT                          84.3%
+  JOINT without size             81.7%
+  JOINT, sizes shuffled (seed 0)  82.0%
+  JOINT, sizes shuffled (seed 1)  81.7%
+  JOINT, sizes shuffled (seed 2)  82.0%
+  JOINT, sizes shuffled (seed 3)  82.3%
+  JOINT, sizes shuffled (seed 4)  81.0%
+  JOINT vs JOINT without size: only JOINT right 23, only without-size right 15; exact McNemar p 0.2559

@@ -1,0 +1,15 @@
+  1 dea8a2f:bindcontext.cpp:defective                  names  24 cand  23 used 19 chars  5956
+  2 03fcb6f:test_string_util.cpp:clean                 names   8 cand   4 used  5 chars  2480
+  3 10e7bc8:operators.cpp:defective                    names  17 cand  13 used  9 chars  3313
+  4 58c34c8:single_batch_array_stream.cpp:clean        names  37 cand  21 used 16 chars  5493
+  5 c938535:vector_helpers.cpp:defective               names  24 cand  20 used 12 chars  5425
+  6 4246233:options.h:clean                            names   4 cand   2 used  1 chars   358
+  7 bab1de9:logical_join.cpp:defective                 names  31 cand  26 used 15 chars  5889
+  8 686abc1:rendering.cpp:clean                        names  11 cand   3 used  2 chars   919
+  9 6dfee23:expression_executor.cpp:defective          names  15 cand  13 used 15 chars  5883
+ 10 d4b23ed:test_art_index.cpp:clean                   names   2 cand   1 used  2 chars   872
+ 11 915ce0a:logical_join.cpp:defective                 names   7 cand   6 used  7 chars  2717
+ 12 797f418:value.cpp:clean                            names   8 cand   5 used  8 chars  2862
+ 13 d227092:logical_plan_generator.cpp:defective       names   8 cand   8 used 13 chars  5343
+ 14 f05fd56:statement_type.cpp:clean                   names  37 cand  30 used 10 chars  5599
+ 15 3438ec0:tpce.cpp:defective                         names  20 cand  17 used 16 chars  5078

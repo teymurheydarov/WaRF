@@ -1,0 +1,28 @@
+{
+ "primary": {
+  "n10": 30,
+  "n01": 18,
+  "p": 0.11140289106101875,
+  "verdict": "not shown"
+ },
+ "arms": {
+  "PANEL3": {
+   "ba0": 0.7649999999999999,
+   "ba5": 0.766,
+   "caught": 309,
+   "false_alarms": 97
+  },
+  "LO-ctx": {
+   "ba0": 0.75,
+   "ba5": 0.75125,
+   "caught": 306,
+   "false_alarms": 106
+  },
+  "FIVE": {
+   "ba0": 0.7625,
+   "ba5": 0.7617499999999999,
+   "caught": 308,
+   "false_alarms": 98
+  }
+ }
+}

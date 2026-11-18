@@ -1,0 +1,30 @@
+  control: the unmutated copy passes
+  caught  group key ignores the question: FAIL  a check seat and a locate seat form groups of their own
+  caught  calibration ignores the question: FAIL  a locate seat counts only locate votes
+  caught  bias keeps the base rate: FAIL  uninformative seats, 80%-clean history: the intercept is the base rate (+1.481, ln 4 = +1.386) and the b
+  caught  intercept penalised: FAIL  the intercept has a flat prior: 8 clean of 10 gives ln 4 = 1.3863 exactly (0.8968933436212743)
+  caught  weights not penalised: FAIL  the intercept has a flat prior: 8 clean of 10 gives ln 4 = 1.3863 exactly (None)
+  caught  learned mode stops early: FAIL  every seat is asked: no early stop on learned weights
+  caught  locate reads p(NONE) as p(REJECT): FAIL  p(NONE) 0.3 -> p(REJECT) 0.70: 'APPROVE\np(APPROVE)=0.70  p(REJECT)=0.30  line=L2  [jev-test: decision m
+  caught  locate asks only the first window: FAIL  70 lines are asked in two windows, each with NONE
+  caught  check reads p(NO): FAIL  YES 0.8 is a REJECT with p(REJECT) 0.80: 'APPROVE\np(APPROVE)=0.80  p(REJECT)=0.20  answer=YES  [jev-tes
+  caught  marking also tags the function context: FAIL  nor when a trimmed hunk runs into it: ['b;', 'context;']
+  caught  no abstention without added lines: FAIL  a locate seat abstains on an input without added lines: {'error: [jev/jev-latest] a locate question need
+  caught  question seats allowed on text models: FAIL  a question seat on a text model is refused before any model is asked
+  caught  a missing seat counts as its vote: FAIL  a seat that voted only on defective changes is not rewarded for its absence: weight +1.897 within three 
+  caught  no fallback to logodds: FAIL  without enough labels the review runs in logodds mode and says so
+  caught  the log drops the question: FAIL  the log records the question of question seats only: {'V': None, 'V2': None, 'C': None, 'L': None}
+  caught  learned allowed with debate: FAIL  learned with debate is refused
+  caught  SAST vote left out of the learned Λ: FAIL  the SAST vote adds its fixed evidence to the learned Î›: -23.758, got -22.819
+  caught  a p that contradicts its vote is used: FAIL  a seat's log-odds: ln((1-p)/p) for a p that agrees with its vote; the vote itself for a p that contradic
+  caught  best line numbered within its window: FAIL  the readout names the likeliest line over all windows, numbered across them: '[L5] int x4 = 4;'
+  caught  learned Λ pooled by group means: FAIL  Î› = bias + Î£ wÂ·r, summed over seats, two of them on one model: -22.819: got -12.838
+  caught  windows multiplied: FAIL  p(REJECT) = 1 - min(0.8, 0.6) = 0.40, the worst window (a product would give 0.52): 'p(APPROVE)=0.48  p(
+  caught  hunk counts ignored: FAIL  the added lines of the diff, in order: ['++ b/f.cc', 'int b = 1;', 'int d;']
+  caught  a check seat asks only its first question: FAIL  a persona of three questions is asked as three YES/NO questions in one call
+  caught  checks pooled by their maximum: FAIL  p(REJECT) = 1 - 0.8 x 0.5 x 0.9 = 0.64, the chance of any problem: 'APPROVE\np(APPROVE)=0.50  p(REJECT)=
+  caught  locate questions pooled by their minimum: FAIL  a window's p(NONE) is the product over its questions (0.8 x 0.5 = 0.40, 0.9 x 0.9 = 0.81); p(REJECT) = 1
+  caught  question lines not stripped: FAIL  a persona's questions are its non-empty lines, stripped
+  caught  fallback reason not reported: FAIL  a fit that does not converge falls back too, and is reported as such, not as too few labels
+
+27 of 27 mutants caught

@@ -1,0 +1,22 @@
+
+DuckDB: 800 changes, 701 with a commit context
+  PANEL3      76.5%  (mean of 5: 76.6%)
+  PANEL3+CC   78.4%  (mean of 5: 78.3%)
+  right only with CC 51, only without 36, exact McNemar p = 0.1329
+  defects diff              243: caught PANEL3 204, PANEL3+CC 209
+  defects needs_other_file  132: caught PANEL3 85, PANEL3+CC 92
+  clean changes: false alarms PANEL3 97, PANEL3+CC 93
+  on the items with a commit context: PANEL3 77.0%, PANEL3+CC 79.0%
+  seat AUC without / with commit context: BOUNDARY 0.847 / 0.836, CHECKLIST 0.830 / 0.827, LOCATE 0.837 / 0.851
+
+PPSSPP: 800 changes, 614 with a commit context
+  PANEL3      70.8%  (mean of 5: 70.8%)
+  PANEL3+CC   69.0%  (mean of 5: 69.0%)
+  right only with CC 44, only without 58, exact McNemar p = 0.1978
+  defects diff              253: caught PANEL3 195, PANEL3+CC 188
+  defects needs_other_file  111: caught PANEL3 63, PANEL3+CC 56
+  clean changes: false alarms PANEL3 119, PANEL3+CC 117
+  on the items with a commit context: PANEL3 71.9%, PANEL3+CC 70.7%
+  seat AUC without / with commit context: BOUNDARY 0.777 / 0.747, CHECKLIST 0.769 / 0.749, LOCATE 0.766 / 0.782
+
+PRIMARY (both projects): right only with CC 95, only without 94, exact McNemar p = 1.0000  -> not shown

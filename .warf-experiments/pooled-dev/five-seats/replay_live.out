@@ -1,0 +1,21 @@
+AUC of each live seat on the 800 changes (stand-in used before, in brackets)
+  DEFAULT       0.765  (0.770)
+  LOCATE        0.789  (0.785)
+  CHECKLIST     0.794  (0.782)
+  LOCATE-13     0.779  (0.785)
+  CHECKLIST-13  0.789  (0.782)
+
+WaRF run_review, live answers, 10-fold x 5 (balanced accuracy)
+  LO with context (5 persona seats)                    --aggregate logodds  70.2%  (70.0-70.4)
+  3: BOUNDARY + LOCATE + CHECKLIST                     --aggregate logodds  73.6%  (73.4-73.9)
+  5: SKEPTIC + BOUNDARY + DEFAULT + LOCATE + CHECKLIST --aggregate logodds  73.5%  (73.4-73.8)
+  5: ... with LOCATE-13 + CHECKLIST-13                 --aggregate logodds  72.1%  (72.0-72.2)
+  5: ... with LOCATE-13 + CHECKLIST                    --aggregate logodds  73.2%  (73.1-73.4)
+  5: ... with LOCATE + CHECKLIST-13                    --aggregate logodds  73.0%  (72.9-73.1)
+
+Exact McNemar against LO with context, repetition 0 (right only in the panel, only in LO, p)
+  3: BOUNDARY + LOCATE + CHECKLIST                     49 vs 22, p = 0.002
+  5: SKEPTIC + BOUNDARY + DEFAULT + LOCATE + CHECKLIST 42 vs 17, p = 0.002
+  5: ... with LOCATE-13 + CHECKLIST-13                 38 vs 24, p = 0.098
+  5: ... with LOCATE-13 + CHECKLIST                    42 vs 19, p = 0.004
+  5: ... with LOCATE + CHECKLIST-13                    41 vs 19, p = 0.006

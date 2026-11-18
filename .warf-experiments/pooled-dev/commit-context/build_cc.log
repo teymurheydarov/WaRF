@@ -1,0 +1,8 @@
+
+ddb: 800 items from 800 commits (budget 8000 characters)
+  defective with other files 353/400; other files median 4.0; context chars median (when present) 6980; cut 125, files only named 147
+  clean     with other files 348/400; other files median 5.0; context chars median (when present) 8014; cut 149, files only named 187
+
+pp: 800 items from 800 commits (budget 8000 characters)
+  defective with other files 290/400; other files median 2.0; context chars median (when present) 4882; cut 65, files only named 90
+  clean     with other files 324/400; other files median 3.0; context chars median (when present) 6345; cut 108, files only named 113

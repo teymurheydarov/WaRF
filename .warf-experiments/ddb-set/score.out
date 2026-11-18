@@ -1,0 +1,22 @@
+800 changes (400 defective, 400 clean)
+
+Balanced accuracy, WaRF logodds, 10-fold calibration within the set (repetition 0; mean of 5)
+  PANEL3   76.5%  (mean of 5: 76.6%)  caught 309/400, false alarms 97/400
+  LO-ctx   75.0%  (mean of 5: 75.1%)  caught 306/400, false alarms 106/400
+  FIVE     76.2%  (mean of 5: 76.2%)  caught 308/400, false alarms 98/400
+
+PRIMARY: PANEL3 vs LO-ctx: right only in PANEL3 30, only in LO-ctx 18, exact McNemar p = 0.1114  -> not shown
+Secondary: FIVE vs LO-ctx: 26 vs 16, p = 0.1641
+Secondary: on the defects visible from the diff (with every clean change): PANEL3 79.9%, LO-ctx 77.5%
+Secondary: the 241 pairs matched in their own added-line bin: PANEL3 74.7%, LO-ctx 74.3%; 14 vs 12, p = 0.8450
+
+AUC of each seat's p(REJECT); the added-line count alone for comparison
+  added lines   0.610
+  SKEPTIC       0.851
+  ADVOCATE      0.821
+  AUDITOR       0.816
+  TEST-FOCUSED  0.841
+  BOUNDARY      0.847
+  LOCATE        0.837
+  CHECKLIST     0.830
+  DEFAULT       0.835

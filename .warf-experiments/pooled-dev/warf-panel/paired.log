@@ -1,0 +1,4 @@
+Exact McNemar on 800 RocksDB changes, repetition 0 of replay_learned.py's folds
+  14 seats learned     vs 14 seats logodds    : 47 vs 39 changes, p = 0.451
+  14 seats logodds     vs 5 personas logodds  : 35 vs 18 changes, p = 0.027
+  14 seats learned     vs 5 personas logodds  : 73 vs 48 changes, p = 0.029

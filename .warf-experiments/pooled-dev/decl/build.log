@@ -1,0 +1,800 @@
+  1 ba6dac0:block.cc:defective                         names   4 cand   4 used  3 chars  1179
+  2 9f20395:memtable_list.cc:clean                     names   3 cand   3 used  1 chars   462
+  3 ccf0fcd:port_posix.h:defective                     names  12 cand  11 used  7 chars  2538
+  4 9f7fc3a:table_test.cc:clean                        names  17 cand   3 used  2 chars   588
+  5 4e4b681:options.cc:defective                       names  13 cand  13 used  9 chars  3638
+  6 bb19b53:coding.cc:clean                            names  41 cand  40 used 17 chars  5941
+  7 80c6638:openhandles.h:defective                    names  53 cand  35 used 18 chars  5939
+  8 03a781a:work_queue_test.cc:clean                   names  43 cand  15 used 17 chars  5744
+  9 d550320:server_options.h:defective                 names  57 cand  35 used 21 chars  5971
+ 10 d9a4411:jni_multiget_helpers.cc:clean              names  82 cand  59 used 14 chars  5924
+ 11 6ba1f17:db_impl.h:defective                        names  11 cand   9 used  7 chars  2160
+ 12 3304266:memtablerep.h:clean                        names   5 cand   5 used  5 chars  1972
+ 13 20ee76b:filename.cc:defective                      names  11 cand   8 used 12 chars  4644
+ 14 ec7a944:iostats_context.h:clean                    names   5 cand   5 used  0 chars    32
+ 15 e675351:sst_dump.cc:defective                      names  21 cand  13 used 10 chars  4222
+ 16 027ca5b:version_set.cc:clean                       names  16 cand  14 used 15 chars  5802
+ 17 9e84834:env_posix.cc:defective                     names  10 cand   7 used  6 chars  2331
+ 18 b5b2b75:column_family_test.cc:clean                names   5 cand   3 used  3 chars  1419
+ 19 92368ab:ldb.cc:defective                           names  30 cand  23 used 11 chars  4319
+ 20 a8b3b9a:ribbon_config.h:clean                      names  28 cand  24 used 14 chars  5999
+ 21 5dc784c:db_stress.cc:defective                     names   6 cand   5 used  2 chars   789
+ 22 745c181:table_test.cc:clean                        names   9 cand   7 used  5 chars  1784
+ 23 925f60d:db_test.cc:defective                       names  12 cand  11 used 16 chars  4846
+ 24 7c14abf:dbformat_test.cc:clean                     names   5 cand   5 used  5 chars  1880
+ 25 d55c2ba:version_set.cc:defective                   names  22 cand  20 used 15 chars  5769
+ 26 0a4cdde:threadpool.h:clean                         names   4 cand   3 used  3 chars  1136
+ 27 854c66b:db_test.cc:defective                       names  45 cand  38 used 17 chars  5858
+ 28 1152625:cleanable_test.cc:clean                    names  23 cand  15 used 16 chars  4896
+ 29 3fcf533:db_impl_readonly.cc:defective              names  42 cand  40 used 16 chars  5888
+ 30 08552b1:fastrange.h:clean                          names  21 cand  16 used  7 chars  3038
+ 31 f5cdf93:ldb_cmd.cc:defective                       names  39 cand  36 used 20 chars  5903
+ 32 4420df4:db_compaction_test.cc:clean                names  24 cand  18 used 15 chars  5866
+ 33 30742e1:ldb_cmd.cc:defective                       names  39 cand  36 used 20 chars  5903
+ 34 b878f93:transaction_base.cc:clean                  names  11 cand   7 used  6 chars  2789
+ 35 5d16e50:db_test.cc:defective                       names   7 cand   5 used  5 chars  1971
+ 36 9625acb:column_family.cc:clean                     names   5 cand   5 used  5 chars  2176
+ 37 7889e09:version_set.cc:defective                   names   8 cand   8 used  8 chars  2693
+ 38 e114f0a:slice.h:clean                              names   5 cand   5 used  2 chars   805
+ 39 879e45e:ldb_cmd.h:defective                        names   2 cand   2 used  2 chars   669
+ 40 9fc23d0:c.cc:clean                                 names   4 cand   4 used  4 chars  1901
+ 41 8055008:db_impl.cc:defective                       names  69 cand  57 used 17 chars  5946
+ 42 065bea1:blob_garbage_meter_test.cc:clean           names  62 cand  29 used 17 chars  5810
+ 43 0eb0c9b:coding_test.cc:defective                   names   8 cand   4 used  3 chars  1111
+ 44 a16d1b2:coding_lean.h:clean                        names  13 cand   9 used  6 chars  1739
+ 45 22c2836:db_impl.cc:defective                       names  21 cand  14 used 16 chars  5990
+ 46 f0da697:compaction_job_stats_impl.cc:clean         names  21 cand  20 used 16 chars  5685
+ 47 f4c2b7c:db_impl.h:defective                        names  10 cand   9 used  5 chars  1654
+ 48 e11a5e7:thread_local.h:clean                       names   0 cand   0 used  0 chars    32
+ 49 b63aafc:auto_roll_logger_test.cc:defective         names  84 cand  49 used 18 chars  5933
+ 50 9d0cae7:cleanable.cc:clean                         names  32 cand  20 used 16 chars  5684
+ 51 4564915:db_impl.cc:defective                       names  15 cand  12 used 13 chars  4873
+ 52 2cd0077:db.h:clean                                 names   7 cand   6 used  5 chars  2454
+ 53 a78fb5e:ldb_cmd.h:defective                        names  11 cand   5 used  6 chars  2135
+ 54 e7ea51a:flush_job_test.cc:clean                    names   2 cand   2 used  4 chars  1387
+ 55 d786b25:db_ttl.cc:defective                        names  75 cand  67 used 17 chars  5944
+ 56 56359da:db_iterator_test.cc:clean                  names  29 cand  13 used 14 chars  5983
+ 57 d8c7c45:db_test.cc:defective                       names   6 cand   3 used  3 chars  1439
+ 58 00ed41d:perf_context_test.cc:clean                 names  18 cand  11 used 11 chars  4268
+ 59 c5de1b9:dbformat.cc:defective                      names   3 cand   3 used  2 chars   786
+ 60 6b2a3ac:env.h:clean                                names   0 cand   0 used  0 chars    32
+ 61 a4913c5:statistics.h:defective                     names  43 cand  41 used 13 chars  5789
+ 62 697380f:repair.cc:clean                            names   0 cand   0 used  0 chars    32
+ 63 59d0b02:db_test.cc:defective                       names   3 cand   3 used  2 chars  1033
+ 64 20995c5:db_merge_operator_test.cc:clean            names   4 cand   2 used  3 chars  1355
+ 65 197034e:db_iter.cc:defective                       names  14 cand  12 used  8 chars  3122
+ 66 aa6eed0:transaction_test.cc:clean                  names   8 cand   7 used 10 chars  3391
+ 67 1036537:db_impl.h:defective                        names   4 cand   3 used  5 chars  1789
+ 68 9405b5e:listener_test.cc:clean                     names   0 cand   0 used  0 chars    32
+ 69 f5f1842:filter_block.cc:defective                  names  46 cand  41 used 17 chars  5912
+ 70 5b7e09b:version_set.cc:clean                       names  40 cand  22 used 14 chars  5970
+ 71 4504c99:statistics.h:defective                     names   3 cand   3 used  2 chars   707
+ 72 3b2a1dd:write_controller.cc:clean                  names   6 cand   6 used  7 chars  2334
+ 73 fc0c399:table.cc:defective                         names  10 cand   9 used  9 chars  3309
+ 74 2200295:optimistic_transaction_db.h:clean          names   4 cand   4 used  2 chars   850
+ 75 4463b11:comparator.cc:defective                    names   0 cand   0 used  0 chars    32
+ 76 21e9581:experimental.h:clean                       names   0 cand   0 used  0 chars    32
+ 77 aac4422:table_test.cc:defective                    names  15 cand  14 used 17 chars  5455
+ 78 e7c64fb:options.h:clean                            names   0 cand   0 used  0 chars    32
+ 79 fe4a449:prefix_test.cc:defective                   names  88 cand  61 used 17 chars  5983
+ 80 5bc8abc:db_iterator_test.cc:clean                  names  36 cand  17 used 15 chars  5944
+ 81 7e2c1ba:blob_store_bench.cc:defective              names  59 cand  33 used 16 chars  5819
+ 82 29d9798:semaphore.h:clean                          names  27 cand  18 used 13 chars  5115
+ 83 39c1489:memtablelist.cc:defective                  names   7 cand   7 used  6 chars  1927
+ 84 9c332aa:prefix_test.cc:clean                       names   4 cand   3 used  4 chars  2134
+ 85 b59d4d5:env_posix.cc:defective                     names   4 cand   3 used  1 chars   336
+ 86 9ee8406:db_test.cc:clean                           names   3 cand   1 used  2 chars   519
+ 87 2158776:env.h:defective                            names   5 cand   5 used  6 chars  1889
+ 88 d5a51d4:log_writer.h:clean                         names   2 cand   2 used  1 chars   373
+ 89 1415f88:table_properties_collector_test.cc:defecti names  32 cand  18 used 14 chars  5684
+ 90 bfb6b1b:version_set.cc:clean                       names  12 cand   8 used 13 chars  5004
+ 91 4c81383:env_posix.cc:defective                     names   5 cand   1 used  0 chars    32
+ 92 8f12145:c.h:clean                                  names  11 cand  10 used  7 chars  3180
+ 93 c01676e:autovector_test.cc:defective               names  54 cand  36 used 17 chars  5936
+ 94 78afb4d:compaction_iterator_test.cc:clean          names  25 cand  15 used 14 chars  5988
+ 95 abaf262:plain_table_db_test.cc:defective           names   4 cand   4 used  8 chars  3500
+ 96 44fa8ec:options_test.cc:clean                      names   3 cand   2 used  4 chars  1876
+ 97 113a08c:autovector_test.cc:defective               names   4 cand   3 used  6 chars  2207
+ 98 7a27006:mock_env.cc:clean                          names   1 cand   1 used  0 chars    32
+ 99 a094f3b:table_cache.cc:defective                   names   6 cand   5 used  9 chars  3928
+100 48da7a9:statistics.h:clean                         names   0 cand   0 used  0 chars    32
+101 12b6d2b:arena_test.cc:defective                    names  17 cand  13 used 16 chars  5194
+102 e91b4d0:block_cache_tier.cc:clean                  names  15 cand  10 used 10 chars  4219
+103 055e6df:version_edit_test.cc:defective             names   3 cand   3 used  5 chars  1954
+104 33c7d4c:env_win.cc:clean                           names   3 cand   2 used  1 chars   667
+105 83681bf:statistics.cc:defective                    names  24 cand  23 used 15 chars  5341
+106 1f8b119:write_batch_base.h:clean                   names  12 cand  10 used  7 chars  2708
+107 7c5e583:db_impl.cc:defective                       names  36 cand  33 used 15 chars  5993
+108 f95a5b2:get_context.h:clean                        names  26 cand  22 used  5 chars  1929
+109 c583157:memtablelist.cc:defective                  names  40 cand  34 used 17 chars  5982
+110 1e87f2b:db_flush_test.cc:clean                     names  31 cand  23 used 14 chars  5961
+111 3c0dcf0:internal_stats.h:defective                 names  51 cand  46 used 16 chars  5877
+112 dc5de45:db_blob_compaction_test.cc:clean           names  27 cand  14 used 14 chars  5922
+113 161ab42:format.cc:defective                        names   3 cand   3 used  2 chars   600
+114 1a136c1:sst_file_writer.h:clean                    names   1 cand   1 used  0 chars    32
+115 6369062:db_test.cc:defective                       names  15 cand  10 used 12 chars  3839
+116 fc4d5f5:db_stress_test_base.cc:clean               names  38 cand  29 used 15 chars  5995
+117 8b7ab99:write_batch.cc:defective                   names  12 cand  11 used 11 chars  4547
+118 ef29d2a:db_test.cc:clean                           names  18 cand  11 used 11 chars  4414
+119 ecb1ffa:env.h:defective                            names  14 cand  14 used 14 chars  4661
+120 f1b0841:write_prepared_transaction_test.cc:clean   names  13 cand  11 used 12 chars  5888
+121 37472bb:version_edit.cc:defective                  names   3 cand   3 used  2 chars   613
+122 81345b9:slice.h:clean                              names   3 cand   3 used  3 chars   931
+123 453ec52:version_set.cc:defective                   names   7 cand   6 used  8 chars  2727
+124 767d1f3:stats_history.h:clean                      names   0 cand   0 used  0 chars    32
+125 6b2e7a2:version_set.cc:defective                   names  20 cand  15 used 11 chars  4659
+126 b06b191:c.h:clean                                  names   7 cand   3 used  3 chars  1344
+127 48bc0c6:db_filesnapshot.cc:defective               names  19 cand  17 used 15 chars  5996
+128 17af09f:comparator.cc:clean                        names  11 cand   6 used  3 chars  1011
+129 cda4006:merge_helper.cc:defective                  names  14 cand  14 used 13 chars  5894
+130 e648c1d:cache_simulator.cc:clean                   names  25 cand  19 used 14 chars  5678
+131 0d755ff:dynamic_bloom_test.cc:defective            names  38 cand  28 used 18 chars  5968
+132 95305c4:history_trimming_iterator.h:clean          names  17 cand   8 used  6 chars  2660
+133 b947fdc:version_set.cc:defective                   names  15 cand  11 used  5 chars  1880
+134 c0208df:column_family_test.cc:clean                names   3 cand   2 used  2 chars   701
+135 588bca2:db_impl_debug.cc:defective                 names  52 cand  50 used 15 chars  5929
+136 e103b87:c.h:clean                                  names  29 cand  27 used 18 chars  5986
+137 fa430bf:table_cache.cc:defective                   names  15 cand  13 used 13 chars  5397
+138 1a928c2:inlineskiplist_test.cc:clean               names  16 cand   5 used  6 chars  2447
+139 e96e71b:rocksjni.cc:defective                      names  46 cand  31 used 17 chars  5797
+140 98236fb:ft-status.h:clean                          names  32 cand  29 used  9 chars  4206
+141 d642c60:version_set.h:defective                    names   9 cand   6 used  9 chars  3703
+142 d6ce0f7:listener.h:clean                           names   3 cand   3 used  1 chars   243
+143 9d9d296:db_impl.cc:defective                       names  10 cand  10 used 14 chars  5180
+144 8e7aa62:blob_file.h:clean                          names   6 cand   5 used  7 chars  2505
+145 0afc8bc:format.cc:defective                        names  61 cand  51 used 18 chars  5956
+146 390cc0b:transaction_test.cc:clean                  names  58 cand  37 used 16 chars  5871
+147 e6de021:options_builder.cc:defective               names  53 cand  22 used 14 chars  5865
+148 f4a02f2:cache_test.cc:clean                        names  36 cand  18 used 16 chars  5991
+149 388d205:forward_iterator.cc:defective              names  89 cand  79 used 16 chars  5911
+150 d1ae7f6:dbformat_test.cc:clean                     names  27 cand  17 used 13 chars  5744
+151 ee5a51e:sst_dump.cc:defective                      names  20 cand  16 used 12 chars  5130
+152 68a2f94:write_prepared_txn_db.h:clean              names  22 cand  12 used  9 chars  4574
+153 dfb31d1:ldb_cmd.h:defective                        names   6 cand   5 used  2 chars   585
+154 67d7623:db.h:clean                                 names   2 cand   2 used  0 chars    32
+155 55531fd:options.cc:defective                       names   2 cand   2 used  3 chars  1645
+156 3c327ac:ldb_cmd_execute_result.h:clean             names   0 cand   0 used  0 chars    32
+157 8a03935:c.cc:defective                             names   8 cand   8 used  8 chars  3338
+158 f7bb1a0:c.h:clean                                  names  10 cand   9 used  8 chars  3642
+159 5ef1ba7:rate_limiter_test.cc:defective             names  37 cand  26 used 19 chars  5889
+160 1d22601:io_tracer.cc:clean                         names  27 cand  19 used 15 chars  5646
+161 cf3da89:cuckoo_table_builder.cc:defective          names 104 cand  82 used 17 chars  5962
+162 3f5bd46:db_merge_operand_test.cc:clean             names  27 cand  14 used 13 chars  5694
+163 62f9b07:cuckoo_table_builder.cc:defective          names  17 cand  10 used  8 chars  3001
+164 7474861:crc32c.cc:clean                            names   6 cand   6 used  7 chars  2319
+165 40fa8a4:statistics.cc:defective                    names  44 cand  36 used 18 chars  5952
+166 d1c510b:db_wal_test.cc:clean                       names  32 cand  27 used 18 chars  5996
+167 f04356e:db_test.cc:defective                       names   5 cand   4 used  7 chars  2753
+168 ca89ac2:iterator.cc:clean                          names   2 cand   1 used  0 chars    32
+169 d6fe8da:slice.cc:defective                         names  60 cand  32 used 15 chars  4602
+170 b92d874:transaction_test.cc:clean                  names  25 cand  12 used 10 chars  4255
+171 c1f588a:c.cc:defective                             names  53 cand  46 used 14 chars  5993
+172 c87f5cf:transaction_test.cc:clean                  names  39 cand  26 used 14 chars  5996
+173 06a52bd:db_test.cc:defective                       names  15 cand   9 used  7 chars  2160
+174 959f86e:autovector.h:clean                         names  14 cand  10 used  9 chars  3637
+175 5e64240:db_info_dummper.cc:defective               names  33 cand  25 used 16 chars  5868
+176 0a43d8a:db_compaction_test.cc:clean                names  47 cand  25 used 14 chars  5941
+177 d977e55:db_impl.cc:defective                       names  13 cand  11 used 14 chars  5209
+178 28aa09d:auto_roll_logger_test.cc:clean             names  17 cand  15 used 15 chars  5947
+179 45a5e3e:write_batch.cc:defective                   names   7 cand   3 used  3 chars  1262
+180 f517d9d:memtablerep.h:clean                        names   3 cand   3 used  2 chars   826
+181 e0b99d4:db_test.cc:defective                       names  15 cand  11 used 15 chars  5586
+182 acab405:db_test.cc:clean                           names  27 cand   5 used  3 chars  1117
+183 a2bb7c3:write_controller.h:defective               names  15 cand  15 used 13 chars  5546
+184 1ba2b8a:db_properties_test.cc:clean                names  31 cand  21 used 16 chars  5926
+185 d343c3f:db_test.cc:defective                       names  25 cand  16 used 17 chars  5890
+186 9d49059:options_helper.cc:clean                    names 128 cand 128 used 19 chars  5858
+187 6cc1286:backupable_db.cc:defective                 names  26 cand  20 used 15 chars  5835
+188 229e6fb:db_wal_test.cc:clean                       names  14 cand  13 used 15 chars  5782
+189 3d9e6f7:db_test.cc:defective                       names  29 cand  25 used 15 chars  5792
+190 86623a7:optimistic_transaction_example.cc:clean    names   4 cand   3 used  1 chars   421
+191 e4eca6a:options_test.cc:defective                  names  86 cand  81 used 14 chars  5945
+192 dfb4efa:db_compaction_test.cc:clean                names  51 cand  27 used 14 chars  5955
+193 51af7c3:cuckoo_table_reader_test.cc:defective      names  26 cand  18 used 15 chars  5782
+194 df38c1c:table.h:clean                              names   5 cand   5 used  5 chars  2745
+195 fbd2daf:db_bench.cc:defective                      names  11 cand   6 used  6 chars  2379
+196 a6d3de4:blob_db_impl.cc:clean                      names  28 cand  23 used 14 chars  5928
+197 5ec53f3:compaction_picker.h:defective              names  45 cand  41 used 13 chars  5914
+198 1b4be4c:blob_db_impl.cc:clean                      names  20 cand  14 used 11 chars  4517
+199 8ea232b:internal_stats.h:defective                 names   2 cand   2 used  0 chars    32
+200 b258457:flush_scheduler.cc:clean                   names   9 cand   3 used  3 chars  1108
+201 4f65fbd:write_batch_with_index.cc:defective        names   6 cand   3 used  1 chars   501
+202 e04f3bc:db_basic_test.cc:clean                     names  15 cand  10 used 14 chars  5872
+203 4d5708a:db_test.cc:defective                       names  22 cand  19 used 16 chars  5897
+204 85f1ba5:env.h:clean                                names 130 cand   5 used  2 chars   968
+205 d6c8dba:mutable_cf_options.cc:defective            names  33 cand  31 used 12 chars  3620
+206 d4b75d2:c.cc:clean                                 names  28 cand  22 used 15 chars  5915
+207 dc50a1a:db_test.cc:defective                       names  24 cand  21 used 17 chars  5938
+208 dafa584:file_system.h:clean                        names  17 cand  14 used 12 chars  5126
+209 d2e60f5:mutable_cf_options.cc:defective            names   4 cand   4 used  5 chars  1638
+210 661e4c9:column_family.h:clean                      names   2 cand   2 used  1 chars   456
+211 6c66918:version_set.cc:defective                   names  32 cand  21 used 15 chars  5693
+212 f24c39a:db_compaction_test.cc:clean                names  24 cand  10 used 14 chars  5856
+213 ee95cae:cache_test.cc:defective                    names  26 cand  20 used 20 chars  5946
+214 dc23c12:write_unprepared_transaction_test.cc:clean names  14 cand  13 used 13 chars  5815
+215 122f98e:mutable_cf_options.cc:defective            names   5 cand   5 used  7 chars  2644
+216 33e09c0:db.h:clean                                 names   0 cand   0 used  0 chars    32
+217 44f0ff3:env_test.cc:defective                      names   4 cand   2 used  1 chars   276
+218 4f0fcb7:version_set.cc:clean                       names   4 cand   3 used  4 chars  1878
+219 68effa0:db_stress.cc:defective                     names   8 cand   7 used  6 chars  1893
+220 bb474e9:options.h:clean                            names   0 cand   0 used  0 chars    32
+221 e3d3567:version_set.h:defective                    names  12 cand   9 used  8 chars  3618
+222 b1887c5:memtablerep.h:clean                        names   1 cand   1 used  1 chars   427
+223 28c82ff:metadata.h:defective                       names  20 cand  16 used  6 chars  2318
+224 a2b9be4:db_compaction_test.cc:clean                names  25 cand  20 used 15 chars  5852
+225 53af5d8:db_test.cc:defective                       names  15 cand  10 used 13 chars  4479
+226 eb7647e:get_context.h:clean                        names   0 cand   0 used  0 chars    32
+227 5811419:version_builder_test.cc:defective          names  59 cand  44 used 16 chars  5959
+228 c42d0cf:object_registry_test.cc:clean              names   8 cand   6 used  9 chars  3647
+229 1d1a64f:compaction_picker.cc:defective             names  22 cand  21 used 13 chars  5871
+230 1b85d57:c.cc:clean                                 names  19 cand  12 used  8 chars  3842
+231 9be338c:compaction_job_test.cc:defective           names 124 cand 102 used 15 chars  5920
+232 f722e68:db_rate_limiter_test.cc:clean              names  43 cand  22 used 15 chars  5921
+233 517c289:options_test.cc:defective                  names   8 cand   8 used 12 chars  4873
+234 249eff0:get_context.cc:clean                       names  13 cand  13 used  8 chars  3194
+235 d0c5f28:thread_status_impl.cc:defective            names  52 cand  45 used 18 chars  5950
+236 32f6671:c.cc:clean                                 names  30 cand  19 used 15 chars  5851
+237 13de000:compact_files_example.cc:defective         names   1 cand   1 used  1 chars   324
+238 3e9c5a3:block_cache_tracer.cc:clean                names   2 cand   2 used  0 chars    32
+239 9d50193:options_builder.cc:defective               names   6 cand   4 used  4 chars  2161
+240 9c0c8f5:debug.h:clean                              names   1 cand   1 used  0 chars    32
+241 a14b787:db_stress.cc:defective                     names   5 cand   5 used  6 chars  2670
+242 f82e693:range_del_aggregator.h:clean               names   3 cand   3 used  4 chars  1452
+243 97c1940:db_stress.cc:defective                     names   2 cand   2 used  2 chars   993
+244 d2dce56:db_iter.h:clean                            names   0 cand   0 used  0 chars    32
+245 caa1fd0:backupable_db.cc:defective                 names  15 cand  12 used 10 chars  3874
+246 eae8327:transaction_test.cc:clean                  names   3 cand   3 used  3 chars  1117
+247 c91cdd5:thread_status_util_debug.cc:defective      names  18 cand  14 used 11 chars  3920
+248 a08f403:portal.h:clean                             names  11 cand   8 used  8 chars  3711
+249 423dee8:db_bench.cc:defective                      names   5 cand   3 used  1 chars   323
+250 fe238e5:version_set.cc:clean                       names  13 cand   8 used  6 chars  2444
+251 10af17f:mock_env.cc:defective                      names  14 cand   9 used  6 chars  2202
+252 1a24f4d:wal_edit.cc:clean                          names  16 cand  12 used  8 chars  2547
+253 f9758e0:listener_test.cc:defective                 names  36 cand  32 used 17 chars  5974
+254 ec346da:db_options_test.cc:clean                   names  38 cand  22 used 13 chars  5880
+255 0b8dec7:xfunc.h:defective                          names  27 cand  20 used 15 chars  5780
+256 3dc6eba:db_compaction_test.cc:clean                names  35 cand  24 used 13 chars  5844
+257 96ab15d:options_test.cc:defective                  names  23 cand  18 used 14 chars  5861
+258 6e78fe3:block_cache_trace_analyzer_test.cc:clean   names  15 cand  11 used 13 chars  5189
+259 c6d54b5:log_writer.cc:defective                    names   3 cand   3 used  3 chars   886
+260 04d5897:hash_table_test.cc:clean                   names   3 cand   2 used  2 chars   409
+261 03bbf71:FbsonStream.h:defective                    names  38 cand  27 used 16 chars  5747
+262 1777e5f:pessimistic_transaction_db.cc:clean        names  30 cand  23 used 14 chars  5796
+263 3d1a924:get_context.cc:defective                   names  34 cand  32 used 19 chars  5927
+264 3da2257:block_cache_trace_analyzer.cc:clean        names  61 cand  46 used 14 chars  5934
+265 89597bb:logging.cc:defective                       names   3 cand   3 used  6 chars  2694
+266 3f52822:transaction_db.h:clean                     names   1 cand   1 used  0 chars    32
+267 c594b0e:db_test.cc:defective                       names   0 cand   0 used  0 chars    32
+268 2b16d66:version_set.cc:clean                       names   4 cand   1 used  1 chars   680
+269 e018892:internal_stats.cc:defective                names  49 cand  30 used  5 chars  2321
+270 ebf8c45:forward_iterator.cc:clean                  names  35 cand  31 used 14 chars  5909
+271 d61cb0b:flashcache.cc:defective                    names  48 cand  34 used 16 chars  5743
+272 e6b6e74:db_compaction_test.cc:clean                names  21 cand  13 used 13 chars  5968
+273 794ccfd:cache.cc:defective                         names  30 cand  22 used 16 chars  5595
+274 7b2216c:db_merge_operand_test.cc:clean             names   8 cand   4 used  6 chars  2738
+275 d454065:version_set.cc:defective                   names  41 cand  33 used 15 chars  5994
+276 34bb3dd:slice_test.cc:clean                        names  19 cand   8 used  8 chars  2697
+277 77a5a54:thread_status_impl.cc:defective            names  21 cand  15 used  8 chars  2998
+278 9794acb:db.h:clean                                 names   5 cand   3 used  5 chars  2172
+279 d978139:db_test.cc:defective                       names  31 cand  25 used 16 chars  5913
+280 43e9a60:db_compaction_test.cc:clean                names  42 cand  20 used 15 chars  5835
+281 14431e9:column_family.cc:defective                 names  12 cand  10 used 14 chars  5921
+282 aef763b:statistics.h:clean                         names  10 cand   6 used  8 chars  3327
+283 3f0867c:flush_job.cc:defective                     names  26 cand  25 used 16 chars  5973
+284 6f0f82d:transaction_test.h:clean                   names   8 cand   8 used  7 chars  3568
+285 9ffc8ba:db_stress.cc:defective                     names  61 cand  42 used 15 chars  5959
+286 8827cd0:db_options_test.cc:clean                   names  25 cand  17 used 15 chars  5886
+287 dc9d70d:write_callback_test.cc:defective           names  32 cand  15 used 15 chars  5343
+288 98c6d7f:env_test.cc:clean                          names  22 cand  14 used 14 chars  4799
+289 fc83821:listener_test.cc:defective                 names  17 cand  15 used 13 chars  4844
+290 569b87e:db_basic_test.cc:clean                     names  15 cand  10 used 12 chars  4246
+291 3ce3bb3:db_impl.cc:defective                       names  30 cand  25 used 14 chars  5935
+292 f7e7b34:listener.h:clean                           names  10 cand   7 used  3 chars  1377
+293 69bb210:cache_test.cc:defective                    names  13 cand   8 used 13 chars  5038
+294 e449482:version_edit.cc:clean                      names  26 cand  21 used 16 chars  5920
+295 04251e1:checkpoint.cc:defective                    names  21 cand  18 used 16 chars  5995
+296 d904233:cf_options.cc:clean                        names  30 cand  23 used 14 chars  5720
+297 15325bf:rocksdb_dump.cc:defective                  names  48 cand  28 used 14 chars  5785
+298 c24ef26:udt_util.cc:clean                          names  25 cand  10 used  6 chars  2595
+299 6199cba:db_test.cc:defective                       names  21 cand  16 used 12 chars  3668
+300 dbc51ad:writable_file_writer.cc:clean              names  11 cand  10 used  8 chars  2739
+301 18285c1:port_win.cc:defective                      names 135 cand  91 used 17 chars  5963
+302 5b5b011:prefetch_test.cc:clean                     names  45 cand  18 used 15 chars  5973
+303 e1c99e1:heap_test.cc:defective                     names  50 cand  28 used 14 chars  5978
+304 32fc1e6:db_test.cc:clean                           names  20 cand  10 used  6 chars  2830
+305 c0b23dd:db_impl.cc:defective                       names  24 cand  20 used 13 chars  5885
+306 a4a4a2d:db_basic_test.cc:clean                     names   9 cand   3 used  4 chars  1842
+307 041b6f9:perf_context.cc:defective                  names   9 cand   9 used  4 chars  1525
+308 d05c0fe:write_thread.cc:clean                      names   4 cand   2 used  1 chars   543
+309 81d0726:convenience.h:defective                    names  18 cand  17 used 15 chars  5919
+310 93d5269:column_family.cc:clean                     names   3 cand   2 used  2 chars   572
+311 6e9fbeb:mock_table.cc:defective                    names  10 cand   8 used 11 chars  3664
+312 c92c58f:table.cc:clean                             names   3 cand   2 used  3 chars  1873
+313 4be6d44:sst_dump_tool.cc:defective                 names  67 cand  44 used 15 chars  5933
+314 f6fd4b9:stack_trace.cc:clean                       names  24 cand  10 used  8 chars  2920
+315 2689430:compact_on_deletion_collector.h:defective  names  30 cand  26 used 15 chars  5881
+316 9243f1b:expected_value.h:clean                     names  13 cand   4 used  4 chars  1753
+317 960d936:db_test.cc:defective                       names  30 cand  25 used 15 chars  5979
+318 4b18c46:status.h:clean                             names   6 cand   4 used  6 chars  1941
+319 b47d65b:thread_local.cc:defective                  names   3 cand   3 used  4 chars  1482
+320 ad21b1a:pessimistic_transaction_db.cc:clean        names   6 cand   5 used  6 chars  2835
+321 1b114ee:forward_iterator.h:defective               names   7 cand   5 used  6 chars  2147
+322 1209b6d:blob_file.cc:clean                         names  16 cand  10 used  5 chars  1536
+323 df79eaf:db_test.cc:defective                       names  25 cand  14 used 15 chars  5955
+324 c3c0cfc:slice_test.cc:clean                        names   5 cand   2 used  3 chars  1195
+325 7a0dbdf:compression.h:defective                    names  27 cand  20 used 16 chars  5809
+326 b8f40f7:db_compaction_test.cc:clean                names   7 cand   7 used 10 chars  4950
+327 76f286c:table_test.cc:defective                    names  41 cand  34 used 16 chars  5925
+328 74d419b:table_iterator.h:clean                     names   8 cand   3 used  2 chars   929
+329 7a31960:ldb_cmd.cc:defective                       names  11 cand   8 used  7 chars  1935
+330 cad99a6:write_prepared_txn_db.h:clean              names   7 cand   4 used  6 chars  2670
+331 a5e312a:compaction.cc:defective                    names  27 cand  23 used 14 chars  5871
+332 303cb23:thread_guard.h:clean                       names   9 cand   3 used  4 chars  1310
+333 8aa1f15:compaction_iterator.cc:defective           names  98 cand  87 used 16 chars  5961
+334 eaa3226:transaction_test.cc:clean                  names  12 cand   7 used  4 chars  1594
+335 3d07b81:listener_test.cc:defective                 names  24 cand  18 used 13 chars  5880
+336 78e8241:options_type.h:clean                       names  14 cand  14 used 14 chars  5773
+337 014fd55:write_batch_with_index_internal.h:defectiv names   3 cand   3 used  1 chars   566
+338 072ae67:env.cc:clean                               names   4 cand   3 used  5 chars  2235
+339 f03b5c9:db_impl.cc:defective                       names 108 cand  92 used 18 chars  5981
+340 21eb82e:db_block_cache_test.cc:clean               names  28 cand  12 used 15 chars  5686
+341 7ee445d:arena.cc:defective                         names   1 cand   0 used  0 chars    32
+342 8843129:listener_test.cc:clean                     names   0 cand   0 used  0 chars    32
+343 4b66d95:write_stress.cc:defective                  names 107 cand  59 used 14 chars  5965
+344 0e3e43f:fault_injection_test.cc:clean              names  28 cand   8 used 12 chars  5034
+345 c9aef3c:geodb_test.cc:defective                    names   8 cand   6 used  9 chars  2700
+346 638d239:sim_cache_test.cc:clean                    names  11 cand  10 used 13 chars  5675
+347 183cadf:options_sanity_check.h:defective           names  12 cand  10 used  9 chars  3902
+348 ecccc63:crc32c_test.cc:clean                       names  22 cand   8 used 10 chars  4023
+349 9d50afc:db_iter.cc:defective                       names  22 cand  14 used  8 chars  2765
+350 669ea77:db_options_test.cc:clean                   names   7 cand   6 used  9 chars  4216
+351 7824444:forward_iterator.cc:defective              names  58 cand  47 used 13 chars  5907
+352 ce6065e:faiss_ivf_index.cc:clean                   names  70 cand  32 used 14 chars  5924
+353 6bbfa18:backupable_db.cc:defective                 names  25 cand  17 used 14 chars  5956
+354 d000134:secondary_index_iterator.cc:clean          names  27 cand  18 used 14 chars  5940
+355 4cedd6b:env.h:defective                            names   6 cand   5 used  6 chars  2326
+356 d150e01:write_unprepared_txn_db.cc:clean           names  11 cand   8 used  5 chars  2488
+357 ef8ed36:db_test_util.h:defective                   names  42 cand  30 used 15 chars  5896
+358 833a226:simple_secondary_index.cc:clean            names  26 cand  20 used 12 chars  5625
+359 774b80e:column_family_test.cc:defective            names  39 cand  20 used 17 chars  5796
+360 7e272d2:db_basic_test.cc:clean                     names  28 cand  13 used 13 chars  5678
+361 97ea8af:db_compaction_test.cc:defective            names  36 cand  30 used 16 chars  5932
+362 4069afe:db_with_timestamp_basic_test.cc:clean      names  22 cand  11 used 16 chars  5839
+363 2074ddd:env_mirror.cc:defective                    names  48 cand  40 used 14 chars  5814
+364 0e73666:external_sst_file_basic_test.cc:clean      names  30 cand  17 used 12 chars  5938
+365 a6fbdd6:version_set.cc:defective                   names   9 cand   8 used  7 chars  2405
+366 6226830:status.h:clean                             names   5 cand   4 used  6 chars  2604
+367 aececc2:table_test.cc:defective                    names   1 cand   0 used  0 chars    32
+368 8581a93:env_basic_test.cc:clean                    names   4 cand   3 used  2 chars   556
+369 eff3098:transaction_db_mutex_impl.cc:defective     names  23 cand  16 used 12 chars  4388
+370 30beece:options_util_test.cc:clean                 names  14 cand  10 used 10 chars  3968
+371 d005c66:listener.h:defective                       names  11 cand  11 used  8 chars  3468
+372 51a8dc6:column_family_test.cc:clean                names   9 cand   5 used  7 chars  2565
+373 e089db4:db_test.cc:defective                       names  40 cand  35 used 14 chars  5816
+374 0917511:data_structure.h:clean                     names  28 cand  10 used  7 chars  2814
+375 9a8e3f7:plain_table_db_test.cc:defective           names  34 cand  22 used 16 chars  5890
+376 42eaa45:db_options_test.cc:clean                   names  15 cand   5 used  9 chars  3882
+377 63ddb78:db_compaction_test.cc:defective            names  36 cand  29 used 16 chars  5976
+378 1bba680:db_sst_test.cc:clean                       names  28 cand  18 used 16 chars  5798
+379 260c297:table_test.cc:defective                    names  32 cand  26 used 17 chars  5994
+380 77565d7:transaction_example.cc:clean               names   5 cand   3 used  2 chars   644
+381 ad7ecca:write_batch_test.cc:defective              names  24 cand  14 used 15 chars  5532
+382 6127a42:cache_bench_tool.cc:clean                  names  32 cand   8 used  8 chars  3167
+383 e84137c:options.cc:defective                       names  52 cand  33 used 17 chars  5945
+384 4917795:util.h:clean                               names   6 cand   6 used  4 chars  1659
+385 d962023:version_set.cc:defective                   names   5 cand   5 used  5 chars  1888
+386 c7c7b07:db_io_failure_test.cc:clean                names   4 cand   2 used  3 chars  1342
+387 54f6b9e:histogram_windowing.cc:defective           names  65 cand  46 used 19 chars  5982
+388 a843991:sst_dump_test.cc:clean                     names  21 cand   5 used  1 chars   294
+389 1a2cc27:column_family.cc:defective                 names   8 cand   4 used  5 chars  2249
+390 cd4592c:compaction.h:clean                         names   2 cand   2 used  4 chars  1467
+391 2feafa3:options.cc:defective                       names  10 cand   9 used 12 chars  5438
+392 9b3c9ef:db_bench_tool.cc:clean                     names  16 cand  10 used  7 chars  3382
+393 21700a5:ldb_cmd_test.cc:defective                  names   9 cand   7 used  7 chars  2004
+394 a00ddf1:version_set.h:clean                        names   6 cand   5 used  4 chars  1814
+395 d755c62:volatile_tier_impl.cc:defective            names  38 cand  30 used 16 chars  5791
+396 e9fc03e:c.h:clean                                  names  47 cand  43 used 17 chars  5969
+397 3070ed9:persistent_cache_tier.h:defective          names  45 cand  23 used 14 chars  5338
+398 a685a70:auto_roll_logger_test.cc:clean             names  13 cand   7 used  9 chars  3228
+399 843d2e3:db_test2.cc:defective                      names  57 cand  43 used 16 chars  5917
+400 fcaa7ff:db_compaction_test.cc:clean                names  19 cand  10 used 13 chars  5828
+401 1d2e4ef:ldb_cmd.cc:defective                       names  12 cand   6 used  9 chars  3228
+402 394f2bb:block_based_table_factory.cc:clean         names  30 cand  23 used 14 chars  5989
+403 5d66025:db_bench_tool.cc:defective                 names  11 cand   8 used  8 chars  3345
+404 239d17a:ribbon_impl.h:clean                        names   8 cand   8 used  8 chars  4152
+405 936973d:db_impl.cc:defective                       names  12 cand  10 used 14 chars  5016
+406 9aad24d:log_reader.h:clean                         names   1 cand   1 used  2 chars   593
+407 62d5480:hash_table_evictable.h:defective           names   7 cand   5 used  4 chars  1552
+408 e8263db:db_ttl_impl.h:clean                        names   1 cand   1 used  0 chars    32
+409 d367555:options.cc:defective                       names  30 cand  13 used  9 chars  4003
+410 c9042db:range_locking_test.cc:clean                names  24 cand  17 used 15 chars  5883
+411 812dbfb:block.cc:defective                         names  22 cand  17 used 12 chars  4414
+412 d795a73:status.h:clean                             names  19 cand  18 used  9 chars  3958
+413 5aaef91:memtable_list.cc:defective                 names  24 cand  20 used 16 chars  5926
+414 0241819:cassandra_functional_test.cc:clean         names   6 cand   4 used  5 chars  2279
+415 68a8e6b:merge_context.h:defective                  names  21 cand   9 used 12 chars  4612
+416 efd0351:hash_containers.h:clean                    names  11 cand   7 used  5 chars  1766
+417 d51dc96:col_buf_decoder.cc:defective               names  60 cand  47 used 17 chars  5982
+418 4f9c0fd:test_agg_merge.h:clean                     names  16 cand  13 used 14 chars  5845
+419 f4d9863:rocksjni.cc:defective                      names  29 cand  20 used 14 chars  5976
+420 ec5add3:options.cc:clean                           names  10 cand   5 used  6 chars  2087
+421 ffdf6ee:portal.h:defective                         names  52 cand  40 used 17 chars  5540
+422 95663ff:db_sst_test.cc:clean                       names  14 cand   9 used 14 chars  5669
+423 6584cec:thread_local_test.cc:defective             names  24 cand  18 used 21 chars  5998
+424 3573558:block_based_table_reader_test.cc:clean     names  54 cand  28 used 14 chars  5846
+425 1613fa9:statistics.cc:defective                    names  23 cand  17 used 15 chars  5746
+426 75d3b6f:block_based_table_factory.cc:clean         names  21 cand  17 used 12 chars  5937
+427 b666f85:db_impl.cc:defective                       names  15 cand  13 used 13 chars  5788
+428 c1a65a4:readahead_raf.cc:clean                     names  27 cand  17 used 10 chars  4218
+429 17f76fc:db_options_test.cc:defective               names  30 cand  19 used 12 chars  5697
+430 356f8c5:version_set.cc:clean                       names  25 cand  20 used 15 chars  5785
+431 06b4785:db_wal_test.cc:defective                   names  14 cand  11 used 14 chars  5660
+432 d894830:option_change_migration_test.cc:clean      names   6 cand   6 used  8 chars  3845
+433 c2a62a4:compact_files_test.cc:defective            names  28 cand  19 used 15 chars  5999
+434 69a32ee:io_posix.cc:clean                          names  29 cand  19 used 15 chars  5857
+435 447f171:internal_iterator.h:defective              names   2 cand   1 used  2 chars   786
+436 4b107ce:version_set.cc:clean                       names   0 cand   0 used  0 chars    32
+437 f470540:db_impl.cc:defective                       names  12 cand  10 used 12 chars  5471
+438 f2fbc5d:write_prepared_txn_db.h:clean              names  20 cand   1 used  1 chars   402
+439 307a4e8:block_based_table_reader.cc:defective      names  21 cand  16 used 16 chars  5979
+440 17a1d65:db_compaction_test.cc:clean                names  44 cand  21 used 13 chars  5978
+441 647eafd:rocks_lua_compaction_filter.h:defective    names  44 cand  38 used 15 chars  5727
+442 6bebe65:pessimistic_transaction_db.cc:clean        names  16 cand  11 used 10 chars  5215
+443 a2bf265:column_family.cc:defective                 names   7 cand   4 used  3 chars  1443
+444 f5f79f0:db_sst_test.cc:clean                       names   3 cand   1 used  0 chars    32
+445 52fd1ff:fault_injection_test.cc:defective          names   6 cand   6 used  7 chars  2046
+446 18a3227:db_impl_write.cc:clean                     names   8 cand   8 used 12 chars  4913
+447 c270735:db_test_util.h:defective                   names   4 cand   3 used  2 chars   846
+448 618bf63:convenience.h:clean                        names   0 cand   0 used  0 chars    32
+449 50e305d:range_del_aggregator.cc:defective          names  51 cand  28 used 14 chars  5715
+450 23fa5b7:db_range_del_test.cc:clean                 names  27 cand  14 used 14 chars  5747
+451 438f22b:checkpoint_test.cc:defective               names  59 cand  48 used 15 chars  5982
+452 d989300:internal_stats.cc:clean                    names  35 cand  30 used 13 chars  5948
+453 fe395fb:lru_cache.cc:defective                     names   9 cand   8 used  9 chars  3134
+454 29ccf20:full_filter_block.cc:clean                 names  12 cand  10 used 14 chars  5874
+455 7c80a6d:db_test.cc:defective                       names   6 cand   4 used  5 chars  1589
+456 8d73137:db_impl.h:clean                            names  23 cand  20 used 15 chars  5873
+457 5b11124:histogram.cc:defective                     names   0 cand   0 used  0 chars    32
+458 249f2b5:env_win.cc:clean                           names   1 cand   0 used  0 chars    32
+459 2d42cf5:file_reader_writer.cc:defective            names   9 cand   6 used  5 chars  1565
+460 ee50b8d:port_win.cc:clean                          names  18 cand  14 used 12 chars  4083
+461 d85ff49:blob_db.h:defective                        names  51 cand  39 used 17 chars  5992
+462 4d0f9a9:compaction_outputs.cc:clean                names  19 cand  13 used 13 chars  5713
+463 11c5d47:crc32c.cc:defective                        names  11 cand   2 used  3 chars   781
+464 b578ca2:file_checksum_helper.h:clean               names   4 cand   3 used  3 chars  1505
+465 3e86c0f:db_stress.cc:defective                     names  13 cand  11 used 17 chars  4428
+466 748e3ac:env.h:clean                                names  17 cand  11 used 11 chars  4684
+467 9c9909b:external_sst_file_ingestion_job.cc:defecti names  47 cand  39 used 14 chars  5950
+468 946d100:c.h:clean                                  names  32 cand  26 used 18 chars  5862
+469 ad19eb8:db_write_test.cc:defective                 names  42 cand  18 used 14 chars  5961
+470 66643b8:external_sst_file_test.cc:clean            names  36 cand  27 used 16 chars  5984
+471 f68d88b:db_write_test.cc:defective                 names   2 cand   1 used  0 chars    32
+472 64324e3:bytesxor.h:clean                           names   1 cand   0 used  0 chars    32
+473 0175d58:file_reader_writer_test.cc:defective       names  50 cand  30 used 15 chars  5891
+474 0fa0c97:db_compaction_test.cc:clean                names  28 cand  11 used 12 chars  5456
+475 5c97a7c:db_io_failure_test.cc:defective            names  52 cand  32 used 14 chars  5909
+476 2b6bcfe:c.cc:clean                                 names  26 cand  24 used 15 chars  5979
+477 f6b9d93:partitioned_filter_block_test.cc:defective names   5 cand   5 used  7 chars  3999
+478 9a690a7:db_test_util.cc:clean                      names   3 cand   2 used  2 chars   984
+479 c9804e0:transaction_db.h:defective                 names   5 cand   4 used  1 chars   526
+480 bfc9737:cassandra_row_merge_test.cc:clean          names  10 cand   7 used  6 chars  2216
+481 f46464d:write_batch_with_index.cc:defective        names  13 cand   9 used 12 chars  4691
+482 03a1d95:db_options_test.cc:clean                   names  10 cand   7 used 12 chars  5136
+483 0154240:column_family.cc:defective                 names  24 cand  22 used 14 chars  5912
+484 ed90e2a:c.h:clean                                  names  17 cand  16 used 14 chars  5981
+485 9b18cc2:db_impl.cc:defective                       names  14 cand  12 used 13 chars  5421
+486 94d0452:table_properties.h:clean                   names   4 cand   4 used  0 chars    32
+487 17731a4:db_impl_write.cc:defective                 names  34 cand  28 used 13 chars  5995
+488 ea9a5b2:external_sst_file_test.cc:clean            names  36 cand  27 used 16 chars  5983
+489 7fe3b32:db.h:defective                             names   4 cand   3 used  2 chars   866
+490 9418403:testharness.cc:clean                       names   9 cand   4 used  3 chars  1150
+491 24ad430:compression.h:defective                    names  12 cand   4 used  3 chars  1387
+492 39a4ff2:db_secondary_test.cc:clean                 names  28 cand  18 used 13 chars  5984
+493 18dcf7f:write_callback_test.cc:defective           names  18 cand  12 used 12 chars  5824
+494 56ed601:compaction_job.cc:clean                    names  19 cand  18 used 16 chars  5779
+495 78d1a5e:db_compaction_test.cc:defective            names  19 cand  14 used 14 chars  5919
+496 bf488c3:optimistic_transaction_test.cc:clean       names  15 cand   9 used 12 chars  5451
+497 36911f5:transaction_test_util.cc:defective         names  65 cand  46 used 14 chars  5774
+498 01e2d33:db_stress_wide_merge_operator.cc:clean     names  20 cand  13 used 11 chars  4935
+499 2f1a3a4:block_fetcher.h:defective                  names  47 cand  41 used 15 chars  5989
+500 141b872:column_family_test.cc:clean                names  29 cand  10 used 10 chars  4512
+501 d0f1b49:db_test.cc:defective                       names   0 cand   0 used  0 chars    32
+502 c4bc30e:env.h:clean                                names   0 cand   0 used  0 chars    32
+503 f1cb83f:db_flush_test.cc:defective                 names  15 cand  12 used 15 chars  5950
+504 bcba372:db_iterator_test.cc:clean                  names  17 cand   9 used 13 chars  5962
+505 f3fe6f8:checkpoint_impl.cc:defective               names  10 cand   6 used  7 chars  3254
+506 b0e7834:version_edit.h:clean                       names  16 cand  12 used 13 chars  4762
+507 ad05cbb:db_impl_open.cc:defective                  names  13 cand   9 used 13 chars  5524
+508 281ac9c:ldb_cmd.cc:clean                           names  24 cand  17 used 15 chars  5950
+509 7a6353b:block_based_filter_block.cc:defective      names   7 cand   5 used  2 chars   923
+510 82afa01:secondary_cache.h:clean                    names   0 cand   0 used  0 chars    32
+511 7429b20:pre_release_callback.h:defective           names   4 cand   2 used  1 chars   550
+512 594e815:options_test.cc:clean                      names   1 cand   0 used  0 chars    32
+513 6d06be2:db_stress.cc:defective                     names  11 cand  10 used 13 chars  5115
+514 95d0ee9:db_blob_compaction_test.cc:clean           names  11 cand   7 used 11 chars  4832
+515 6390443:db_bench_tool.cc:defective                 names   3 cand   1 used  1 chars   630
+516 55e9968:db_test_util.cc:clean                      names   1 cand   1 used  1 chars   497
+517 ab22cf3:sst_dump_test.cc:defective                 names  23 cand  10 used  7 chars  2065
+518 98ab2d8:portal.h:clean                             names  13 cand  12 used  8 chars  3718
+519 ee234e8:db_stress.cc:defective                     names   8 cand   4 used  6 chars  2737
+520 d52b520:file_system.h:clean                        names   6 cand   4 used  4 chars  1289
+521 da4aa59:log_reader.cc:defective                    names  16 cand  15 used 11 chars  3590
+522 d8bd9fc:pessimistic_transaction.cc:clean           names  30 cand  25 used 14 chars  5895
+523 8c78348:range_tombstone_fragmenter.cc:defective    names  80 cand  43 used 16 chars  5991
+524 b2fe148:options_util.cc:clean                      names  21 cand  11 used 12 chars  4595
+525 0415244:db_bench_tool.cc:defective                 names   7 cand   3 used  2 chars   533
+526 2f1984d:range_tombstone_fragmenter.h:clean         names   3 cand   3 used  2 chars  1053
+527 7528130:memtable.cc:defective                      names  10 cand   6 used  6 chars  2586
+528 dfa6b40:options.h:clean                            names   0 cand   0 used  0 chars    32
+529 0ed738f:db_bench_tool.cc:defective                 names  16 cand  10 used  9 chars  4096
+530 89f66d4:customizable.h:clean                       names   6 cand   4 used  2 chars   807
+531 4fce44f:db_impl_compaction_flush.cc:defective      names  31 cand  26 used 13 chars  5976
+532 2dab137:offpeak_time_info.cc:clean                 names  28 cand  19 used 12 chars  4347
+533 e254710:db_bench_tool.cc:defective                 names   8 cand   3 used  3 chars  1190
+534 6e0f62f:db_test_util.h:clean                       names   5 cand   1 used  2 chars   744
+535 62f70f6:db_test2.cc:defective                      names  53 cand  35 used 16 chars  5992
+536 8b8f6c6:db_wide_basic_test.cc:clean                names  24 cand  16 used 14 chars  5721
+537 d6b9b3b:transaction_test_util.cc:defective         names  49 cand  38 used 16 chars  5824
+538 2f9ea81:hyper_clock_cache.cc:clean                 names  20 cand   8 used  5 chars  2135
+539 88d85b6:env_win.cc:defective                       names  16 cand  13 used 12 chars  4451
+540 d10801e:replayer.h:clean                           names  11 cand   7 used  9 chars  3343
+541 14b3f68:db_iterator_test.cc:defective              names  12 cand   7 used  4 chars  1376
+542 c3ff14e:file_system.h:clean                        names   4 cand   3 used  3 chars  1276
+543 d9d3cac:iostats_context_imp.h:defective            names   3 cand   2 used  4 chars  1951
+544 b931f84:cuckoo_table_reader.h:clean                names   0 cand   0 used  0 chars    32
+545 313e877:env_encryption.cc:defective                names   6 cand   4 used  4 chars  1733
+546 0ea7db7:pessimistic_transaction_db.cc:clean        names  33 cand  27 used 13 chars  5831
+547 fefd4b9:db_impl.cc:defective                       names 100 cand  75 used 14 chars  5930
+548 cd21e4e:write_batch_with_index.cc:clean            names  33 cand  14 used 12 chars  5705
+549 f49e12b:event_helpers.cc:defective                 names  21 cand  20 used 13 chars  5756
+550 0cb0fc6:db.h:clean                                 names   4 cand   4 used  0 chars    32
+551 506e844:compaction_iterator.cc:defective           names  22 cand  19 used 10 chars  4461
+552 e4f1e64:ribbon_impl.h:clean                        names  20 cand  15 used 12 chars  5720
+553 4479dff:block_based_table_reader.cc:defective      names  13 cand   9 used  8 chars  3204
+554 f72c834:mock_env.cc:clean                          names  75 cand  49 used 16 chars  5846
+555 f383641:db_memtable_test.cc:defective              names  45 cand  30 used 15 chars  5985
+556 d8e4762:version_set_test.cc:clean                  names  15 cand   7 used  9 chars  3460
+557 0153e14:env_test.cc:defective                      names  34 cand  21 used 19 chars  5983
+558 a31fded:backup_engine_test.cc:clean                names  31 cand  11 used  9 chars  3971
+559 9bbccda:block_cache_trace_analyzer.cc:defective    names 105 cand  54 used 18 chars  5893
+560 98d8a85:jni_perf_context.cc:clean                  names  14 cand   7 used  6 chars  2443
+561 4a285d0:write_prepared_transaction_test.cc:defecti names   5 cand   1 used  2 chars   801
+562 3ac07a1:db_impl_readonly.h:clean                   names   2 cand   1 used  0 chars    32
+563 22028aa:file_reader_writer.cc:defective            names   5 cand   4 used  5 chars  2100
+564 ff46374:transaction_test.cc:clean                  names   3 cand   2 used  3 chars  1160
+565 9f0bd56:cache_simulator.cc:defective               names  54 cand  49 used 14 chars  5951
+566 d985902:db_compaction_test.cc:clean                names  35 cand  20 used 15 chars  5891
+567 6edc5d0:get_context.h:defective                    names   5 cand   4 used  4 chars  1512
+568 3aee4fb:db_map_fuzzer.cc:clean                     names   9 cand   2 used  3 chars  1332
+569 38b03c8:Futex.cpp:defective                        names  85 cand  63 used 17 chars  5770
+570 6cc7ad1:tiered_secondary_cache_test.cc:clean       names  29 cand  15 used 16 chars  5845
+571 e1c468d:block_based_table_reader.cc:defective      names  29 cand  23 used 12 chars  5896
+572 3295e9f:advanced_options.h:clean                   names   0 cand   0 used  0 chars    32
+573 19e8c9b:transaction_base.cc:defective              names   8 cand   2 used  3 chars   919
+574 1022090:toku_portability.h:clean                   names  40 cand  23 used  8 chars  4335
+575 b55b2f4:dynamic_bloom.cc:defective                 names  19 cand  17 used 13 chars  4849
+576 e7a60d0:write_controller.cc:clean                  names  19 cand   9 used  5 chars  1545
+577 108c619:plain_table_db_test.cc:defective           names   4 cand   3 used  3 chars  1048
+578 225abff:file_util.cc:clean                         names   5 cand   4 used  2 chars   602
+579 a68d814:db_impl.cc:defective                       names  17 cand  11 used  8 chars  2779
+580 ecf2bec:listener.h:clean                           names   4 cand   4 used  3 chars  1271
+581 9e4913c:bloom_test.cc:defective                    names  28 cand  12 used 11 chars  3961
+582 259f21e:c.cc:clean                                 names  27 cand  24 used 13 chars  5940
+583 1f9d7c0:db_flush_test.cc:defective                 names  53 cand  32 used 14 chars  5965
+584 20777b9:write_thread.cc:clean                      names  19 cand  14 used 14 chars  5993
+585 526e3b9:trace_replay.cc:defective                  names  52 cand  41 used 19 chars  5969
+586 fc59d8f:write_callback_test.cc:clean               names  22 cand   9 used  6 chars  2205
+587 fe464bc:plain_table_reader.cc:defective            names   4 cand   4 used  6 chars  2473
+588 3e1bf77:cf_options.cc:clean                        names  11 cand   9 used 10 chars  5329
+589 6c7b1a0:write_batch_with_index.cc:defective        names  20 cand  12 used 13 chars  5979
+590 c66b442:cf_options.cc:clean                        names  12 cand  11 used 11 chars  5857
+591 bb23bfe:version_set.cc:defective                   names   4 cand   2 used  3 chars  1667
+592 fdf882d:option_change_migration.h:clean            names   0 cand   0 used  0 chars    32
+593 e3a82bb:io_posix.cc:defective                      names  54 cand  23 used 19 chars  5919
+594 8523f0a:external_sst_file_test.cc:clean            names  17 cand  15 used 15 chars  5897
+595 14c38ba:db_stress_test_base.cc:defective           names  58 cand  35 used 15 chars  5914
+596 9f95aa8:db_properties_test.cc:clean                names  30 cand  19 used 13 chars  5974
+597 bd8404f:write_batch.cc:defective                   names  14 cand  10 used 14 chars  5979
+598 423538a:memkind_kmem_allocator.h:clean             names  12 cand   9 used  7 chars  2719
+599 fbda25f:db_stress_common.cc:defective              names  25 cand  17 used 15 chars  5610
+600 5ecb927:c.cc:clean                                 names  23 cand  16 used 13 chars  5150
+601 3160edf:db_stress_common.h:defective               names  33 cand  19 used 11 chars  4302
+602 d02f63c:tiered_secondary_cache_test.cc:clean       names  30 cand  17 used 14 chars  5720
+603 1aaa145:db_test2.cc:defective                      names  11 cand   6 used 10 chars  4064
+604 ac37bfd:configurable.cc:clean                      names   2 cand   2 used  1 chars   521
+605 0a0151f:random_access_file_reader.cc:defective     names  10 cand   7 used  4 chars  1540
+606 7fd68b7:table_properties.h:clean                   names   6 cand   4 used  0 chars    32
+607 4fc2166:random_access_file_reader.cc:defective     names  41 cand  26 used 17 chars  5910
+608 55de265:multi_cf_iterator_impl.h:clean             names  11 cand   6 used  8 chars  2810
+609 fb09ef0:db_impl_files.cc:defective                 names  34 cand  20 used 17 chars  5971
+610 2ba4dce:transaction_base.cc:clean                  names  27 cand  19 used 13 chars  5942
+611 a6ce5c8:db_impl.cc:defective                       names  25 cand  13 used 14 chars  5278
+612 dd0447a:env_test.cc:clean                          names  30 cand  19 used 16 chars  5963
+613 4246888:version_set.cc:defective                   names  18 cand  11 used 15 chars  5989
+614 685044d:expected_state.cc:clean                    names  13 cand  10 used  2 chars   785
+615 0355d14:timer.h:defective                          names  49 cand  22 used 17 chars  5994
+616 02b4197:dbformat.h:clean                           names  19 cand  15 used 13 chars  5868
+617 94f90ac:options_settable_test.cc:defective         names  32 cand  13 used 12 chars  5500
+618 f7d32c1:backup_engine_test.cc:clean                names  27 cand  15 used 14 chars  5932
+619 0c05624:testutil.cc:defective                      names  24 cand  18 used  9 chars  3844
+620 9b1d0c0:options.cc:clean                           names  27 cand  15 used 15 chars  5869
+621 51bdfae:io_posix.cc:defective                      names   9 cand   6 used  6 chars  2136
+622 4217d1b:internal_stats.h:clean                     names   9 cand   9 used  9 chars  4159
+623 9e7b7e2:fault_injection_test_fs.cc:defective       names  10 cand   8 used  3 chars   990
+624 930f2e9:db_sst_test.cc:clean                       names   4 cand   4 used  5 chars  2154
+625 c384c08:db_test2.cc:defective                      names  58 cand  28 used 13 chars  5849
+626 da8eba8:seqno_to_time_mapping.h:clean              names  20 cand  12 used 10 chars  4523
+627 1092f19:env_basic_test.cc:defective                names  16 cand   8 used  7 chars  3011
+628 5b748b9:status.cc:clean                            names   5 cand   2 used  1 chars   251
+629 373d5ac:backupable_db_test.cc:defective            names  48 cand  30 used 16 chars  5926
+630 934cf2d:db_table_properties_test.cc:clean          names  33 cand  18 used 13 chars  5888
+631 9a83fd2:db_impl.cc:defective                       names   4 cand   3 used  4 chars  1225
+632 725833a:filter_policy.h:clean                      names  14 cand   8 used 13 chars  5535
+633 d34e015:random_access_file_reader_test.cc:defectiv names  22 cand  11 used 12 chars  4194
+634 925c63a:no_batched_ops_stress.cc:clean             names  12 cand   7 used 12 chars  4878
+635 3e422ce:mock_time_env.h:defective                  names  12 cand   7 used  9 chars  3459
+636 30b0887:options_test.cc:clean                      names  13 cand  10 used 12 chars  5802
+637 27aa443:block_based_table_reader.cc:defective      names  35 cand  21 used 12 chars  5805
+638 bcda3bd:c.h:clean                                  names  21 cand  19 used 12 chars  3879
+639 9a63bbd:db_impl_compaction_flush.cc:defective      names   2 cand   2 used  2 chars   750
+640 6878ced:compaction_iterator.cc:clean               names   4 cand   4 used  4 chars  1501
+641 7cd760d:forward_iterator.cc:defective              names   7 cand   7 used  8 chars  2981
+642 2035798:db_impl.h:clean                            names   4 cand   1 used  1 chars   485
+643 24498ab:db_impl.cc:defective                       names   8 cand   4 used  5 chars  1875
+644 b860a42:version_set.h:clean                        names   7 cand   6 used  7 chars  3248
+645 00751e4:options.h:defective                        names   2 cand   2 used  0 chars    32
+646 728e5f5:db_bench_tool.cc:clean                     names  13 cand   5 used  1 chars   473
+647 6595267:compaction_iterator.h:defective            names  14 cand  10 used  4 chars  1810
+648 4c41e51:c.h:clean                                  names  16 cand  15 used 13 chars  3812
+649 9aa1b1d:block_based_table_factory.cc:defective     names   7 cand   7 used  8 chars  3260
+650 aeb913d:lang.h:clean                               names   7 cand   7 used  7 chars  2267
+651 81592d9:compaction_job.cc:defective                names  17 cand  11 used 13 chars  5924
+652 0fb938c:customizable.h:clean                       names   1 cand   1 used  2 chars   805
+653 4926b33:env_win.cc:defective                       names  12 cand   8 used  7 chars  2935
+654 79f4a04:db_impl_experimental.cc:clean              names   0 cand   0 used  0 chars    32
+655 b0fd1cc:trace_replay.h:defective                   names  42 cand  41 used 16 chars  5996
+656 613e1a9:db_flush_test.cc:clean                     names  23 cand  10 used 12 chars  4779
+657 596e900:write_buffer_manager.h:defective           names  41 cand  29 used 16 chars  5930
+658 1d94aee:job_context.h:clean                        names  23 cand  18 used 12 chars  5607
+659 60e5af8:env_test.cc:defective                      names  55 cand  25 used 16 chars  5905
+660 20d065d:listener_test.cc:clean                     names  32 cand  17 used 14 chars  5996
+661 311a544:cache_entry_stats.h:defective              names  43 cand  26 used 15 chars  5779
+662 1601da4:external_sst_file_ingestion_job.cc:clean   names  20 cand  14 used 12 chars  5925
+663 6ad0810:cf_options.cc:defective                    names  23 cand  17 used 12 chars  5856
+664 6f12599:write_batch_with_index_internal.h:clean    names  22 cand  18 used 14 chars  5924
+665 beed864:cf_options.cc:defective                    names  19 cand  15 used 10 chars  5714
+666 a8a422e:autovector.h:clean                         names  10 cand   5 used  2 chars   701
+667 4f1dd05:fault_injection_fs.cc:defective            names  21 cand  17 used 15 chars  5778
+668 a776406:listener_test.cc:clean                     names  19 cand   8 used 10 chars  4177
+669 d6aa8c4:blob_file_completion_callback.h:defective  names  35 cand  29 used 15 chars  5798
+670 c8aafdb:vectorrep.cc:clean                         names  25 cand  18 used 12 chars  5864
+671 3ffb3ba:metadata.h:defective                       names  44 cand  37 used 14 chars  5976
+672 d55655a:compact_on_deletion_collector_test.cc:clea names  26 cand  16 used 13 chars  5970
+673 2910264:io_posix.cc:defective                      names  33 cand  23 used 17 chars  5646
+674 08dc5ca:transaction_test.cc:clean                  names  25 cand  13 used 15 chars  5975
+675 dfedc74:options_helper.h:defective                 names   5 cand   4 used  5 chars  1641
+676 9a116ab:db_with_timestamp_basic_test.cc:clean      names   7 cand   3 used  5 chars  1532
+677 9246165:write_batch.h:defective                    names   7 cand   6 used  4 chars  1476
+678 17ce1ca:readahead_file_info.h:clean                names   8 cand   7 used  3 chars  1325
+679 a6a6aad:expected_state.cc:defective                names  57 cand  29 used 13 chars  5727
+680 4f7d3a0:db_compaction_test.cc:clean                names  46 cand  28 used 14 chars  5983
+681 c9818b3:db_stress_test_base.cc:defective           names   7 cand   4 used  6 chars  2426
+682 4a7c1dc:writable_file_writer.h:clean               names  14 cand   8 used 11 chars  4192
+683 37ec9d0:slice.cc:defective                         names  40 cand  26 used 14 chars  5985
+684 e859c3b:dbformat_test.cc:clean                     names   8 cand   6 used  3 chars   890
+685 f07c569:db_stress_driver.cc:defective              names  16 cand  12 used 15 chars  5778
+686 63a284a:db_bench_tool.cc:clean                     names  10 cand   7 used  7 chars  2827
+687 d3a2f28:db_test2.cc:defective                      names  67 cand  41 used 12 chars  5841
+688 0eb5b43:io_posix_test.cc:clean                     names  22 cand   2 used  2 chars  1024
+689 4dff279:db_compaction_test.cc:defective            names  37 cand  21 used 15 chars  5919
+690 37176a4:options.h:clean                            names   1 cand   1 used  0 chars    32
+691 bbdaf63:db_impl_write.cc:defective                 names  23 cand  20 used 14 chars  5941
+692 ce60d0c:fs_remap.cc:clean                          names  23 cand  16 used 12 chars  4543
+693 f241d08:lru_cache.cc:defective                     names  10 cand   6 used  5 chars  1357
+694 0bd4dcd:job_context.h:clean                        names   6 cand   3 used  5 chars  2270
+695 5bd374b:fs_posix.cc:defective                      names   4 cand   3 used  4 chars  1821
+696 b82edff:options.h:clean                            names   0 cand   0 used  0 chars    32
+697 c6d326d:compaction_service_test.cc:defective       names   7 cand   3 used  3 chars  1478
+698 b6ec332:db_bench_tool.cc:clean                     names   5 cand   4 used  5 chars  2018
+699 2db6a4a:file_prefetch_buffer.cc:defective          names  45 cand  33 used 12 chars  5987
+700 c757f5b:rocksjni.cc:clean                          names   9 cand   6 used 11 chars  4609
+701 b0e1906:external_sst_file_basic_test.cc:defective  names  27 cand  15 used 13 chars  5994
+702 bfc6a8e:db_options.cc:clean                        names  22 cand  16 used 13 chars  5640
+703 65893ad:file_system.h:defective                    names   5 cand   1 used  2 chars   562
+704 e6432df:db_bench_tool.cc:clean                     names   4 cand   4 used  5 chars  2606
+705 21906d6:env.h:defective                            names   0 cand   0 used  0 chars    32
+706 8273435:db_wal_test.cc:clean                       names   2 cand   2 used  2 chars   918
+707 c0e0f30:fs_posix.cc:defective                      names  32 cand  26 used 16 chars  5731
+708 d6e016b:db_properties_test.cc:clean                names  17 cand  15 used 14 chars  5671
+709 40d19bc:fs_posix.cc:defective                      names   3 cand   2 used  2 chars   845
+710 653c392:block_based_table_reader.h:clean           names   0 cand   0 used  0 chars    32
+711 c965c9e:blob_source.cc:defective                   names  64 cand  48 used 17 chars  5944
+712 5645207:internal_stats.cc:clean                    names  14 cand  11 used 10 chars  3964
+713 b397dcd:version_set.cc:defective                   names  20 cand  10 used 11 chars  4208
+714 edda219:db_flush_test.cc:clean                     names  28 cand  13 used 14 chars  5899
+715 056e08d:blob_file_reader.cc:defective              names  42 cand  31 used 14 chars  5963
+716 eca47fb:db_compaction_test.cc:clean                names  20 cand  10 used 13 chars  5219
+717 2acbf38:io_posix.h:defective                       names  32 cand  19 used 10 chars  3864
+718 7cf27ea:win_thread.cc:clean                        names  31 cand  17 used 14 chars  5628
+719 a3acf2e:db_impl.cc:defective                       names  36 cand  22 used 13 chars  5975
+720 7a95938:range_del_aggregator_bench.cc:clean        names  29 cand  13 used 11 chars  4139
+721 9d7de65:clock_cache.cc:defective                   names  44 cand  31 used 18 chars  5999
+722 0a89cea:block_based_table_reader.cc:clean          names   8 cand   6 used  4 chars  1964
+723 aec28eb:stderr_logger.h:defective                  names  19 cand  15 used  7 chars  1839
+724 f79b3d1:instrumented_mutex.cc:clean                names  14 cand   9 used 11 chars  3680
+725 56463d4:compaction_job.cc:defective                names  28 cand  19 used 13 chars  5894
+726 b6640c3:max_operator.h:clean                       names  19 cand  15 used  8 chars  3646
+727 cc20998:env_logger.h:defective                     names  24 cand  14 used 11 chars  4312
+728 2ee20a6:trace_replay.cc:clean                      names  26 cand  24 used 11 chars  4217
+729 87b82f2:compressed_secondary_cache.cc:defective    names  53 cand  31 used 13 chars  5421
+730 adc9001:options_test.cc:clean                      names  20 cand   9 used  9 chars  3196
+731 bf4532e:version_set.cc:defective                   names  28 cand  20 used 14 chars  5786
+732 17bc277:optimistic_transaction_db_impl.h:clean     names  30 cand  17 used 14 chars  5977
+733 35cdd3e:version_set.h:defective                    names  23 cand  18 used 12 chars  4506
+734 b632ed0:iostats_context.h:clean                    names   9 cand   7 used  0 chars    32
+735 c206aeb:version_set.cc:defective                   names   4 cand   3 used  2 chars   708
+736 9116601:memtable_list.h:clean                      names   1 cand   1 used  2 chars   928
+737 8367f0d:arena.cc:defective                         names  43 cand  32 used 16 chars  5869
+738 e267909:db_test_util.cc:clean                      names  14 cand   9 used  9 chars  4054
+739 7d26e4c:merge_helper.cc:defective                  names  29 cand  22 used 16 chars  5994
+740 f4e4039:math128.h:clean                            names   9 cand   9 used  9 chars  3512
+741 c93ba7d:db_impl_write.cc:defective                 names  10 cand   9 used 14 chars  5915
+742 6d2a983:advanced_options.h:clean                   names   0 cand   0 used  0 chars    32
+743 6a82b68:builder.cc:defective                       names  32 cand  19 used 12 chars  5968
+744 40c2ec6:c.h:clean                                  names  14 cand  11 used  7 chars  3629
+745 9aa3b6f:import_column_family_job.cc:defective      names  50 cand  35 used 13 chars  5876
+746 05daa12:db_options_test.cc:clean                   names  14 cand  10 used 14 chars  5782
+747 8f763bd:partitioned_filter_block.cc:defective      names  20 cand  15 used 15 chars  5942
+748 03a892a:db_wal_test.cc:clean                       names  16 cand   8 used  8 chars  3511
+749 8d8eb0e:db_impl.cc:defective                       names  38 cand  24 used 14 chars  5945
+750 1c6faf3:bloom_test.cc:clean                        names  16 cand  14 used 12 chars  5903
+751 ffb5f1f:no_batched_ops_stress.cc:defective         names  53 cand  29 used 12 chars  5754
+752 089070c:compaction.cc:clean                        names  31 cand  22 used 13 chars  5788
+753 11ebddb:udt_util.cc:defective                      names  63 cand  38 used 13 chars  5867
+754 c9d8e6a:db.h:clean                                 names   5 cand   3 used  4 chars  1555
+755 7521478:sst_file_dumper.cc:defective               names   2 cand   2 used  3 chars  1323
+756 bc04ec8:db_test_util.h:clean                       names   1 cand   1 used  0 chars    32
+757 f65a037:block_based_table_iterator.cc:defective    names  23 cand  17 used 14 chars  5552
+758 19768a9:checkpoint.cc:clean                        names  22 cand  12 used  9 chars  3575
+759 c4a19ed:transaction_test.cc:defective              names  17 cand  13 used 13 chars  5780
+760 6d10f8d:c.h:clean                                  names  20 cand  19 used 13 chars  4546
+761 269478e:tiered_secondary_cache.cc:defective        names  51 cand  30 used 14 chars  5748
+762 4bea83a:blob_db_test.cc:clean                      names  13 cand  13 used 15 chars  5814
+763 b3ffca0:db_impl_write.cc:defective                 names  13 cand   9 used  9 chars  3679
+764 06dc32e:file_reader_writer_test.cc:clean           names   2 cand   2 used  2 chars   617
+765 8d50a7c:ldb_cmd_test.cc:defective                  names  35 cand  15 used 13 chars  5280
+766 97e7090:optimistic_transaction_test.cc:clean       names  18 cand  10 used 14 chars  5917
+767 4835c11:stderr_logger.h:defective                  names  10 cand   7 used  7 chars  2568
+768 50dc3ec:fault_injection_fs.cc:clean                names  14 cand   6 used  7 chars  2940
+769 d9c0d44:db_write_test.cc:defective                 names  26 cand  11 used 12 chars  5016
+770 efba8f5:prefetch_test.cc:clean                     names  21 cand  15 used 13 chars  5902
+771 ad423ab:db_stress_gflags.cc:defective              names  19 cand  17 used 13 chars  5993
+772 719c961:write_batch.h:clean                        names  10 cand   5 used  7 chars  3490
+773 7d83b4e:writable_file_writer.cc:defective          names   8 cand   5 used  4 chars  1243
+774 e2ef349:db_compaction_test.cc:clean                names  15 cand  12 used 13 chars  5939
+775 2c02a9b:compaction_iterator.cc:defective           names  41 cand  29 used 14 chars  5943
+776 6549b11:customizable_test.cc:clean                 names  22 cand  14 used 13 chars  5635
+777 b34cef5:block_based_table_reader.cc:defective      names  38 cand  27 used 13 chars  5795
+778 f69a5fe:io_posix.h:clean                           names  12 cand   8 used  4 chars  1784
+779 37b81bd:db_stress_test_base.cc:defective           names   2 cand   2 used  2 chars  1081
+780 ac24f15:compaction_job_test.cc:clean               names   3 cand   2 used  1 chars   420
+781 da5e113:compaction_job.h:defective                 names   1 cand   1 used  0 chars    32
+782 319374a:external_sst_file_test.cc:clean            names   4 cand   2 used  2 chars   654
+783 ba164ac:db_stress_test_base.cc:defective           names  12 cand   7 used 12 chars  5601
+784 a44f4b8:attribute_groups.h:clean                   names   7 cand   5 used  6 chars  2805
+785 1c7652f:wbwi_memtable.cc:defective                 names  86 cand  62 used 16 chars  5990
+786 346055a:wide_columns_helper.h:clean                names  16 cand   8 used 11 chars  4446
+787 a0edca3:sst_file_reader.cc:defective               names  55 cand  35 used 16 chars  5922
+788 b8d915c:no_batched_ops_stress.cc:clean             names  11 cand   7 used  5 chars  2294
+789 6d83a75:external_table.cc:defective                names   8 cand   3 used  3 chars  1305
+790 602e19f:pessimistic_transaction_db.cc:clean        names   5 cand   4 used  5 chars  2335
+791 504ff4e:auto_skip_compressor.cc:defective          names  50 cand  41 used 14 chars  5948
+792 78c83ac:column_family.cc:clean                     names  17 cand  10 used 12 chars  5687
+793 9758482:user_defined_index_wrapper.h:defective     names  46 cand  29 used 13 chars  5875
+794 11a259a:env_test.cc:clean                          names  27 cand   5 used  8 chars  3134
+795 217e075:db_stress_driver.cc:defective              names  11 cand   8 used 10 chars  4175
+796 0a169ce:compressed_secondary_cache.cc:clean        names  14 cand   5 used  3 chars  1289
+797 07f1520:db_stress_test_base.cc:defective           names  79 cand  55 used 13 chars  5862
+798 ca5d60f:env_encryption.cc:clean                    names  21 cand  11 used 13 chars  5456
+799 2620c85:db_stress_test_base.cc:defective           names   3 cand   3 used  2 chars  1013
+800 3bd7d96:external_sst_file_ingestion_job.h:clean    names   0 cand   0 used  0 chars    32

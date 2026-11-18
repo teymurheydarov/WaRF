@@ -1,0 +1,22 @@
+  V.commit     AUC 0.713
+  C.commit     AUC 0.649
+  V.both       AUC 0.715
+  C.both       AUC 0.667
+  CK.decl      AUC 0.786
+  CK.decl_ctx  AUC 0.792
+  V.decl       AUC 0.733
+  V.decl_ctx   AUC 0.761
+
+10-fold x 5, rule logodds (balanced accuracy)
+  core: BOUNDARY + LE + CK.or                 72.8%
+  core + V.commit                             71.4%  (71.1-71.6)
+  core + C.commit                             72.5%  (72.4-72.8)
+  core + V.both                               72.0%  (71.9-72.1)
+  core + C.both                               72.4%  (72.1-72.8)
+  core + CK.decl                              73.2%  (72.8-73.4)
+  core + CK.decl_ctx                          73.4%  (73.0-73.6)
+  core + V.decl                               72.3%  (72.1-72.5)
+  core + V.decl_ctx                           73.5%  (73.2-73.9)
+  core + V.commit + CK.decl_ctx               72.7%  (72.6-72.8)
+  core + C.both + CK.decl_ctx                 74.0%  (73.8-74.1)
+  core + V.both + CK.decl_ctx                 72.8%  (72.5-73.0)

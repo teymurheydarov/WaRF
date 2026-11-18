@@ -1,0 +1,23 @@
+800 changes (400 defective, 400 clean)
+
+Balanced accuracy, WaRF logodds, 10-fold calibration within the set (repetition 0; mean of 5)
+  PANEL3   70.8%  (mean of 5: 70.8%)  caught 285/400, false alarms 119/400
+  LO-ctx   69.0%  (mean of 5: 69.2%)  caught 278/400, false alarms 126/400
+  FIVE     70.8%  (mean of 5: 70.6%)  caught 286/400, false alarms 120/400
+
+PRIMARY: PANEL3 vs LO-ctx: right only in PANEL3 47, only in LO-ctx 33, exact McNemar p = 0.1456  -> not shown
+Secondary: pooled with DuckDB (30 vs 18): PANEL3 77, LO-ctx 51, exact McNemar p = 0.0267  -> POOLED WINS
+Secondary: FIVE vs LO-ctx: 39 vs 25, p = 0.1034
+Secondary: on the defects visible from the diff (with every clean change): PANEL3 73.7%, LO-ctx 71.6%
+Secondary: the 302 pairs matched in their own added-line bin: PANEL3 70.5%, LO-ctx 68.9%; 35 vs 25, p = 0.2451
+
+AUC of each seat's p(REJECT); the added-line count alone for comparison
+  added lines   0.549
+  SKEPTIC       0.772
+  ADVOCATE      0.734
+  AUDITOR       0.715
+  TEST-FOCUSED  0.778
+  BOUNDARY      0.777
+  LOCATE        0.766
+  CHECKLIST     0.769
+  DEFAULT       0.723

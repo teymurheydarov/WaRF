@@ -1,0 +1,25 @@
+844 changes; leave one project out (calibrate on the other two)
+  arm                             G+Smo       MFEM  KeePassXC     mean   all 844
+  V1, one Jev seat                71.3%      75.7%      77.6%    74.9%     74.3%
+  SIZE alone                      73.6%      79.3%      80.2%    77.7%     77.1%
+  LO, as tested                   73.3%      80.0%      82.3%    78.5%     77.7%
+  LO-full, no early stop          73.3%      80.0%      82.3%    78.5%     77.7%
+  LO+SIZE                         76.1%      82.7%      84.4%    81.1%     80.3%
+  LO+SIZE-full                    76.1%      82.7%      84.4%    81.1%     80.3%
+
+against LO over all 844 (only this arm right / only LO right / exact McNemar p), and per project
+  V1, one Jev seat            22 /  51  p 0.0009   (G+Smo 12/19 p 0.28; MFEM 5/18 p 0.01; KeePassXC 5/14 p 0.06)
+  SIZE alone                  96 / 101  p 0.7757   (G+Smo 47/46 p 1.00; MFEM 33/35 p 0.90; KeePassXC 16/20 p 0.62)
+  LO-full, no early stop       0 /   0  p 1.0000   (G+Smo 0/0 p 1.00; MFEM 0/0 p 1.00; KeePassXC 0/0 p 1.00)
+  LO+SIZE                     45 /  23  p 0.0103   (G+Smo 17/7 p 0.06; MFEM 17/9 p 0.17; KeePassXC 11/7 p 0.48)
+  LO+SIZE-full                45 /  23  p 0.0103   (G+Smo 17/7 p 0.06; MFEM 17/9 p 0.17; KeePassXC 11/7 p 0.48)
+  LO+SIZE against SIZE alone: 79 / 52  p 0.0227
+  LO on the 725 changes WaRF does not mark LOW: right 81.8% (balanced)
+
+LO's boundary after the first group (jev-1.14 seats)
+  stopped early on 139/844; the full pool decides differently on 0 of them; of those LO is right on 0, LO-full on 0
+
+LO's errors by distance from the threshold |Lambda - tau| (leave-one-project-out decisions)
+  < ln 2 (WaRF says LOW)      119 changes,  56 wrong (47.1%): 25 missed defects, 31 false alarms
+  ln 2 .. 2                   224 changes,  63 wrong (28.1%): 29 missed defects, 34 false alarms
+  >= 2 (confidently wrong)    501 changes,  69 wrong (13.8%): 34 missed defects, 35 false alarms

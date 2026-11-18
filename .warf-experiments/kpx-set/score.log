@@ -1,0 +1,13 @@
+192 KeePassXC items (96 defective, 96 clean); Jev cost $0.135
+offline rebuild of LO: 192/192 decisions equal WaRF's logged ones
+  V1            right  77.6%  caught 72/96  false alarms 19/96
+  SIZE          right  80.2%  caught 73/96  false alarms 15/96
+  LO            right  82.3%  caught 80/96  false alarms 18/96
+  JOINT-noSize  right  79.2%  caught 81/96  false alarms 25/96
+  JOINT         right  83.9%  caught 83/96  false alarms 18/96
+
+PRIMARY  JOINT - LO: +1.6 points; only JOINT right 13, only LO right 10; exact McNemar p 0.6776 -> not shown
+secondary JOINT-noSize - LO: -3.1 points; 3 vs 9; McNemar p 0.1460
+secondary JOINT - JOINT-noSize: +4.7 points; 14 vs 5; McNemar p 0.0636
+secondary JOINT - SIZE: +3.6 points; 15 vs 8; McNemar p 0.2100
+secondary LO - V1: +4.7 points; 14 vs 5; McNemar p 0.0636

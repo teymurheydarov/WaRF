@@ -1,0 +1,7 @@
+RocksDB matched set, 800 changes (balanced accuracy)
+  calibrated on the other three projects       69.0%   (test files 61.2%, others 70.9%)
+  calibrated on the other three projects + T   69.0%   (test files 67.8%, others 70.6%)
+  learned on RocksDB folds + other projects       69.5%   (repeats 69.5-69.6)
+  learned on RocksDB folds only                   69.2%   (repeats 69.0-69.2)
+  learned on RocksDB folds + other projects + T   70.1%   (repeats 69.9-70.2)
+  learned on RocksDB folds only             + T   70.6%   (repeats 70.4-70.9)

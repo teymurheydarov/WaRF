@@ -1,0 +1,26 @@
+reproduction: LO calibrated on the 132 G+Smo dev items gives 300/300 of WaRF's logged MFEM decisions; BA 80.0%
+
+1. G+Smo, 10-fold x 5 cross-validation over 352 items (balanced accuracy)
+  V1, one Jev seat                          73.8%   (repeats 73.6-74.1)
+  SIZE, the size seat alone                 74.6%   (repeats 74.4-74.7)
+  LO, five persona seats                    76.3%   (repeats 75.9-76.7)
+  LO+SIZE, size as a third group            75.7%   (repeats 75.3-76.1)
+  JOINT, seats and size fitted together     76.9%   (repeats 76.7-77.6)
+  candidate (the better size arm on G+Smo): JOINT, seats and size fitted together
+
+2. MFEM, one look: calibrated on all 352 G+Smo items, deciding the 300 MFEM items
+  V1, one Jev seat                          75.3%   caught 96/150  false alarms 20/150
+  SIZE, the size seat alone                 79.3%   caught 120/150  false alarms 32/150
+  LO, five persona seats                    78.7%   caught 108/150  false alarms 22/150
+  LO+SIZE, size as a third group            83.0%   caught 115/150  false alarms 16/150
+  JOINT, seats and size fitted together     84.3%   caught 120/150  false alarms 17/150
+  JOINT vs LO: +5.7 points; only JOINT right 27, only LO right 10; exact McNemar p 0.0076
+  JOINT vs SIZE: +5.0 points; only JOINT right 22, only SIZE right 7; exact McNemar p 0.0081
+  verdict (README rule): RAISES ACCURACY
+
+3. for information: 10-fold x 5 cross-validation within MFEM (300 items)
+  V1, one Jev seat                          77.0%   (repeats 77.0-77.0)
+  SIZE, the size seat alone                 79.2%   (repeats 79.0-79.3)
+  LO, five persona seats                    81.1%   (repeats 81.0-81.3)
+  LO+SIZE, size as a third group            82.9%   (repeats 82.7-83.0)
+  JOINT, seats and size fitted together     84.3%   (repeats 83.7-84.7)

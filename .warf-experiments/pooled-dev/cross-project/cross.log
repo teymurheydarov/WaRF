@@ -1,0 +1,15 @@
+Reference (mean of 5 repetitions): LO-ctx RocksDB 70.2%, DuckDB 75.1%; PANEL3 RocksDB 73.6%, DuckDB 76.6%
+
+Panels of at most 5 seats ranked by the worse project (repetition 0), top 12, then 5 repetitions
+  BOUNDARY + LOCATE + CHECKLIST                                  RocksDB  73.6%  DuckDB  76.6%
+  ADVOCATE + LOCATE + CHECKLIST                                  RocksDB  73.5%  DuckDB  75.4%
+  SKEPTIC + BOUNDARY + LOCATE + CHECKLIST                        RocksDB  73.4%  DuckDB  76.6%
+  AUDITOR + BOUNDARY + DEFAULT + LOCATE + CHECKLIST              RocksDB  73.7%  DuckDB  76.0%
+  AUDITOR + BOUNDARY + LOCATE + CHECKLIST                        RocksDB  73.3%  DuckDB  75.8%
+  ADVOCATE + AUDITOR + BOUNDARY + LOCATE + CHECKLIST             RocksDB  73.4%  DuckDB  75.7%
+  BOUNDARY + DEFAULT + LOCATE + CHECKLIST                        RocksDB  73.4%  DuckDB  76.5%
+  SKEPTIC + ADVOCATE + BOUNDARY + LOCATE + CHECKLIST             RocksDB  73.2%  DuckDB  76.1%
+  SKEPTIC + BOUNDARY + DEFAULT + LOCATE + CHECKLIST              RocksDB  73.5%  DuckDB  76.2%
+  AUDITOR + TEST-FOCUSED + BOUNDARY + LOCATE + CHECKLIST         RocksDB  73.3%  DuckDB  76.8%
+  SKEPTIC + AUDITOR + BOUNDARY + LOCATE + CHECKLIST              RocksDB  73.2%  DuckDB  75.9%
+  ADVOCATE + TEST-FOCUSED + BOUNDARY + LOCATE + CHECKLIST        RocksDB  73.2%  DuckDB  75.8%

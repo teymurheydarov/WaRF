@@ -1,0 +1,9 @@
+AUC of the five seats' mean p: LO 0.758, LO with project context 0.773 (+0.015 [+0.004, +0.026])
+
+Balanced accuracy on 800 RocksDB changes, 10-fold x 5 within RocksDB
+  LO, RocksDB folds only                      69.2%  (69.0-69.2)
+  LO, + other projects                        69.5%  (69.5-69.6)
+  LO with context, RocksDB folds only         70.2%  (70.0-70.4)
+  LO with context + checks, RocksDB folds     71.4%  (71.2-71.5)
+  LO, calibrated on the other projects only   69.0%
+  LO with context, calibrated on the other projects only  69.8%

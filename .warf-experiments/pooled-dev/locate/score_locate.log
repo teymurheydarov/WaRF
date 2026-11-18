@@ -1,0 +1,28 @@
+1. Ranking on 800 RocksDB changes (AUC; reference: WaRF's question with the same context 0.770)
+  build      0.757   vs reference -0.013 [-0.043, +0.016]
+  runtime    0.759   vs reference -0.011 [-0.039, +0.016]
+  either     0.777   vs reference +0.006 [-0.020, +0.033]
+  diag mean  0.713   vs reference -0.057 [-0.094, -0.022]
+  signcmp    0.653   vs reference -0.118 [-0.159, -0.078]
+  narrow     0.701   vs reference -0.069 [-0.108, -0.030]
+  shadow     0.651   vs reference -0.120 [-0.157, -0.083]
+  ndebug     0.682   vs reference -0.088 [-0.125, -0.052]
+  override   0.599   vs reference -0.171 [-0.211, -0.131]
+  format     0.595   vs reference -0.175 [-0.212, -0.139]
+  config     0.657   vs reference -0.114 [-0.152, -0.074]
+  include    0.623   vs reference -0.147 [-0.187, -0.108]
+  uninit     0.693   vs reference -0.078 [-0.112, -0.043]
+  leak       0.629   vs reference -0.142 [-0.181, -0.102]
+  flaky      0.545   vs reference -0.225 [-0.274, -0.179]
+
+2. Learned weights, 10-fold x 5 within RocksDB (balanced accuracy)
+  all views (stack.py)         prior sd 1.0:  72.8%  (72.5-73.2)
+  all views (stack.py)         prior sd 0.3:  72.0%  (71.8-72.6)
+  new views alone (13)         prior sd 1.0:  70.5%  (69.6-71.1)
+  new views alone (13)         prior sd 0.3:  69.8%  (69.1-70.6)
+  localisation alone (2)       prior sd 1.0:  70.0%  (69.6-70.4)
+  localisation alone (2)       prior sd 0.3:  70.3%  (70.1-70.5)
+  all views + localisation     prior sd 1.0:  72.8%  (72.1-73.4)
+  all views + localisation     prior sd 0.3:  73.1%  (73.0-73.1)
+  all views + new views        prior sd 1.0:  73.6%  (72.6-74.4)
+  all views + new views        prior sd 0.3:  73.7%  (73.2-74.4)

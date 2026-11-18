@@ -1,0 +1,4 @@
+PANEL3 (BOUNDARY + LOCATE + CHECKLIST), 10-fold x 5 (balanced accuracy)
+  own      RocksDB  73.6%  DuckDB  76.6%
+  shared   RocksDB  71.1%  DuckDB  77.0%
+  learned  RocksDB  71.2%  DuckDB  77.2%

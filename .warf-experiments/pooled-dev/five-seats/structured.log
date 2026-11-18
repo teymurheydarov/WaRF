@@ -1,0 +1,8 @@
+Structured panels, 10-fold x 5 within RocksDB (balanced accuracy)
+  4 seats: SKEPTIC + BOUNDARY + LOCATE + CHECKLIST logodds  72.1% (71.9-72.2)  learned  71.9% (71.6-72.2)
+  + WaRF's default question (V.prof_ctx)           logodds  73.2% (72.9-73.5)  learned  72.1% (71.4-72.4)
+  + the diagnostics checklist (DG.mean)            logodds  71.9% (71.8-72.2)  learned  71.9% (71.5-72.4)
+  + the compile question (C.prof_ctx)              logodds  72.2% (71.8-72.5)  learned  71.8% (71.1-72.2)
+  + AUDITOR                                        logodds  72.5% (72.2-72.8)  learned  71.7% (71.4-72.1)
+  3 seats: BOUNDARY + LOCATE + CHECKLIST           logodds  72.8% (72.6-73.0)  learned  71.1% (70.8-71.4)
+  2 seats: LOCATE + CHECKLIST                      logodds  71.8% (71.8-72.1)  learned  72.0% (71.8-72.2)

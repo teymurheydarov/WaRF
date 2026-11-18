@@ -1,0 +1,13 @@
+WaRF run_review on 800 RocksDB changes, stored Jev answers, 10-fold x 5 (balanced accuracy)
+  LO with context (5 persona seats)                          --aggregate logodds   70.2%  (70.0-70.4)  ran as ['logodds']
+  LO with context (5 persona seats)                          --aggregate learned   69.6%  (69.2-69.9)  ran as ['learned']
+  3 seats: BOUNDARY + LOCATE + CHECKLIST                     --aggregate logodds   72.8%  (72.6-72.9)  ran as ['logodds']
+  3 seats: BOUNDARY + LOCATE + CHECKLIST                     --aggregate learned   71.3%  (71.1-71.4)  ran as ['learned']
+  5 seats: SKEPTIC + BOUNDARY + DEFAULT + LOCATE + CHECKLIST --aggregate logodds   73.2%  (73.0-73.5)  ran as ['logodds']
+  5 seats: SKEPTIC + BOUNDARY + DEFAULT + LOCATE + CHECKLIST --aggregate learned   72.2%  (71.6-72.6)  ran as ['learned']
+
+Exact McNemar, repetition 0, --aggregate logodds (changes right only in the first, only in the second, p)
+  5 seats   vs LO       : 44 vs 21, p = 0.006
+  3 seats   vs LO       : 48 vs 29, p = 0.040
+  5 seats   vs 14 seats : 17 vs 11, p = 0.345
+  5 seats   vs 3 seats  : 12 vs 8, p = 0.503

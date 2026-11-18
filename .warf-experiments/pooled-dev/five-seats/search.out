@@ -1,0 +1,30 @@
+Panels of at most five seats, 10-fold CV within RocksDB (balanced accuracy)
+
+Top panels, rule logodds (repetition 0, then mean over 5 repetitions in both rules)
+  P:AUDITOR + P:BOUNDARY + V.prof_ctx + CK.mean + DG.mean        logodds  73.3%  learned  72.3%
+  P:SKEPTIC + P:AUDITOR + P:TEST-FOCUSED + CK.or + DG.mean       logodds  73.2%  learned  72.6%
+  P:AUDITOR + P:TEST-FOCUSED + CK.mean + DG.mean                 logodds  73.3%  learned  72.9%
+  P:SKEPTIC + P:BOUNDARY + V.prof_ctx + LE + CK.or               logodds  73.2%  learned  72.1%
+  P:AUDITOR + P:BOUNDARY + V.prof_ctx + CK.or + DG.mean          logodds  73.2%  learned  72.6%
+  P:BOUNDARY + V.prof_ctx + LB + CK.mean + DG.mean               logodds  73.0%  learned  71.6%
+  P:ADVOCATE + P:TEST-FOCUSED + LE + CK.or                       logodds  73.0%  learned  71.8%
+  P:BOUNDARY + V.prof_ctx + LB + DG.mean                         logodds  73.1%  learned  72.4%
+
+Top panels, rule learned (repetition 0, then mean over 5 repetitions in both rules)
+  P:ADVOCATE + P:AUDITOR + P:BOUNDARY + V.prof_ctx + DG.mean     logodds  72.0%  learned  73.5%
+  P:ADVOCATE + P:BOUNDARY + V.prof_ctx + CK.or                   logodds  71.7%  learned  73.0%
+  P:SKEPTIC + P:ADVOCATE + P:BOUNDARY + V.prof_ctx + CK.or       logodds  71.6%  learned  72.9%
+  P:SKEPTIC + V.prof_ctx + LR + CK.or + DG.mean                  logodds  71.2%  learned  73.2%
+  P:ADVOCATE + P:AUDITOR + P:BOUNDARY + V.prof_ctx + CK.or       logodds  72.2%  learned  73.4%
+  P:ADVOCATE + P:BOUNDARY + V.prof_ctx + LB + DG.mean            logodds  72.9%  learned  73.0%
+  P:AUDITOR + LR + CK.or + C.prof_ctx                            logodds  72.7%  learned  73.1%
+  P:SKEPTIC + P:AUDITOR + P:TEST-FOCUSED + CK.mean + DG.mean     logodds  72.7%  learned  72.9%
+
+Best panel per size (repetition 0)
+  1 seat(s): CK.mean                                                        logodds  71.6%  learned  71.4%
+  2 seat(s): P:BOUNDARY + CK.mean                                           logodds  72.2%  learned  73.0%
+  3 seat(s): P:ADVOCATE + LR + CK.or                                        logodds  72.0%  learned  73.2%
+  4 seat(s): P:ADVOCATE + P:BOUNDARY + V.prof_ctx + CK.or                   logodds  71.5%  learned  73.5%
+  5 seat(s): P:ADVOCATE + P:AUDITOR + P:BOUNDARY + V.prof_ctx + DG.mean     logodds  71.9%  learned  73.5%
+
+Reference, the five persona seats (LO with context): logodds 70.2%  learned 69.6%

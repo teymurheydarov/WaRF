@@ -1,0 +1,5 @@
+WaRF run_review on 800 RocksDB changes, stored Jev answers, 10-fold x 5 (balanced accuracy)
+  LO ctx (5 persona seats)                     --aggregate logodds   70.2%  (70.0-70.4)  ran as ['logodds']
+  LO ctx (5 persona seats)                     --aggregate learned   69.6%  (69.2-69.9)  ran as ['learned']
+  14 seats (5 personas + 2 locate + 7 checks)  --aggregate logodds   72.9%  (72.8-73.0)  ran as ['logodds']
+  14 seats (5 personas + 2 locate + 7 checks)  --aggregate learned   73.1%  (72.8-73.6)  ran as ['learned']

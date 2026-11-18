@@ -1,0 +1,34 @@
+{
+ "primary": {
+  "n10": 47,
+  "n01": 33,
+  "p": 0.1456354544029827,
+  "verdict": "not shown"
+ },
+ "pooled": {
+  "n10": 77,
+  "n01": 51,
+  "p": 0.02673517285597548,
+  "verdict": "POOLED WINS"
+ },
+ "arms": {
+  "PANEL3": {
+   "ba0": 0.7075,
+   "ba5": 0.7082499999999999,
+   "caught": 285,
+   "false_alarms": 119
+  },
+  "LO-ctx": {
+   "ba0": 0.69,
+   "ba5": 0.692,
+   "caught": 278,
+   "false_alarms": 126
+  },
+  "FIVE": {
+   "ba0": 0.7075,
+   "ba5": 0.70625,
+   "caught": 286,
+   "false_alarms": 120
+  }
+ }
+}

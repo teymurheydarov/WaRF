@@ -1,0 +1,4 @@
+400 defects matched; 109 took a control from a neighbouring bin; date gap median 1414 days, max 4378
+  defective added lines median 34, input chars median 8634
+  clean     added lines median 30, input chars median 6428
+  AUC of added lines (defective vs clean): 0.558

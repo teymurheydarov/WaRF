@@ -1,0 +1,15 @@
+800 RocksDB items (400 defective, 400 clean); Jev cost $0.615
+offline rebuild of LO: 800/800 decisions equal WaRF's logged ones
+  V1       right  66.6%  caught 228/400  false alarms 95/400
+  SIZE     right  50.2%  caught 319/400  false alarms 317/400
+  LO       right  69.0%  caught 243/400  false alarms 91/400
+  LO+SIZE  right  64.8%  caught 309/400  false alarms 191/400
+
+PRIMARY  LO+SIZE - LO: -4.2 points; only LO+SIZE right 75, only LO right 109; exact McNemar p 0.0148 -> no case
+secondary LO+SIZE - SIZE: +14.5 points; 155 vs 39; McNemar p 0.0000
+secondary LO - V1: +2.4 points; 54 vs 35; McNemar p 0.0558
+secondary LO+SIZE - V1: -1.9 points; 99 vs 114; McNemar p 0.3374
+secondary, the 250 defects visible from the diff (with all clean items):
+  V1       right  70.1%  caught 160/250
+  LO       right  72.8%  caught 171/250
+  LO+SIZE  right  66.5%  caught 202/250
