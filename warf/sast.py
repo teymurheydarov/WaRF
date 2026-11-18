@@ -21,12 +21,16 @@ def _run_bandit_json(path: Path) -> dict | None:
             [sys.executable, "-m", "bandit", "-f", "json", "-q", str(path)],
             capture_output=True, text=True, encoding="utf-8", timeout=30,
         )
-        # bandit exits 0 if clean, 1 if findings found — both produce valid JSON stdout
+        # bandit exits 0 if clean, 1 if findings found — both produce valid JSON stdout. No report means bandit
+        # did not run (not installed: "No module named bandit", or it failed before reporting), not a clean scan.
         if result.stdout.strip():
-            return json.loads(result.stdout)
-        return {"results": [], "errors": []}
+            report = json.loads(result.stdout)
+            # One file per run, so an entry in "errors" means bandit could not scan it: it parses every file it is
+            # given as Python, and a .cpp comes back as "syntax error while parsing AST from file". Not a clean scan.
+            return None if report.get("errors") else report
+        return None
     except FileNotFoundError:
-        return None  # bandit not installed
+        return None  # no Python to run bandit with
     except Exception:
         return None
 

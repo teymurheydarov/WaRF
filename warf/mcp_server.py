@@ -33,7 +33,7 @@ from .bootstrap import policy_text
 from .detector import detect_domain
 from .engine import omega_ci
 from .logger import (
-    AlreadyLabelled, SessionAmbiguous, SessionNotFound,
+    AlreadyLabelled, LabelConflict, ProfileMismatch, ProfileNotFound, SessionAmbiguous, SessionNotFound,
     append_session, label_session, load_lines,
 )
 from .orchestrator import run_review
@@ -141,7 +141,7 @@ def build_server():
         session_id: str | None = None,
         artifact: str | None = None,
         oracle: str = "DEVELOPER",
-        profile: str = "default",
+        profile: str | None = None,
         force: bool = False,
     ) -> dict:
         """Attach ground truth to a past review and update the agents' weights.
@@ -150,16 +150,25 @@ def build_server():
         guess. Select the session by session_id (a prefix is enough) or by an
         artifact path substring. verdict: APPROVE | REJECT.
         oracle: DEVELOPER | SAST | TEST | COMPILER. Refuses an already-labelled
-        session unless force=True, which applies a second weight update.
+        session unless force=True, which applies its own label a second time (to
+        repair a failed profile write); another verdict or oracle is refused.
+        profile: leave it out; the profile the session was reviewed with is
+        updated, and naming another is refused.
         """
         try:
             with contextlib.redirect_stdout(sys.stderr):
                 out = label_session(
-                    verdict, profile_path(profile),
+                    verdict, profile,
                     session_id=session_id, artifact=artifact,
                     oracle_type=oracle, force=force,
                 )
             return {"ok": True, **out}
+        except ProfileMismatch as exc:
+            return {"ok": False, "error": "profile_mismatch", "message": str(exc)}
+        except LabelConflict as exc:
+            return {"ok": False, "error": "label_conflict", "message": str(exc)}
+        except ProfileNotFound as exc:
+            return {"ok": False, "error": "profile_not_found", "message": str(exc)}
         except SessionAmbiguous as exc:
             return {
                 "ok": False, "error": "ambiguous_selector",

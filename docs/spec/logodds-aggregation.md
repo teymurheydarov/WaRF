@@ -235,8 +235,9 @@ untagged votes, calibration); the tests catch all ten.
 - **Dashboards:** `dashboard.html` and `slide06` draw every session as a `vote`-mode ω·LLR trace,
   so a `logodds` session's detail trace does not match its logged Λ. Its verdict, confidence and
   `sprt_lambda` are right.
-- **Directory review** skips files that have already been reviewed, so `--aggregate logodds`
-  cannot be applied to them without a new data directory.
+- **Directory review** skips a file already reviewed with the same input, profile and
+  aggregation (since 2026-11-18; before, any earlier review of the path), so `--aggregate logodds`
+  reviews a file that only has `vote` sessions again (policy.md §1).
 - **Text agents state no probability,** so their evidence takes one of two values.
 - **Out-of-fold replay on the 100 stored commits** (`.warf-experiments/logodds-replay/replay.log`,
   full pools, Claude's stored blinded probabilities standing in for a decision-style seat):

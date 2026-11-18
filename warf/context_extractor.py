@@ -36,6 +36,8 @@ def extract_changed_lines(patch: str) -> list[int]:
             continue
         if line.startswith("---") or line.startswith("+++"):
             continue
+        if line.startswith("\\"):
+            continue  # "\ No newline at end of file": a marker, no line of either file
         if line.startswith("-"):
             continue  # removed line — exists only in old file
         current_line += 1

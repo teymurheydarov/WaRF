@@ -33,6 +33,7 @@ if __package__ in (None, ""):
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8", errors="replace")
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding="utf-8", errors="replace")
 
+import hashlib
 import re
 import time
 
@@ -44,7 +45,7 @@ from .state import (
 from .logger import (
     append_session, session_dict, load_lines, find_session, write_lines,
     result_from_session, oracle_entry, label_session,
-    SessionNotFound, SessionAmbiguous, AlreadyLabelled,
+    SessionNotFound, SessionAmbiguous, AlreadyLabelled, ProfileMismatch, LabelConflict, ProfileNotFound,
 )
 from .detector import detect_domain
 from .vcs import detect_vcs, get_diff, get_message
@@ -89,6 +90,7 @@ class FileSummary:
     sprt_lambda: float
     error: str | None = None
     record: dict | None = None   # full session dict, for --json
+    reused: bool = False         # the verdict of an earlier session on the same input (see _load_reviewed_sessions)
 
 
 # ── machine-readable output ──────────────────────────────────────────────────
@@ -360,6 +362,7 @@ def _cmd_review_dir(args: argparse.Namespace, directory: Path) -> None:
                 "reject":  sum(1 for s in summaries if s.decision == "REJECT"),
                 "error":   sum(1 for s in summaries if s.error),
                 "failing": n_fail,
+                "reused":  sum(1 for s in summaries if s.reused),
             },
             "reviews": [
                 s.record if s.record else
@@ -368,7 +371,8 @@ def _cmd_review_dir(args: argparse.Namespace, directory: Path) -> None:
             ],
         })
 
-    sys.exit(1 if n_fail else 0)
+    # 2 when a file was not reviewed (it errored, or the run stopped before it): unknown is not APPROVE (policy.md §2)
+    sys.exit(2 if any(s.error for s in summaries) else 1 if n_fail else 0)
 
 
 def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSummary"]:
@@ -382,19 +386,28 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
         print(f"No supported files found in {directory}", file=sys.stderr)
         return []
 
-    # Skip files already successfully reviewed (errors are retried)
-    reviewed = _load_reviewed_paths()
-    files = [f for f in all_files if str(f) not in reviewed]
-    n_skipped = len(all_files) - len(files)
+    # Skip files already successfully reviewed with the same input (errors are retried); they count with that verdict
+    reviewed = _load_reviewed_sessions(args.profile, getattr(args, "aggregate", "vote"))
+    hashes = {f: _file_sha256(f) for f in all_files}
+    reused: list[FileSummary] = []
+    files: list[Path] = []
+    for f in all_files:
+        earlier = _earlier_review(reviewed, hashes[f], str(f))      # identical bytes elsewhere are another file
+        if earlier:
+            reused.append(_reused(f, earlier))
+        else:
+            files.append(f)
+    n_skipped = len(reused)
 
     if not files:
-        print(f"All {len(all_files)} file(s) already reviewed. Nothing to do.")
-        return []
+        print(f"All {len(all_files)} file(s) already reviewed; their earlier verdicts count.")
+        return reused
 
     if context:
         print(f"  [context] warf_context.md loaded ({len(context)} chars)")
 
-    if len(all_files) > 20 and not getattr(args, "json", False):
+    # Ask only someone who can answer: a script or CI job (no terminal) gets the review its command asked for.
+    if len(all_files) > 20 and not getattr(args, "json", False) and sys.stdin is not None and sys.stdin.isatty():
         skip_note = f"  ({n_skipped} already reviewed, {len(files)} remaining)" if n_skipped else ""
         print(f"Found {len(all_files)} files in {directory}.{skip_note}")
         try:
@@ -402,9 +415,13 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
         except EOFError:
             answer = "n"
         if answer != "y":
-            return []
+            # Also reached without an answer (EOF): Windows reports stdin from NUL as a terminal
+            print(f"  {len(files)} file(s) not reviewed (exit 2); --json reviews without asking.")
+            # Declined is not reviewed: the files count as errors, so the run exits 2, not 0
+            return reused + [FileSummary(path=f, domain="?", decision="ERROR", confidence="?", sprt_lambda=0.0,
+                                         error="not reviewed: declined at the prompt") for f in files]
     elif n_skipped:
-        print(f"  Skipping {n_skipped} already-reviewed file(s).")
+        print(f"  Skipping {n_skipped} already-reviewed file(s); their earlier verdicts count.")
 
     verbose_each = getattr(args, "verbose", False)
     domain_arg   = (args.domain or "AUTO").upper()
@@ -412,7 +429,7 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
 
     print(f"\n=== WaRF Review: {directory}  [{len(files)} file(s)] ===\n")
 
-    summaries: list[FileSummary] = []
+    summaries: list[FileSummary] = list(reused)
     consecutive_errors = 0
     stopped_early = False
 
@@ -459,6 +476,7 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
                 x_star=None,
                 weight_updates=None,
                 profile_name=args.profile,
+                input_sha256=hashes[file_path],
             )
 
             summaries.append(FileSummary(
@@ -486,11 +504,15 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
             print(f"  {len(remaining)} file(s) not yet reviewed.")
             print(f"  Resume after quota resets with:")
             print(f'    py cli.py review "{directory}"')
+        # Not reached is not reviewed: each counts as an error, so the run exits 2
+        summaries += [FileSummary(path=f, domain="?", decision="ERROR", confidence="?", sprt_lambda=0.0,
+                                  error="not reviewed: the run stopped before it") for f in remaining]
 
     # ── summary ───────────────────────────────────────────────────────────────
     n_reject  = sum(1 for s in summaries if s.decision == "REJECT")
     n_approve = sum(1 for s in summaries if s.decision == "APPROVE")
     n_error   = sum(1 for s in summaries if s.error)
+    n_reused  = sum(1 for s in summaries if s.reused)
 
     bar = "━" * 50
     print(f"\n{bar}")
@@ -499,6 +521,8 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
     print(f"  REJECT  : {n_reject}" + ("  ← needs review" if n_reject else ""))
     if n_error:
         print(f"  ERROR   : {n_error}")
+    if n_reused:
+        print(f"  REUSED  : {n_reused}  (verdicts of earlier sessions on the same input)")
 
     if n_reject:
         print()
@@ -515,6 +539,21 @@ def _review_dir_inner(args: argparse.Namespace, directory: Path) -> list["FileSu
 
 # ── commit review ────────────────────────────────────────────────────────────
 
+# git quotes a path that is not plain ASCII or holds " \ or a control character, each on its own:
+#   diff --git "a/caf\303\251.cc" "b/caf\303\251.cc"     (a rename can mix both forms)
+_GIT_DIFF_HEADER = re.compile(r'diff --git (?:"a/(?:[^"\\]|\\.)*"|a/.+) (?:"b/((?:[^"\\]|\\.)*)"|b/(.+))')
+_GIT_C_ESCAPES = {b"a": b"\a", b"b": b"\b", b"t": b"\t", b"n": b"\n", b"v": b"\v", b"f": b"\f", b"r": b"\r"}
+
+
+def _git_unquote(quoted: str) -> str:
+    """Undo git's C-style quoting of a path; its octal escapes are the bytes of the UTF-8 name, \\" and \\\\ stand
+    for the character itself."""
+    raw = re.sub(rb'\\([0-7]{3}|.)',
+                 lambda m: bytes([int(m[1], 8)]) if len(m[1]) == 3 else _GIT_C_ESCAPES.get(m[1], m[1]),
+                 quoted.encode("utf-8"))
+    return raw.decode("utf-8", errors="replace")
+
+
 def _parse_diff(diff_text: str) -> list[tuple[str, str]]:
     """Split unified diff into (filepath, patch_text) per file. Handles git and SVN format."""
     if "diff --git " in diff_text:
@@ -523,9 +562,10 @@ def _parse_diff(diff_text: str) -> list[tuple[str, str]]:
         for chunk in chunks:
             if not chunk.startswith("diff --git "):
                 continue
-            m = re.match(r"diff --git a/.+ b/(.+)", chunk)
+            m = _GIT_DIFF_HEADER.match(chunk)
             if m:
-                result.append((m.group(1).strip(), chunk))
+                path = _git_unquote(m.group(1)) if m.group(1) is not None else m.group(2).strip()
+                result.append((path, chunk))
         return result
     # SVN format: sections start with "Index: path"
     chunks = re.split(r"(?=^Index: )", diff_text, flags=re.MULTILINE)
@@ -539,9 +579,13 @@ def _parse_diff(diff_text: str) -> list[tuple[str, str]]:
     return result
 
 
-def _load_reviewed_paths() -> set[str]:
-    """Return artifact paths that already have a decision in sessions.jsonl."""
-    reviewed: set[str] = set()
+def _load_reviewed_sessions(profile: str, aggregate: str) -> dict[str, list[dict]]:
+    """Sessions in sessions.jsonl with a decision for this profile and aggregation, by input_sha256, oldest first.
+
+    A rerun skips a file only when one of them reviewed the same input (the same file bytes, or the same patch), and
+    the file then counts with that session's verdict. Sessions logged before input_sha256 existed are never reused.
+    """
+    reviewed: dict[str, list[dict]] = {}
     if not SESSIONS_PATH.exists():
         return reviewed
     with SESSIONS_PATH.open(encoding="utf-8") as f:
@@ -551,11 +595,31 @@ def _load_reviewed_paths() -> set[str]:
                 continue
             try:
                 s = json.loads(line)
-                if s.get("decision") and s.get("artifact"):
-                    reviewed.add(s["artifact"])
             except json.JSONDecodeError:
-                pass
+                continue
+            if (s.get("decision") and s.get("artifact") and s.get("input_sha256")
+                    and s.get("profile") == profile and s.get("aggregate", "vote") == aggregate):
+                reviewed.setdefault(s["input_sha256"], []).append(s)
     return reviewed
+
+
+def _earlier_review(reviewed: dict[str, list[dict]], input_sha256: str | None,
+                    artifact: str | None = None) -> dict | None:
+    """The latest of those sessions that reviewed this input (as this artifact, when given), or None."""
+    return next((s for s in reversed(reviewed.get(input_sha256, [])) if artifact in (None, s["artifact"])), None)
+
+
+def _reused(path: Path, session: dict) -> FileSummary:
+    return FileSummary(path=path, domain=session["domain"], decision=session["decision"],
+                       confidence=session["confidence"], sprt_lambda=session["sprt_lambda"],
+                       record=session, reused=True)
+
+
+def _file_sha256(path: Path) -> str | None:
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        return None          # the review reports the unreadable file; None never matches an earlier session
 
 
 def _cmd_review_commit(args: argparse.Namespace) -> None:
@@ -580,6 +644,7 @@ def _cmd_review_commit(args: argparse.Namespace) -> None:
                 "reject":  sum(1 for s in summaries if s.decision == "REJECT"),
                 "error":   sum(1 for s in summaries if s.error),
                 "failing": n_fail,
+                "reused":  sum(1 for s in summaries if s.reused),
             },
             "reviews": [
                 s.record if s.record else
@@ -588,7 +653,8 @@ def _cmd_review_commit(args: argparse.Namespace) -> None:
             ],
         })
 
-    sys.exit(1 if n_fail else 0)
+    # 2 when a file was not reviewed (it errored, or the run stopped before it): unknown is not APPROVE (policy.md §2)
+    sys.exit(2 if any(s.error for s in summaries) else 1 if n_fail else 0)
 
 
 def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
@@ -628,7 +694,7 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
     if context:
         print(f"  [context] warf_context.md loaded ({len(context)} chars)\n")
 
-    reviewed_paths = _load_reviewed_paths()
+    reviewed = _load_reviewed_sessions(args.profile, getattr(args, "aggregate", "vote"))
 
     summaries: list[FileSummary] = []
     consecutive_errors = 0
@@ -637,9 +703,15 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
     try:
         for filepath, patch in supported:
             fpath = Path(filepath)
-
-            if not getattr(args, "force", False) and f"{commit}:{filepath}" in reviewed_paths:
-                print(f"  {fpath.name:<{name_w}}  [already reviewed — skipped]")
+            # The input is the file's patch (its header names the file): the same commit and --context hash the
+            # same, whether named HEAD or by its sha. An earlier review of it counts with its verdict; the other
+            # options, the --commit-context block included, are not compared (policy.md §1).
+            enriched = enrich_patch(repo_str, commit, filepath, patch) if vcs == "git" else patch
+            input_sha256 = hashlib.sha256(enriched.encode("utf-8")).hexdigest()
+            earlier = None if getattr(args, "force", False) else _earlier_review(reviewed, input_sha256)
+            if earlier:
+                print(f"  {fpath.name:<{name_w}}  [already reviewed: {earlier['decision']} {earlier['confidence']}]")
+                summaries.append(_reused(fpath, earlier))
                 continue
 
             verbose_review = getattr(args, "verbose", False)
@@ -657,7 +729,6 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
                 print(f"  {fpath.name:<{name_w}}  ...", end="", flush=True)
 
             t_file = time.time()
-            enriched = enrich_patch(repo_str, commit, filepath, patch) if vcs == "git" else patch
             try:
                 result = run_review(
                     enriched, domain_used, profiles_path,
@@ -721,7 +792,8 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
 
             record = append_session(result, artifact_path=f"{commit}:{filepath}",
                            oracle_type=oracle_type_val, x_star=x_star_val,
-                           weight_updates=oracle_updates, profile_name=args.profile)
+                           weight_updates=oracle_updates, profile_name=args.profile,
+                           input_sha256=input_sha256)
             summaries.append(FileSummary(
                 path=fpath, domain=domain_used,
                 decision=result.decision.value,
@@ -743,10 +815,14 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
             print("  Stopped by user.")
         if remaining:
             print(f"  {len(remaining)} file(s) not reviewed.")
+        # Not reached is not reviewed: each counts as an error, so the run exits 2
+        summaries += [FileSummary(path=f, domain="?", decision="ERROR", confidence="?", sprt_lambda=0.0,
+                                  error="not reviewed: the run stopped before it") for f in remaining]
 
     n_reject  = sum(1 for s in summaries if s.decision == "REJECT")
     n_approve = sum(1 for s in summaries if s.decision == "APPROVE")
     n_error   = sum(1 for s in summaries if s.error)
+    n_reused  = sum(1 for s in summaries if s.reused)
     bar = "━" * 50
     print(f"\n{bar}")
     print(f"  {'Revision' if vcs == 'svn' else 'Commit':<8}: {short}")
@@ -755,6 +831,8 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
     print(f"  REJECT  : {n_reject}" + ("  ← needs review" if n_reject else ""))
     if n_error:
         print(f"  ERROR   : {n_error}")
+    if n_reused:
+        print(f"  REUSED  : {n_reused}  (verdicts of earlier sessions on the same input; --force reviews again)")
     if n_reject:
         print("\n  Flagged:")
         for s in summaries:
@@ -862,20 +940,25 @@ def cmd_label(args: argparse.Namespace) -> None:
     is what moves alpha/beta. See warf/policy.md §7.
     """
     json_mode     = getattr(args, "json", False)
-    profiles_path = _profiles_path(args.profile)
 
     # The work is logger.label_session, shared with the MCP server; this wrapper
     # only renders the outcome for a terminal or as JSON and maps failures to
-    # exit codes.
+    # exit codes. --profile omitted (None): the profile the session was reviewed with.
     try:
         with _quiet_stdout(json_mode):
             out = label_session(
-                args.verdict, profiles_path,
+                args.verdict, args.profile,
                 session_id=args.session_id, artifact=args.artifact,
                 oracle_type=args.oracle, force=args.force, verbose=True,
             )
     except SessionNotFound as exc:
         _fail_label(json_mode, str(exc))
+    except ProfileMismatch as exc:
+        _fail_label(json_mode, str(exc), error="profile_mismatch")
+    except LabelConflict as exc:
+        _fail_label(json_mode, str(exc), error="label_conflict")
+    except ProfileNotFound as exc:
+        _fail_label(json_mode, str(exc), error="profile_not_found")
     except AlreadyLabelled as exc:
         s = exc.session
         _fail_label(
@@ -922,7 +1005,7 @@ def cmd_label(args: argparse.Namespace) -> None:
             print("Preserved-> sessions.jsonl  (original oracle entry kept; weights updated again)")
         else:
             print("Updated  -> sessions.jsonl")
-        print(f"Saved    -> {profiles_path}")
+        print(f"Saved    -> {_profiles_path(out['profile'])}  (profile {out['profile']})")
         _refresh_html()
 
     if json_mode:
@@ -1279,12 +1362,14 @@ def main() -> None:
         help="Oracle tier (default: DEVELOPER). Use DEVELOPER only for a human judgement.",
     )
     p_label.add_argument(
-        "--profile", default="default", metavar="NAME",
-        help="Weight profile to update (default: default)",
+        "--profile", default=None, metavar="NAME",
+        help="Weight profile to update (default: the one the session was reviewed with, which is the only one "
+             "accepted; 'default' for a session logged without one)",
     )
     p_label.add_argument(
         "--force", action="store_true", default=False,
-        help="Apply a second weight update to a session that is already labelled",
+        help="Apply a labelled session's own label again (a second weight update), to repair a failed "
+             "profile write; another verdict or oracle is refused",
     )
     p_label.add_argument(
         "--json", action="store_true", default=False,

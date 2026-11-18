@@ -90,9 +90,13 @@ warf review src/                             # every supported file under a dire
 warf review-commit <sha> --repo .            # only the files a commit changed
 ```
 
+A merge commit is reviewed against its first parent: the files it brings into the branch.
+
 **Exit codes** are `0` nothing failed the gate, `1` a REJECT met the `--fail-on`
-threshold, `2` WaRF could not run (bad path, no credentials, quota) — `2` is never
-a verdict. For CI, always set the threshold explicitly:
+threshold, `2` WaRF could not run (bad path, no credentials, quota) or a file of the
+run could not be reviewed — `2` is never a verdict. A rerun reuses the verdicts of files
+already reviewed with the same input, profile and aggregation; other options are not
+compared (policy.md §1). For CI, always set the threshold explicitly:
 
 ```bash
 warf review src/ --json --fail-on HIGH       # block only on REJECT [HIGH]
@@ -167,6 +171,12 @@ Per agent, in a profile file:
 Because ω is learned per agent per domain, a mixed panel discovers on its own
 which persona-on-which-model is worth trusting where. `WARF_PROVIDER`,
 `WARF_MODEL` and `WARF_TIMEOUT` set process-wide defaults.
+
+A text model is told to put APPROVE or REJECT on its first line. Its vote is read there
+only (markdown such as `**REJECT**`, a `Decision:` label and APPROVED / REJECTED are
+fine); a reply whose first non-empty line holds no verdict fails the review like a
+provider error, rather than being guessed from the rest of the text. A model that opens
+with a `<think>` block therefore cannot be used as it is.
 
 **Decision models.** Jev (TypeSafe) and Laya (ConvAI, open weights) write no
 text. Given a state and a typed question they return the chosen option and a

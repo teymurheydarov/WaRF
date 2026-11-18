@@ -127,16 +127,23 @@ _DEBUG_LOG: Path | None = None  # set by run_review when debug=True
 _DEBUG_LOG_LOCK = threading.Lock()
 
 
+# The first non-empty line starts with the verdict, after markdown (**, ##, `, a bullet) and an optional label
+# ("Decision:", "**Verdict:**"); APPROVED / REJECTED are the verdict too. The rest of the reply is not searched for
+# the word: under a REJECT its reasoning may well say "I would not approve this".
+_VERDICT_LINE = re.compile(
+    r"[\s#>*_`~\[(-]*(?:(?:final\s+)?(?:decision|verdict|vote|answer)[\s*_`]*[:\-][\s*_`~\[(]*)?(APPROVE|REJECT)(?:E?D)?\b",
+    re.IGNORECASE)
+
+
 def _parse_vote(text: str) -> tuple[int, str]:
-    first_word = text.split()[0].upper().rstrip(".,:")
-    if first_word == "APPROVE":
-        vote = 1
-    elif first_word == "REJECT":
-        vote = -1
-    else:
-        vote = 1 if re.search(r"\bAPPROVE\b", text, re.IGNORECASE) else -1
-    reasoning = text[text.index("\n"):].strip() if "\n" in text else ""
-    return vote, reasoning
+    """(vote, reasoning) of a text model's reply; ValueError when its first line holds no verdict."""
+    lines = text.splitlines()
+    first = next((i for i, line in enumerate(lines) if line.strip()), None)
+    m = _VERDICT_LINE.match(lines[first]) if first is not None else None
+    if not m:
+        raise ValueError("no APPROVE or REJECT at the start of the reply: "
+                         f"{(lines[first].strip()[:80] if first is not None else '')!r}")
+    return (1 if m.group(1).upper() == "APPROVE" else -1), "\n".join(lines[first + 1:]).strip()
 
 
 def _commit_section(commit_context: str | None) -> str:
@@ -225,7 +232,10 @@ def _call_agent(
         with _DEBUG_LOG_LOCK, _DEBUG_LOG.open("a", encoding="utf-8") as f:
             f.write(f"[{provider_name}/{model_name}]\n[OUTPUT]\n{completion.text}\n")
 
-    vote, reasoning = _parse_vote(completion.text)
+    try:
+        vote, reasoning = _parse_vote(completion.text)
+    except ValueError as exc:      # a reply that is no vote fails like a provider error, not as a silent REJECT
+        raise RuntimeError(f"[{provider_name}/{model_name}] {exc}") from exc
     return (vote, reasoning, completion.tokens_in, completion.tokens_out,
             provider_name, model_name)
 
@@ -550,7 +560,7 @@ def run_review(
         sast_result = bandit_vote(sast_path)
         if sast_result is None:
             if verbose or demo:
-                print("  [sast] bandit not installed — SAST vote skipped.")
+                print("  [sast] no bandit result (not installed, or not Python it can parse) — SAST vote skipped.")
         else:
             sast_v, sast_r, sast_high, sast_total = sast_result
             sast_label = "APPROVE" if sast_v == 1 else "REJECT"

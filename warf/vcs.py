@@ -43,7 +43,13 @@ def _run(args: list[str], cwd: str | None = None) -> str:
 
 def get_diff(repo: str, revision: str, context: int = 30) -> str:
     if detect_vcs(repo) == "git":
-        return _run(["git", "show", f"-U{context}", revision], cwd=repo)
+        # The format cli._parse_diff reads, whatever the user's config: diff.noprefix or color.ui=always
+        # would otherwise leave no "diff --git a/... b/..." header, and every file of the commit unreviewed.
+        # -m --first-parent: a merge is diffed against its first parent, what it brings into the branch; plain
+        # `git show` prints a combined diff for it (`diff --cc`, nothing at all for a clean merge). No effect on
+        # other commits. (--diff-merges=first-parent says the same but needs git 2.31.)
+        return _run(["git", "show", "--no-color", "--src-prefix=a/", "--dst-prefix=b/", "-m", "--first-parent",
+                     f"-U{context}", revision], cwd=repo)
     # SVN: -c N means diff of r(N-1)→rN; -x passes flags to the diff tool
     return _run(["svn", "diff", f"-c{revision}", "-x", f"-U{context}", repo])
 

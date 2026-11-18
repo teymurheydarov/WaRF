@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .engine import THETA, Decision, Confidence, logodds_tau
 from .orchestrator import ReviewResult, VoteRecord
-from .state import ORACLE_TIERS
+from .state import ORACLE_TIERS, profile_path
 from .paths import sessions_path
 
 DEFAULT_LOG_PATH = sessions_path()
@@ -153,6 +153,7 @@ def append_session(
     weight_updates: list[dict] | None = None,
     log_path: Path = DEFAULT_LOG_PATH,
     profile_name: str | None = None,
+    input_sha256: str | None = None,
 ) -> dict:
     """
     Append one review session to the JSONL log.
@@ -160,13 +161,25 @@ def append_session(
     Returns the written entry. Callers that need the generated session_id —
     for example to print it so a human can later run `warf label <id>` —
     read it from the returned dict; older callers may ignore the return value.
+    input_sha256 (directory and commit reviews): the SHA-256 of what was reviewed, the file's bytes or its patch
+    (without a --commit-context block); a rerun reuses the session only for the same input
+    (cli._load_reviewed_sessions).
     """
     entry = session_dict(result, artifact_path, oracle_type, x_star,
                          weight_updates, profile_name)
+    if input_sha256:
+        entry["input_sha256"] = input_sha256
 
     log_path.parent.mkdir(parents=True, exist_ok=True)
+    # A review killed while writing leaves a last line without its newline: start a line of our own, or the two
+    # merge into one line no reader parses and this session is lost with it.
+    cut_short = False
+    if log_path.exists() and log_path.stat().st_size:
+        with open(log_path, "rb") as f:
+            f.seek(-1, 2)
+            cut_short = f.read(1) != b"\n"
     with open(log_path, "a", encoding="utf-8") as f:
-        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+        f.write(("\n" if cut_short else "") + json.dumps(entry, ensure_ascii=False) + "\n")
 
     return entry
 
@@ -275,9 +288,43 @@ class AlreadyLabelled(LookupError):
         super().__init__(f"session {session.get('session_id', '?')[:8]} is already labelled")
 
 
+class ProfileMismatch(LookupError):
+    """A profile was named that is not the one the session was reviewed with. Carries both."""
+
+    def __init__(self, session: dict, profile: str):
+        self.session, self.profile = session, profile
+        super().__init__(
+            f"session {session.get('session_id', '?')[:8]} was reviewed with profile {session['profile']!r}, not "
+            f"{profile!r}: its votes belong to that profile's agents. Leave the profile out to update it.")
+
+
+class ProfileNotFound(LookupError):
+    """The profile to update has no file here. Carries the session and the path looked at."""
+
+    def __init__(self, session: dict, name: str, path: Path):
+        self.session, self.path = session, path
+        relative = "" if path.is_absolute() else (
+            f"; {name!r} is relative to the directory the review ran in: label from there, or name the file "
+            f"with --profile")
+        super().__init__(f"profile {name!r} of session {session.get('session_id', '?')[:8]} not found at "
+                         f"{path}{relative}. No profile is created to take a label.")
+
+
+class LabelConflict(LookupError):
+    """force=True with a verdict or oracle other than the session's label. Carries the session."""
+
+    def __init__(self, session: dict, verdict: str, oracle_type: str):
+        self.session = session
+        o = session["oracle"]
+        super().__init__(
+            f"session {session.get('session_id', '?')[:8]} is labelled {o['x_star_label']} ({o['type']}); --force "
+            f"applies that label again, to repair a failed profile write, not {verdict} ({oracle_type}). A label "
+            f"cannot be changed: its weight update has no undo short of `warf reset` (policy.md §7).")
+
+
 def label_session(
     verdict: str,
-    profiles_path: Path,
+    profile: str | None,
     session_id: str | None = None,
     artifact: str | None = None,
     oracle_type: str = "DEVELOPER",
@@ -289,15 +336,23 @@ def label_session(
 
     The learning loop in one call: locate the session (by id prefix or artifact
     substring), rebuild its ReviewResult, run the Bayesian update against the
-    given profile, and patch the log entry with the oracle block.
+    profile it was reviewed with, and patch the log entry with the oracle block.
+    profile None means that one; naming another raises ProfileMismatch, since the
+    votes are its agents'. A session logged without a profile takes the named
+    one, "default" when None. A profile logged as a relative file path holds
+    only from the directory the review ran in; from elsewhere it is not found
+    (ProfileNotFound) unless the profile is named, and no profile is ever
+    created to take a label.
 
     Raises SessionNotFound, SessionAmbiguous (carrying the candidates),
-    AlreadyLabelled or ValueError instead of exiting, so the CLI and the MCP
-    server can each report in their own way. Returns a dict shaped like
-    `warf label --json`.
+    AlreadyLabelled, LabelConflict, ProfileMismatch, ProfileNotFound or
+    ValueError instead of exiting, so the CLI and the MCP server can each report
+    in their own way. Returns a dict shaped like `warf label --json`.
 
     Re-labelling (force=True) keeps the original oracle block as the historical
-    record and applies a second weight update on top of the first.
+    record and applies a second weight update on top of the first. It takes the
+    session's own verdict and oracle only (LabelConflict otherwise): it repairs a
+    failed profile write, it does not change a label.
     """
     from .orchestrator import apply_oracle
 
@@ -317,6 +372,21 @@ def label_session(
     relabel = "oracle" in session
     if relabel and not force:
         raise AlreadyLabelled(session)
+    if relabel and (x_star, oracle_type) != (session["oracle"]["x_star"], session["oracle"]["type"]):
+        raise LabelConflict(session, x_star_label, oracle_type)     # the log would no longer say what was applied
+
+    logged = session.get("profile")
+    name = logged if logged is not None else (profile or "default")
+    profiles_path = profile_path(name, create=False)
+    if logged is not None and profile is not None and \
+            profile_path(profile, create=False).resolve() != profiles_path.resolve():
+        if profiles_path.exists() or profiles_path.is_absolute():
+            raise ProfileMismatch(session, profile)
+        # A relative path logged from another directory: the file named here is the one meant.
+        name, profiles_path = profile, profile_path(profile, create=False)
+    if not profiles_path.exists():
+        raise ProfileNotFound(session, name, profiles_path)
+    profile = name
 
     result  = result_from_session(session)
     updates = apply_oracle(result, x_star, oracle_type, profiles_path, verbose=verbose)
@@ -332,6 +402,7 @@ def label_session(
         "domain":     session["domain"],
         "decision":   session["decision"],
         "confidence": session["confidence"],
+        "profile":    profile,
         "oracle": {
             "type":         oracle_type,
             "gamma":        ORACLE_TIERS[oracle_type],

@@ -93,7 +93,7 @@ A directory or commit review returns an envelope instead of a bare record:
   "mode":    "directory",
   "root":    "src/",
   "fail_on": "HIGH",
-  "summary": {"total": 12, "approve": 9, "reject": 3, "error": 0, "failing": 1},
+  "summary": {"total": 12, "approve": 9, "reject": 3, "error": 0, "failing": 1, "reused": 0},
   "reviews": [ /* one object per file, same shape as above */ ]
 }
 ```
@@ -105,7 +105,18 @@ normally smaller than `summary.reject`. Report `failing`, not `reject`, when tel
 a human whether a change is blocked.
 
 Files that errored appear in `reviews` as `{"artifact": ..., "decision": "ERROR",
-"error": "..."}` with no verdict fields.
+"error": "..."}` with no verdict fields; so do files a stopped run never reached
+(`"error": "not reviewed: the run stopped before it"`).
+
+A rerun does not review a file again when an earlier session reviewed the same input
+(its `input_sha256`: the same file bytes, or for a commit the same patch) with the same
+profile and aggregation. That session appears in `reviews` and counts in every number
+of `summary`, `failing` included, so a rerun cannot turn a failed gate into a pass;
+`summary.reused` counts these files. `review-commit --force` reviews them again.
+The other options are not compared: an earlier session counts whatever `--domain`,
+`--agents`, `--max-agents`, `--debate`, `--sast` or `--commit-context` it ran with, and
+whatever `warf_context.md` said. After changing one of these, review again with
+`review-commit --force`, or for a directory with a fresh data directory (`WARF_HOME`).
 
 ---
 
@@ -147,11 +158,12 @@ warf review src/ --fail-on HIGH --json
 |---|---|
 | `0` | Nothing met the `--fail-on` threshold. Proceed. |
 | `1` | At least one `REJECT` met the threshold. WaRF ran correctly and objected. |
-| `2` | **WaRF could not run.** Bad path, unreadable diff, no matching session. |
+| `2` | **WaRF could not run.** Bad path, unreadable diff, no matching session, or a file of a directory or commit review that errored or was never reached. |
 
 Never treat `2` as a review verdict. It means the review did not happen — a build
 that conflates it with `1` will report a nonexistent defect, and one that conflates
-it with `0` will silently skip review entirely.
+it with `0` will silently skip review entirely. A review that is only partly done
+exits `2` even when another file was rejected; `summary.failing` still counts that one.
 
 ---
 
@@ -253,8 +265,13 @@ When there is dissent — most often because the panel split — it leads the re
 
 ## 6. Choosing the domain
 
-`--domain AUTO` (the default) infers from file path and content. Override when you
-have better information than the file extension provides:
+`--domain AUTO` (the default) infers from file path and content. A path keyword counts
+when it starts a word of the file name or of a folder inside the project (`auth/`,
+`OAuthClient`, `PasswordHash`; not `uncertainty` for `cert` or `gsLowRank` for `slow`).
+The folders above the project, which an absolute path names, do not count. A keyword
+joined to the front of another word is missed (`mbedtls`, `libcrypto`, `userauth`,
+`lrucache`): give `--domain` for such files. Override when you have better information
+than the file extension provides:
 
 | Use | When |
 |---|---|
@@ -289,6 +306,12 @@ the confidence bands never calibrate.
 When the session included a debate round, the **Round-2** votes are scored, not
 Round-1 — the oracle credits each agent's final position, not its opening one.
 
+The weights updated are those of the profile the session was reviewed with (its
+`profile` field); leave `--profile` out. Naming another profile is refused with exit
+`2` (`"error": "profile_mismatch"`), since the votes were cast by that profile's
+agents. Only a session logged without a profile takes `--profile` (`default` if
+omitted).
+
 Label whenever ground truth becomes known:
 
 - a human overrode a `HIGH REJECT` and merged anyway → label `APPROVE`
@@ -306,7 +329,9 @@ Labelling an already-labelled session is refused unless `--force` is given. With
 `--force` the original label is preserved in the log as the historical record, but a
 second weight update is applied on top of the first — so the agents involved are
 credited or penalised twice. Use it only to repair a run where the profile write
-failed, never to change your mind about a verdict.
+failed, never to change your mind about a verdict: `--force` with another verdict or
+oracle than the session's label is refused (exit `2`, `"error": "label_conflict"`), so
+the log always names the label its weight updates were made with.
 
 **Persona versions.** Every vote records a fingerprint of the persona text that cast
 it. When an agent's prompt is edited, its weights are retired (kept under their

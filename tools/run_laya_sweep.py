@@ -34,13 +34,17 @@ going:
     still parse;
   * when enrich_patch raises, the plain patch is reviewed, as its docstring
     promises for a parse error, and the record names the error (`enrich_error`).
-    It does raise: it numbers a "\\ No newline at end of file" marker as a line,
-    runs past the end of the file and fails with IndexError, which crashes
-    review-commit on such a commit;
+    Until 2026-11-18 it raised IndexError on a "\\ No newline at end of file"
+    marker, which it numbered as a line, and so crashed review-commit; it skips
+    the marker since. The 61 records of the 2026-11 sweep with `enrich_error`
+    IndexError would therefore get another input in a rerun, and a rerun also
+    detects some domains differently (path keywords only at word starts since
+    2026-11-18, policy.md §6);
   * every record carries a `sweep` block: repository, commit metadata, the cut,
     Laya's own truncation report and its probabilities at full precision.
-Merge commits are skipped. review-commit skips them too, because its diff split
-does not read the combined diff that `git show` prints for a merge.
+Merge commits are skipped. (review-commit used to skip them too, as its diff split
+could not read the combined diff of `git show`; since 2026-11-18 it reviews a merge
+against its first parent, which repeats the changes of the merged commits.)
 
 Needs a laya-serve on http://127.0.0.1:8000 (or LAYA_BASE_URL). Data goes to
 .warf-experiments/laya-sweep/ by default (--home overrides), never to the corpus
@@ -447,9 +451,9 @@ def cmd_run(args: argparse.Namespace, home: Path) -> None:
             try:
                 enriched, enrich_error = enrich_patch(cwd, sha, path, patch), None
             except Exception as exc:
-                # enrich_patch promises the patch back on a parse error, but it numbers a
-                # "\ No newline at end of file" marker as a line, runs past the end of the
-                # file and raises IndexError, which crashes review-commit. Keep its promise.
+                # enrich_patch promises the patch back on a parse error, but not every error
+                # is caught inside it (until 2026-11-18 the "\ No newline" marker raised
+                # IndexError there and crashed review-commit). Keep its promise here.
                 enriched, enrich_error = patch, f"{type(exc).__name__}: {exc}"
             try:
                 domain, why = detect_domain(Path(path), patch)

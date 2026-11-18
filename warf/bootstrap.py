@@ -142,7 +142,8 @@ Read the JSON from stdout; everything else goes to stderr. If `{cmd}` is not
 found, try `python -m warf` or, on Windows, `py -m warf`.
 
 Exit codes: 0 = nothing met the `--fail-on` threshold; 1 = a REJECT did;
-2 = WaRF could not run (bad path, no credentials, quota). 2 is never a verdict.
+2 = WaRF could not run (bad path, no credentials, quota), or a file of the run could
+not be reviewed (an error, or the run stopped before it). 2 is never a verdict.
 
 ## Report
 
