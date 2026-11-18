@@ -49,6 +49,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
+from .questions import CHECK_CRITERIA, LOCATE_NONE, LOCATE_WINDOW, locate_criteria, persona_questions
+
 # Per-agent wall-clock limit. This is a safety net against a hung backend, not a
 # performance target: setting it too tight silently drops the slowest agents from
 # the panel, which biases any per-agent measurement toward the cases they finished.
@@ -315,25 +317,21 @@ class SystemOneProvider:
             )
 
     def complete(self, system: str, user: str, model: str,
-                 timeout: float = DEFAULT_TIMEOUT) -> Completion:
-        payload = json.dumps({
-            "model": model,
-            "state": user,
-            "questions": {
-                _DECISION_QUESTION: {
-                    "type":         "choice",
-                    "instructions": system,
-                    "criteria":     DECISION_CRITERIA,
-                },
-            },
-        }).encode("utf-8")
-        headers = {"Content-Type": "application/json"}
-        if self._api_key:
-            headers["Authorization"] = f"Bearer {self._api_key}"
-        request = urllib.request.Request(
-            f"{self._base_url}/v1/systemone", data=payload, headers=headers, method="POST",
-        )
-        body = self._post(request, timeout)
+                 timeout: float = DEFAULT_TIMEOUT, *, question: str | None = None,
+                 lines: list[str] | None = None) -> Completion:
+        """
+        WaRF's verdict (question None), or a question seat's question (docs/spec/learned-aggregation.md §2):
+        `check` asks the persona as YES/NO, `locate` asks which of `lines` (the added lines, tagged in
+        `user`) has the problem, or NONE. Both are rendered as a verdict readout with p(REJECT) = p(YES)
+        or 1 - p(NONE).
+        """
+        if question == "check":
+            return self._check(system, user, model, timeout)
+        if question == "locate":
+            return self._locate(system, user, model, timeout, lines or [])
+        if question is not None:
+            raise ProviderError(f"{self.name} cannot ask a {question!r} question")
+        body = self._ask(model, user, system, DECISION_CRITERIA, timeout)
 
         answer = (body.get("answers") or {}).get(_DECISION_QUESTION) or {}
         choice = str(answer.get("choice") or "").upper()
@@ -357,6 +355,100 @@ class SystemOneProvider:
             tokens_in=int(usage.get("input_tokens") or 0),
             tokens_out=int(usage.get("output_tokens") or 0),
         )
+
+    def _ask(self, model: str, state: str, instructions: str | list[str], criteria: dict,
+             timeout: float) -> dict:
+        """
+        Choice questions with the same options on one state, in one request; the response body. One question
+        is sent as `verdict`; several (a list of instructions) as `q1`, `q2`, ... (_question_ids).
+        """
+        texts = [instructions] if isinstance(instructions, str) else instructions
+        payload = json.dumps({
+            "model": model,
+            "state": state,
+            "questions": {
+                qid: {"type": "choice", "instructions": text, "criteria": criteria}
+                for qid, text in zip(self._question_ids(len(texts)), texts)
+            },
+        }).encode("utf-8")
+        headers = {"Content-Type": "application/json"}
+        if self._api_key:
+            headers["Authorization"] = f"Bearer {self._api_key}"
+        request = urllib.request.Request(
+            f"{self._base_url}/v1/systemone", data=payload, headers=headers, method="POST",
+        )
+        return self._post(request, timeout)
+
+    @staticmethod
+    def _rendered(p_reject: float, detail: str, reported: str) -> str:
+        """A question seat's answer in the verdict readout's shape (calibration.p_reject_from_text)."""
+        choice = "REJECT" if p_reject > 0.5 else "APPROVE"
+        return (f"{choice}\np(APPROVE)={1.0 - p_reject:.2f}  p(REJECT)={p_reject:.2f}  {detail}  "
+                f"[{reported}: decision model, no reasoning]")
+
+    @staticmethod
+    def _question_ids(n: int) -> list[str]:
+        return [_DECISION_QUESTION] if n == 1 else [f"q{k + 1}" for k in range(n)]
+
+    def _probabilities(self, body: dict, n: int) -> list[dict]:
+        answers = body.get("answers") or {}
+        return [(answers.get(qid) or {}).get("probabilities") or {} for qid in self._question_ids(n)]
+
+    def _check(self, system: str, user: str, model: str, timeout: float) -> Completion:
+        """
+        The persona's questions (persona_questions) as YES/NO in one call. p(REJECT) is the chance that any
+        of them finds the problem, 1 - prod(1 - p(YES)): one question gives its own p(YES).
+        """
+        texts = persona_questions(system) or [system]
+        body = self._ask(model, user, texts, CHECK_CRITERIA, timeout)
+        p_no = 1.0
+        n_yes = 0
+        for probs in self._probabilities(body, len(texts)):
+            if not isinstance(probs.get("YES"), (int, float)) or not isinstance(probs.get("NO"), (int, float)):
+                raise ProviderError(f"{self._base_url} returned no YES/NO probabilities: {str(body)[:300]}")
+            p_no *= 1.0 - float(probs["YES"])
+            n_yes += float(probs["YES"]) > 0.5
+        detail = (f"answer={'YES' if n_yes else 'NO'}" if len(texts) == 1 else f"yes={n_yes}/{len(texts)}")
+        usage = body.get("usage") or {}
+        return Completion(
+            text=self._rendered(1.0 - p_no, detail, body.get("model") or model),
+            tokens_in=int(usage.get("input_tokens") or 0),
+            tokens_out=int(usage.get("output_tokens") or 0),
+        )
+
+    def _locate(self, system: str, user: str, model: str, timeout: float, lines: list[str]) -> Completion:
+        """
+        Windows of LOCATE_WINDOW lines on the same state, the persona's questions (persona_questions) asked
+        together in each. A window's p(NONE) is the product over its questions (no question finds a line);
+        p(REJECT) = 1 - min over windows of that, the most suspicious window. Not a product over windows: they
+        share one state and are not independent, and a product would grow p(REJECT) with the size of the diff
+        (on RocksDB, clean changes from 0.47 with one window to 0.84 with three; learned-aggregation.md §2).
+        """
+        if not lines:
+            raise ProviderError("a locate question needs the added lines of a diff")
+        texts = persona_questions(system) or [system]
+        p_none, best_p, best = 1.0, -1.0, 0
+        tokens_in = tokens_out = 0
+        reported = model
+        for start in range(0, len(lines), LOCATE_WINDOW):
+            window = lines[start:start + LOCATE_WINDOW]
+            body = self._ask(model, user, texts, locate_criteria(window, start), timeout)
+            window_none = 1.0
+            for probs in self._probabilities(body, len(texts)):
+                if not isinstance(probs.get(LOCATE_NONE), (int, float)):
+                    raise ProviderError(f"{self._base_url} returned no p(NONE): {str(body)[:300]}")
+                window_none *= float(probs[LOCATE_NONE])
+                for k in range(len(window)):
+                    p = probs.get(f"L{start + k + 1}")
+                    if isinstance(p, (int, float)) and float(p) > best_p:
+                        best_p, best = float(p), start + k
+            p_none = min(p_none, window_none)
+            usage = body.get("usage") or {}
+            tokens_in += int(usage.get("input_tokens") or 0)
+            tokens_out += int(usage.get("output_tokens") or 0)
+            reported = body.get("model") or reported
+        text = self._rendered(1.0 - p_none, f"line=L{best + 1}", reported) + f"\n[L{best + 1}] {lines[best][:120]}"
+        return Completion(text=text, tokens_in=tokens_in, tokens_out=tokens_out)
 
     def _post(self, request: urllib.request.Request, timeout: float) -> dict:
         """Send once; on 429/503/529 back off and retry, as the API asks clients to."""
@@ -447,6 +539,15 @@ def detect_default_provider() -> str:
     # Nothing detected. Return the Anthropic path so the resulting error names the
     # missing credential rather than a missing binary.
     return "anthropic"
+
+
+def provider_kind(name: str | None = None) -> str:
+    """'decision' or 'text' for a provider name, without building it (so without credentials)."""
+    resolved = (name or detect_default_provider()).strip().lower()
+    builder_name = _ALIASES[resolved][0] if resolved in _ALIASES else resolved
+    if builder_name not in _BUILDERS:
+        raise ProviderError(f"Unknown provider '{resolved}'. Available: {', '.join(PROVIDER_NAMES)}")
+    return getattr(_BUILDERS[builder_name], "kind", "text")
 
 
 def get_provider(name: str | None = None, **config) -> Provider:

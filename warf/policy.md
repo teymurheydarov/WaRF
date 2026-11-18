@@ -62,7 +62,8 @@ Field notes that matter when parsing:
 - **`votes` is ordered by descending ω** — heaviest-weighted agent first.
 - **`sprt_fired`** is `true` exactly when `confidence == "HIGH"`. It is the
   mechanical fact behind the label: the boundary was crossed and — unless
-  `--no-early-stop` was given (§10) — the review stopped there.
+  `--no-early-stop` was given (§10), or the session has `"aggregate": "learned"`,
+  which always asks every seat — the review stopped there.
 - **`normalised_score`** is the weighted-average fallback and is `null` on many
   boundary-crossing sessions. Do not rely on it being present.
 - **`provider`, `model`, `persona`** on each vote record which backend answered and

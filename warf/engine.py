@@ -207,6 +207,25 @@ def logodds_decision(
     return decision, Confidence.LOW if low else Confidence.MEDIUM, normalised
 
 
+def learned_decision(lambda_: float, domain: str) -> tuple[Decision, Confidence, float]:
+    """
+    Verdict of the learned aggregation (docs/spec/learned-aggregation.md §4), every seat asked.
+
+    APPROVE if Λ ≥ τ. HIGH beyond an SPRT boundary, LOW within ln 2 of τ, else MEDIUM. The learned
+    weights already say how far seats agree, so there is no disagreement rule.
+    Returns (decision, confidence, normalised_score) with the score on [-1, 1].
+    """
+    tau = logodds_tau(domain)
+    decision = Decision.APPROVE if lambda_ >= tau else Decision.REJECT
+    if sprt_boundary(lambda_) is not None:
+        confidence = Confidence.HIGH
+    elif abs(lambda_ - tau) < LOGODDS_MARGIN:
+        confidence = Confidence.LOW
+    else:
+        confidence = Confidence.MEDIUM
+    return decision, confidence, 2.0 / (1.0 + math.exp(-(lambda_ - tau))) - 1.0
+
+
 LAMBDA_DECAY = 0.95  # decay factor per week (spec §2.3.4)
 
 

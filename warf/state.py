@@ -119,6 +119,10 @@ class AgentProfile:
     # In log-odds mode, seats of one model with different evidence count as separate
     # sources; seats of one model shown the same input still count once (ADR 0002).
     evidence: str | None = None
+    # What a decision seat is asked, when it is not WaRF's verdict: "check" (the persona as a YES/NO
+    # question) or "locate" (which added line has the problem, or NONE). A seat asked another question
+    # is another source and another reviewer (ADR 0003, warf.questions).
+    question: str | None = None
 
 
 _DEFAULT_AGENTS = [
@@ -190,6 +194,8 @@ def _to_dict(p: AgentProfile) -> dict:
         out["retired"] = p.retired
     if p.evidence:
         out["evidence"] = p.evidence
+    if p.question:
+        out["question"] = p.question
     return out
 
 
@@ -208,6 +214,7 @@ def _from_dict(d: dict) -> AgentProfile:
         persona_hash=d.get("persona_hash"),
         retired=dict(d.get("retired") or {}),
         evidence=d.get("evidence"),
+        question=d.get("question"),
     )
 
 

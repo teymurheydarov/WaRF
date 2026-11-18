@@ -16,18 +16,19 @@ from pathlib import Path
 from .engine import (
     SPRTState, sprt_update, synthesis, bayesian_update, apply_decay,
     Decision, Confidence, THETA, A, B,
-    pool_evidence, logodds_boundary, logodds_decision, logodds_tau, vote_evidence,
+    pool_evidence, logodds_boundary, logodds_decision, logodds_tau, vote_evidence, learned_decision,
 )
-from .calibration import Calibrator, p_reject_from_text
+from .calibration import Calibrator, p_reject_from_text, seat_logodds
+from .questions import QUESTIONS, mark_added_lines
 from .state import AgentProfile, DomainWeight, ORACLE_TIERS, load_profiles, save_profiles
 from .sast import bandit_vote, SAST_AGENT_NAME, SAST_OMEGA
 from .paths import debug_log_path, sessions_path
 
-# How votes are combined: "vote" (SPECIFICATION §2, the default) or "logodds"
-# (docs/spec/logodds-aggregation.md).
-AGGREGATE_MODES = ("vote", "logodds")
+# How votes are combined: "vote" (SPECIFICATION §2, the default), "logodds"
+# (docs/spec/logodds-aggregation.md) or "learned" (docs/spec/learned-aggregation.md).
+AGGREGATE_MODES = ("vote", "logodds", "learned")
 from .providers import (
-    ProviderError, get_provider, resolve_model, detect_default_provider,
+    ProviderError, get_provider, resolve_model, detect_default_provider, provider_kind,
     DEFAULT_TIMEOUT,
 )
 
@@ -86,17 +87,19 @@ class VoteRecord:
     calibration: str = ""
     # The seat's evidence source (AgentProfile.evidence), "" when it sees the common input.
     evidence_source: str = ""
+    # The seat's question (AgentProfile.question), "" for WaRF's verdict.
+    question: str = ""
 
 
-def _group_key(provider: str, model: str, source: str | None) -> str:
-    """Seats of one model shown the same input form one group (ADR 0001); a seat shown other
-    evidence is its own source (ADR 0002)."""
-    return f"{provider}/{model}" + (f"#{source}" if source else "")
+def _group_key(provider: str, model: str, source: str | None, question: str | None = None) -> str:
+    """Seats of one model shown the same input and asked the same question form one group (ADR 0001);
+    a seat shown other evidence (ADR 0002) or asked another question (ADR 0003) is its own source."""
+    return f"{provider}/{model}" + (f"#{source}" if source else "") + (f"@{question}" if question else "")
 
 
 def _evidence_group(v: VoteRecord) -> str:
     """The pooling group of a vote; a vote without a provider (SAST) is its own."""
-    return _group_key(v.provider, v.model, v.evidence_source) if v.provider else v.agent_name
+    return _group_key(v.provider, v.model, v.evidence_source, v.question) if v.provider else v.agent_name
 
 
 def _pooled(votes: list[VoteRecord]) -> tuple[float, dict[str, float]]:
@@ -116,6 +119,8 @@ class ReviewResult:
     debate_sprt_lambda: float = 0.0
     debate_normalised_score: float | None = None
     aggregate: str = "vote"
+    # aggregate "learned": the fit the verdict used (bias, n_clean, n_defective)
+    learned: dict | None = None
 
 
 _DEBUG_LOG: Path | None = None  # set by run_review when debug=True
@@ -134,6 +139,11 @@ def _parse_vote(text: str) -> tuple[int, str]:
     return vote, reasoning
 
 
+def _commit_section(commit_context: str | None) -> str:
+    """The rest of the commit as its own block of the message, or nothing (docs/spec/commit-context.md)."""
+    return f"Other files changed in this commit (unified diff):\n```\n{commit_context}\n```\n\n" if commit_context else ""
+
+
 def _call_agent(
     persona: str,
     code: str,
@@ -144,6 +154,8 @@ def _call_agent(
     context: str | None = None,
     provider: str | None = None,
     model: str | None = None,
+    question: str | None = None,
+    commit_context: str | None = None,
 ) -> tuple[int, str, int, int, str, str]:
     """Send code to one agent and parse its vote.
 
@@ -151,15 +163,25 @@ def _call_agent(
     the environment (see providers.detect_default_provider). Passing them per
     call is what lets one panel mix models.
 
+    question: a decision seat's question other than the verdict (warf.questions). A
+    `locate` seat is shown the code with its added lines tagged [L1], [L2], ...
+
+    commit_context: the diff of the commit's other files (warf.commit_context), shown
+    between the project context and the input; a locate seat's lines stay those of `code`.
+
     Returns (vote, reasoning, tokens_in, tokens_out, provider_used, model_used).
     The last two are returned rather than stashed on the module because agents
     are dispatched concurrently.
     """
+    lines = None
+    if question == "locate":
+        code, lines = mark_added_lines(code)
     if user_message is None:
         ctx_section = f"Project context:\n{context}\n\n" if context else ""
         user_message = (
             f"Domain: {domain}\n\n"
             f"{ctx_section}"
+            f"{_commit_section(commit_context)}"
             f"{input_label}:\n```\n{code}\n```"
         )
     provider_name = provider or detect_default_provider()
@@ -180,6 +202,9 @@ def _call_agent(
             user=user_message,
             model=model_name,
             timeout=DEFAULT_TIMEOUT,
+            # Only a decision provider takes these (run_review refuses question seats on text models);
+            # a text provider's complete() has no such parameters, so a verdict seat sends none.
+            **({"question": question, "lines": lines} if question else {}),
         )
     except subprocess.TimeoutExpired as exc:
         # Surfaced unchanged: run_review treats a timeout as "skip this agent"
@@ -228,6 +253,7 @@ def _build_debate_prompt(
     round1_votes: list[VoteRecord],
     agent_name: str,
     context: str | None = None,
+    commit_context: str | None = None,
 ) -> str:
     """
     Construct a per-agent Round-2 prompt.
@@ -252,6 +278,7 @@ def _build_debate_prompt(
     return (
         f"Domain: {domain}\n\n"
         f"{ctx_section}"
+        f"{_commit_section(commit_context)}"
         f"Code under review:\n```\n{code}\n```\n\n"
         "=== Round 1 Summary ===\n"
         f"Your Round 1 vote: {own_label}\n\n"
@@ -275,6 +302,7 @@ def _run_debate_round(
     demo: bool = False,
     context: str | None = None,
     no_early_stop: bool = False,
+    commit_context: str | None = None,
 ) -> tuple[list[VoteRecord], float, Decision, Confidence, float | None]:
     """
     Run Round 2 (debate). Λ resets to 0; weights frozen at Round-1 values.
@@ -299,7 +327,8 @@ def _run_debate_round(
                 print(f"  [D2][{profile.name}] no Round-1 vote (timed out) — not polled")
             continue
         omega = r1_omega_map[profile.name]
-        debate_msg = _build_debate_prompt(code, domain, round1_votes, agent_name=profile.name, context=context)
+        debate_msg = _build_debate_prompt(code, domain, round1_votes, agent_name=profile.name, context=context,
+                                          commit_context=commit_context)
 
         if verbose:
             print(f"  [D2][{profile.name}] omega={omega:.3f}  querying...")
@@ -383,6 +412,7 @@ def run_review(
     aggregate: str = "vote",
     log_path: Path | None = None,
     seat_inputs: dict[str, str] | None = None,
+    commit_context: str | None = None,
 ) -> ReviewResult:
     """
     Run a full WaRF review session.
@@ -398,17 +428,27 @@ def run_review(
     aggregate="logodds" pools calibrated per-vote evidence instead of counting
     votes (docs/spec/logodds-aggregation.md); calibration is read from the
     labelled sessions in log_path (default: the data directory's session log).
+    aggregate="learned" weighs each seat's log-odds by weights fitted on those
+    sessions and asks every seat (docs/spec/learned-aggregation.md); with too few
+    labels for this panel it runs as "logodds", and the result says so.
+
+    A seat with a question (AgentProfile.question: "check", "locate") must be on a
+    decision provider; a locate seat abstains on an input without added lines.
 
     seat_inputs gives the input for seats shown other evidence (AgentProfile.evidence),
     keyed by that source; such a seat reviews seat_inputs[source] instead of `code`. A
     tagged seat without an input is refused: reviewing the common input, it would be
     counted as a separate source for evidence it never saw (ADR 0002).
+
+    commit_context is the diff of the commit's other files (warf.commit_context); every
+    seat is shown it next to the input (docs/spec/commit-context.md).
     """
     if aggregate not in AGGREGATE_MODES:
         raise ValueError(f"aggregate must be one of {', '.join(AGGREGATE_MODES)}, got {aggregate!r}")
-    if aggregate == "logodds" and debate:
-        raise ValueError("the debate round is not defined for aggregate='logodds'")
-    calibrator = Calibrator(log_path or sessions_path()) if aggregate == "logodds" else None
+    if aggregate != "vote" and debate:
+        raise ValueError(f"the debate round is not defined for aggregate={aggregate!r}")
+    labelled = Calibrator(log_path or sessions_path()) if aggregate != "vote" else None
+    calibrator = labelled if aggregate == "logodds" else None
 
     global _DEBUG_LOG
     if debug:
@@ -443,6 +483,36 @@ def run_review(
         if p.evidence and debate:
             raise ValueError(f"the debate round shows every seat the same input; seat {p.name} is "
                              f"shown {p.evidence!r} evidence")
+        # Question seats (ADR 0003): a known question, asked of a decision model, never in a debate.
+        if p.question:
+            if p.question not in QUESTIONS:
+                raise ValueError(f"seat {p.name} asks an unknown question {p.question!r}; "
+                                 f"known: {', '.join(QUESTIONS)}")
+            prov = p.provider or detect_default_provider()
+            if provider_kind(prov) != "decision":
+                raise ValueError(f"seat {p.name} asks a {p.question!r} question, which needs a decision "
+                                 f"provider (jev, laya); {prov} is a text model")
+            if debate:
+                raise ValueError(f"the debate round asks every seat WaRF's verdict; seat {p.name} is "
+                                 f"asked {p.question!r}")
+
+    # Learned weights over this panel's seats, or logodds pooling while the labels are too few.
+    learned_fit = None
+    if aggregate == "learned":
+        reviewers = []
+        for p in profiles:
+            prov = p.provider or detect_default_provider()
+            reviewers.append((p, prov, resolve_model(prov, p.model)))
+        learned_fit = labelled.learned(reviewers)
+        if learned_fit is None:
+            if verbose:
+                print(f"  [learned] {labelled.learned_status}: pooling as logodds")
+            aggregate, calibrator = "logodds", labelled
+
+    def _learned_step(votes_so_far: list[VoteRecord]) -> tuple[SPRTState, None]:
+        """Λ = bias + Σ evidence; no boundary: the weights hold only with every seat's answer."""
+        lam = learned_fit.bias + sum(v.evidence for v in votes_so_far if v.evidence is not None)
+        return SPRTState(lambda_=lam, k=len(votes_so_far)), None
 
     # Log-odds mode tests the boundary on whole models only: a model's evidence is
     # the mean over its seats, which later seats can pull back. Seats of one model
@@ -453,7 +523,7 @@ def run_review(
         group_of = {}
         for p in profiles:
             prov = p.provider or detect_default_provider()
-            group_of[p.name] = _group_key(prov, resolve_model(prov, p.model), p.evidence)
+            group_of[p.name] = _group_key(prov, resolve_model(prov, p.model), p.evidence, p.question)
         first_seat = {}
         for i, p in enumerate(profiles):
             first_seat.setdefault(group_of[p.name], i)
@@ -468,10 +538,12 @@ def run_review(
         return SPRTState(lambda_=lam, k=len(votes_so_far)), logodds_boundary(lam, means) if complete else None
 
     # --- Sequential agent calls (heaviest omega first for SPRT efficiency) -
-    sprt_state = SPRTState()
+    # In learned mode Λ starts at the fitted bias, so each seat's Δλ is its own evidence.
+    sprt_state = SPRTState(lambda_=learned_fit.bias) if learned_fit is not None else SPRTState()
     votes: list[VoteRecord] = []
     early_decision: Decision | None = None
     agent_timings: list[dict] = []
+    abstained: list[str] = []
 
     # --- SAST pre-vote (SECURITY domain only, fixed ω, no LLM call) ----------
     if sast_path is not None and domain == "SECURITY":
@@ -494,7 +566,10 @@ def run_review(
             agent_timings.append({"name": SAST_AGENT_NAME, "elapsed": 0.0, "timed_out": False})
 
             lambda_before = sprt_state.lambda_
-            if calibrator is not None:
+            if learned_fit is not None:
+                sast_record.evidence, sast_record.calibration = vote_evidence(sast_v, SAST_OMEGA), "fixed"
+                sprt_state, boundary = _learned_step(votes)
+            elif calibrator is not None:
                 sast_record.evidence, sast_record.calibration = vote_evidence(sast_v, SAST_OMEGA), "fixed"
                 sprt_state, boundary = _logodds_step(votes)
             else:
@@ -532,6 +607,12 @@ def run_review(
         omega = _effective_omega(profile, domain)
         if calibrator is not None:
             unasked[group_of[profile.name]] -= 1   # asked now, whether it answers or times out
+        seat_input = seat_inputs[profile.evidence] if profile.evidence else code
+        if profile.question == "locate" and not mark_added_lines(seat_input)[1]:
+            abstained.append(profile.name)
+            if verbose or demo:
+                print(f"  [{profile.name}] abstains: the input has no added lines to locate")
+            continue
 
         if verbose:
             print(f"  [{profile.name}] omega={omega:.3f}  querying...")
@@ -541,9 +622,10 @@ def run_review(
         t0 = time.time()
         try:
             vote, reasoning, tok_in, tok_out, prov_used, model_used = _call_agent(
-                profile.persona, seat_inputs[profile.evidence] if profile.evidence else code, domain,
+                profile.persona, seat_input, domain,
                 input_label=input_label, context=context,
-                provider=profile.provider, model=profile.model,
+                provider=profile.provider, model=profile.model, question=profile.question,
+                commit_context=commit_context,
             )
         except subprocess.TimeoutExpired:
             elapsed = time.time() - t0
@@ -567,10 +649,17 @@ def run_review(
             model=model_used,
             persona_hash=profile.persona_hash or "",
             evidence_source=profile.evidence or "",
+            question=profile.question or "",
         )
 
         lambda_before = sprt_state.lambda_
-        if calibrator is not None:
+        if learned_fit is not None:
+            record.p_reject = p_reject_from_text(reasoning)
+            record.evidence = (learned_fit.weight(profile, prov_used, model_used)
+                               * seat_logodds(vote, record.p_reject))
+            record.calibration = "learned"
+            sprt_state, boundary = _learned_step(votes + [record])
+        elif calibrator is not None:
             record.p_reject = p_reject_from_text(reasoning)
             record.evidence, record.calibration = calibrator.evidence(
                 profile, vote, record.p_reject, omega, prov_used, model_used)
@@ -629,6 +718,9 @@ def run_review(
             break
 
     if not votes:
+        if abstained:
+            raise RuntimeError(f"No votes collected: {len(abstained)} seat(s) abstained "
+                               f"({', '.join(abstained)}: no added lines to locate), the rest timed out")
         raise RuntimeError("All agents timed out — no votes collected")
 
     # ── Time analysis ────────────────────────────────────────────────────────
@@ -658,6 +750,26 @@ def run_review(
             print(f"  {total:.0f}s total  — {len(timed_out)} timeout(s): {', '.join(t['name'] for t in timed_out)}")
         else:
             print(f"  {total:.0f}s total  — all {len(agent_timings)} agents responded")
+
+    if learned_fit is not None:
+        # Every seat asked: the learned Λ against τ (docs/spec/learned-aggregation.md §4)
+        lam = _learned_step(votes)[0].lambda_
+        decision, confidence, norm = learned_decision(lam, domain)
+        if verbose:
+            print(f"  Learned weights  L={lam:.3f}  tau={logodds_tau(domain):.3f}  bias={learned_fit.bias:+.3f}  "
+                  f"(fitted on {learned_fit.n_clean} clean / {learned_fit.n_defective} defective)")
+            print(f"  -> {decision.value} [{confidence.value}]")
+        return ReviewResult(
+            decision=decision,
+            confidence=confidence,
+            domain=domain,
+            votes=votes,
+            sprt_lambda=lam,
+            normalised_score=norm,
+            aggregate="learned",
+            learned={"bias": learned_fit.bias, "n_clean": learned_fit.n_clean,
+                     "n_defective": learned_fit.n_defective},
+        )
 
     if early_decision is not None:
         return ReviewResult(
@@ -706,7 +818,7 @@ def run_review(
             print(f"{'=' * 42}\n")
         d_votes, d_lam, d_decision, d_confidence, d_norm = _run_debate_round(
             profiles, code, domain, votes, verbose, demo, context=context,
-            no_early_stop=no_early_stop,
+            no_early_stop=no_early_stop, commit_context=commit_context,
         )
         return ReviewResult(
             decision=d_decision,

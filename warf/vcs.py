@@ -31,8 +31,10 @@ def detect_vcs(repo: str) -> str:
 
 
 def _run(args: list[str], cwd: str | None = None) -> str:
+    # errors="replace": a diff can carry any file's bytes (a Latin-1 comment); strict UTF-8
+    # decoding loses the whole output (stdout None on Windows) instead of one character.
     result = subprocess.run(
-        args, capture_output=True, text=True, encoding="utf-8", cwd=cwd,
+        args, capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=cwd,
     )
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or f"Command failed: {' '.join(args)}")

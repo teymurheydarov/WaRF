@@ -49,7 +49,7 @@ def extract_changed_lines(patch: str) -> list[int]:
 def _get_file_at_commit(repo: str, commit: str, filepath: str) -> str:
     result = subprocess.run(
         ["git", "show", f"{commit}:{filepath}"],
-        capture_output=True, text=True, encoding="utf-8", cwd=repo,
+        capture_output=True, text=True, encoding="utf-8", errors="replace", cwd=repo,   # as vcs._run
     )
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "git show failed")

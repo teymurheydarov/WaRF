@@ -20,6 +20,8 @@ from .state import AgentProfile
 
 MIN_PER_CLASS_DECISION = 10   # Platt fit: two parameters
 MIN_PER_CLASS_TEXT     = 5    # two rates
+MIN_PER_CLASS_LEARNED  = 20   # learned weights over a panel (docs/spec/learned-aggregation.md §3)
+LEARNED_PRIOR_SD       = 1.0  # every learned coefficient ~ N(0, 1)
 P_FLOOR = 0.01                # the readout has two decimals; keeps |log-odds| <= 4.6
 
 # WaRF's own rendering of a decision-model answer (providers.SystemOneProvider).
@@ -126,6 +128,101 @@ def fit_platt(rs: list[float], ys: list[int], max_iter: int = 50) -> PlattFit | 
     return None
 
 
+def seat_logodds(vote: int, p_reject: float | None) -> float:
+    """
+    A seat's own log-odds for APPROVE, the feature the learned weights act on: ln((1 - p) / p) for a
+    usable p that agrees with the vote, else the vote itself (+1 / -1), as for a text agent.
+    """
+    if p_reject is not None and not (p_reject - 0.5) * vote > 0:
+        return approve_logodds(_clamp(p_reject))
+    return float(vote)
+
+
+def _solve(H: list[list[float]], g: list[float]) -> list[float] | None:
+    """H d = g by Gaussian elimination with partial pivoting; None if H is singular."""
+    n = len(g)
+    M = [row[:] + [g[i]] for i, row in enumerate(H)]
+    for c in range(n):
+        piv = max(range(c, n), key=lambda r: abs(M[r][c]))
+        if abs(M[piv][c]) < 1e-12:
+            return None
+        M[c], M[piv] = M[piv], M[c]
+        for r in range(c + 1, n):
+            f = M[r][c] / M[c][c]
+            for k in range(c, n + 1):
+                M[r][k] -= f * M[c][k]
+    d = [0.0] * n
+    for r in range(n - 1, -1, -1):
+        d[r] = (M[r][n] - sum(M[r][k] * d[k] for k in range(r + 1, n))) / M[r][r]
+    return d
+
+
+def _log_posterior_k(w: list[float], X: list[list[float]], ys: list[int], prior_sd: float) -> float:
+    total = -0.5 * sum(wj * wj for wj in w[1:]) / prior_sd ** 2       # the intercept w[0] has a flat prior
+    for x, y in zip(X, ys):
+        z = sum(a * b for a, b in zip(w, x))
+        s = z if y == 1 else -z
+        total += -math.log1p(math.exp(-s)) if s >= 0 else s - math.log1p(math.exp(s))
+    return total
+
+
+def fit_logistic(X: list[list[float]], ys: list[int], prior_sd: float, max_iter: int = 50) -> list[float] | None:
+    """
+    MAP logistic regression of y = clean (+1) on the rows of X (their first column is 1, the
+    intercept). Every weight ~ N(0, prior_sd²); the intercept has a flat prior, so that it carries the
+    training base rate in full and LearnedFit.bias can remove it (a shrunk intercept would lean every
+    verdict of a panel trained on an imbalanced history). Newton's method with step halving, as
+    fit_platt. None if it does not converge.
+    """
+    k = len(X[0])
+    w = [0.0] * k
+    current = _log_posterior_k(w, X, ys, prior_sd)
+    for _ in range(max_iter):
+        g = [0.0] + [-wj / prior_sd ** 2 for wj in w[1:]]
+        H = [[(1.0 / prior_sd ** 2 if a == b and a > 0 else 0.0) for b in range(k)] for a in range(k)]
+        for x, y in zip(X, ys):
+            p = _sigmoid(sum(a * b for a, b in zip(w, x)))
+            t = 1.0 if y == 1 else 0.0
+            for a in range(k):
+                g[a] += (t - p) * x[a]
+                for b in range(k):
+                    H[a][b] += p * (1.0 - p) * x[a] * x[b]
+        d = _solve(H, g)
+        if d is None:
+            return None
+        step = 1.0
+        for _ in range(40):
+            candidate = [wj + step * dj for wj, dj in zip(w, d)]
+            value = _log_posterior_k(candidate, X, ys, prior_sd)
+            if value >= current:
+                break
+            step /= 2.0
+        else:
+            return None
+        w, current = candidate, value
+        if max(abs(step * dj) for dj in d) < 1e-9:
+            return w
+    return None
+
+
+@dataclass
+class LearnedFit:
+    """Learned weights of one panel: Λ = bias + Σ weight(seat) · seat_logodds (learned-aggregation.md §3)."""
+    intercept: float
+    weights: dict[tuple, float]     # reviewer key (Calibrator._key) -> weight
+    prior_logodds: float            # logit of the smoothed clean share of the training sessions
+    n_clean: int
+    n_defective: int
+
+    @property
+    def bias(self) -> float:
+        """The fitted intercept minus the training base rate: evidence at prior odds 1:1, as τ expects."""
+        return self.intercept - self.prior_logodds
+
+    def weight(self, profile: AgentProfile, provider: str = "", model: str = "") -> float:
+        return self.weights.get(Calibrator._key(profile, provider, model), 0.0)
+
+
 @dataclass
 class _History:
     votes: list[int]
@@ -137,9 +234,10 @@ class Calibrator:
     """
     Evidence for each agent's answer, from the labelled votes in one session log.
 
-    A history belongs to one reviewer: the same agent name, persona text, model
-    and evidence source. The same persona on another model, or shown other
-    evidence (AgentProfile.evidence), is another reviewer.
+    A history belongs to one reviewer: the same agent name, persona text, model,
+    evidence source and question. The same persona on another model, shown other
+    evidence (AgentProfile.evidence) or asked another question (AgentProfile.question),
+    is another reviewer.
     """
 
     def __init__(self, log_path: Path):
@@ -160,10 +258,63 @@ class Calibrator:
                 self._sessions.append(s)
         self._cache: dict[tuple, _History] = {}
         self._fits: dict[tuple, PlattFit | None] = {}
+        self.learned_status = ""   # why the last learned() call gave a fit or none
 
     @staticmethod
     def _key(profile: AgentProfile, provider: str, model: str) -> tuple:
-        return profile.name, profile.persona_hash or "", provider or "", model or "", profile.evidence or ""
+        return (profile.name, profile.persona_hash or "", provider or "", model or "", profile.evidence or "",
+                profile.question or "")
+
+    @staticmethod
+    def _vote_key(v: dict) -> tuple:
+        return (v.get("agent"), v.get("persona"), v.get("provider") or "", v.get("model") or "",
+                v.get("evidence_source") or "", v.get("question") or "")
+
+    @staticmethod
+    def _vote_p(v: dict) -> float | None:
+        p = v.get("p_reject")
+        return _clamp(p) if isinstance(p, (int, float)) else p_reject_from_text(v.get("reasoning") or "")
+
+    def learned(self, reviewers: list[tuple[AgentProfile, str, str]]) -> "LearnedFit | None":
+        """
+        Weights over the panel's seats from the labelled sessions (docs/spec/learned-aggregation.md §3).
+
+        reviewers: each seat with the provider and model it answers on. A session counts when at least
+        one of them voted in it; a seat that did not vote adds 0 (no evidence). None until there are
+        MIN_PER_CLASS_LEARNED labels of each class, or when the fit does not converge; `learned_status`
+        then says which.
+        """
+        keys = [self._key(p, prov, model) for p, prov, model in reviewers]
+        index = {k: i for i, k in enumerate(keys)}
+        rows, ys = [], []
+        for s in self._sessions:
+            x, seen = [0.0] * len(keys), set()
+            for v in s["votes"]:
+                if not isinstance(v, dict) or v.get("vote") not in (1, -1):
+                    continue
+                i = index.get(self._vote_key(v))
+                if i is None or i in seen or not (v.get("persona") or ""):
+                    continue
+                seen.add(i)
+                x[i] = seat_logodds(v["vote"], self._vote_p(v))
+            if seen:
+                rows.append([1.0] + x)
+                ys.append(s["oracle"]["x_star"])
+        n_clean = sum(1 for y in ys if y == 1)
+        n_defective = len(ys) - n_clean
+        if n_clean < MIN_PER_CLASS_LEARNED or n_defective < MIN_PER_CLASS_LEARNED:
+            self.learned_status = (f"too few labelled sessions with this panel's seats: {n_clean} clean, "
+                                   f"{n_defective} defective (needs {MIN_PER_CLASS_LEARNED} of each)")
+            return None
+        w = fit_logistic(rows, ys, LEARNED_PRIOR_SD)
+        if w is None:
+            self.learned_status = (f"the weight fit did not converge on {n_clean} clean and {n_defective} "
+                                   f"defective sessions")
+            return None
+        self.learned_status = f"fitted on {n_clean} clean and {n_defective} defective sessions"
+        return LearnedFit(intercept=w[0], weights=dict(zip(keys, w[1:])),
+                          prior_logodds=_logit((n_clean + 1) / (len(ys) + 2)),
+                          n_clean=n_clean, n_defective=n_defective)
 
     def _history(self, profile: AgentProfile, provider: str, model: str) -> _History:
         key = self._key(profile, provider, model)
@@ -174,13 +325,10 @@ class Calibrator:
                     for v in s["votes"]:
                         if not isinstance(v, dict) or v.get("vote") not in (1, -1):
                             continue
-                        if (v.get("agent"), v.get("persona"), v.get("provider") or "", v.get("model") or "",
-                                v.get("evidence_source") or "") != key:
+                        if self._vote_key(v) != key:
                             continue
-                        p = v.get("p_reject")
-                        p = _clamp(p) if isinstance(p, (int, float)) else p_reject_from_text(v.get("reasoning") or "")
                         h.votes.append(v["vote"])
-                        h.p_rejects.append(p)
+                        h.p_rejects.append(self._vote_p(v))
                         h.labels.append(s["oracle"]["x_star"])
             self._cache[key] = h
         return self._cache[key]

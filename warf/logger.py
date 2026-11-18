@@ -85,6 +85,8 @@ def session_dict(
     for rec, v in zip(entry["votes"], result.votes):
         if v.evidence_source:          # ADR 0002; votes of seats on the common input keep their shape
             rec["evidence_source"] = v.evidence_source
+        if v.question:                 # ADR 0003; verdict seats keep their shape
+            rec["question"] = v.question
 
     if result.aggregate != "vote":
         # docs/spec/logodds-aggregation.md §6; vote-mode records keep their shape
@@ -94,6 +96,11 @@ def session_dict(
             rec["p_reject"]    = v.p_reject
             rec["evidence"]    = round(v.evidence, 4) if v.evidence is not None else None
             rec["calibration"] = v.calibration
+    if result.learned:
+        # docs/spec/learned-aggregation.md §6: the fit behind the verdict
+        entry["learned"] = {"bias": round(result.learned["bias"], 4),
+                            "n_clean": result.learned["n_clean"],
+                            "n_defective": result.learned["n_defective"]}
 
     if result.debate_votes:
         r1_vote_map = {v.agent_name: v.vote for v in result.votes}

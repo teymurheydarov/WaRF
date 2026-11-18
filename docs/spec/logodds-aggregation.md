@@ -20,9 +20,10 @@ Status: implemented on branch `probability-pooling`, revised after an independen
 - `p` is a decision agent's p(REJECT) for the change under review, read as described in §7 and
   clamped to `[0.01, 0.99]`.
 - `r = logit(1 − p) = ln((1 − p) / p)` is the agent's raw log-odds for APPROVE.
-- A **reviewer** is one agent name, persona text (`persona_hash`), model (`provider/model`) and
-  evidence source (`AgentProfile.evidence`, empty for the common input). The same persona text on
-  another model, or shown other evidence, is another reviewer.
+- A **reviewer** is one agent name, persona text (`persona_hash`), model (`provider/model`),
+  evidence source (`AgentProfile.evidence`, empty for the common input) and question
+  (`AgentProfile.question`, empty for WaRF's verdict; ADR 0003). The same persona text on another
+  model, shown other evidence or asked another question, is another reviewer.
 
 ## 3. Evidence per vote
 
@@ -76,6 +77,9 @@ Each vote `i` contributes evidence `e_i` in natural log-likelihood-ratio units:
   - **ω is not kept per source:** a seat's ω is learned from its votes whatever it was shown. Only
     the calibration of §5 keeps sources apart.
   - Every rule below (order, early stop on whole groups, disagreement) applies to these groups.
+- **Questions (ADR 0003):** a seat asked another question than the verdict (`AgentProfile.question`:
+  `check`, `locate`) forms its own group, `provider/model@question`, and is its own reviewer for
+  calibration. See [`learned-aggregation.md`](learned-aggregation.md) §2.
 - **Order:**
   - agents are ranked heaviest ω first, as in `vote` mode;
   - the seats of one model are then asked together;
@@ -121,10 +125,11 @@ Each vote `i` contributes evidence `e_i` in natural log-likelihood-ratio units:
   objects with an oracle object and a vote list are skipped.
 - **Labels:** sessions whose oracle has type `DEVELOPER`; `y = oracle.x_star`.
 - **Votes:** a vote counts for a reviewer when its agent name, persona fingerprint, `provider`,
-  `model` and evidence source all equal the reviewer's (§2). The provider and model are the ones the
-  vote was actually cast with.
+  `model`, evidence source and question all equal the reviewer's (§2). The provider and model are the
+  ones the vote was actually cast with.
   - A vote with no `evidence_source` belongs to a seat on the common input, so a seat shown other
-    evidence never calibrates from such votes.
+    evidence never calibrates from such votes. Likewise a vote with no `question` belongs to a verdict
+    seat, so votes logged before question seats existed calibrate verdict seats only.
   - This is **stricter than `apply_oracle`**, which accepts votes without a fingerprint. Votes
     without one (WaRF's labelled corpus before persona fingerprints and provider fields existed)
     never calibrate. That corpus therefore starts uncalibrated: its votes do not record which model
@@ -167,9 +172,10 @@ p(APPROVE)=0.12  p(REJECT)=0.88  confidence=0.76  [jev-1.13.0: decision model, n
 
 ## 8. Errors and edge cases
 
-- **`aggregate` not in {`vote`, `logodds`}:** `ValueError`.
-- **`aggregate="logodds"` with `debate=True`:** `ValueError`. The CLI refuses the combination before
-  reviewing anything: argparse error, exit 2.
+- **`aggregate` not in {`vote`, `logodds`, `learned`}:** `ValueError` (`learned`:
+  [`learned-aggregation.md`](learned-aggregation.md)).
+- **`aggregate="logodds"` or `"learned"` with `debate=True`:** `ValueError`. The CLI refuses the
+  combination before reviewing anything: argparse error, exit 2.
 - **No labelled history, or a missing or unreadable log:** every reviewer is uncalibrated
   (`capped` / `omega`), and the review runs.
 - **Timeouts:** a timed-out agent contributes nothing, and its seat counts as answered for the

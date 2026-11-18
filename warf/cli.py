@@ -50,6 +50,7 @@ from .detector import detect_domain
 from .vcs import detect_vcs, get_diff, get_message
 from .engine import omega_ci
 from .context_extractor import enrich_patch
+from .commit_context import commit_context
 from .paths import (
     profiles_dir, sessions_path, html_dir, find_context, describe as describe_paths,
 )
@@ -103,8 +104,10 @@ FAIL_ON_DEFAULT = "LOW"   # preserves historical behaviour: any REJECT exits 1
 # Shared by `review` and `review-commit` (docs/spec/logodds-aggregation.md).
 _AGGREGATE_ARG = dict(
     choices=AGGREGATE_MODES, default="vote",
-    help="How votes are combined: 'vote' (default, the weighted SPRT vote) or 'logodds' "
-         "(calibrated per-vote evidence, seats of one model counted once; no --debate).",
+    help="How votes are combined: 'vote' (default, the weighted SPRT vote), 'logodds' "
+         "(calibrated per-vote evidence, seats of one model counted once) or 'learned' (per-seat "
+         "weights fitted on the labelled sessions, every seat asked; 'logodds' until there are 20 "
+         "labels per class). No --debate with either of the last two.",
 )
 
 
@@ -616,6 +619,9 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
         print("No supported source files changed in this commit.")
         return []
 
+    # The rest of the commit for each file's reviewers: every changed file, compact (3 lines of context)
+    compact = _parse_diff(get_diff(repo_str, commit, 3)) if getattr(args, "commit_context", False) else None
+
     short = commit[:8] if vcs == "git" else f"r{commit}"
     name_w = max(len(Path(f).name) for f, _ in supported)
     print(f"\n=== WaRF {vcs.upper()} Review: {short}  [{len(supported)} file(s)]  profile={args.profile} ===\n")
@@ -665,6 +671,7 @@ def _review_commit_inner(args: argparse.Namespace) -> list["FileSummary"]:
                     agents=getattr(args, "agents", None),
                     max_agents=getattr(args, "max_agents", None),
                     aggregate=getattr(args, "aggregate", "vote"),
+                    commit_context=commit_context(compact, filepath) if compact is not None else None,
                 )
                 consecutive_errors = 0
             except Exception as exc:
@@ -1163,6 +1170,11 @@ def main() -> None:
         "--debate", action="store_true", default=False,
         help="Enable debate Round 2",
     )
+    p_commit.add_argument(
+        "--commit-context", action="store_true", default=False,
+        help="Show each file's reviewers the commit's other files as a compact diff "
+             "(docs/spec/commit-context.md)",
+    )
     p_commit.add_argument("--aggregate", **_AGGREGATE_ARG)
     p_commit.add_argument(
         "--debug", action="store_true", default=False,
@@ -1378,9 +1390,9 @@ def main() -> None:
 
     if args.command == "label" and not (args.session_id or args.artifact):
         p_label.error("give a session id or --artifact to select the session")
-    if getattr(args, "aggregate", "vote") == "logodds" and getattr(args, "debate", False):
+    if getattr(args, "aggregate", "vote") != "vote" and getattr(args, "debate", False):
         (p_review if args.command == "review" else p_commit).error(
-            "--debate is not defined for --aggregate logodds")
+            f"--debate is not defined for --aggregate {args.aggregate}")
 
     try:
         _dispatch(args, parser)
